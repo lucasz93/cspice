@@ -8,7 +8,7 @@
 
 
 extern ckpfs_init_t __ckpfs_init;
-static inline ckpfs_state_t* get_ckpfs_state(cspice_t* state) {
+static ckpfs_state_t* get_ckpfs_state(cspice_t* state) {
 	if (!state->ckpfs)
 		state->ckpfs = __cspice_allocate_module(sizeof(ckpfs_state_t),
 	 &__ckpfs_init, sizeof(__ckpfs_init));

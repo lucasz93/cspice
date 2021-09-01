@@ -8,7 +8,7 @@
 
 
 typedef int radrec_state_t;
-static inline radrec_state_t* get_radrec_state(cspice_t* state) {
+static radrec_state_t* get_radrec_state(cspice_t* state) {
 	return 0;
 }
 

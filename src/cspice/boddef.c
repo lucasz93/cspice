@@ -8,7 +8,7 @@
 
 
 typedef int boddef_state_t;
-static inline boddef_state_t* get_boddef_state(cspice_t* state) {
+static boddef_state_t* get_boddef_state(cspice_t* state) {
 	return 0;
 }
 

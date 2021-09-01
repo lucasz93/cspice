@@ -8,7 +8,7 @@
 
 
 extern ioerr_init_t __ioerr_init;
-static inline ioerr_state_t* get_ioerr_state(cspice_t* state) {
+static ioerr_state_t* get_ioerr_state(cspice_t* state) {
 	if (!state->ioerr)
 		state->ioerr = __cspice_allocate_module(sizeof(ioerr_state_t),
 	 &__ioerr_init, sizeof(__ioerr_init));

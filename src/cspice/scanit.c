@@ -8,7 +8,7 @@
 
 
 typedef int scanit_state_t;
-static inline scanit_state_t* get_scanit_state(cspice_t* state) {
+static scanit_state_t* get_scanit_state(cspice_t* state) {
 	return 0;
 }
 
@@ -1589,16 +1589,16 @@ L_scan:
 	integer *pnters, integer *ntokns, integer *ident, integer *beg, 
 	integer *end, ftnlen string_len, ftnlen marks_len)
 {
-    return scanit_0_(0, string, start, room, nmarks, marks, mrklen, pnters, 
-	    ntokns, ident, beg, end, string_len, marks_len);
+    return scanit_0_(__global_state, 0, string, start, room, nmarks, marks, 
+	    mrklen, pnters, ntokns, ident, beg, end, string_len, marks_len);
     }
 
 /* Subroutine */ int scanpr_(cspice_t* __global_state, integer *nmarks, char *
 	marks, integer *mrklen, integer *pnters, ftnlen marks_len)
 {
-    return scanit_0_(1, (char *)0, (integer *)0, (integer *)0, nmarks, marks, 
-	    mrklen, pnters, (integer *)0, (integer *)0, (integer *)0, (
-	    integer *)0, (ftnint)0, marks_len);
+    return scanit_0_(__global_state, 1, (char *)0, (integer *)0, (integer *)0,
+	     nmarks, marks, mrklen, pnters, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (ftnint)0, marks_len);
     }
 
 /* Subroutine */ int scan_(cspice_t* __global_state, char *string, char *
@@ -1606,7 +1606,8 @@ L_scan:
 	start, integer *ntokns, integer *ident, integer *beg, integer *end, 
 	ftnlen string_len, ftnlen marks_len)
 {
-    return scanit_0_(2, string, start, room, (integer *)0, marks, mrklen, 
-	    pnters, ntokns, ident, beg, end, string_len, marks_len);
+    return scanit_0_(__global_state, 2, string, start, room, (integer *)0, 
+	    marks, mrklen, pnters, ntokns, ident, beg, end, string_len, 
+	    marks_len);
     }
 

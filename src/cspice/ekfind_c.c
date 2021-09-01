@@ -655,7 +655,7 @@
       whether or not the SPICELIB routine signaled an error.
       */
 
-      F2C_ConvertStr ( lenout, errmsg );
+      F2C_ConvertStr ( naif_state, lenout, errmsg );
    }
    
    else

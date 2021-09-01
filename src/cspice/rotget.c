@@ -8,7 +8,7 @@
 
 
 extern rotget_init_t __rotget_init;
-static inline rotget_state_t* get_rotget_state(cspice_t* state) {
+static rotget_state_t* get_rotget_state(cspice_t* state) {
 	if (!state->rotget)
 		state->rotget = __cspice_allocate_module(sizeof(
 	rotget_state_t), &__rotget_init, sizeof(__rotget_init));

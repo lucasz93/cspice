@@ -8,7 +8,7 @@
 
 
 extern etcal_init_t __etcal_init;
-static inline etcal_state_t* get_etcal_state(cspice_t* state) {
+static etcal_state_t* get_etcal_state(cspice_t* state) {
 	if (!state->etcal)
 		state->etcal = __cspice_allocate_module(sizeof(etcal_state_t),
 	 &__etcal_init, sizeof(__etcal_init));

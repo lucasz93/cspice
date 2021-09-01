@@ -8,7 +8,7 @@
 
 
 typedef int wncard_state_t;
-static inline wncard_state_t* get_wncard_state(cspice_t* state) {
+static wncard_state_t* get_wncard_state(cspice_t* state) {
 	return 0;
 }
 

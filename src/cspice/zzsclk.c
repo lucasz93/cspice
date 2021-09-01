@@ -8,7 +8,7 @@
 
 
 extern zzsclk_init_t __zzsclk_init;
-static inline zzsclk_state_t* get_zzsclk_state(cspice_t* state) {
+static zzsclk_state_t* get_zzsclk_state(cspice_t* state) {
 	if (!state->zzsclk)
 		state->zzsclk = __cspice_allocate_module(sizeof(
 	zzsclk_state_t), &__zzsclk_init, sizeof(__zzsclk_init));

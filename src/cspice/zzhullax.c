@@ -8,7 +8,7 @@
 
 
 extern zzhullax_init_t __zzhullax_init;
-static inline zzhullax_state_t* get_zzhullax_state(cspice_t* state) {
+static zzhullax_state_t* get_zzhullax_state(cspice_t* state) {
 	if (!state->zzhullax)
 		state->zzhullax = __cspice_allocate_module(sizeof(
 	zzhullax_state_t), &__zzhullax_init, sizeof(__zzhullax_init));

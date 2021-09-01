@@ -8,7 +8,7 @@
 
 
 typedef int stdio_state_t;
-static inline stdio_state_t* get_stdio_state(cspice_t* state) {
+static stdio_state_t* get_stdio_state(cspice_t* state) {
 	return 0;
 }
 

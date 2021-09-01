@@ -8,7 +8,7 @@
 
 
 typedef int drdcyl_state_t;
-static inline drdcyl_state_t* get_drdcyl_state(cspice_t* state) {
+static drdcyl_state_t* get_drdcyl_state(cspice_t* state) {
 	return 0;
 }
 
@@ -17,7 +17,7 @@ static inline drdcyl_state_t* get_drdcyl_state(cspice_t* state) {
 	doublereal *long__, doublereal *z__, doublereal *jacobi)
 {
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
 
     /* Module state */
@@ -212,11 +212,11 @@ static inline drdcyl_state_t* get_drdcyl_state(cspice_t* state) {
 
 /*     Local parameters */
 
-    jacobi[0] = cos(&__global_state->f2c, *long__);
-    jacobi[1] = sin(&__global_state->f2c, *long__);
+    jacobi[0] = cos(*long__);
+    jacobi[1] = sin(*long__);
     jacobi[2] = 0.;
-    jacobi[3] = -sin(&__global_state->f2c, *long__) * *r__;
-    jacobi[4] = cos(&__global_state->f2c, *long__) * *r__;
+    jacobi[3] = -sin(*long__) * *r__;
+    jacobi[4] = cos(*long__) * *r__;
     jacobi[5] = 0.;
     jacobi[6] = 0.;
     jacobi[7] = 0.;

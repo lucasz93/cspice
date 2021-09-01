@@ -8,7 +8,7 @@
 
 
 extern zzekdps_init_t __zzekdps_init;
-static inline zzekdps_state_t* get_zzekdps_state(cspice_t* state) {
+static zzekdps_state_t* get_zzekdps_state(cspice_t* state) {
 	if (!state->zzekdps)
 		state->zzekdps = __cspice_allocate_module(sizeof(
 	zzekdps_state_t), &__zzekdps_init, sizeof(__zzekdps_init));

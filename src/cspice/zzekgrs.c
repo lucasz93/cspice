@@ -8,7 +8,7 @@
 
 
 typedef int zzekgrs_state_t;
-static inline zzekgrs_state_t* get_zzekgrs_state(cspice_t* state) {
+static zzekgrs_state_t* get_zzekgrs_state(cspice_t* state) {
 	return 0;
 }
 

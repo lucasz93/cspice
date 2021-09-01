@@ -8,7 +8,7 @@
 
 
 extern zzspkgo1_init_t __zzspkgo1_init;
-static inline zzspkgo1_state_t* get_zzspkgo1_state(cspice_t* state) {
+static zzspkgo1_state_t* get_zzspkgo1_state(cspice_t* state) {
 	if (!state->zzspkgo1)
 		state->zzspkgo1 = __cspice_allocate_module(sizeof(
 	zzspkgo1_state_t), &__zzspkgo1_init, sizeof(__zzspkgo1_init));

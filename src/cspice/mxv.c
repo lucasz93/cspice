@@ -8,7 +8,7 @@
 
 
 typedef int mxv_state_t;
-static inline mxv_state_t* get_mxv_state(cspice_t* state) {
+static mxv_state_t* get_mxv_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern spk14b_init_t __spk14b_init;
-static inline spk14b_state_t* get_spk14b_state(cspice_t* state) {
+static spk14b_state_t* get_spk14b_state(cspice_t* state) {
 	if (!state->spk14b)
 		state->spk14b = __cspice_allocate_module(sizeof(
 	spk14b_state_t), &__spk14b_init, sizeof(__spk14b_init));

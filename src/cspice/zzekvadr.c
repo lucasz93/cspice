@@ -8,7 +8,7 @@
 
 
 extern zzekvadr_init_t __zzekvadr_init;
-static inline zzekvadr_state_t* get_zzekvadr_state(cspice_t* state) {
+static zzekvadr_state_t* get_zzekvadr_state(cspice_t* state) {
 	if (!state->zzekvadr)
 		state->zzekvadr = __cspice_allocate_module(sizeof(
 	zzekvadr_state_t), &__zzekvadr_init, sizeof(__zzekvadr_init));
@@ -787,19 +787,21 @@ L_zzekvcal:
 /* Subroutine */ int zzekvadr_(cspice_t* __global_state, integer *njrs, 
 	integer *bases, integer *rwvidx, integer *rwvbas, integer *sgvbas)
 {
-    return zzekvadr_0_(0, njrs, bases, rwvidx, rwvbas, sgvbas);
+    return zzekvadr_0_(__global_state, 0, njrs, bases, rwvidx, rwvbas, sgvbas)
+	    ;
     }
 
 /* Subroutine */ int zzekvset_(cspice_t* __global_state, integer *njrs, 
 	integer *bases)
 {
-    return zzekvadr_0_(1, njrs, bases, (integer *)0, (integer *)0, (integer *)
-	    0);
+    return zzekvadr_0_(__global_state, 1, njrs, bases, (integer *)0, (integer 
+	    *)0, (integer *)0);
     }
 
 /* Subroutine */ int zzekvcal_(cspice_t* __global_state, integer *rwvidx, 
 	integer *rwvbas, integer *sgvbas)
 {
-    return zzekvadr_0_(2, (integer *)0, (integer *)0, rwvidx, rwvbas, sgvbas);
+    return zzekvadr_0_(__global_state, 2, (integer *)0, (integer *)0, rwvidx, 
+	    rwvbas, sgvbas);
     }
 

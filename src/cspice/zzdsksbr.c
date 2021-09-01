@@ -8,7 +8,7 @@
 
 
 extern zzdsksbr_init_t __zzdsksbr_init;
-static inline zzdsksbr_state_t* get_zzdsksbr_state(cspice_t* state) {
+static zzdsksbr_state_t* get_zzdsksbr_state(cspice_t* state) {
 	if (!state->zzdsksbr)
 		state->zzdsksbr = __cspice_allocate_module(sizeof(
 	zzdsksbr_state_t), &__zzdsksbr_init, sizeof(__zzdsksbr_init));

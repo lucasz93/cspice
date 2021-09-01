@@ -8,7 +8,7 @@
 
 
 typedef int lastpc_state_t;
-static inline lastpc_state_t* get_lastpc_state(cspice_t* state) {
+static lastpc_state_t* get_lastpc_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern gfevnt_init_t __gfevnt_init;
-static inline gfevnt_state_t* get_gfevnt_state(cspice_t* state) {
+static gfevnt_state_t* get_gfevnt_state(cspice_t* state) {
 	if (!state->gfevnt)
 		state->gfevnt = __cspice_allocate_module(sizeof(
 	gfevnt_state_t), &__gfevnt_init, sizeof(__gfevnt_init));

@@ -8,7 +8,7 @@
 
 
 extern zzrytlat_init_t __zzrytlat_init;
-static inline zzrytlat_state_t* get_zzrytlat_state(cspice_t* state) {
+static zzrytlat_state_t* get_zzrytlat_state(cspice_t* state) {
 	if (!state->zzrytlat)
 		state->zzrytlat = __cspice_allocate_module(sizeof(
 	zzrytlat_state_t), &__zzrytlat_init, sizeof(__zzrytlat_init));
@@ -28,7 +28,7 @@ static inline zzrytlat_state_t* get_zzrytlat_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
@@ -747,7 +747,7 @@ static inline zzrytlat_state_t* get_zzrytlat_state(cspice_t* state) {
 /*     2*pi radians. Note that MAXLON > MINLON at this point. */
 
     loncov = maxlon - minlon;
-    if (cos(&__global_state->f2c, loncov) < 1.) {
+    if (cos(loncov) < 1.) {
 
 /*        We have distinct longitude boundaries. Go to work. */
 
@@ -758,8 +758,8 @@ static inline zzrytlat_state_t* get_zzrytlat_state(cspice_t* state) {
 /*        The vector WESTB is an outward-facing vector normal to */
 /*        the west boundary. */
 
-	d__1 = sin(&__global_state->f2c, minlon);
-	d__2 = -cos(&__global_state->f2c, minlon);
+	d__1 = sin(minlon);
+	d__2 = -cos(minlon);
 	vpack_(__global_state, &d__1, &d__2, &__state->c_b10, westb);
 	s = (vnorm_(__global_state, vertex) + maxr) * 1.1;
 	zzinrypl_(__global_state, vertex, udir, westb, &__state->c_b10, &s, &
@@ -808,8 +808,8 @@ static inline zzrytlat_state_t* get_zzrytlat_state(cspice_t* state) {
 
 /*        The vector EASTB is an outward-facing vector normal to */
 /*        the east boundary. */
-	d__1 = -sin(&__global_state->f2c, maxlon);
-	d__2 = cos(&__global_state->f2c, maxlon);
+	d__1 = -sin(maxlon);
+	d__2 = cos(maxlon);
 	vpack_(__global_state, &d__1, &d__2, &__state->c_b10, eastb);
 	zzinrypl_(__global_state, vertex, udir, eastb, &__state->c_b10, &s, &
 		nx, srfx);

@@ -8,7 +8,7 @@
 
 
 typedef int raxisa_state_t;
-static inline raxisa_state_t* get_raxisa_state(cspice_t* state) {
+static raxisa_state_t* get_raxisa_state(cspice_t* state) {
 	return 0;
 }
 
@@ -17,7 +17,7 @@ static inline raxisa_state_t* get_raxisa_state(cspice_t* state) {
 	doublereal *axis, doublereal *angle)
 {
     /* Builtin functions */
-    double atan2(f2c_state_t*, doublereal, doublereal);
+    double atan2(doublereal, doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
@@ -352,8 +352,7 @@ static inline raxisa_state_t* get_raxisa_state(cspice_t* state) {
 	axis[2] = q[3];
     } else {
 	vhat_(__global_state, &q[1], axis);
-	*angle = atan2(&__global_state->f2c, vnorm_(__global_state, &q[1]), q[
-		0]) * 2.;
+	*angle = atan2(vnorm_(__global_state, &q[1]), q[0]) * 2.;
     }
     chkout_(__global_state, "RAXISA", (ftnlen)6);
     return 0;

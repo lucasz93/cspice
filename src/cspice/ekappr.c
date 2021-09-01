@@ -8,7 +8,7 @@
 
 
 typedef int ekappr_state_t;
-static inline ekappr_state_t* get_ekappr_state(cspice_t* state) {
+static ekappr_state_t* get_ekappr_state(cspice_t* state) {
 	return 0;
 }
 

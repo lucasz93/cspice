@@ -8,7 +8,7 @@
 
 
 typedef int sameai_state_t;
-static inline sameai_state_t* get_sameai_state(cspice_t* state) {
+static sameai_state_t* get_sameai_state(cspice_t* state) {
 	return 0;
 }
 

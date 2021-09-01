@@ -8,7 +8,7 @@
 
 
 extern vprjpi_init_t __vprjpi_init;
-static inline vprjpi_state_t* get_vprjpi_state(cspice_t* state) {
+static vprjpi_state_t* get_vprjpi_state(cspice_t* state) {
 	if (!state->vprjpi)
 		state->vprjpi = __cspice_allocate_module(sizeof(
 	vprjpi_state_t), &__vprjpi_init, sizeof(__vprjpi_init));

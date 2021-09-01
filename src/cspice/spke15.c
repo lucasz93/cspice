@@ -8,7 +8,7 @@
 
 
 extern spke15_init_t __spke15_init;
-static inline spke15_state_t* get_spke15_state(cspice_t* state) {
+static spke15_state_t* get_spke15_state(cspice_t* state) {
 	if (!state->spke15)
 		state->spke15 = __cspice_allocate_module(sizeof(
 	spke15_state_t), &__spke15_init, sizeof(__spke15_init));
@@ -24,8 +24,8 @@ static inline spke15_state_t* get_spke15_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
-	    doublereal *), d_sign(f2c_state_t*, doublereal *, doublereal *);
+    double sqrt(doublereal), d_mod(f2c_state_t*, doublereal *, doublereal *), 
+	    d_sign(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal near__;
@@ -504,7 +504,7 @@ static inline spke15_state_t* get_spke15_state(cspice_t* state) {
 /*     Compute the distance and speed at periapse. */
 
     near__ = p / (ecc + 1.);
-    speed = sqrt(&__global_state->f2c, gm / p) * (ecc + 1.);
+    speed = sqrt(gm / p) * (ecc + 1.);
 
 /*     Next get the position at periapse ... */
 
@@ -558,7 +558,7 @@ static inline spke15_state_t* get_spke15_state(cspice_t* state) {
 /* Computing 2nd power */
 	d__1 = ecc;
 	oneme2 = 1. - d__1 * d__1;
-	dmdt = oneme2 / p * sqrt(&__global_state->f2c, gm * oneme2 / p);
+	dmdt = oneme2 / p * sqrt(gm * oneme2 / p);
 	manom = dmdt * dt;
 
 /*        Next compute the angle THETA such that THETA is between */

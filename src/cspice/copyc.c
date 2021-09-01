@@ -8,7 +8,7 @@
 
 
 typedef int copyc_state_t;
-static inline copyc_state_t* get_copyc_state(cspice_t* state) {
+static copyc_state_t* get_copyc_state(cspice_t* state) {
 	return 0;
 }
 

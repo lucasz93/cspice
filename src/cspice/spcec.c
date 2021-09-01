@@ -8,7 +8,7 @@
 
 
 extern spcec_init_t __spcec_init;
-static inline spcec_state_t* get_spcec_state(cspice_t* state) {
+static spcec_state_t* get_spcec_state(cspice_t* state) {
 	if (!state->spcec)
 		state->spcec = __cspice_allocate_module(sizeof(spcec_state_t),
 	 &__spcec_init, sizeof(__spcec_init));

@@ -8,7 +8,7 @@
 
 
 extern ekdelr_init_t __ekdelr_init;
-static inline ekdelr_state_t* get_ekdelr_state(cspice_t* state) {
+static ekdelr_state_t* get_ekdelr_state(cspice_t* state) {
 	if (!state->ekdelr)
 		state->ekdelr = __cspice_allocate_module(sizeof(
 	ekdelr_state_t), &__ekdelr_init, sizeof(__ekdelr_init));

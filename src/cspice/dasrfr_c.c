@@ -241,8 +241,8 @@
    /*
    Convert the output strings to C style strings. 
    */
-   F2C_ConvertStr ( idwlen, idword );
-   F2C_ConvertStr ( ifnlen, ifname );
+   F2C_ConvertStr ( naif_state, idwlen, idword );
+   F2C_ConvertStr ( naif_state, ifnlen, ifname );
 
 
    chkout_c ( naif_state, "dasrfr_c" );

@@ -8,7 +8,7 @@
 
 
 typedef int nvp2pl_state_t;
-static inline nvp2pl_state_t* get_nvp2pl_state(cspice_t* state) {
+static nvp2pl_state_t* get_nvp2pl_state(cspice_t* state) {
 	return 0;
 }
 

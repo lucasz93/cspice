@@ -8,7 +8,7 @@
 
 
 extern zzgfocu_init_t __zzgfocu_init;
-static inline zzgfocu_state_t* get_zzgfocu_state(cspice_t* state) {
+static zzgfocu_state_t* get_zzgfocu_state(cspice_t* state) {
 	if (!state->zzgfocu)
 		state->zzgfocu = __cspice_allocate_module(sizeof(
 	zzgfocu_state_t), &__zzgfocu_init, sizeof(__zzgfocu_init));
@@ -2358,10 +2358,10 @@ L_zzgfocst:
 	fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, 
 	ftnlen obsrvr_len, ftnlen abcorr_len)
 {
-    return zzgfocu_0_(0, occtyp, front, fshape, fframe, back, bshape, bframe, 
-	    obsrvr, abcorr, time, ocstat, occtyp_len, front_len, fshape_len, 
-	    fframe_len, back_len, bshape_len, bframe_len, obsrvr_len, 
-	    abcorr_len);
+    return zzgfocu_0_(__global_state, 0, occtyp, front, fshape, fframe, back, 
+	    bshape, bframe, obsrvr, abcorr, time, ocstat, occtyp_len, 
+	    front_len, fshape_len, fframe_len, back_len, bshape_len, 
+	    bframe_len, obsrvr_len, abcorr_len);
     }
 
 /* Subroutine */ int zzgfocin_(cspice_t* __global_state, char *occtyp, char *
@@ -2371,18 +2371,18 @@ L_zzgfocst:
 	ftnlen bshape_len, ftnlen bframe_len, ftnlen obsrvr_len, ftnlen 
 	abcorr_len)
 {
-    return zzgfocu_0_(1, occtyp, front, fshape, fframe, back, bshape, bframe, 
-	    obsrvr, abcorr, (doublereal *)0, (logical *)0, occtyp_len, 
-	    front_len, fshape_len, fframe_len, back_len, bshape_len, 
-	    bframe_len, obsrvr_len, abcorr_len);
+    return zzgfocu_0_(__global_state, 1, occtyp, front, fshape, fframe, back, 
+	    bshape, bframe, obsrvr, abcorr, (doublereal *)0, (logical *)0, 
+	    occtyp_len, front_len, fshape_len, fframe_len, back_len, 
+	    bshape_len, bframe_len, obsrvr_len, abcorr_len);
     }
 
 /* Subroutine */ int zzgfocst_(cspice_t* __global_state, doublereal *time, 
 	logical *ocstat)
 {
-    return zzgfocu_0_(2, (char *)0, (char *)0, (char *)0, (char *)0, (char *)
-	    0, (char *)0, (char *)0, (char *)0, (char *)0, time, ocstat, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0);
+    return zzgfocu_0_(__global_state, 2, (char *)0, (char *)0, (char *)0, (
+	    char *)0, (char *)0, (char *)0, (char *)0, (char *)0, (char *)0, 
+	    time, ocstat, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 

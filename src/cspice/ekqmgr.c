@@ -8,7 +8,7 @@
 
 
 extern ekqmgr_init_t __ekqmgr_init;
-static inline ekqmgr_state_t* get_ekqmgr_state(cspice_t* state) {
+static ekqmgr_state_t* get_ekqmgr_state(cspice_t* state) {
 	if (!state->ekqmgr)
 		state->ekqmgr = __cspice_allocate_module(sizeof(
 	ekqmgr_state_t), &__ekqmgr_init, sizeof(__ekqmgr_init));
@@ -7782,132 +7782,136 @@ L_ekgi:
 	eqryc_len, ftnlen fname_len, ftnlen column_len, ftnlen table_len, 
 	ftnlen errmsg_len, ftnlen cdata_len)
 {
-    return ekqmgr_0_(0, cindex, elment, eqryc, eqryd, eqryi, fname, row, 
-	    selidx, column, handle, n, table, attdsc, ccount, found, nelt, 
-	    nmrows, semerr, errmsg, cdata, ddata, idata, null, eqryc_len, 
-	    fname_len, column_len, table_len, errmsg_len, cdata_len);
+    return ekqmgr_0_(__global_state, 0, cindex, elment, eqryc, eqryd, eqryi, 
+	    fname, row, selidx, column, handle, n, table, attdsc, ccount, 
+	    found, nelt, nmrows, semerr, errmsg, cdata, ddata, idata, null, 
+	    eqryc_len, fname_len, column_len, table_len, errmsg_len, 
+	    cdata_len);
     }
 
 /* Subroutine */ int eklef_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return ekqmgr_0_(1, (integer *)0, (integer *)0, (char *)0, (doublereal *)
-	    0, (integer *)0, fname, (integer *)0, (integer *)0, (char *)0, 
-	    handle, (integer *)0, (char *)0, (integer *)0, (integer *)0, (
-	    logical *)0, (integer *)0, (integer *)0, (logical *)0, (char *)0, 
-	    (char *)0, (doublereal *)0, (integer *)0, (logical *)0, (ftnint)0,
-	     fname_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return ekqmgr_0_(__global_state, 1, (integer *)0, (integer *)0, (char *)0,
+	     (doublereal *)0, (integer *)0, fname, (integer *)0, (integer *)0,
+	     (char *)0, handle, (integer *)0, (char *)0, (integer *)0, (
+	    integer *)0, (logical *)0, (integer *)0, (integer *)0, (logical *)
+	    0, (char *)0, (char *)0, (doublereal *)0, (integer *)0, (logical *
+	    )0, (ftnint)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int ekuef_(cspice_t* __global_state, integer *handle)
 {
-    return ekqmgr_0_(2, (integer *)0, (integer *)0, (char *)0, (doublereal *)
-	    0, (integer *)0, (char *)0, (integer *)0, (integer *)0, (char *)0,
-	     handle, (integer *)0, (char *)0, (integer *)0, (integer *)0, (
-	    logical *)0, (integer *)0, (integer *)0, (logical *)0, (char *)0, 
-	    (char *)0, (doublereal *)0, (integer *)0, (logical *)0, (ftnint)0,
-	     (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return ekqmgr_0_(__global_state, 2, (integer *)0, (integer *)0, (char *)0,
+	     (doublereal *)0, (integer *)0, (char *)0, (integer *)0, (integer 
+	    *)0, (char *)0, handle, (integer *)0, (char *)0, (integer *)0, (
+	    integer *)0, (logical *)0, (integer *)0, (integer *)0, (logical *)
+	    0, (char *)0, (char *)0, (doublereal *)0, (integer *)0, (logical *
+	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int ekntab_(cspice_t* __global_state, integer *n)
 {
-    return ekqmgr_0_(3, (integer *)0, (integer *)0, (char *)0, (doublereal *)
-	    0, (integer *)0, (char *)0, (integer *)0, (integer *)0, (char *)0,
-	     (integer *)0, n, (char *)0, (integer *)0, (integer *)0, (logical 
-	    *)0, (integer *)0, (integer *)0, (logical *)0, (char *)0, (char *)
-	    0, (doublereal *)0, (integer *)0, (logical *)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return ekqmgr_0_(__global_state, 3, (integer *)0, (integer *)0, (char *)0,
+	     (doublereal *)0, (integer *)0, (char *)0, (integer *)0, (integer 
+	    *)0, (char *)0, (integer *)0, n, (char *)0, (integer *)0, (
+	    integer *)0, (logical *)0, (integer *)0, (integer *)0, (logical *)
+	    0, (char *)0, (char *)0, (doublereal *)0, (integer *)0, (logical *
+	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int ektnam_(cspice_t* __global_state, integer *n, char *
 	table, ftnlen table_len)
 {
-    return ekqmgr_0_(4, (integer *)0, (integer *)0, (char *)0, (doublereal *)
-	    0, (integer *)0, (char *)0, (integer *)0, (integer *)0, (char *)0,
-	     (integer *)0, n, table, (integer *)0, (integer *)0, (logical *)0,
-	     (integer *)0, (integer *)0, (logical *)0, (char *)0, (char *)0, (
-	    doublereal *)0, (integer *)0, (logical *)0, (ftnint)0, (ftnint)0, 
-	    (ftnint)0, table_len, (ftnint)0, (ftnint)0);
+    return ekqmgr_0_(__global_state, 4, (integer *)0, (integer *)0, (char *)0,
+	     (doublereal *)0, (integer *)0, (char *)0, (integer *)0, (integer 
+	    *)0, (char *)0, (integer *)0, n, table, (integer *)0, (integer *)
+	    0, (logical *)0, (integer *)0, (integer *)0, (logical *)0, (char *
+	    )0, (char *)0, (doublereal *)0, (integer *)0, (logical *)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, table_len, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int ekccnt_(cspice_t* __global_state, char *table, integer *
 	ccount, ftnlen table_len)
 {
-    return ekqmgr_0_(5, (integer *)0, (integer *)0, (char *)0, (doublereal *)
-	    0, (integer *)0, (char *)0, (integer *)0, (integer *)0, (char *)0,
-	     (integer *)0, (integer *)0, table, (integer *)0, ccount, (
-	    logical *)0, (integer *)0, (integer *)0, (logical *)0, (char *)0, 
-	    (char *)0, (doublereal *)0, (integer *)0, (logical *)0, (ftnint)0,
-	     (ftnint)0, (ftnint)0, table_len, (ftnint)0, (ftnint)0);
+    return ekqmgr_0_(__global_state, 5, (integer *)0, (integer *)0, (char *)0,
+	     (doublereal *)0, (integer *)0, (char *)0, (integer *)0, (integer 
+	    *)0, (char *)0, (integer *)0, (integer *)0, table, (integer *)0, 
+	    ccount, (logical *)0, (integer *)0, (integer *)0, (logical *)0, (
+	    char *)0, (char *)0, (doublereal *)0, (integer *)0, (logical *)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0, table_len, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int ekcii_(cspice_t* __global_state, char *table, integer *
 	cindex, char *column, integer *attdsc, ftnlen table_len, ftnlen 
 	column_len)
 {
-    return ekqmgr_0_(6, cindex, (integer *)0, (char *)0, (doublereal *)0, (
-	    integer *)0, (char *)0, (integer *)0, (integer *)0, column, (
-	    integer *)0, (integer *)0, table, attdsc, (integer *)0, (logical *
-	    )0, (integer *)0, (integer *)0, (logical *)0, (char *)0, (char *)
-	    0, (doublereal *)0, (integer *)0, (logical *)0, (ftnint)0, (
-	    ftnint)0, column_len, table_len, (ftnint)0, (ftnint)0);
+    return ekqmgr_0_(__global_state, 6, cindex, (integer *)0, (char *)0, (
+	    doublereal *)0, (integer *)0, (char *)0, (integer *)0, (integer *)
+	    0, column, (integer *)0, (integer *)0, table, attdsc, (integer *)
+	    0, (logical *)0, (integer *)0, (integer *)0, (logical *)0, (char *
+	    )0, (char *)0, (doublereal *)0, (integer *)0, (logical *)0, (
+	    ftnint)0, (ftnint)0, column_len, table_len, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int eksrch_(cspice_t* __global_state, integer *eqryi, char *
 	eqryc, doublereal *eqryd, integer *nmrows, logical *semerr, char *
 	errmsg, ftnlen eqryc_len, ftnlen errmsg_len)
 {
-    return ekqmgr_0_(7, (integer *)0, (integer *)0, eqryc, eqryd, eqryi, (
-	    char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
-	    integer *)0, (char *)0, (integer *)0, (integer *)0, (logical *)0, 
-	    (integer *)0, nmrows, semerr, errmsg, (char *)0, (doublereal *)0, 
-	    (integer *)0, (logical *)0, eqryc_len, (ftnint)0, (ftnint)0, (
-	    ftnint)0, errmsg_len, (ftnint)0);
+    return ekqmgr_0_(__global_state, 7, (integer *)0, (integer *)0, eqryc, 
+	    eqryd, eqryi, (char *)0, (integer *)0, (integer *)0, (char *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (integer *)0, 
+	    (logical *)0, (integer *)0, nmrows, semerr, errmsg, (char *)0, (
+	    doublereal *)0, (integer *)0, (logical *)0, eqryc_len, (ftnint)0, 
+	    (ftnint)0, (ftnint)0, errmsg_len, (ftnint)0);
     }
 
 /* Subroutine */ int eknelt_(cspice_t* __global_state, integer *selidx, 
 	integer *row, integer *nelt)
 {
-    return ekqmgr_0_(8, (integer *)0, (integer *)0, (char *)0, (doublereal *)
-	    0, (integer *)0, (char *)0, row, selidx, (char *)0, (integer *)0, 
-	    (integer *)0, (char *)0, (integer *)0, (integer *)0, (logical *)0,
-	     nelt, (integer *)0, (logical *)0, (char *)0, (char *)0, (
-	    doublereal *)0, (integer *)0, (logical *)0, (ftnint)0, (ftnint)0, 
-	    (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return ekqmgr_0_(__global_state, 8, (integer *)0, (integer *)0, (char *)0,
+	     (doublereal *)0, (integer *)0, (char *)0, row, selidx, (char *)0,
+	     (integer *)0, (integer *)0, (char *)0, (integer *)0, (integer *)
+	    0, (logical *)0, nelt, (integer *)0, (logical *)0, (char *)0, (
+	    char *)0, (doublereal *)0, (integer *)0, (logical *)0, (ftnint)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int ekgc_(cspice_t* __global_state, integer *selidx, integer 
 	*row, integer *elment, char *cdata, logical *null, logical *found, 
 	ftnlen cdata_len)
 {
-    return ekqmgr_0_(9, (integer *)0, elment, (char *)0, (doublereal *)0, (
-	    integer *)0, (char *)0, row, selidx, (char *)0, (integer *)0, (
-	    integer *)0, (char *)0, (integer *)0, (integer *)0, found, (
-	    integer *)0, (integer *)0, (logical *)0, (char *)0, cdata, (
-	    doublereal *)0, (integer *)0, null, (ftnint)0, (ftnint)0, (ftnint)
-	    0, (ftnint)0, (ftnint)0, cdata_len);
+    return ekqmgr_0_(__global_state, 9, (integer *)0, elment, (char *)0, (
+	    doublereal *)0, (integer *)0, (char *)0, row, selidx, (char *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (integer *)0, 
+	    found, (integer *)0, (integer *)0, (logical *)0, (char *)0, cdata,
+	     (doublereal *)0, (integer *)0, null, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, cdata_len);
     }
 
 /* Subroutine */ int ekgd_(cspice_t* __global_state, integer *selidx, integer 
 	*row, integer *elment, doublereal *ddata, logical *null, logical *
 	found)
 {
-    return ekqmgr_0_(10, (integer *)0, elment, (char *)0, (doublereal *)0, (
-	    integer *)0, (char *)0, row, selidx, (char *)0, (integer *)0, (
-	    integer *)0, (char *)0, (integer *)0, (integer *)0, found, (
-	    integer *)0, (integer *)0, (logical *)0, (char *)0, (char *)0, 
-	    ddata, (integer *)0, null, (ftnint)0, (ftnint)0, (ftnint)0, (
+    return ekqmgr_0_(__global_state, 10, (integer *)0, elment, (char *)0, (
+	    doublereal *)0, (integer *)0, (char *)0, row, selidx, (char *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (integer *)0, 
+	    found, (integer *)0, (integer *)0, (logical *)0, (char *)0, (char 
+	    *)0, ddata, (integer *)0, null, (ftnint)0, (ftnint)0, (ftnint)0, (
 	    ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int ekgi_(cspice_t* __global_state, integer *selidx, integer 
 	*row, integer *elment, integer *idata, logical *null, logical *found)
 {
-    return ekqmgr_0_(11, (integer *)0, elment, (char *)0, (doublereal *)0, (
-	    integer *)0, (char *)0, row, selidx, (char *)0, (integer *)0, (
-	    integer *)0, (char *)0, (integer *)0, (integer *)0, found, (
-	    integer *)0, (integer *)0, (logical *)0, (char *)0, (char *)0, (
-	    doublereal *)0, idata, null, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0);
+    return ekqmgr_0_(__global_state, 11, (integer *)0, elment, (char *)0, (
+	    doublereal *)0, (integer *)0, (char *)0, row, selidx, (char *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (integer *)0, 
+	    found, (integer *)0, (integer *)0, (logical *)0, (char *)0, (char 
+	    *)0, (doublereal *)0, idata, null, (ftnint)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 

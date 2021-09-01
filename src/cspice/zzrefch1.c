@@ -8,7 +8,7 @@
 
 
 extern zzrefch1_init_t __zzrefch1_init;
-static inline zzrefch1_state_t* get_zzrefch1_state(cspice_t* state) {
+static zzrefch1_state_t* get_zzrefch1_state(cspice_t* state) {
 	if (!state->zzrefch1)
 		state->zzrefch1 = __cspice_allocate_module(sizeof(
 	zzrefch1_state_t), &__zzrefch1_init, sizeof(__zzrefch1_init));

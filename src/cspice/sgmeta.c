@@ -8,7 +8,7 @@
 
 
 extern sgmeta_init_t __sgmeta_init;
-static inline sgmeta_state_t* get_sgmeta_state(cspice_t* state) {
+static sgmeta_state_t* get_sgmeta_state(cspice_t* state) {
 	if (!state->sgmeta)
 		state->sgmeta = __cspice_allocate_module(sizeof(
 	sgmeta_state_t), &__sgmeta_init, sizeof(__sgmeta_init));

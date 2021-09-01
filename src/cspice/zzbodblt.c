@@ -8,7 +8,7 @@
 
 
 extern zzbodblt_init_t __zzbodblt_init;
-static inline zzbodblt_state_t* get_zzbodblt_state(cspice_t* state) {
+static zzbodblt_state_t* get_zzbodblt_state(cspice_t* state) {
 	if (!state->zzbodblt)
 		state->zzbodblt = __cspice_allocate_module(sizeof(
 	zzbodblt_state_t), &__zzbodblt_init, sizeof(__zzbodblt_init));
@@ -1010,23 +1010,23 @@ L_zzbodlst:
 	char *reqst, ftnlen names_len, ftnlen nornam_len, ftnlen device_len, 
 	ftnlen reqst_len)
 {
-    return zzbodblt_0_(0, room, names, nornam, codes, nvals, device, reqst, 
-	    names_len, nornam_len, device_len, reqst_len);
+    return zzbodblt_0_(__global_state, 0, room, names, nornam, codes, nvals, 
+	    device, reqst, names_len, nornam_len, device_len, reqst_len);
     }
 
 /* Subroutine */ int zzbodget_(cspice_t* __global_state, integer *room, char *
 	names, char *nornam, integer *codes, integer *nvals, ftnlen names_len,
 	 ftnlen nornam_len)
 {
-    return zzbodblt_0_(1, room, names, nornam, codes, nvals, (char *)0, (char 
-	    *)0, names_len, nornam_len, (ftnint)0, (ftnint)0);
+    return zzbodblt_0_(__global_state, 1, room, names, nornam, codes, nvals, (
+	    char *)0, (char *)0, names_len, nornam_len, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzbodlst_(cspice_t* __global_state, char *device, char *
 	reqst, ftnlen device_len, ftnlen reqst_len)
 {
-    return zzbodblt_0_(2, (integer *)0, (char *)0, (char *)0, (integer *)0, (
-	    integer *)0, device, reqst, (ftnint)0, (ftnint)0, device_len, 
-	    reqst_len);
+    return zzbodblt_0_(__global_state, 2, (integer *)0, (char *)0, (char *)0, 
+	    (integer *)0, (integer *)0, device, reqst, (ftnint)0, (ftnint)0, 
+	    device_len, reqst_len);
     }
 

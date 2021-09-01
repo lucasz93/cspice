@@ -8,7 +8,7 @@
 
 
 extern wnexpd_init_t __wnexpd_init;
-static inline wnexpd_state_t* get_wnexpd_state(cspice_t* state) {
+static wnexpd_state_t* get_wnexpd_state(cspice_t* state) {
 	if (!state->wnexpd)
 		state->wnexpd = __cspice_allocate_module(sizeof(
 	wnexpd_state_t), &__wnexpd_init, sizeof(__wnexpd_init));

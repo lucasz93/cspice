@@ -8,7 +8,7 @@
 
 
 extern stpool_init_t __stpool_init;
-static inline stpool_state_t* get_stpool_state(cspice_t* state) {
+static stpool_state_t* get_stpool_state(cspice_t* state) {
 	if (!state->stpool)
 		state->stpool = __cspice_allocate_module(sizeof(
 	stpool_state_t), &__stpool_init, sizeof(__stpool_init));

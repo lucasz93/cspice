@@ -8,7 +8,7 @@
 
 
 typedef int isrot_state_t;
-static inline isrot_state_t* get_isrot_state(cspice_t* state) {
+static isrot_state_t* get_isrot_state(cspice_t* state) {
 	return 0;
 }
 

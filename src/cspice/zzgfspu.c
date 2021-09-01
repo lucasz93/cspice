@@ -8,7 +8,7 @@
 
 
 extern zzgfspu_init_t __zzgfspu_init;
-static inline zzgfspu_state_t* get_zzgfspu_state(cspice_t* state) {
+static zzgfspu_state_t* get_zzgfspu_state(cspice_t* state) {
 	if (!state->zzgfspu)
 		state->zzgfspu = __cspice_allocate_module(sizeof(
 	zzgfspu_state_t), &__zzgfspu_init, sizeof(__zzgfspu_init));
@@ -1405,49 +1405,51 @@ L_zzgfspx:
 	ftnlen of_len, ftnlen from_len, ftnlen shape_len, ftnlen frame_len, 
 	ftnlen abcorr_len, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len)
 {
-    return zzgfspu_0_(0, of, from, shape, frame, et, udfunc, abcorr, decres, 
-	    sep, xabcr, xbod, yref, xref, xobs, xrad, xshp, of_len, from_len, 
-	    shape_len, frame_len, abcorr_len, xabcr_len, yref_len, xref_len);
+    return zzgfspu_0_(__global_state, 0, of, from, shape, frame, et, udfunc, 
+	    abcorr, decres, sep, xabcr, xbod, yref, xref, xobs, xrad, xshp, 
+	    of_len, from_len, shape_len, frame_len, abcorr_len, xabcr_len, 
+	    yref_len, xref_len);
     }
 
 /* Subroutine */ int zzgfspin_(cspice_t* __global_state, char *of, char *from,
 	 char *shape, char *frame, char *abcorr, ftnlen of_len, ftnlen 
 	from_len, ftnlen shape_len, ftnlen frame_len, ftnlen abcorr_len)
 {
-    return zzgfspu_0_(1, of, from, shape, frame, (doublereal *)0, (U_fp)0, 
-	    abcorr, (logical *)0, (doublereal *)0, (char *)0, (integer *)0, (
-	    char *)0, (char *)0, (integer *)0, (doublereal *)0, (integer *)0, 
-	    of_len, from_len, shape_len, frame_len, abcorr_len, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfspu_0_(__global_state, 1, of, from, shape, frame, (doublereal *
+	    )0, (U_fp)0, abcorr, (logical *)0, (doublereal *)0, (char *)0, (
+	    integer *)0, (char *)0, (char *)0, (integer *)0, (doublereal *)0, 
+	    (integer *)0, of_len, from_len, shape_len, frame_len, abcorr_len, 
+	    (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfspdc_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *decres)
 {
-    return zzgfspu_0_(2, (char *)0, (char *)0, (char *)0, (char *)0, et, 
-	    udfunc, (char *)0, decres, (doublereal *)0, (char *)0, (integer *)
-	    0, (char *)0, (char *)0, (integer *)0, (doublereal *)0, (integer *
-	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0);
+    return zzgfspu_0_(__global_state, 2, (char *)0, (char *)0, (char *)0, (
+	    char *)0, et, udfunc, (char *)0, decres, (doublereal *)0, (char *)
+	    0, (integer *)0, (char *)0, (char *)0, (integer *)0, (doublereal *
+	    )0, (integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfspgq_(cspice_t* __global_state, doublereal *et, 
 	doublereal *sep)
 {
-    return zzgfspu_0_(3, (char *)0, (char *)0, (char *)0, (char *)0, et, (
-	    U_fp)0, (char *)0, (logical *)0, sep, (char *)0, (integer *)0, (
-	    char *)0, (char *)0, (integer *)0, (doublereal *)0, (integer *)0, 
-	    (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, 
-	    (ftnint)0, (ftnint)0);
+    return zzgfspu_0_(__global_state, 3, (char *)0, (char *)0, (char *)0, (
+	    char *)0, et, (U_fp)0, (char *)0, (logical *)0, sep, (char *)0, (
+	    integer *)0, (char *)0, (char *)0, (integer *)0, (doublereal *)0, 
+	    (integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfspx_(cspice_t* __global_state, char *xabcr, integer *
 	xbod, char *yref, char *xref, integer *xobs, doublereal *xrad, 
 	integer *xshp, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len)
 {
-    return zzgfspu_0_(4, (char *)0, (char *)0, (char *)0, (char *)0, (
-	    doublereal *)0, (U_fp)0, (char *)0, (logical *)0, (doublereal *)0,
-	     xabcr, xbod, yref, xref, xobs, xrad, xshp, (ftnint)0, (ftnint)0, 
-	    (ftnint)0, (ftnint)0, (ftnint)0, xabcr_len, yref_len, xref_len);
+    return zzgfspu_0_(__global_state, 4, (char *)0, (char *)0, (char *)0, (
+	    char *)0, (doublereal *)0, (U_fp)0, (char *)0, (logical *)0, (
+	    doublereal *)0, xabcr, xbod, yref, xref, xobs, xrad, xshp, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, xabcr_len, 
+	    yref_len, xref_len);
     }
 

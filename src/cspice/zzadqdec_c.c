@@ -172,7 +172,7 @@
    list matches that of "udqdec."
    */
    fPtr = ( void (*) ( void*, 
-                       void ( * ) ( SpiceDouble, SpiceDouble  *),
+                       void ( * ) ( void *, SpiceDouble, SpiceDouble  *),
                        SpiceDouble, 
                        SpiceBoolean*) ) zzadget_c ( naif_state, UDQDEC );
 

@@ -8,7 +8,7 @@
 
 
 typedef int shelld_state_t;
-static inline shelld_state_t* get_shelld_state(cspice_t* state) {
+static shelld_state_t* get_shelld_state(cspice_t* state) {
 	return 0;
 }
 

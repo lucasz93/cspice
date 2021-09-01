@@ -8,7 +8,7 @@
 
 
 extern zzvstrng_init_t __zzvstrng_init;
-static inline zzvstrng_state_t* get_zzvstrng_state(cspice_t* state) {
+static zzvstrng_state_t* get_zzvstrng_state(cspice_t* state) {
 	if (!state->zzvstrng)
 		state->zzvstrng = __cspice_allocate_module(sizeof(
 	zzvstrng_state_t), &__zzvstrng_init, sizeof(__zzvstrng_init));
@@ -742,22 +742,23 @@ L_zzvsbstr:
 	fill, integer *from, integer *to, logical *rnd, integer *expont, char 
 	*substr, logical *did, ftnlen fill_len, ftnlen substr_len)
 {
-    return zzvstrng_0_(0, x, fill, from, to, rnd, expont, substr, did, 
-	    fill_len, substr_len);
+    return zzvstrng_0_(__global_state, 0, x, fill, from, to, rnd, expont, 
+	    substr, did, fill_len, substr_len);
     }
 
 /* Subroutine */ int zzvststr_(cspice_t* __global_state, doublereal *x, char *
 	fill, integer *expont, ftnlen fill_len)
 {
-    return zzvstrng_0_(1, x, fill, (integer *)0, (integer *)0, (logical *)0, 
-	    expont, (char *)0, (logical *)0, fill_len, (ftnint)0);
+    return zzvstrng_0_(__global_state, 1, x, fill, (integer *)0, (integer *)0,
+	     (logical *)0, expont, (char *)0, (logical *)0, fill_len, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int zzvsbstr_(cspice_t* __global_state, integer *from, 
 	integer *to, logical *rnd, char *substr, logical *did, ftnlen 
 	substr_len)
 {
-    return zzvstrng_0_(2, (doublereal *)0, (char *)0, from, to, rnd, (integer 
-	    *)0, substr, did, (ftnint)0, substr_len);
+    return zzvstrng_0_(__global_state, 2, (doublereal *)0, (char *)0, from, 
+	    to, rnd, (integer *)0, substr, did, (ftnint)0, substr_len);
     }
 

@@ -8,7 +8,7 @@
 
 
 typedef int ekopr_state_t;
-static inline ekopr_state_t* get_ekopr_state(cspice_t* state) {
+static ekopr_state_t* get_ekopr_state(cspice_t* state) {
 	return 0;
 }
 

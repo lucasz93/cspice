@@ -8,7 +8,7 @@
 
 
 extern ckgr01_init_t __ckgr01_init;
-static inline ckgr01_state_t* get_ckgr01_state(cspice_t* state) {
+static ckgr01_state_t* get_ckgr01_state(cspice_t* state) {
 	if (!state->ckgr01)
 		state->ckgr01 = __cspice_allocate_module(sizeof(
 	ckgr01_state_t), &__ckgr01_init, sizeof(__ckgr01_init));

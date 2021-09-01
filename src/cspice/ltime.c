@@ -8,7 +8,7 @@
 
 
 typedef int ltime_state_t;
-static inline ltime_state_t* get_ltime_state(cspice_t* state) {
+static ltime_state_t* get_ltime_state(cspice_t* state) {
 	return 0;
 }
 

@@ -235,7 +235,7 @@
    /*
    Convert the internal file name to a C-style string. 
    */
-   F2C_ConvertStr ( lenout, ifname );
+   F2C_ConvertStr ( naif_state, lenout, ifname );
 
 
    chkout_c ( naif_state, "dafrfr_c" );

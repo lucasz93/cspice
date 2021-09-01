@@ -8,7 +8,7 @@
 
 
 typedef int prsdp_state_t;
-static inline prsdp_state_t* get_prsdp_state(cspice_t* state) {
+static prsdp_state_t* get_prsdp_state(cspice_t* state) {
 	return 0;
 }
 

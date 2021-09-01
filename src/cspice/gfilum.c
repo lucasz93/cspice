@@ -8,7 +8,7 @@
 
 
 extern gfilum_init_t __gfilum_init;
-static inline gfilum_state_t* get_gfilum_state(cspice_t* state) {
+static gfilum_state_t* get_gfilum_state(cspice_t* state) {
 	if (!state->gfilum)
 		state->gfilum = __cspice_allocate_module(sizeof(
 	gfilum_state_t), &__gfilum_init, sizeof(__gfilum_init));

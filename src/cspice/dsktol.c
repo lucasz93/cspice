@@ -8,7 +8,7 @@
 
 
 extern dsktol_init_t __dsktol_init;
-static inline dsktol_state_t* get_dsktol_state(cspice_t* state) {
+static dsktol_state_t* get_dsktol_state(cspice_t* state) {
 	if (!state->dsktol)
 		state->dsktol = __cspice_allocate_module(sizeof(
 	dsktol_state_t), &__dsktol_init, sizeof(__dsktol_init));
@@ -713,18 +713,18 @@ L_dskstl:
 /* Subroutine */ int dsktol_(cspice_t* __global_state, integer *keywrd, 
 	doublereal *dpval)
 {
-    return dsktol_0_(0, keywrd, dpval);
+    return dsktol_0_(__global_state, 0, keywrd, dpval);
     }
 
 /* Subroutine */ int dskgtl_(cspice_t* __global_state, integer *keywrd, 
 	doublereal *dpval)
 {
-    return dsktol_0_(1, keywrd, dpval);
+    return dsktol_0_(__global_state, 1, keywrd, dpval);
     }
 
 /* Subroutine */ int dskstl_(cspice_t* __global_state, integer *keywrd, 
 	doublereal *dpval)
 {
-    return dsktol_0_(2, keywrd, dpval);
+    return dsktol_0_(__global_state, 2, keywrd, dpval);
     }
 

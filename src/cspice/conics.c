@@ -8,7 +8,7 @@
 
 
 typedef int conics_state_t;
-static inline conics_state_t* get_conics_state(cspice_t* state) {
+static conics_state_t* get_conics_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,9 +20,8 @@ static inline conics_state_t* get_conics_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
-	    f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
-	    doublereal *);
+    double cos(doublereal), sin(doublereal), sqrt(doublereal), d_mod(
+	    f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal cnci;
@@ -371,12 +370,12 @@ static inline conics_state_t* get_conics_state(cspice_t* state) {
 /*     First construct the orthonormal basis vectors that span the orbit */
 /*     plane. */
 
-    cosi = cos(&__global_state->f2c, inc);
-    sini = sin(&__global_state->f2c, inc);
-    cosn = cos(&__global_state->f2c, lnode);
-    sinn = sin(&__global_state->f2c, lnode);
-    cosw = cos(&__global_state->f2c, argp);
-    sinw = sin(&__global_state->f2c, argp);
+    cosi = cos(inc);
+    sini = sin(inc);
+    cosn = cos(lnode);
+    sinn = sin(lnode);
+    cosw = cos(argp);
+    sinw = sin(argp);
     snci = sinn * cosi;
     cnci = cosn * cosi;
     basisp[0] = cosn * cosw - snci * sinw;
@@ -402,7 +401,7 @@ static inline conics_state_t* get_conics_state(cspice_t* state) {
 
 /*     so that: */
 
-    v = sqrt(&__global_state->f2c, mu * (ecc + 1.) / rp);
+    v = sqrt(mu * (ecc + 1.) / rp);
     vscl_(__global_state, &rp, basisp, pstate);
     vscl_(__global_state, &v, basisq, &pstate[3]);
 
@@ -417,7 +416,7 @@ static inline conics_state_t* get_conics_state(cspice_t* state) {
 /*        But since, A = RP / ( 1 - ECC ) ... */
 
 	ainvrs = (1. - ecc) / rp;
-	n = sqrt(&__global_state->f2c, mu * ainvrs) * ainvrs;
+	n = sqrt(mu * ainvrs) * ainvrs;
 	period = twopi_(__global_state) / n;
 
 /*        In general the mean anomaly is given by */
@@ -447,13 +446,13 @@ static inline conics_state_t* get_conics_state(cspice_t* state) {
 /*        But since, |A| = RP / ( ECC - 1 ) ... */
 
 	ainvrs = (ecc - 1.) / rp;
-	n = sqrt(&__global_state->f2c, mu * ainvrs) * ainvrs;
+	n = sqrt(mu * ainvrs) * ainvrs;
 	dt = *et - t0 + m0 / n;
 
 /*     Finally, parabolas. */
 
     } else {
-	n = sqrt(&__global_state->f2c, mu / (rp * 2.)) / rp;
+	n = sqrt(mu / (rp * 2.)) / rp;
 	dt = *et - t0 + m0 / n;
     }
 

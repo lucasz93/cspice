@@ -8,7 +8,7 @@
 
 
 extern zzctr_init_t __zzctr_init;
-static inline zzctr_state_t* get_zzctr_state(cspice_t* state) {
+static zzctr_state_t* get_zzctr_state(cspice_t* state) {
 	if (!state->zzctr)
 		state->zzctr = __cspice_allocate_module(sizeof(zzctr_state_t),
 	 &__zzctr_init, sizeof(__zzctr_init));
@@ -897,27 +897,27 @@ L_zzctrchk:
 /* Subroutine */ int zzctr_(cspice_t* __global_state, integer *newctr, 
 	integer *oldctr, logical *update)
 {
-    return zzctr_0_(0, newctr, oldctr, update);
+    return zzctr_0_(__global_state, 0, newctr, oldctr, update);
     }
 
 /* Subroutine */ int zzctruin_(cspice_t* __global_state, integer *oldctr)
 {
-    return zzctr_0_(1, (integer *)0, oldctr, (logical *)0);
+    return zzctr_0_(__global_state, 1, (integer *)0, oldctr, (logical *)0);
     }
 
 /* Subroutine */ int zzctrsin_(cspice_t* __global_state, integer *oldctr)
 {
-    return zzctr_0_(2, (integer *)0, oldctr, (logical *)0);
+    return zzctr_0_(__global_state, 2, (integer *)0, oldctr, (logical *)0);
     }
 
 /* Subroutine */ int zzctrinc_(cspice_t* __global_state, integer *oldctr)
 {
-    return zzctr_0_(3, (integer *)0, oldctr, (logical *)0);
+    return zzctr_0_(__global_state, 3, (integer *)0, oldctr, (logical *)0);
     }
 
 /* Subroutine */ int zzctrchk_(cspice_t* __global_state, integer *newctr, 
 	integer *oldctr, logical *update)
 {
-    return zzctr_0_(4, newctr, oldctr, update);
+    return zzctr_0_(__global_state, 4, newctr, oldctr, update);
     }
 

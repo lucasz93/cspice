@@ -8,7 +8,7 @@
 
 
 typedef int dvcrss_state_t;
-static inline dvcrss_state_t* get_dvcrss_state(cspice_t* state) {
+static dvcrss_state_t* get_dvcrss_state(cspice_t* state) {
 	return 0;
 }
 

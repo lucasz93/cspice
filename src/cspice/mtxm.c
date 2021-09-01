@@ -8,7 +8,7 @@
 
 
 extern mtxm_init_t __mtxm_init;
-static inline mtxm_state_t* get_mtxm_state(cspice_t* state) {
+static mtxm_state_t* get_mtxm_state(cspice_t* state) {
 	if (!state->mtxm)
 		state->mtxm = __cspice_allocate_module(sizeof(mtxm_state_t), &
 	__mtxm_init, sizeof(__mtxm_init));

@@ -8,7 +8,7 @@
 
 
 extern zzeksca_init_t __zzeksca_init;
-static inline zzeksca_state_t* get_zzeksca_state(cspice_t* state) {
+static zzeksca_state_t* get_zzeksca_state(cspice_t* state) {
 	if (!state->zzeksca)
 		state->zzeksca = __cspice_allocate_module(sizeof(
 	zzeksca_state_t), &__zzeksca_init, sizeof(__zzeksca_init));
@@ -1583,48 +1583,52 @@ L_zzekscln:
 /* Subroutine */ int zzeksca_(cspice_t* __global_state, integer *n, integer *
 	beg, integer *end, integer *idata, integer *top)
 {
-    return zzeksca_0_(0, n, beg, end, idata, top);
+    return zzeksca_0_(__global_state, 0, n, beg, end, idata, top);
     }
 
 /* Subroutine */ int zzekstop_(cspice_t* __global_state, integer *top)
 {
-    return zzeksca_0_(1, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, top);
+    return zzeksca_0_(__global_state, 1, (integer *)0, (integer *)0, (integer 
+	    *)0, (integer *)0, top);
     }
 
 /* Subroutine */ int zzekspsh_(cspice_t* __global_state, integer *n, integer *
 	idata)
 {
-    return zzeksca_0_(2, n, (integer *)0, (integer *)0, idata, (integer *)0);
+    return zzeksca_0_(__global_state, 2, n, (integer *)0, (integer *)0, idata,
+	     (integer *)0);
     }
 
 /* Subroutine */ int zzekspop_(cspice_t* __global_state, integer *n, integer *
 	idata)
 {
-    return zzeksca_0_(3, n, (integer *)0, (integer *)0, idata, (integer *)0);
+    return zzeksca_0_(__global_state, 3, n, (integer *)0, (integer *)0, idata,
+	     (integer *)0);
     }
 
 /* Subroutine */ int zzeksdec_(cspice_t* __global_state, integer *n)
 {
-    return zzeksca_0_(4, n, (integer *)0, (integer *)0, (integer *)0, (
-	    integer *)0);
+    return zzeksca_0_(__global_state, 4, n, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0);
     }
 
 /* Subroutine */ int zzeksupd_(cspice_t* __global_state, integer *beg, 
 	integer *end, integer *idata)
 {
-    return zzeksca_0_(5, (integer *)0, beg, end, idata, (integer *)0);
+    return zzeksca_0_(__global_state, 5, (integer *)0, beg, end, idata, (
+	    integer *)0);
     }
 
 /* Subroutine */ int zzeksrd_(cspice_t* __global_state, integer *beg, integer 
 	*end, integer *idata)
 {
-    return zzeksca_0_(6, (integer *)0, beg, end, idata, (integer *)0);
+    return zzeksca_0_(__global_state, 6, (integer *)0, beg, end, idata, (
+	    integer *)0);
     }
 
 /* Subroutine */ int zzekscln_(cspice_t* __global_state)
 {
-    return zzeksca_0_(7, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0);
+    return zzeksca_0_(__global_state, 7, (integer *)0, (integer *)0, (integer 
+	    *)0, (integer *)0, (integer *)0);
     }
 

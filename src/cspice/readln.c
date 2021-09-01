@@ -8,7 +8,7 @@
 
 
 extern readln_init_t __readln_init;
-static inline readln_state_t* get_readln_state(cspice_t* state) {
+static readln_state_t* get_readln_state(cspice_t* state) {
 	if (!state->readln)
 		state->readln = __cspice_allocate_module(sizeof(
 	readln_state_t), &__readln_init, sizeof(__readln_init));

@@ -8,7 +8,7 @@
 
 
 extern mequ_init_t __mequ_init;
-static inline mequ_state_t* get_mequ_state(cspice_t* state) {
+static mequ_state_t* get_mequ_state(cspice_t* state) {
 	if (!state->mequ)
 		state->mequ = __cspice_allocate_module(sizeof(mequ_state_t), &
 	__mequ_init, sizeof(__mequ_init));

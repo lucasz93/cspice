@@ -8,7 +8,7 @@
 
 
 typedef int dskopn_state_t;
-static inline dskopn_state_t* get_dskopn_state(cspice_t* state) {
+static dskopn_state_t* get_dskopn_state(cspice_t* state) {
 	return 0;
 }
 

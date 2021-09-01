@@ -42,6 +42,7 @@
 */
 
    #include <math.h>
+   #include "__cspice_state.h"
    #include "SpiceUsr.h"
 
    SpiceDouble dpr_c ( void *naif_state )
@@ -122,13 +123,11 @@
      /*
      Local Variables
      */
+     cspice_user_state_t * user = &((cspice_t *)naif_state)->user;
 
-     /* MECHSOFT: Safe to persist between contexts. */
-     static _Thread_local SpiceDouble  value = 0.;
-
-     if (value == 0.)
+     if (user->dpr_c.value == 0.)
         {
-         value = 180. / acos(-1.);
+         user->dpr_c.value = 180. / acos(-1.);
         }
 
 
@@ -136,7 +135,7 @@
      What is there to say?
      */
 
-     return value;
+     return user->dpr_c.value;
 
    }
 /* End dpr_c */

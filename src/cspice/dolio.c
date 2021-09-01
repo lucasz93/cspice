@@ -10,7 +10,7 @@ integer do_lio(f2c, type,number,ptr,len) f2c_state_t *f2c; ftnint *number,*type;
 integer do_lio(f2c_state_t *f2c, ftnint *type, ftnint *number, char *ptr, ftnlen len)
 #endif
 {
-	return((*f2c->f__lioproc)(number,ptr,len,*type));
+	return((*f2c->f__lioproc)(f2c,number,ptr,len,*type));
 }
 #ifdef __cplusplus
 	}

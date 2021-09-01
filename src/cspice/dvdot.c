@@ -8,7 +8,7 @@
 
 
 typedef int dvdot_state_t;
-static inline dvdot_state_t* get_dvdot_state(cspice_t* state) {
+static dvdot_state_t* get_dvdot_state(cspice_t* state) {
 	return 0;
 }
 

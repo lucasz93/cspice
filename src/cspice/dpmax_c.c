@@ -42,6 +42,7 @@
  
 */
 
+   #include "__cspice_state.h"
    #include "SpiceUsr.h"
 
    SpiceDouble dpmax_c (void *naif_state) 
@@ -163,24 +164,15 @@
 */
 
 { /* Begin dpmax_c */
+   cspice_user_state_t * user = &((cspice_t *)naif_state)->user;
 
-   /*
-   Static variables
-   */
-
-   /* MECHSOFT: Safe to persist between contexts. */
-   static _Thread_local SpiceBoolean first = SPICETRUE;
-   static _Thread_local SpiceDouble  value;
-
-
-
-   if ( first )
+   if ( user->dpmax_c.first )
    {
-      value = dpmax_(naif_state);
-      first = SPICEFALSE;
+      user->dpmax_c.value = dpmax_(naif_state);
+      user->dpmax_c.first = SPICEFALSE;
    }
    
-   return ( value );
+   return ( user->dpmax_c.value );
    
 
 } /* End dpmax_c */

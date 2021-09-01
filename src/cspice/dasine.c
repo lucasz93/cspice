@@ -8,7 +8,7 @@
 
 
 typedef int dasine_state_t;
-static inline dasine_state_t* get_dasine_state(cspice_t* state) {
+static dasine_state_t* get_dasine_state(cspice_t* state) {
 	return 0;
 }
 
@@ -19,7 +19,7 @@ doublereal dasine_(cspice_t* __global_state, doublereal *arg, doublereal *tol)
     doublereal ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double asin(f2c_state_t*, doublereal);
+    double asin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -158,7 +158,7 @@ doublereal dasine_(cspice_t* __global_state, doublereal *arg, doublereal *tol)
 
 /* Computing MAX */
     d__1 = -1., d__2 = min(1.,*arg);
-    ret_val = asin(&__global_state->f2c, (max(d__1,d__2)));
+    ret_val = asin((max(d__1,d__2)));
 
 /*     Check that tolerance is non negative. */
 

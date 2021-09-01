@@ -8,7 +8,7 @@
 
 
 extern int2hx_init_t __int2hx_init;
-static inline int2hx_state_t* get_int2hx_state(cspice_t* state) {
+static int2hx_state_t* get_int2hx_state(cspice_t* state) {
 	if (!state->int2hx)
 		state->int2hx = __cspice_allocate_module(sizeof(
 	int2hx_state_t), &__int2hx_init, sizeof(__int2hx_init));

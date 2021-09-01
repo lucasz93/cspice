@@ -8,7 +8,7 @@
 
 
 extern subslr_init_t __subslr_init;
-static inline subslr_state_t* get_subslr_state(cspice_t* state) {
+static subslr_state_t* get_subslr_state(cspice_t* state) {
 	if (!state->subslr)
 		state->subslr = __cspice_allocate_module(sizeof(
 	subslr_state_t), &__subslr_init, sizeof(__subslr_init));

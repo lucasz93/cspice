@@ -8,7 +8,7 @@
 
 
 typedef int eul2m_state_t;
-static inline eul2m_state_t* get_eul2m_state(cspice_t* state) {
+static eul2m_state_t* get_eul2m_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int vtmv_state_t;
-static inline vtmv_state_t* get_vtmv_state(cspice_t* state) {
+static vtmv_state_t* get_vtmv_state(cspice_t* state) {
 	return 0;
 }
 

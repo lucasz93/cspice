@@ -8,7 +8,7 @@
 
 
 extern lx4uns_init_t __lx4uns_init;
-static inline lx4uns_state_t* get_lx4uns_state(cspice_t* state) {
+static lx4uns_state_t* get_lx4uns_state(cspice_t* state) {
 	if (!state->lx4uns)
 		state->lx4uns = __cspice_allocate_module(sizeof(
 	lx4uns_state_t), &__lx4uns_init, sizeof(__lx4uns_init));

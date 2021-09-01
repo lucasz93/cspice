@@ -8,7 +8,7 @@
 
 
 typedef int packac_state_t;
-static inline packac_state_t* get_packac_state(cspice_t* state) {
+static packac_state_t* get_packac_state(cspice_t* state) {
 	return 0;
 }
 

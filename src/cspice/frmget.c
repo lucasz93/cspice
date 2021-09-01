@@ -8,7 +8,7 @@
 
 
 extern frmget_init_t __frmget_init;
-static inline frmget_state_t* get_frmget_state(cspice_t* state) {
+static frmget_state_t* get_frmget_state(cspice_t* state) {
 	if (!state->frmget)
 		state->frmget = __cspice_allocate_module(sizeof(
 	frmget_state_t), &__frmget_init, sizeof(__frmget_init));

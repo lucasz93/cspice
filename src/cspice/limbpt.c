@@ -8,7 +8,7 @@
 
 
 extern limbpt_init_t __limbpt_init;
-static inline limbpt_state_t* get_limbpt_state(cspice_t* state) {
+static limbpt_state_t* get_limbpt_state(cspice_t* state) {
 	if (!state->limbpt)
 		state->limbpt = __cspice_allocate_module(sizeof(
 	limbpt_state_t), &__limbpt_init, sizeof(__limbpt_init));

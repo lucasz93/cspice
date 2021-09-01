@@ -233,7 +233,7 @@
    /*
    Create a Fortran-style string array.
    */
-   C2F_MapStrArr ( "lmpool_c", n, lenvals, cvals, &fCvalsLen, &fCvalsArr );
+   C2F_MapStrArr ( naif_state, "lmpool_c", n, lenvals, cvals, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c(naif_state) )
    {

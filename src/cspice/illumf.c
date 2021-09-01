@@ -8,7 +8,7 @@
 
 
 extern illumf_init_t __illumf_init;
-static inline illumf_state_t* get_illumf_state(cspice_t* state) {
+static illumf_state_t* get_illumf_state(cspice_t* state) {
 	if (!state->illumf)
 		state->illumf = __cspice_allocate_module(sizeof(
 	illumf_state_t), &__illumf_init, sizeof(__illumf_init));

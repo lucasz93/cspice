@@ -8,7 +8,7 @@
 
 
 extern zzdiv_init_t __zzdiv_init;
-static inline zzdiv_state_t* get_zzdiv_state(cspice_t* state) {
+static zzdiv_state_t* get_zzdiv_state(cspice_t* state) {
 	if (!state->zzdiv)
 		state->zzdiv = __cspice_allocate_module(sizeof(zzdiv_state_t),
 	 &__zzdiv_init, sizeof(__zzdiv_init));

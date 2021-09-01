@@ -42,7 +42,7 @@ integer f_clos(f2c_state_t *f2c, cllist *a)
 		case 'k':
 		case 'K':
 			if(b->uwrt == 1)
-				t_runc((alist *)a);
+				t_runc(f2c,(alist *)a);
 			if(b->ufnm) {
 				fclose(b->ufd);
 				free(b->ufnm);

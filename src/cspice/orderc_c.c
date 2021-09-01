@@ -208,7 +208,7 @@
    /*
    Create a Fortran-style string array.
    */
-   C2F_MapStrArr ( "orderc_c", 
+   C2F_MapStrArr ( naif_state, "orderc_c", 
                    ndim, lenvals, array, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c(naif_state) )

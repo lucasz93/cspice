@@ -8,7 +8,7 @@
 
 
 typedef int latrec_state_t;
-static inline latrec_state_t* get_latrec_state(cspice_t* state) {
+static latrec_state_t* get_latrec_state(cspice_t* state) {
 	return 0;
 }
 
@@ -17,7 +17,7 @@ static inline latrec_state_t* get_latrec_state(cspice_t* state) {
 	doublereal *long__, doublereal *lat, doublereal *rectan)
 {
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal x;
@@ -206,11 +206,9 @@ static inline latrec_state_t* get_latrec_state(cspice_t* state) {
 /*     Convert to rectangular coordinates, storing the results in */
 /*     temporary variables. */
 
-    x = *radius * cos(&__global_state->f2c, *long__) * cos(&
-	    __global_state->f2c, *lat);
-    y = *radius * sin(&__global_state->f2c, *long__) * cos(&
-	    __global_state->f2c, *lat);
-    z__ = *radius * sin(&__global_state->f2c, *lat);
+    x = *radius * cos(*long__) * cos(*lat);
+    y = *radius * sin(*long__) * cos(*lat);
+    z__ = *radius * sin(*lat);
 
 /*  Move the results to the output variables. */
 

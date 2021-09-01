@@ -8,7 +8,7 @@
 
 
 typedef int vdistg_state_t;
-static inline vdistg_state_t* get_vdistg_state(cspice_t* state) {
+static vdistg_state_t* get_vdistg_state(cspice_t* state) {
 	return 0;
 }
 
@@ -21,7 +21,7 @@ doublereal vdistg_(cspice_t* __global_state, doublereal *v1, doublereal *v2,
     doublereal ret_val, d__1, d__2, d__3;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     integer i__;
@@ -216,7 +216,7 @@ doublereal vdistg_(cspice_t* __global_state, doublereal *v1, doublereal *v2,
 	    d__1 = (v1[i__ - 1] - v2[i__ - 1]) / scale;
 	    ret_val += d__1 * d__1;
 	}
-	ret_val = scale * sqrt(&__global_state->f2c, ret_val);
+	ret_val = scale * sqrt(ret_val);
     }
     return ret_val;
 } /* vdistg_ */

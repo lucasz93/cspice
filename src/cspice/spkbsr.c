@@ -8,7 +8,7 @@
 
 
 extern spkbsr_init_t __spkbsr_init;
-static inline spkbsr_state_t* get_spkbsr_state(cspice_t* state) {
+static spkbsr_state_t* get_spkbsr_state(cspice_t* state) {
 	if (!state->spkbsr)
 		state->spkbsr = __cspice_allocate_module(sizeof(
 	spkbsr_state_t), &__spkbsr_init, sizeof(__spkbsr_init));
@@ -3563,28 +3563,30 @@ L_spksfs:
 	handle, integer *body, doublereal *et, doublereal *descr, char *ident,
 	 logical *found, ftnlen fname_len, ftnlen ident_len)
 {
-    return spkbsr_0_(0, fname, handle, body, et, descr, ident, found, 
-	    fname_len, ident_len);
+    return spkbsr_0_(__global_state, 0, fname, handle, body, et, descr, ident,
+	     found, fname_len, ident_len);
     }
 
 /* Subroutine */ int spklef_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return spkbsr_0_(1, fname, handle, (integer *)0, (doublereal *)0, (
-	    doublereal *)0, (char *)0, (logical *)0, fname_len, (ftnint)0);
+    return spkbsr_0_(__global_state, 1, fname, handle, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (char *)0, (logical *)0, 
+	    fname_len, (ftnint)0);
     }
 
 /* Subroutine */ int spkuef_(cspice_t* __global_state, integer *handle)
 {
-    return spkbsr_0_(2, (char *)0, handle, (integer *)0, (doublereal *)0, (
-	    doublereal *)0, (char *)0, (logical *)0, (ftnint)0, (ftnint)0);
+    return spkbsr_0_(__global_state, 2, (char *)0, handle, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (char *)0, (logical *)0, (ftnint)
+	    0, (ftnint)0);
     }
 
 /* Subroutine */ int spksfs_(cspice_t* __global_state, integer *body, 
 	doublereal *et, integer *handle, doublereal *descr, char *ident, 
 	logical *found, ftnlen ident_len)
 {
-    return spkbsr_0_(3, (char *)0, handle, body, et, descr, ident, found, (
-	    ftnint)0, ident_len);
+    return spkbsr_0_(__global_state, 3, (char *)0, handle, body, et, descr, 
+	    ident, found, (ftnint)0, ident_len);
     }
 

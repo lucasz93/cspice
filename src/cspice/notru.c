@@ -8,7 +8,7 @@
 
 
 typedef int notru_state_t;
-static inline notru_state_t* get_notru_state(cspice_t* state) {
+static notru_state_t* get_notru_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int lgrint_state_t;
-static inline lgrint_state_t* get_lgrint_state(cspice_t* state) {
+static lgrint_state_t* get_lgrint_state(cspice_t* state) {
 	return 0;
 }
 

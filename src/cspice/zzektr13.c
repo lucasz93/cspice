@@ -8,7 +8,7 @@
 
 
 extern zzektr13_init_t __zzektr13_init;
-static inline zzektr13_state_t* get_zzektr13_state(cspice_t* state) {
+static zzektr13_state_t* get_zzektr13_state(cspice_t* state) {
 	if (!state->zzektr13)
 		state->zzektr13 = __cspice_allocate_module(sizeof(
 	zzektr13_state_t), &__zzektr13_init, sizeof(__zzektr13_init));

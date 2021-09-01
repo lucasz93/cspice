@@ -8,7 +8,7 @@
 
 
 extern lbuild_init_t __lbuild_init;
-static inline lbuild_state_t* get_lbuild_state(cspice_t* state) {
+static lbuild_state_t* get_lbuild_state(cspice_t* state) {
 	if (!state->lbuild)
 		state->lbuild = __cspice_allocate_module(sizeof(
 	lbuild_state_t), &__lbuild_init, sizeof(__lbuild_init));

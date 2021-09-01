@@ -8,7 +8,7 @@
 
 
 typedef int zzvalcor_state_t;
-static inline zzvalcor_state_t* get_zzvalcor_state(cspice_t* state) {
+static zzvalcor_state_t* get_zzvalcor_state(cspice_t* state) {
 	return 0;
 }
 

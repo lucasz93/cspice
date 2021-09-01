@@ -8,7 +8,7 @@
 
 
 extern bltfrm_init_t __bltfrm_init;
-static inline bltfrm_state_t* get_bltfrm_state(cspice_t* state) {
+static bltfrm_state_t* get_bltfrm_state(cspice_t* state) {
 	if (!state->bltfrm)
 		state->bltfrm = __cspice_allocate_module(sizeof(
 	bltfrm_state_t), &__bltfrm_init, sizeof(__bltfrm_init));

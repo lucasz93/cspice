@@ -8,7 +8,7 @@
 
 
 extern spkapo_init_t __spkapo_init;
-static inline spkapo_state_t* get_spkapo_state(cspice_t* state) {
+static spkapo_state_t* get_spkapo_state(cspice_t* state) {
 	if (!state->spkapo)
 		state->spkapo = __cspice_allocate_module(sizeof(
 	spkapo_state_t), &__spkapo_init, sizeof(__spkapo_init));

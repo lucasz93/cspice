@@ -8,7 +8,7 @@
 
 
 extern lnkprv_init_t __lnkprv_init;
-static inline lnkprv_state_t* get_lnkprv_state(cspice_t* state) {
+static lnkprv_state_t* get_lnkprv_state(cspice_t* state) {
 	if (!state->lnkprv)
 		state->lnkprv = __cspice_allocate_module(sizeof(
 	lnkprv_state_t), &__lnkprv_init, sizeof(__lnkprv_init));

@@ -8,7 +8,7 @@
 
 
 typedef int nthwd_state_t;
-static inline nthwd_state_t* get_nthwd_state(cspice_t* state) {
+static nthwd_state_t* get_nthwd_state(cspice_t* state) {
 	return 0;
 }
 

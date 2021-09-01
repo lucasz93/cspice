@@ -8,7 +8,7 @@
 
 
 typedef int wndifd_state_t;
-static inline wndifd_state_t* get_wndifd_state(cspice_t* state) {
+static wndifd_state_t* get_wndifd_state(cspice_t* state) {
 	return 0;
 }
 

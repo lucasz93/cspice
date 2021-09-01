@@ -8,7 +8,7 @@
 
 
 typedef int lnksiz_state_t;
-static inline lnksiz_state_t* get_lnksiz_state(cspice_t* state) {
+static lnksiz_state_t* get_lnksiz_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern wnvald_init_t __wnvald_init;
-static inline wnvald_state_t* get_wnvald_state(cspice_t* state) {
+static wnvald_state_t* get_wnvald_state(cspice_t* state) {
 	if (!state->wnvald)
 		state->wnvald = __cspice_allocate_module(sizeof(
 	wnvald_state_t), &__wnvald_init, sizeof(__wnvald_init));

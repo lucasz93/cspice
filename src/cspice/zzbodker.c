@@ -8,7 +8,7 @@
 
 
 extern zzbodker_init_t __zzbodker_init;
-static inline zzbodker_state_t* get_zzbodker_state(cspice_t* state) {
+static zzbodker_state_t* get_zzbodker_state(cspice_t* state) {
 	if (!state->zzbodker)
 		state->zzbodker = __cspice_allocate_module(sizeof(
 	zzbodker_state_t), &__zzbodker_init, sizeof(__zzbodker_init));

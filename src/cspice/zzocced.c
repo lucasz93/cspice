@@ -8,7 +8,7 @@
 
 
 extern zzocced_init_t __zzocced_init;
-static inline zzocced_state_t* get_zzocced_state(cspice_t* state) {
+static zzocced_state_t* get_zzocced_state(cspice_t* state) {
 	if (!state->zzocced)
 		state->zzocced = __cspice_allocate_module(sizeof(
 	zzocced_state_t), &__zzocced_init, sizeof(__zzocced_init));
@@ -26,8 +26,7 @@ integer zzocced_(cspice_t* __global_state, doublereal *viewpt, doublereal *
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double atan2(f2c_state_t*, doublereal, doublereal), cos(f2c_state_t*, 
-	    doublereal), sin(f2c_state_t*, doublereal);
+    double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
@@ -1002,7 +1001,7 @@ integer zzocced_(cspice_t* __global_state, doublereal *viewpt, doublereal *
 
 	    maxang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
 		    __global_state->f2c, "maxang", i__1, "zzocced_", (ftnlen)
-		    824)] = atan2(&__global_state->f2c, ubdist, vph);
+		    824)] = atan2(ubdist, vph);
 	}
 
 /*        At this point MAXANG(I) and MINANG(I) are both set for the */
@@ -1476,7 +1475,7 @@ integer zzocced_(cspice_t* __global_state, doublereal *viewpt, doublereal *
 
 	    maxang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
 		    __global_state->f2c, "maxang", i__1, "zzocced_", (ftnlen)
-		    1329)] = atan2(&__global_state->f2c, ubdist, vph);
+		    1329)] = atan2(ubdist, vph);
 	}
 
 /*        Now find the minimum bounding cone.  The situation is slightly */
@@ -1522,9 +1521,8 @@ integer zzocced_(cspice_t* __global_state, doublereal *viewpt, doublereal *
 
 	minang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
 		__global_state->f2c, "minang", i__1, "zzocced_", (ftnlen)1380)
-		] = atan2(&__global_state->f2c, cos(&__global_state->f2c, 
-		tilt) * minlen, sin(&__global_state->f2c, tilt) * minlen + 
-		xdist[(i__2 = smlidx - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+		] = atan2(cos(tilt) * minlen, sin(tilt) * minlen + xdist[(
+		i__2 = smlidx - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
 		__global_state->f2c, "xdist", i__2, "zzocced_", (ftnlen)1380)]
 		);
 

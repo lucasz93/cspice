@@ -8,7 +8,7 @@
 
 
 extern pckuds_init_t __pckuds_init;
-static inline pckuds_state_t* get_pckuds_state(cspice_t* state) {
+static pckuds_state_t* get_pckuds_state(cspice_t* state) {
 	if (!state->pckuds)
 		state->pckuds = __cspice_allocate_module(sizeof(
 	pckuds_state_t), &__pckuds_init, sizeof(__pckuds_init));

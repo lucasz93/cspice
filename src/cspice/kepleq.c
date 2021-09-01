@@ -8,7 +8,7 @@
 
 
 typedef int kepleq_state_t;
-static inline kepleq_state_t* get_kepleq_state(cspice_t* state) {
+static kepleq_state_t* get_kepleq_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,7 +20,7 @@ doublereal kepleq_(cspice_t* __global_state, doublereal *ml, doublereal *h__,
     doublereal ret_val;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal evec[2];
@@ -239,10 +239,8 @@ doublereal kepleq_(cspice_t* __global_state, doublereal *ml, doublereal *h__,
 /*     The routine KPEVEC returns the value of X that solves */
 /*     the equation X - < EVEC, UVEC(X) > */
 
-    evec[0] = -(*h__) * cos(&__global_state->f2c, *ml) + *k * sin(&
-	    __global_state->f2c, *ml);
-    evec[1] = *h__ * sin(&__global_state->f2c, *ml) + *k * cos(&
-	    __global_state->f2c, *ml);
+    evec[0] = -(*h__) * cos(*ml) + *k * sin(*ml);
+    evec[1] = *h__ * sin(*ml) + *k * cos(*ml);
     ret_val = *ml + kpsolv_(__global_state, evec);
     return ret_val;
 } /* kepleq_ */

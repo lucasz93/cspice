@@ -414,7 +414,7 @@
                 ( ftnlen ) lenout-1    );
 
 
-      F2C_ConvertStr( lenout, action );
+      F2C_ConvertStr( naif_state, lenout, action );
    }
 
    else

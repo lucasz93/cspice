@@ -8,7 +8,7 @@
 
 
 extern sysetd_init_t __sysetd_init;
-static inline sysetd_state_t* get_sysetd_state(cspice_t* state) {
+static sysetd_state_t* get_sysetd_state(cspice_t* state) {
 	if (!state->sysetd)
 		state->sysetd = __cspice_allocate_module(sizeof(
 	sysetd_state_t), &__sysetd_init, sizeof(__sysetd_init));

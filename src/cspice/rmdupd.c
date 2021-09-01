@@ -8,7 +8,7 @@
 
 
 typedef int rmdupd_state_t;
-static inline rmdupd_state_t* get_rmdupd_state(cspice_t* state) {
+static rmdupd_state_t* get_rmdupd_state(cspice_t* state) {
 	return 0;
 }
 

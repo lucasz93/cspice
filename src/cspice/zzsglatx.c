@@ -8,7 +8,7 @@
 
 
 extern zzsglatx_init_t __zzsglatx_init;
-static inline zzsglatx_state_t* get_zzsglatx_state(cspice_t* state) {
+static zzsglatx_state_t* get_zzsglatx_state(cspice_t* state) {
 	if (!state->zzsglatx)
 		state->zzsglatx = __cspice_allocate_module(sizeof(
 	zzsglatx_state_t), &__zzsglatx_init, sizeof(__zzsglatx_init));

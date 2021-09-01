@@ -8,7 +8,7 @@
 
 
 typedef int reclat_state_t;
-static inline reclat_state_t* get_reclat_state(cspice_t* state) {
+static reclat_state_t* get_reclat_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,8 +20,7 @@ static inline reclat_state_t* get_reclat_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
-	    doublereal);
+    double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
     doublereal x;
@@ -223,15 +222,14 @@ static inline reclat_state_t* get_reclat_state(cspice_t* state) {
 	x = rectan[0] / big;
 	y = rectan[1] / big;
 	z__ = rectan[2] / big;
-	*radius = big * sqrt(&__global_state->f2c, x * x + y * y + z__ * z__);
-	*lat = atan2(&__global_state->f2c, z__, sqrt(&__global_state->f2c, x *
-		 x + y * y));
+	*radius = big * sqrt(x * x + y * y + z__ * z__);
+	*lat = atan2(z__, sqrt(x * x + y * y));
 	x = rectan[0];
 	y = rectan[1];
 	if (x == 0. && y == 0.) {
 	    *long__ = 0.;
 	} else {
-	    *long__ = atan2(&__global_state->f2c, y, x);
+	    *long__ = atan2(y, x);
 	}
     } else {
 	*radius = 0.;

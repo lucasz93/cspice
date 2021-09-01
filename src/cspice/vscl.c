@@ -8,7 +8,7 @@
 
 
 typedef int vscl_state_t;
-static inline vscl_state_t* get_vscl_state(cspice_t* state) {
+static vscl_state_t* get_vscl_state(cspice_t* state) {
 	return 0;
 }
 

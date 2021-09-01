@@ -8,7 +8,7 @@
 
 
 typedef int vpack_state_t;
-static inline vpack_state_t* get_vpack_state(cspice_t* state) {
+static vpack_state_t* get_vpack_state(cspice_t* state) {
 	return 0;
 }
 

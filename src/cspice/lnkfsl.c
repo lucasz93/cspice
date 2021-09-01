@@ -8,7 +8,7 @@
 
 
 extern lnkfsl_init_t __lnkfsl_init;
-static inline lnkfsl_state_t* get_lnkfsl_state(cspice_t* state) {
+static lnkfsl_state_t* get_lnkfsl_state(cspice_t* state) {
 	if (!state->lnkfsl)
 		state->lnkfsl = __cspice_allocate_module(sizeof(
 	lnkfsl_state_t), &__lnkfsl_init, sizeof(__lnkfsl_init));

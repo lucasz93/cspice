@@ -8,7 +8,7 @@
 
 
 extern zzddhmnm_init_t __zzddhmnm_init;
-static inline zzddhmnm_state_t* get_zzddhmnm_state(cspice_t* state) {
+static zzddhmnm_state_t* get_zzddhmnm_state(cspice_t* state) {
 	if (!state->zzddhmnm)
 		state->zzddhmnm = __cspice_allocate_module(sizeof(
 	zzddhmnm_state_t), &__zzddhmnm_init, sizeof(__zzddhmnm_init));

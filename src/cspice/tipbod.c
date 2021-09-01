@@ -8,7 +8,7 @@
 
 
 typedef int tipbod_state_t;
-static inline tipbod_state_t* get_tipbod_state(cspice_t* state) {
+static tipbod_state_t* get_tipbod_state(cspice_t* state) {
 	return 0;
 }
 

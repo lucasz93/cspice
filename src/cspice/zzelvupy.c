@@ -8,7 +8,7 @@
 
 
 extern zzelvupy_init_t __zzelvupy_init;
-static inline zzelvupy_state_t* get_zzelvupy_state(cspice_t* state) {
+static zzelvupy_state_t* get_zzelvupy_state(cspice_t* state) {
 	if (!state->zzelvupy)
 		state->zzelvupy = __cspice_allocate_module(sizeof(
 	zzelvupy_state_t), &__zzelvupy_init, sizeof(__zzelvupy_init));
@@ -31,8 +31,7 @@ static inline zzelvupy_state_t* get_zzelvupy_state(cspice_t* state) {
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
     /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
-    double asin(f2c_state_t*, doublereal), pow_dd(f2c_state_t*, doublereal *, 
-	    doublereal *);
+    double asin(doublereal), pow_dd(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal asep;
@@ -711,7 +710,7 @@ static inline zzelvupy_state_t* get_zzelvupy_state(cspice_t* state) {
 
     d__ = vdist_(__global_state, center, apex);
     if (a < d__) {
-	easize = asin(&__global_state->f2c, a / d__);
+	easize = asin(a / d__);
 
 /*        The variable PASIZE already contains the angular radius of a */
 /*        bounding cone of the pyramid as seen from the pyramid's apex. */

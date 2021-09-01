@@ -8,7 +8,7 @@
 
 
 typedef int isrchc_state_t;
-static inline isrchc_state_t* get_isrchc_state(cspice_t* state) {
+static isrchc_state_t* get_isrchc_state(cspice_t* state) {
 	return 0;
 }
 

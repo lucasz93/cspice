@@ -651,7 +651,7 @@
       cvalsPtr[i] =  (SpiceChar *)cvals  +  ( i * vallen );
    }
    
-   C2F_CreateFixStrArr (  nelts, 
+   C2F_CreateFixStrArr ( naif_state,  nelts, 
                           vallen,
                           ( ConstSpiceChar ** ) cvalsPtr, 
                           &fCvalsLen, 

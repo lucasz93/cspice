@@ -8,7 +8,7 @@
 
 
 extern pckmat_init_t __pckmat_init;
-static inline pckmat_state_t* get_pckmat_state(cspice_t* state) {
+static pckmat_state_t* get_pckmat_state(cspice_t* state) {
 	if (!state->pckmat)
 		state->pckmat = __cspice_allocate_module(sizeof(
 	pckmat_state_t), &__pckmat_init, sizeof(__pckmat_init));

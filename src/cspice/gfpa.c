@@ -8,7 +8,7 @@
 
 
 extern gfpa_init_t __gfpa_init;
-static inline gfpa_state_t* get_gfpa_state(cspice_t* state) {
+static gfpa_state_t* get_gfpa_state(cspice_t* state) {
 	if (!state->gfpa)
 		state->gfpa = __cspice_allocate_module(sizeof(gfpa_state_t), &
 	__gfpa_init, sizeof(__gfpa_init));

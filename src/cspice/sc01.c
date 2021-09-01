@@ -8,7 +8,7 @@
 
 
 extern sc01_init_t __sc01_init;
-static inline sc01_state_t* get_sc01_state(cspice_t* state) {
+static sc01_state_t* get_sc01_state(cspice_t* state) {
 	if (!state->sc01)
 		state->sc01 = __cspice_allocate_module(sizeof(sc01_state_t), &
 	__sc01_init, sizeof(__sc01_init));
@@ -3432,38 +3432,42 @@ L_scec01:
 	clkstr, doublereal *ticks, doublereal *sclkdp, doublereal *et, ftnlen 
 	clkstr_len)
 {
-    return sc01_0_(0, sc, clkstr, ticks, sclkdp, et, clkstr_len);
+    return sc01_0_(__global_state, 0, sc, clkstr, ticks, sclkdp, et, 
+	    clkstr_len);
     }
 
 /* Subroutine */ int sctk01_(cspice_t* __global_state, integer *sc, char *
 	clkstr, doublereal *ticks, ftnlen clkstr_len)
 {
-    return sc01_0_(1, sc, clkstr, ticks, (doublereal *)0, (doublereal *)0, 
-	    clkstr_len);
+    return sc01_0_(__global_state, 1, sc, clkstr, ticks, (doublereal *)0, (
+	    doublereal *)0, clkstr_len);
     }
 
 /* Subroutine */ int scfm01_(cspice_t* __global_state, integer *sc, 
 	doublereal *ticks, char *clkstr, ftnlen clkstr_len)
 {
-    return sc01_0_(2, sc, clkstr, ticks, (doublereal *)0, (doublereal *)0, 
-	    clkstr_len);
+    return sc01_0_(__global_state, 2, sc, clkstr, ticks, (doublereal *)0, (
+	    doublereal *)0, clkstr_len);
     }
 
 /* Subroutine */ int scte01_(cspice_t* __global_state, integer *sc, 
 	doublereal *sclkdp, doublereal *et)
 {
-    return sc01_0_(3, sc, (char *)0, (doublereal *)0, sclkdp, et, (ftnint)0);
+    return sc01_0_(__global_state, 3, sc, (char *)0, (doublereal *)0, sclkdp, 
+	    et, (ftnint)0);
     }
 
 /* Subroutine */ int scet01_(cspice_t* __global_state, integer *sc, 
 	doublereal *et, doublereal *sclkdp)
 {
-    return sc01_0_(4, sc, (char *)0, (doublereal *)0, sclkdp, et, (ftnint)0);
+    return sc01_0_(__global_state, 4, sc, (char *)0, (doublereal *)0, sclkdp, 
+	    et, (ftnint)0);
     }
 
 /* Subroutine */ int scec01_(cspice_t* __global_state, integer *sc, 
 	doublereal *et, doublereal *sclkdp)
 {
-    return sc01_0_(5, sc, (char *)0, (doublereal *)0, sclkdp, et, (ftnint)0);
+    return sc01_0_(__global_state, 5, sc, (char *)0, (doublereal *)0, sclkdp, 
+	    et, (ftnint)0);
     }
 

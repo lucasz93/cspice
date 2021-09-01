@@ -8,7 +8,7 @@
 
 
 extern prtpkg_init_t __prtpkg_init;
-static inline prtpkg_state_t* get_prtpkg_state(cspice_t* state) {
+static prtpkg_state_t* get_prtpkg_state(cspice_t* state) {
 	if (!state->prtpkg)
 		state->prtpkg = __cspice_allocate_module(sizeof(
 	prtpkg_state_t), &__prtpkg_init, sizeof(__prtpkg_init));
@@ -829,20 +829,20 @@ logical prtpkg_(cspice_t* __global_state, logical *short__, logical *long__,
 	logical *expl, logical *trace, logical *dfault, char *type__, ftnlen 
 	type_len)
 {
-    return prtpkg_0_(0, short__, long__, expl, trace, dfault, type__, 
-	    type_len);
+    return prtpkg_0_(__global_state, 0, short__, long__, expl, trace, dfault, 
+	    type__, type_len);
     }
 
 logical setprt_(cspice_t* __global_state, logical *short__, logical *expl, 
 	logical *long__, logical *trace, logical *dfault)
 {
-    return prtpkg_0_(1, short__, long__, expl, trace, dfault, (char *)0, (
-	    ftnint)0);
+    return prtpkg_0_(__global_state, 1, short__, long__, expl, trace, dfault, 
+	    (char *)0, (ftnint)0);
     }
 
 logical msgsel_(cspice_t* __global_state, char *type__, ftnlen type_len)
 {
-    return prtpkg_0_(2, (logical *)0, (logical *)0, (logical *)0, (logical *)
-	    0, (logical *)0, type__, type_len);
+    return prtpkg_0_(__global_state, 2, (logical *)0, (logical *)0, (logical *
+	    )0, (logical *)0, (logical *)0, type__, type_len);
     }
 

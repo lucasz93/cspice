@@ -8,7 +8,7 @@
 
 
 extern gfstep_init_t __gfstep_init;
-static inline gfstep_state_t* get_gfstep_state(cspice_t* state) {
+static gfstep_state_t* get_gfstep_state(cspice_t* state) {
 	if (!state->gfstep)
 		state->gfstep = __cspice_allocate_module(sizeof(
 	gfstep_state_t), &__gfstep_init, sizeof(__gfstep_init));
@@ -360,11 +360,11 @@ L_gfsstp:
 /* Subroutine */ int gfstep_(cspice_t* __global_state, doublereal *time, 
 	doublereal *step)
 {
-    return gfstep_0_(0, time, step);
+    return gfstep_0_(__global_state, 0, time, step);
     }
 
 /* Subroutine */ int gfsstp_(cspice_t* __global_state, doublereal *step)
 {
-    return gfstep_0_(1, (doublereal *)0, step);
+    return gfstep_0_(__global_state, 1, (doublereal *)0, step);
     }
 

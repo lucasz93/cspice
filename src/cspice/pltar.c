@@ -8,7 +8,7 @@
 
 
 typedef int pltar_state_t;
-static inline pltar_state_t* get_pltar_state(cspice_t* state) {
+static pltar_state_t* get_pltar_state(cspice_t* state) {
 	return 0;
 }
 

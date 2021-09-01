@@ -8,7 +8,7 @@
 
 
 typedef int maxai_state_t;
-static inline maxai_state_t* get_maxai_state(cspice_t* state) {
+static maxai_state_t* get_maxai_state(cspice_t* state) {
 	return 0;
 }
 

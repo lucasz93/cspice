@@ -8,7 +8,7 @@
 
 
 extern zzeknrml_init_t __zzeknrml_init;
-static inline zzeknrml_state_t* get_zzeknrml_state(cspice_t* state) {
+static zzeknrml_state_t* get_zzeknrml_state(cspice_t* state) {
 	if (!state->zzeknrml)
 		state->zzeknrml = __cspice_allocate_module(sizeof(
 	zzeknrml_state_t), &__zzeknrml_init, sizeof(__zzeknrml_init));

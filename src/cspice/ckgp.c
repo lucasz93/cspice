@@ -8,7 +8,7 @@
 
 
 extern ckgp_init_t __ckgp_init;
-static inline ckgp_state_t* get_ckgp_state(cspice_t* state) {
+static ckgp_state_t* get_ckgp_state(cspice_t* state) {
 	if (!state->ckgp)
 		state->ckgp = __cspice_allocate_module(sizeof(ckgp_state_t), &
 	__ckgp_init, sizeof(__ckgp_init));

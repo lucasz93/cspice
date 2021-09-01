@@ -8,7 +8,7 @@
 
 
 typedef int gcd_state_t;
-static inline gcd_state_t* get_gcd_state(cspice_t* state) {
+static gcd_state_t* get_gcd_state(cspice_t* state) {
 	return 0;
 }
 

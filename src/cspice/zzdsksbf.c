@@ -8,7 +8,7 @@
 
 
 extern zzdsksbf_init_t __zzdsksbf_init;
-static inline zzdsksbf_state_t* get_zzdsksbf_state(cspice_t* state) {
+static zzdsksbf_state_t* get_zzdsksbf_state(cspice_t* state) {
 	if (!state->zzdsksbf)
 		state->zzdsksbf = __cspice_allocate_module(sizeof(
 	zzdsksbf_state_t), &__zzdsksbf_init, sizeof(__zzdsksbf_init));
@@ -1489,8 +1489,9 @@ L_zzsbfnrm:
 	*xpt, integer *handle, integer *dladsc, doublereal *dskdsc, 
 	doublereal *dc, integer *ic, logical *found, doublereal *normal)
 {
-    return zzdsksbf_0_(0, bodyid, nsurf, srflst, et, fixfid, vertex, raydir, 
-	    point, xpt, handle, dladsc, dskdsc, dc, ic, found, normal);
+    return zzdsksbf_0_(__global_state, 0, bodyid, nsurf, srflst, et, fixfid, 
+	    vertex, raydir, point, xpt, handle, dladsc, dskdsc, dc, ic, found,
+	     normal);
     }
 
 /* Subroutine */ int zzsbfxr_(cspice_t* __global_state, integer *bodyid, 
@@ -1498,9 +1499,10 @@ L_zzsbfnrm:
 	doublereal *vertex, doublereal *raydir, doublereal *xpt, logical *
 	found)
 {
-    return zzdsksbf_0_(1, bodyid, nsurf, srflst, et, fixfid, vertex, raydir, (
-	    doublereal *)0, xpt, (integer *)0, (integer *)0, (doublereal *)0, 
-	    (doublereal *)0, (integer *)0, found, (doublereal *)0);
+    return zzdsksbf_0_(__global_state, 1, bodyid, nsurf, srflst, et, fixfid, 
+	    vertex, raydir, (doublereal *)0, xpt, (integer *)0, (integer *)0, 
+	    (doublereal *)0, (doublereal *)0, (integer *)0, found, (
+	    doublereal *)0);
     }
 
 /* Subroutine */ int zzsbfxri_(cspice_t* __global_state, integer *bodyid, 
@@ -1509,18 +1511,18 @@ L_zzsbfnrm:
 	handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *
 	ic, logical *found)
 {
-    return zzdsksbf_0_(2, bodyid, nsurf, srflst, et, fixfid, vertex, raydir, (
-	    doublereal *)0, xpt, handle, dladsc, dskdsc, dc, ic, found, (
-	    doublereal *)0);
+    return zzdsksbf_0_(__global_state, 2, bodyid, nsurf, srflst, et, fixfid, 
+	    vertex, raydir, (doublereal *)0, xpt, handle, dladsc, dskdsc, dc, 
+	    ic, found, (doublereal *)0);
     }
 
 /* Subroutine */ int zzsbfnrm_(cspice_t* __global_state, integer *bodyid, 
 	integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, 
 	doublereal *point, doublereal *normal)
 {
-    return zzdsksbf_0_(3, bodyid, nsurf, srflst, et, fixfid, (doublereal *)0, 
-	    (doublereal *)0, point, (doublereal *)0, (integer *)0, (integer *)
-	    0, (doublereal *)0, (doublereal *)0, (integer *)0, (logical *)0, 
-	    normal);
+    return zzdsksbf_0_(__global_state, 3, bodyid, nsurf, srflst, et, fixfid, (
+	    doublereal *)0, (doublereal *)0, point, (doublereal *)0, (integer 
+	    *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (integer *)0,
+	     (logical *)0, normal);
     }
 

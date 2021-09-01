@@ -8,7 +8,7 @@
 
 
 typedef int sytrnd_state_t;
-static inline sytrnd_state_t* get_sytrnd_state(cspice_t* state) {
+static sytrnd_state_t* get_sytrnd_state(cspice_t* state) {
 	return 0;
 }
 

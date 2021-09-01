@@ -8,7 +8,7 @@
 
 
 extern stmp03_init_t __stmp03_init;
-static inline stmp03_state_t* get_stmp03_state(cspice_t* state) {
+static stmp03_state_t* get_stmp03_state(cspice_t* state) {
 	if (!state->stmp03)
 		state->stmp03 = __cspice_allocate_module(sizeof(
 	stmp03_state_t), &__stmp03_init, sizeof(__stmp03_init));
@@ -28,9 +28,8 @@ static inline stmp03_state_t* get_stmp03_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double log(f2c_state_t*, doublereal), sqrt(f2c_state_t*, doublereal), 
-	    cosh(f2c_state_t*, doublereal), sinh(f2c_state_t*, doublereal), 
-	    cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double log(doublereal), sqrt(doublereal), cosh(doublereal), sinh(
+	    doublereal), cos(doublereal), sin(doublereal);
 
     /* Local variables */
     integer i__;
@@ -584,8 +583,7 @@ static inline stmp03_state_t* get_stmp03_state(cspice_t* state) {
 		    &__global_state->f2c, "pairs", i__1, "stmp03_", (ftnlen)
 		    589)] = 1. / ((doublereal) i__ * (doublereal) (i__ + 1));
 	}
-	y = log(&__global_state->f2c, 2.) + log(&__global_state->f2c, dpmax_(
-		__global_state));
+	y = log(2.) + log(dpmax_(__global_state));
 	__state->lbound = -y * y;
     }
 
@@ -669,17 +667,17 @@ static inline stmp03_state_t* get_stmp03_state(cspice_t* state) {
 
 
     if (*x < -1.) {
-	z__ = sqrt(&__global_state->f2c, -(*x));
-	*c0 = cosh(&__global_state->f2c, z__);
-	*c1 = sinh(&__global_state->f2c, z__) / z__;
+	z__ = sqrt(-(*x));
+	*c0 = cosh(z__);
+	*c1 = sinh(z__) / z__;
 	*c2 = (1 - *c0) / *x;
 	*c3 = (1 - *c1) / *x;
 	return 0;
     }
     if (*x > 1.) {
-	z__ = sqrt(&__global_state->f2c, *x);
-	*c0 = cos(&__global_state->f2c, z__);
-	*c1 = sin(&__global_state->f2c, z__) / z__;
+	z__ = sqrt(*x);
+	*c0 = cos(z__);
+	*c1 = sin(z__) / z__;
 	*c2 = (1 - *c0) / *x;
 	*c3 = (1 - *c1) / *x;
 	return 0;

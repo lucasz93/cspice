@@ -8,7 +8,7 @@
 
 
 typedef int vminug_state_t;
-static inline vminug_state_t* get_vminug_state(cspice_t* state) {
+static vminug_state_t* get_vminug_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int astrip_state_t;
-static inline astrip_state_t* get_astrip_state(cspice_t* state) {
+static astrip_state_t* get_astrip_state(cspice_t* state) {
 	return 0;
 }
 

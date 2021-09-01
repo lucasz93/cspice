@@ -8,7 +8,7 @@
 
 
 extern lxname_init_t __lxname_init;
-static inline lxname_state_t* get_lxname_state(cspice_t* state) {
+static lxname_state_t* get_lxname_state(cspice_t* state) {
 	if (!state->lxname)
 		state->lxname = __cspice_allocate_module(sizeof(
 	lxname_state_t), &__lxname_init, sizeof(__lxname_init));
@@ -1043,29 +1043,30 @@ L_lxcsid:
 	integer *nchar, ftnlen hdchrs_len, ftnlen tlchrs_len, ftnlen 
 	string_len)
 {
-    return lxname_0_(0, hdchrs, tlchrs, string, first, last, idspec, nchar, 
-	    hdchrs_len, tlchrs_len, string_len);
+    return lxname_0_(__global_state, 0, hdchrs, tlchrs, string, first, last, 
+	    idspec, nchar, hdchrs_len, tlchrs_len, string_len);
     }
 
 /* Subroutine */ int lxidnt_(cspice_t* __global_state, integer *idspec, char *
 	string, integer *first, integer *last, integer *nchar, ftnlen 
 	string_len)
 {
-    return lxname_0_(1, (char *)0, (char *)0, string, first, last, idspec, 
-	    nchar, (ftnint)0, (ftnint)0, string_len);
+    return lxname_0_(__global_state, 1, (char *)0, (char *)0, string, first, 
+	    last, idspec, nchar, (ftnint)0, (ftnint)0, string_len);
     }
 
 /* Subroutine */ int lxdfid_(cspice_t* __global_state, integer *idspec)
 {
-    return lxname_0_(2, (char *)0, (char *)0, (char *)0, (integer *)0, (
-	    integer *)0, idspec, (integer *)0, (ftnint)0, (ftnint)0, (ftnint)
-	    0);
+    return lxname_0_(__global_state, 2, (char *)0, (char *)0, (char *)0, (
+	    integer *)0, (integer *)0, idspec, (integer *)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int lxcsid_(cspice_t* __global_state, char *hdchrs, char *
 	tlchrs, integer *idspec, ftnlen hdchrs_len, ftnlen tlchrs_len)
 {
-    return lxname_0_(3, hdchrs, tlchrs, (char *)0, (integer *)0, (integer *)0,
-	     idspec, (integer *)0, hdchrs_len, tlchrs_len, (ftnint)0);
+    return lxname_0_(__global_state, 3, hdchrs, tlchrs, (char *)0, (integer *)
+	    0, (integer *)0, idspec, (integer *)0, hdchrs_len, tlchrs_len, (
+	    ftnint)0);
     }
 

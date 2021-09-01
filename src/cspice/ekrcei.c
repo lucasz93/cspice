@@ -8,7 +8,7 @@
 
 
 extern ekrcei_init_t __ekrcei_init;
-static inline ekrcei_state_t* get_ekrcei_state(cspice_t* state) {
+static ekrcei_state_t* get_ekrcei_state(cspice_t* state) {
 	if (!state->ekrcei)
 		state->ekrcei = __cspice_allocate_module(sizeof(
 	ekrcei_state_t), &__ekrcei_init, sizeof(__ekrcei_init));

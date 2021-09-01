@@ -8,7 +8,7 @@
 
 
 extern zzlexmet_init_t __zzlexmet_init;
-static inline zzlexmet_state_t* get_zzlexmet_state(cspice_t* state) {
+static zzlexmet_state_t* get_zzlexmet_state(cspice_t* state) {
 	if (!state->zzlexmet)
 		state->zzlexmet = __cspice_allocate_module(sizeof(
 	zzlexmet_state_t), &__zzlexmet_init, sizeof(__zzlexmet_init));

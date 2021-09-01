@@ -8,7 +8,7 @@
 
 
 extern spkgeo_init_t __spkgeo_init;
-static inline spkgeo_state_t* get_spkgeo_state(cspice_t* state) {
+static spkgeo_state_t* get_spkgeo_state(cspice_t* state) {
 	if (!state->spkgeo)
 		state->spkgeo = __cspice_allocate_module(sizeof(
 	spkgeo_state_t), &__spkgeo_init, sizeof(__spkgeo_init));

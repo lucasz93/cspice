@@ -8,7 +8,7 @@
 
 
 typedef int hrmesp_state_t;
-static inline hrmesp_state_t* get_hrmesp_state(cspice_t* state) {
+static hrmesp_state_t* get_hrmesp_state(cspice_t* state) {
 	return 0;
 }
 

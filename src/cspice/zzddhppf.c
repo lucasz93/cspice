@@ -8,7 +8,7 @@
 
 
 extern zzddhppf_init_t __zzddhppf_init;
-static inline zzddhppf_state_t* get_zzddhppf_state(cspice_t* state) {
+static zzddhppf_state_t* get_zzddhppf_state(cspice_t* state) {
 	if (!state->zzddhppf)
 		state->zzddhppf = __cspice_allocate_module(sizeof(
 	zzddhppf_state_t), &__zzddhppf_init, sizeof(__zzddhppf_init));

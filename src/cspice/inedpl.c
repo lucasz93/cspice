@@ -8,7 +8,7 @@
 
 
 extern inedpl_init_t __inedpl_init;
-static inline inedpl_state_t* get_inedpl_state(cspice_t* state) {
+static inedpl_state_t* get_inedpl_state(cspice_t* state) {
 	if (!state->inedpl)
 		state->inedpl = __cspice_allocate_module(sizeof(
 	inedpl_state_t), &__inedpl_init, sizeof(__inedpl_init));
@@ -27,7 +27,7 @@ static inline inedpl_state_t* get_inedpl_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal dist;
@@ -513,8 +513,8 @@ static inline inedpl_state_t* get_inedpl_state(cspice_t* state) {
 /* Computing 2nd power */
     d__2 = dist;
     d__1 = 1. - d__2 * d__2;
-    rcircl = sqrt(&__global_state->f2c, brcktd_(__global_state, &d__1, &
-	    __state->c_b32, &__state->c_b33));
+    rcircl = sqrt(brcktd_(__global_state, &d__1, &__state->c_b32, &
+	    __state->c_b33));
     vsclip_(__global_state, &rcircl, vec1);
     vsclip_(__global_state, &rcircl, vec2);
 

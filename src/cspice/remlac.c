@@ -8,7 +8,7 @@
 
 
 typedef int remlac_state_t;
-static inline remlac_state_t* get_remlac_state(cspice_t* state) {
+static remlac_state_t* get_remlac_state(cspice_t* state) {
 	return 0;
 }
 

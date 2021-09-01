@@ -8,7 +8,7 @@
 
 
 typedef int sdiffi_state_t;
-static inline sdiffi_state_t* get_sdiffi_state(cspice_t* state) {
+static sdiffi_state_t* get_sdiffi_state(cspice_t* state) {
 	return 0;
 }
 

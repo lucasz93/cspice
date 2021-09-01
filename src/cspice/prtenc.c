@@ -8,7 +8,7 @@
 
 
 typedef int prtenc_state_t;
-static inline prtenc_state_t* get_prtenc_state(cspice_t* state) {
+static prtenc_state_t* get_prtenc_state(cspice_t* state) {
 	return 0;
 }
 
@@ -363,12 +363,12 @@ L_prtdec:
 /* Subroutine */ int prtenc_(cspice_t* __global_state, integer *number, char *
 	string, ftnlen string_len)
 {
-    return prtenc_0_(0, number, string, string_len);
+    return prtenc_0_(__global_state, 0, number, string, string_len);
     }
 
 /* Subroutine */ int prtdec_(cspice_t* __global_state, char *string, integer *
 	number, ftnlen string_len)
 {
-    return prtenc_0_(1, number, string, string_len);
+    return prtenc_0_(__global_state, 1, number, string, string_len);
     }
 

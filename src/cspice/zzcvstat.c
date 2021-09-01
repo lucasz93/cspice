@@ -8,7 +8,7 @@
 
 
 extern zzcvstat_init_t __zzcvstat_init;
-static inline zzcvstat_state_t* get_zzcvstat_state(cspice_t* state) {
+static zzcvstat_state_t* get_zzcvstat_state(cspice_t* state) {
 	if (!state->zzcvstat)
 		state->zzcvstat = __cspice_allocate_module(sizeof(
 	zzcvstat_state_t), &__zzcvstat_init, sizeof(__zzcvstat_init));
@@ -535,18 +535,18 @@ L_zzcvssta:
 /* Subroutine */ int zzcvstat_(cspice_t* __global_state, doublereal *et, char 
 	*ref, integer *center, doublereal *state, ftnlen ref_len)
 {
-    return zzcvstat_0_(0, et, ref, center, state, ref_len);
+    return zzcvstat_0_(__global_state, 0, et, ref, center, state, ref_len);
     }
 
 /* Subroutine */ int zzcvxsta_(cspice_t* __global_state, doublereal *et, char 
 	*ref, integer *center, doublereal *state, ftnlen ref_len)
 {
-    return zzcvstat_0_(1, et, ref, center, state, ref_len);
+    return zzcvstat_0_(__global_state, 1, et, ref, center, state, ref_len);
     }
 
 /* Subroutine */ int zzcvssta_(cspice_t* __global_state, doublereal *state, 
 	integer *center, doublereal *et, char *ref, ftnlen ref_len)
 {
-    return zzcvstat_0_(2, et, ref, center, state, ref_len);
+    return zzcvstat_0_(__global_state, 2, et, ref, center, state, ref_len);
     }
 

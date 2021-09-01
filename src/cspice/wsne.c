@@ -11,7 +11,7 @@ s_wsne(f2c_state_t *f2c, cilist *a)
 {
 	int n;
 
-	if(n=c_le(a))
+	if(n=c_le(f2c,a))
 		return(n);
 	f2c->f__reading=0;
 	f2c->f__external=1;
@@ -19,8 +19,8 @@ s_wsne(f2c_state_t *f2c, cilist *a)
 	f2c->f__putn = x_putc;
 	f2c->L_len = LINE;
 	f2c->f__donewrec = x_wSL;
-	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c->f__curunit))
-		err(a->cierr, errno, "namelist output start");
-	x_wsne(a);
-	return e_wsle();
+	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c,f2c->f__curunit))
+		err(f2c,a->cierr, errno, "namelist output start");
+	x_wsne(f2c,a);
+	return e_wsle(f2c);
 	}

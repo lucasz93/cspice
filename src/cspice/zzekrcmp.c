@@ -8,7 +8,7 @@
 
 
 extern zzekrcmp_init_t __zzekrcmp_init;
-static inline zzekrcmp_state_t* get_zzekrcmp_state(cspice_t* state) {
+static zzekrcmp_state_t* get_zzekrcmp_state(cspice_t* state) {
 	if (!state->zzekrcmp)
 		state->zzekrcmp = __cspice_allocate_module(sizeof(
 	zzekrcmp_state_t), &__zzekrcmp_init, sizeof(__zzekrcmp_init));

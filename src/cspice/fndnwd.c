@@ -8,7 +8,7 @@
 
 
 typedef int fndnwd_state_t;
-static inline fndnwd_state_t* get_fndnwd_state(cspice_t* state) {
+static fndnwd_state_t* get_fndnwd_state(cspice_t* state) {
 	return 0;
 }
 

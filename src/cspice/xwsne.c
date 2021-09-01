@@ -6,7 +6,7 @@
  static VOID
 nl_donewrec(f2c_state_t *f2c)
 {
-	(*f2c->f__donewrec)();
+	(*f2c->f__donewrec)(f2c);
 	PUT(f2c,' ');
 	}
 
@@ -56,7 +56,7 @@ x_wsne(f2c_state_t *f2c, cilist *a)
 			}
 		else
 			size = f__typesize[type];
-		l_write(number, v->addr, size, type);
+		l_write(f2c,number, v->addr, size, type);
 		if (vd < vde) {
 			if (f2c->f__recpos+2 >= f2c->L_len)
 				nl_donewrec(f2c);

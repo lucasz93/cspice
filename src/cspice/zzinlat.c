@@ -8,7 +8,7 @@
 
 
 extern zzinlat_init_t __zzinlat_init;
-static inline zzinlat_state_t* get_zzinlat_state(cspice_t* state) {
+static zzinlat_state_t* get_zzinlat_state(cspice_t* state) {
 	if (!state->zzinlat)
 		state->zzinlat = __cspice_allocate_module(sizeof(
 	zzinlat_state_t), &__zzinlat_init, sizeof(__zzinlat_init));
@@ -28,7 +28,7 @@ static inline zzinlat_state_t* get_zzinlat_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal);
+    double cos(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int zzinlat0_(cspice_t*, doublereal *, doublereal 
@@ -635,7 +635,7 @@ static inline zzinlat_state_t* get_zzinlat_state(cspice_t* state) {
 /*              DLON << 1 */
 
 /* Computing MAX */
-	    d__2 = (d__1 = cos(&__global_state->f2c, lat), abs(d__1));
+	    d__2 = (d__1 = cos(lat), abs(d__1));
 	    dlon = lonmrg / max(d__2,1e-8);
 	    aminlo = minlon - dlon;
 	    amaxlo = maxlon + dlon;

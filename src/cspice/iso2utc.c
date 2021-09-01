@@ -8,7 +8,7 @@
 
 
 extern iso2utc_init_t __iso2utc_init;
-static inline iso2utc_state_t* get_iso2utc_state(cspice_t* state) {
+static iso2utc_state_t* get_iso2utc_state(cspice_t* state) {
 	if (!state->iso2utc)
 		state->iso2utc = __cspice_allocate_module(sizeof(
 	iso2utc_state_t), &__iso2utc_init, sizeof(__iso2utc_init));

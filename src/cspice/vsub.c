@@ -8,7 +8,7 @@
 
 
 typedef int vsub_state_t;
-static inline vsub_state_t* get_vsub_state(cspice_t* state) {
+static vsub_state_t* get_vsub_state(cspice_t* state) {
 	return 0;
 }
 

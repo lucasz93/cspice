@@ -41,9 +41,8 @@
 
 */
 
-   #include "SpiceUsr.h"
-   #include "f2c.h"
    #include "__cspice_state.h"
+   #include "SpiceUsr.h"
 
    void ftncls_c ( void *naif_state, SpiceInt unit )
 

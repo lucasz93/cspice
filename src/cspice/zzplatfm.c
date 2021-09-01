@@ -8,7 +8,7 @@
 
 
 extern zzplatfm_init_t __zzplatfm_init;
-static inline zzplatfm_state_t* get_zzplatfm_state(cspice_t* state) {
+static zzplatfm_state_t* get_zzplatfm_state(cspice_t* state) {
 	if (!state->zzplatfm)
 		state->zzplatfm = __cspice_allocate_module(sizeof(
 	zzplatfm_state_t), &__zzplatfm_init, sizeof(__zzplatfm_init));

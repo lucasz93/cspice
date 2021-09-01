@@ -8,7 +8,7 @@
 
 
 typedef int zzelnaxx_state_t;
-static inline zzelnaxx_state_t* get_zzelnaxx_state(cspice_t* state) {
+static zzelnaxx_state_t* get_zzelnaxx_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,7 +20,7 @@ static inline zzelnaxx_state_t* get_zzelnaxx_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -278,8 +278,8 @@ static inline zzelnaxx_state_t* get_zzelnaxx_state(cspice_t* state) {
 /*     order to take advantage of existing code. The third coordinates */
 /*     of all participating vectors will be zero. */
 
-    normal[0] = cos(&__global_state->f2c, *lat);
-    normal[1] = sin(&__global_state->f2c, *lat);
+    normal[0] = cos(*lat);
+    normal[1] = sin(*lat);
     normal[2] = 0.;
     ednmpt_(__global_state, a, b, b, normal, ept);
 

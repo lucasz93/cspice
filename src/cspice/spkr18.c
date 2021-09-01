@@ -8,7 +8,7 @@
 
 
 extern spkr18_init_t __spkr18_init;
-static inline spkr18_state_t* get_spkr18_state(cspice_t* state) {
+static spkr18_state_t* get_spkr18_state(cspice_t* state) {
 	if (!state->spkr18)
 		state->spkr18 = __cspice_allocate_module(sizeof(
 	spkr18_state_t), &__spkr18_init, sizeof(__spkr18_init));

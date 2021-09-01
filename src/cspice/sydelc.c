@@ -8,7 +8,7 @@
 
 
 extern sydelc_init_t __sydelc_init;
-static inline sydelc_state_t* get_sydelc_state(cspice_t* state) {
+static sydelc_state_t* get_sydelc_state(cspice_t* state) {
 	if (!state->sydelc)
 		state->sydelc = __cspice_allocate_module(sizeof(
 	sydelc_state_t), &__sydelc_init, sizeof(__sydelc_init));

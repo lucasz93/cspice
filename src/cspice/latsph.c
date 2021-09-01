@@ -8,7 +8,7 @@
 
 
 typedef int latsph_state_t;
-static inline latsph_state_t* get_latsph_state(cspice_t* state) {
+static latsph_state_t* get_latsph_state(cspice_t* state) {
 	return 0;
 }
 

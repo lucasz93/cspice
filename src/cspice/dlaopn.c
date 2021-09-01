@@ -8,7 +8,7 @@
 
 
 extern dlaopn_init_t __dlaopn_init;
-static inline dlaopn_state_t* get_dlaopn_state(cspice_t* state) {
+static dlaopn_state_t* get_dlaopn_state(cspice_t* state) {
 	if (!state->dlaopn)
 		state->dlaopn = __cspice_allocate_module(sizeof(
 	dlaopn_state_t), &__dlaopn_init, sizeof(__dlaopn_init));

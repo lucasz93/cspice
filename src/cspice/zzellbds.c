@@ -8,7 +8,7 @@
 
 
 typedef int zzellbds_state_t;
-static inline zzellbds_state_t* get_zzellbds_state(cspice_t* state) {
+static zzellbds_state_t* get_zzellbds_state(cspice_t* state) {
 	return 0;
 }
 

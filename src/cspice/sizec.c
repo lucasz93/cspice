@@ -8,7 +8,7 @@
 
 
 typedef int sizec_state_t;
-static inline sizec_state_t* get_sizec_state(cspice_t* state) {
+static sizec_state_t* get_sizec_state(cspice_t* state) {
 	return 0;
 }
 

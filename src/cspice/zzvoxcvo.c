@@ -8,7 +8,7 @@
 
 
 typedef int zzvoxcvo_state_t;
-static inline zzvoxcvo_state_t* get_zzvoxcvo_state(cspice_t* state) {
+static zzvoxcvo_state_t* get_zzvoxcvo_state(cspice_t* state) {
 	return 0;
 }
 

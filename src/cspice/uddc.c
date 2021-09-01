@@ -8,7 +8,7 @@
 
 
 typedef int uddc_state_t;
-static inline uddc_state_t* get_uddc_state(cspice_t* state) {
+static uddc_state_t* get_uddc_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern zzedtmpt_init_t __zzedtmpt_init;
-static inline zzedtmpt_state_t* get_zzedtmpt_state(cspice_t* state) {
+static zzedtmpt_state_t* get_zzedtmpt_state(cspice_t* state) {
 	if (!state->zzedtmpt)
 		state->zzedtmpt = __cspice_allocate_module(sizeof(
 	zzedtmpt_state_t), &__zzedtmpt_init, sizeof(__zzedtmpt_init));

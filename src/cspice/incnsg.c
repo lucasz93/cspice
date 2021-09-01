@@ -8,7 +8,7 @@
 
 
 extern incnsg_init_t __incnsg_init;
-static inline incnsg_state_t* get_incnsg_state(cspice_t* state) {
+static incnsg_state_t* get_incnsg_state(cspice_t* state) {
 	if (!state->incnsg)
 		state->incnsg = __cspice_allocate_module(sizeof(
 	incnsg_state_t), &__incnsg_init, sizeof(__incnsg_init));
@@ -29,7 +29,7 @@ static inline incnsg_state_t* get_incnsg_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal);
+    double cos(doublereal);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
@@ -461,7 +461,7 @@ static inline incnsg_state_t* get_incnsg_state(cspice_t* state) {
 /*     cases with COSANG equal to 0 as though the cone is actually a */
 /*     plane normal to the axis and containing the apex. */
 
-    cosang = cos(&__global_state->f2c, *angle);
+    cosang = cos(*angle);
     locang = *angle;
 
 /*     We'll work with a local axis that has angular separation of */

@@ -335,7 +335,8 @@
    /*
    Create a Fortran-style string array.
    */
-   C2F_CreateStrArr_Sig (   nterms, 
+   C2F_CreateStrArr_Sig (  naif_state,
+                           nterms, 
                           ( ConstSpiceChar ** ) strptrs, 
                            &fTermsLen, 
                            &fTermsArr                      );
@@ -373,8 +374,8 @@
    /*
    Convert the output strings to C style.  Also set the output found flag.
    */
-   F2C_ConvertStr ( stringlen, string );
-   F2C_ConvertStr ( substrlen, substr );
+   F2C_ConvertStr ( naif_state, stringlen, string );
+   F2C_ConvertStr ( naif_state, substrlen, substr );
 
    *found = fnd;
 

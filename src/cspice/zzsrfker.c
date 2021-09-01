@@ -8,7 +8,7 @@
 
 
 extern zzsrfker_init_t __zzsrfker_init;
-static inline zzsrfker_state_t* get_zzsrfker_state(cspice_t* state) {
+static zzsrfker_state_t* get_zzsrfker_state(cspice_t* state) {
 	if (!state->zzsrfker)
 		state->zzsrfker = __cspice_allocate_module(sizeof(
 	zzsrfker_state_t), &__zzsrfker_init, sizeof(__zzsrfker_init));

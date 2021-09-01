@@ -8,7 +8,7 @@
 
 
 typedef int remlai_state_t;
-static inline remlai_state_t* get_remlai_state(cspice_t* state) {
+static remlai_state_t* get_remlai_state(cspice_t* state) {
 	return 0;
 }
 

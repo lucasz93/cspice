@@ -8,7 +8,7 @@
 
 
 extern dasrdi_init_t __dasrdi_init;
-static inline dasrdi_state_t* get_dasrdi_state(cspice_t* state) {
+static dasrdi_state_t* get_dasrdi_state(cspice_t* state) {
 	if (!state->dasrdi)
 		state->dasrdi = __cspice_allocate_module(sizeof(
 	dasrdi_state_t), &__dasrdi_init, sizeof(__dasrdi_init));

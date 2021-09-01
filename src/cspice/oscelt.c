@@ -8,7 +8,7 @@
 
 
 extern oscelt_init_t __oscelt_init;
-static inline oscelt_state_t* get_oscelt_state(cspice_t* state) {
+static oscelt_state_t* get_oscelt_state(cspice_t* state) {
 	if (!state->oscelt)
 		state->oscelt = __cspice_allocate_module(sizeof(
 	oscelt_state_t), &__oscelt_init, sizeof(__oscelt_init));
@@ -27,10 +27,9 @@ static inline oscelt_state_t* get_oscelt_state(cspice_t* state) {
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    double atan2(f2c_state_t*, doublereal, doublereal), cos(f2c_state_t*, 
-	    doublereal), sqrt(f2c_state_t*, doublereal), sin(f2c_state_t*, 
-	    doublereal), d_sign(f2c_state_t*, doublereal *, doublereal *), 
-	    sinh(f2c_state_t*, doublereal), tan(f2c_state_t*, doublereal);
+    double atan2(doublereal, doublereal), cos(doublereal), sqrt(doublereal), 
+	    sin(doublereal), d_sign(f2c_state_t*, doublereal *, doublereal *),
+	     sinh(doublereal), tan(doublereal);
 
     /* Local variables */
     doublereal rmag;
@@ -571,7 +570,7 @@ static inline oscelt_state_t* get_oscelt_state(cspice_t* state) {
 /*     (the x-axis) and the node vector, n. */
 /*                                       - */
 
-    lnode = atan2(&__global_state->f2c, n[1], n[0]);
+    lnode = atan2(n[1], n[0]);
     if (lnode < 0.) {
 	lnode += twopi_(__global_state);
     }
@@ -629,8 +628,8 @@ static inline oscelt_state_t* get_oscelt_state(cspice_t* state) {
 	vhat_(__global_state, e, perix);
     }
     ucrss_(__global_state, h__, perix, periy);
-    nu = atan2(&__global_state->f2c, vdot_(__global_state, r__, periy), vdot_(
-	    __global_state, r__, perix));
+    nu = atan2(vdot_(__global_state, r__, periy), vdot_(__global_state, r__, 
+	    perix));
 
 /*     Unfortunately, the other element routines need the mean */
 /*     anomaly, M. The true and mean anomalies are related through */
@@ -664,8 +663,7 @@ static inline oscelt_state_t* get_oscelt_state(cspice_t* state) {
 /*        sine and cosine of the eccentric anomaly, then let ATAN2 */
 /*        find the eccentric anomaly. */
 
-	cosea = (ecc + cos(&__global_state->f2c, nu)) / (ecc * cos(&
-		__global_state->f2c, nu) + 1.);
+	cosea = (ecc + cos(nu)) / (ecc * cos(nu) + 1.);
 
 /*        Here we use the relationships (here b is the length */
 /*        of the semi-minor axis): */
@@ -677,23 +675,21 @@ static inline oscelt_state_t* get_oscelt_state(cspice_t* state) {
 /*                    = (r/rp) \/ (1-e) / (1+e)  sin(nu) */
 
 
-	sinea = rmag / rp * sqrt(&__global_state->f2c, (1. - ecc) / (ecc + 1.)
-		) * sin(&__global_state->f2c, nu);
-	ea = atan2(&__global_state->f2c, sinea, cosea);
-	d__1 = ea - ecc * sin(&__global_state->f2c, ea);
+	sinea = rmag / rp * sqrt((1. - ecc) / (ecc + 1.)) * sin(nu);
+	ea = atan2(sinea, cosea);
+	d__1 = ea - ecc * sin(ea);
 	m0 = d_sign(&__global_state->f2c, &d__1, &nu);
 	if (m0 < 0.) {
 	    m0 += twopi_(__global_state);
 	}
     } else if (ecc > 1.) {
-	coshf = (ecc + cos(&__global_state->f2c, nu)) / (ecc * cos(&
-		__global_state->f2c, nu) + 1.);
+	coshf = (ecc + cos(nu)) / (ecc * cos(nu) + 1.);
 	d__1 = max(1.,coshf);
 	ea = dacosh_(__global_state, &d__1);
-	d__1 = ecc * sinh(&__global_state->f2c, ea) - ea;
+	d__1 = ecc * sinh(ea) - ea;
 	m0 = d_sign(&__global_state->f2c, &d__1, &nu);
     } else {
-	ea = tan(&__global_state->f2c, nu / 2.);
+	ea = tan(nu / 2.);
 /* Computing 3rd power */
 	d__2 = ea;
 	d__1 = ea + d__2 * (d__2 * d__2) / 3.;

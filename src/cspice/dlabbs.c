@@ -8,7 +8,7 @@
 
 
 extern dlabbs_init_t __dlabbs_init;
-static inline dlabbs_state_t* get_dlabbs_state(cspice_t* state) {
+static dlabbs_state_t* get_dlabbs_state(cspice_t* state) {
 	if (!state->dlabbs)
 		state->dlabbs = __cspice_allocate_module(sizeof(
 	dlabbs_state_t), &__dlabbs_init, sizeof(__dlabbs_init));

@@ -8,7 +8,7 @@
 
 
 extern putdev_init_t __putdev_init;
-static inline putdev_state_t* get_putdev_state(cspice_t* state) {
+static putdev_state_t* get_putdev_state(cspice_t* state) {
 	if (!state->putdev)
 		state->putdev = __cspice_allocate_module(sizeof(
 	putdev_state_t), &__putdev_init, sizeof(__putdev_init));
@@ -495,12 +495,12 @@ L_getdev:
 /* Subroutine */ int putdev_(cspice_t* __global_state, char *device, ftnlen 
 	device_len)
 {
-    return putdev_0_(0, device, device_len);
+    return putdev_0_(__global_state, 0, device, device_len);
     }
 
 /* Subroutine */ int getdev_(cspice_t* __global_state, char *device, ftnlen 
 	device_len)
 {
-    return putdev_0_(1, device, device_len);
+    return putdev_0_(__global_state, 1, device, device_len);
     }
 

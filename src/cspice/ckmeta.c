@@ -8,7 +8,7 @@
 
 
 extern ckmeta_init_t __ckmeta_init;
-static inline ckmeta_state_t* get_ckmeta_state(cspice_t* state) {
+static ckmeta_state_t* get_ckmeta_state(cspice_t* state) {
 	if (!state->ckmeta)
 		state->ckmeta = __cspice_allocate_module(sizeof(
 	ckmeta_state_t), &__ckmeta_init, sizeof(__ckmeta_init));

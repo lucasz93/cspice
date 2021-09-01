@@ -8,7 +8,7 @@
 
 
 extern zzgfref_init_t __zzgfref_init;
-static inline zzgfref_state_t* get_zzgfref_state(cspice_t* state) {
+static zzgfref_state_t* get_zzgfref_state(cspice_t* state) {
 	if (!state->zzgfref)
 		state->zzgfref = __cspice_allocate_module(sizeof(
 	zzgfref_state_t), &__zzgfref_init, sizeof(__zzgfref_init));

@@ -46,10 +46,11 @@
  
 */
 
+   #include "__cspice_state.h"
+   #undef abs
    #include "SpiceUsr.h"
    #include "SpiceZst.h"
    #include "SpiceZad.h"
-   #include "__cspice_state.h"
 
 
 

@@ -5,15 +5,15 @@
 #ifdef KR_headers
 extern void z_putc();
 #else
-extern void z_putc(int);
+extern void z_putc(f2c_state_t *,int);
 #endif
 
  static int
 z_wSL(f2c_state_t *f2c)
 {
 	while(f2c->f__recpos < f2c->f__svic->icirlen)
-		z_putc(' ');
-	return z_rnew();
+		z_putc(f2c,' ');
+	return z_rnew(f2c);
 	}
 
  static void
@@ -50,7 +50,7 @@ s_wsni(f2c_state_t *f2c, icilist *a)
 
 	c_liw(f2c, a);
 	ca.cifmt = a->icifmt;
-	x_wsne(&ca);
+	x_wsne(f2c,&ca);
 	z_wSL(f2c);
 	return 0;
 	}

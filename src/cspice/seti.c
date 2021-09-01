@@ -8,7 +8,7 @@
 
 
 typedef int seti_state_t;
-static inline seti_state_t* get_seti_state(cspice_t* state) {
+static seti_state_t* get_seti_state(cspice_t* state) {
 	return 0;
 }
 

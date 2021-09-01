@@ -8,7 +8,7 @@
 
 
 extern zzgetbff_init_t __zzgetbff_init;
-static inline zzgetbff_state_t* get_zzgetbff_state(cspice_t* state) {
+static zzgetbff_state_t* get_zzgetbff_state(cspice_t* state) {
 	if (!state->zzgetbff)
 		state->zzgetbff = __cspice_allocate_module(sizeof(
 	zzgetbff_state_t), &__zzgetbff_init, sizeof(__zzgetbff_init));

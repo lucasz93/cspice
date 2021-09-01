@@ -8,7 +8,7 @@
 
 
 extern dskv02_init_t __dskv02_init;
-static inline dskv02_state_t* get_dskv02_state(cspice_t* state) {
+static dskv02_state_t* get_dskv02_state(cspice_t* state) {
 	if (!state->dskv02)
 		state->dskv02 = __cspice_allocate_module(sizeof(
 	dskv02_state_t), &__dskv02_init, sizeof(__dskv02_init));

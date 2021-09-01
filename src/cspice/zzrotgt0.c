@@ -8,7 +8,7 @@
 
 
 extern zzrotgt0_init_t __zzrotgt0_init;
-static inline zzrotgt0_state_t* get_zzrotgt0_state(cspice_t* state) {
+static zzrotgt0_state_t* get_zzrotgt0_state(cspice_t* state) {
 	if (!state->zzrotgt0)
 		state->zzrotgt0 = __cspice_allocate_module(sizeof(
 	zzrotgt0_state_t), &__zzrotgt0_init, sizeof(__zzrotgt0_init));

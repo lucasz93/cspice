@@ -8,7 +8,7 @@
 
 
 extern lparss_init_t __lparss_init;
-static inline lparss_state_t* get_lparss_state(cspice_t* state) {
+static lparss_state_t* get_lparss_state(cspice_t* state) {
 	if (!state->lparss)
 		state->lparss = __cspice_allocate_module(sizeof(
 	lparss_state_t), &__lparss_init, sizeof(__lparss_init));

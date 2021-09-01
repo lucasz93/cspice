@@ -8,7 +8,7 @@
 
 
 extern zzholdd_init_t __zzholdd_init;
-static inline zzholdd_state_t* get_zzholdd_state(cspice_t* state) {
+static zzholdd_state_t* get_zzholdd_state(cspice_t* state) {
 	if (!state->zzholdd)
 		state->zzholdd = __cspice_allocate_module(sizeof(
 	zzholdd_state_t), &__zzholdd_init, sizeof(__zzholdd_init));

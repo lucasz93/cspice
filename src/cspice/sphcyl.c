@@ -8,7 +8,7 @@
 
 
 typedef int sphcyl_state_t;
-static inline sphcyl_state_t* get_sphcyl_state(cspice_t* state) {
+static sphcyl_state_t* get_sphcyl_state(cspice_t* state) {
 	return 0;
 }
 
@@ -18,7 +18,7 @@ static inline sphcyl_state_t* get_sphcyl_state(cspice_t* state) {
 	long__, doublereal *z__)
 {
     /* Builtin functions */
-    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal);
+    double sin(doublereal), cos(doublereal);
 
     /* Local variables */
     doublereal rr;
@@ -172,8 +172,8 @@ static inline sphcyl_state_t* get_sphcyl_state(cspice_t* state) {
 /*     Convert to cylindrical coordinates, storing the results in */
 /*     temporary variables. */
 
-    rr = *radius * sin(&__global_state->f2c, *colat);
-    zz = *radius * cos(&__global_state->f2c, *colat);
+    rr = *radius * sin(*colat);
+    zz = *radius * cos(*colat);
 
 /*     Move the results to the output variables. */
 

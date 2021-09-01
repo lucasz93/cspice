@@ -8,7 +8,7 @@
 
 
 typedef int nblen_state_t;
-static inline nblen_state_t* get_nblen_state(cspice_t* state) {
+static nblen_state_t* get_nblen_state(cspice_t* state) {
 	return 0;
 }
 

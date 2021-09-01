@@ -8,7 +8,7 @@
 
 
 extern zzxlatei_init_t __zzxlatei_init;
-static inline zzxlatei_state_t* get_zzxlatei_state(cspice_t* state) {
+static zzxlatei_state_t* get_zzxlatei_state(cspice_t* state) {
 	if (!state->zzxlatei)
 		state->zzxlatei = __cspice_allocate_module(sizeof(
 	zzxlatei_state_t), &__zzxlatei_init, sizeof(__zzxlatei_init));

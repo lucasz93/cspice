@@ -8,7 +8,7 @@
 
 
 extern spkcvt_init_t __spkcvt_init;
-static inline spkcvt_state_t* get_spkcvt_state(cspice_t* state) {
+static spkcvt_state_t* get_spkcvt_state(cspice_t* state) {
 	if (!state->spkcvt)
 		state->spkcvt = __cspice_allocate_module(sizeof(
 	spkcvt_state_t), &__spkcvt_init, sizeof(__spkcvt_init));

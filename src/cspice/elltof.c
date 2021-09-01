@@ -8,7 +8,7 @@
 
 
 typedef int elltof_state_t;
-static inline elltof_state_t* get_elltof_state(cspice_t* state) {
+static elltof_state_t* get_elltof_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,8 +20,7 @@ static inline elltof_state_t* get_elltof_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sin(f2c_state_t*, doublereal), sqrt(f2c_state_t*, doublereal), cos(
-	    f2c_state_t*, doublereal);
+    double sin(doublereal), sqrt(doublereal), cos(doublereal);
 
     /* Local variables */
     doublereal a;
@@ -269,7 +268,7 @@ static inline elltof_state_t* get_elltof_state(cspice_t* state) {
 /* Computing 2nd power */
 	d__1 = 1. - a / b;
 	y = 1. - d__1 * d__1 * (a * 2. / b + 1. - a / (*ecc + 1.));
-	*e = *ecc * sin(&__global_state->f2c, *ecc * y + m) + m;
+	*e = *ecc * sin(*ecc * y + m) + m;
 
 /*     The situation is a little more troublesome, however, when M < M0. */
 /*     For small eccentricity, the cubic */
@@ -304,17 +303,17 @@ static inline elltof_state_t* get_elltof_state(cspice_t* state) {
 /* Computing 2nd power */
 	d__1 = 1. - m / m0;
 	y = 1. - d__1 * d__1 * (m * 2. / m0 + 1. - m / (1. - *ecc));
-	*e = *ecc * sin(&__global_state->f2c, *ecc * y + m) + m;
+	*e = *ecc * sin(*ecc * y + m) + m;
     } else if (*ecc <= .85) {
 /* Computing 4th power */
 	d__1 = 1. - m / m0, d__1 *= d__1;
 	y = 1. - d__1 * d__1;
-	*e = *ecc * sin(&__global_state->f2c, *ecc * y + m) + m;
+	*e = *ecc * sin(*ecc * y + m) + m;
     } else if (*ecc <= .96 || m > .05) {
 /* Computing 8th power */
 	d__1 = 1. - m / m0, d__1 *= d__1, d__1 *= d__1;
 	y = 1. - d__1 * d__1;
-	*e = *ecc * sin(&__global_state->f2c, *ecc * y + m) + m;
+	*e = *ecc * sin(*ecc * y + m) + m;
     } else {
 	q = 2. / *ecc * (1. - *ecc);
 	r__ = m / *ecc * 3.;
@@ -322,7 +321,7 @@ static inline elltof_state_t* get_elltof_state(cspice_t* state) {
 	d__1 = q;
 /* Computing 2nd power */
 	d__2 = r__;
-	qr = sqrt(&__global_state->f2c, d__1 * (d__1 * d__1) + d__2 * d__2);
+	qr = sqrt(d__1 * (d__1 * d__1) + d__2 * d__2);
 	d__1 = r__ + qr;
 	d__2 = r__ - qr;
 	*e = dcbrt_(__global_state, &d__1) + dcbrt_(__global_state, &d__2);
@@ -342,9 +341,9 @@ static inline elltof_state_t* get_elltof_state(cspice_t* state) {
 
     change = 1.;
     while(abs(change) > 1e-15) {
-	fn = *e - *ecc * sin(&__global_state->f2c, *e) - m;
-	deriv = 1. - *ecc * cos(&__global_state->f2c, *e);
-	deriv2 = *ecc * sin(&__global_state->f2c, *e);
+	fn = *e - *ecc * sin(*e) - m;
+	deriv = 1. - *ecc * cos(*e);
+	deriv2 = *ecc * sin(*e);
 /* Computing 2nd power */
 	d__1 = deriv;
 	change = fn / deriv * (fn * deriv2 / (d__1 * d__1 * 2.) + 1.);

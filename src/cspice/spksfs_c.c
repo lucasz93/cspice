@@ -377,7 +377,7 @@
    or if a SPICE error was signaled, since it's unsafe to return
    a string without a null terminator.
    */
-   F2C_ConvertStr ( idlen, ident );
+   F2C_ConvertStr ( naif_state, idlen, ident );
 
 
    chkout_c ( naif_state, "spksfs_c" );

@@ -8,7 +8,7 @@
 
 
 typedef int minai_state_t;
-static inline minai_state_t* get_minai_state(cspice_t* state) {
+static minai_state_t* get_minai_state(cspice_t* state) {
 	return 0;
 }
 

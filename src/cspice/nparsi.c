@@ -8,7 +8,7 @@
 
 
 extern nparsi_init_t __nparsi_init;
-static inline nparsi_state_t* get_nparsi_state(cspice_t* state) {
+static nparsi_state_t* get_nparsi_state(cspice_t* state) {
 	if (!state->nparsi)
 		state->nparsi = __cspice_allocate_module(sizeof(
 	nparsi_state_t), &__nparsi_init, sizeof(__nparsi_init));

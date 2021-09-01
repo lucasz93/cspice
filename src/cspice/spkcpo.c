@@ -8,7 +8,7 @@
 
 
 extern spkcpo_init_t __spkcpo_init;
-static inline spkcpo_state_t* get_spkcpo_state(cspice_t* state) {
+static spkcpo_state_t* get_spkcpo_state(cspice_t* state) {
 	if (!state->spkcpo)
 		state->spkcpo = __cspice_allocate_module(sizeof(
 	spkcpo_state_t), &__spkcpo_init, sizeof(__spkcpo_init));

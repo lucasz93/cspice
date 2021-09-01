@@ -8,7 +8,7 @@
 
 
 extern spkezp_init_t __spkezp_init;
-static inline spkezp_state_t* get_spkezp_state(cspice_t* state) {
+static spkezp_state_t* get_spkezp_state(cspice_t* state) {
 	if (!state->spkezp)
 		state->spkezp = __cspice_allocate_module(sizeof(
 	spkezp_state_t), &__spkezp_init, sizeof(__spkezp_init));

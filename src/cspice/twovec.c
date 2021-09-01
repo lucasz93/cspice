@@ -8,7 +8,7 @@
 
 
 extern twovec_init_t __twovec_init;
-static inline twovec_state_t* get_twovec_state(cspice_t* state) {
+static twovec_state_t* get_twovec_state(cspice_t* state) {
 	if (!state->twovec)
 		state->twovec = __cspice_allocate_module(sizeof(
 	twovec_state_t), &__twovec_init, sizeof(__twovec_init));

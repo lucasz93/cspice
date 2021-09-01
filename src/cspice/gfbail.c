@@ -8,7 +8,7 @@
 
 
 typedef int gfbail_state_t;
-static inline gfbail_state_t* get_gfbail_state(cspice_t* state) {
+static gfbail_state_t* get_gfbail_state(cspice_t* state) {
 	return 0;
 }
 

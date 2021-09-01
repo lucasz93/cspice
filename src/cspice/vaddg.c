@@ -8,7 +8,7 @@
 
 
 typedef int vaddg_state_t;
-static inline vaddg_state_t* get_vaddg_state(cspice_t* state) {
+static vaddg_state_t* get_vaddg_state(cspice_t* state) {
 	return 0;
 }
 

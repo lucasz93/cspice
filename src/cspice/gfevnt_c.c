@@ -53,6 +53,7 @@
    #include "SpiceZad.h"
    #include "SpiceZst.h"
    #include "zzalloc.h"
+   #include "signal1.h"
    #undef gfevnt_c
 
    void gfevnt_c ( void               * naif_state,
@@ -1400,9 +1401,9 @@
    The calling routine should declare the 'qpnams' and 'qcpars' string arrays 
    with the same dimensions (size and shape).
    */
-   C2F_MapStrArr ( "gfevnt_c", qnpars, lenvals, qpnams, &fstr_Len_qpnams, 
+   C2F_MapStrArr ( naif_state, "gfevnt_c", qnpars, lenvals, qpnams, &fstr_Len_qpnams, 
                                                         &fstr_qpnams );
-   C2F_MapStrArr ( "gfevnt_c", qnpars, lenvals, qcpars, &fstr_Len_qcpars, 
+   C2F_MapStrArr ( naif_state, "gfevnt_c", qnpars, lenvals, qcpars, &fstr_Len_qcpars, 
                                                         &fstr_qcpars );
 
    /*
@@ -1470,8 +1471,8 @@
 
       if ( newHandler )
          {
-         defSigHandler = signal ( SIGINT, gfinth_c );
-
+         defSigHandler = signal_user ( SIGINT, gfinth_c, naif_state );
+         
          if ( defSigHandler == SIG_ERR )
             {
             setmsg_c ( naif_state, "Attempt to establish the CSPICE routine "
@@ -1501,7 +1502,8 @@
       
    */
 
-   gfevnt_(  ( U_fp            )  zzadstep_c, 
+   gfevnt_(  naif_state,
+             ( U_fp            )  zzadstep_c, 
              ( U_fp            )  zzadrefn_c,
              ( char          * )  gquant,
              ( integer       * ) &qnpars,

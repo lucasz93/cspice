@@ -8,7 +8,7 @@
 
 
 extern zzekscan_init_t __zzekscan_init;
-static inline zzekscan_state_t* get_zzekscan_state(cspice_t* state) {
+static zzekscan_state_t* get_zzekscan_state(cspice_t* state) {
 	if (!state->zzekscan)
 		state->zzekscan = __cspice_allocate_module(sizeof(
 	zzekscan_state_t), &__zzekscan_init, sizeof(__zzekscan_init));

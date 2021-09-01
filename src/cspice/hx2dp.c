@@ -8,7 +8,7 @@
 
 
 extern hx2dp_init_t __hx2dp_init;
-static inline hx2dp_state_t* get_hx2dp_state(cspice_t* state) {
+static hx2dp_state_t* get_hx2dp_state(cspice_t* state) {
 	if (!state->hx2dp)
 		state->hx2dp = __cspice_allocate_module(sizeof(hx2dp_state_t),
 	 &__hx2dp_init, sizeof(__hx2dp_init));

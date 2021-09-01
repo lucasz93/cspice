@@ -7,7 +7,7 @@
 #include "__cspice_state.h"
 
 
-static inline zzvrtplt_state_t* get_zzvrtplt_state(cspice_t* state) {
+static zzvrtplt_state_t* get_zzvrtplt_state(cspice_t* state) {
 	if (!state->zzvrtplt)
 		state->zzvrtplt = __cspice_allocate_module(sizeof(
 	zzvrtplt_state_t), 0, 0);

@@ -77,8 +77,8 @@
 #ifndef ZZERROR_H
 #define ZZERROR_H
 
-   const char * zzerror( long cnt );
-   void         zzerrorinit();
+   const char * zzerror( void *naif_state, long cnt );
+   void         zzerrorinit(void *naif_state);
 
    #define      SCALAR_OP         -1
 

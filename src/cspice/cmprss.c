@@ -8,7 +8,7 @@
 
 
 typedef int cmprss_state_t;
-static inline cmprss_state_t* get_cmprss_state(cspice_t* state) {
+static cmprss_state_t* get_cmprss_state(cspice_t* state) {
 	return 0;
 }
 

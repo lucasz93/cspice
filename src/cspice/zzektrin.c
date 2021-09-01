@@ -8,7 +8,7 @@
 
 
 extern zzektrin_init_t __zzektrin_init;
-static inline zzektrin_state_t* get_zzektrin_state(cspice_t* state) {
+static zzektrin_state_t* get_zzektrin_state(cspice_t* state) {
 	if (!state->zzektrin)
 		state->zzektrin = __cspice_allocate_module(sizeof(
 	zzektrin_state_t), &__zzektrin_init, sizeof(__zzektrin_init));

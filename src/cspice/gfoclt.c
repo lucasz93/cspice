@@ -8,7 +8,7 @@
 
 
 extern gfoclt_init_t __gfoclt_init;
-static inline gfoclt_state_t* get_gfoclt_state(cspice_t* state) {
+static gfoclt_state_t* get_gfoclt_state(cspice_t* state) {
 	if (!state->gfoclt)
 		state->gfoclt = __cspice_allocate_module(sizeof(
 	gfoclt_state_t), &__gfoclt_init, sizeof(__gfoclt_init));

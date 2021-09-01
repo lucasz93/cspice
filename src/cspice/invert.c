@@ -8,7 +8,7 @@
 
 
 extern invert_init_t __invert_init;
-static inline invert_state_t* get_invert_state(cspice_t* state) {
+static invert_state_t* get_invert_state(cspice_t* state) {
 	if (!state->invert)
 		state->invert = __cspice_allocate_module(sizeof(
 	invert_state_t), &__invert_init, sizeof(__invert_init));

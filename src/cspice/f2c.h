@@ -411,7 +411,9 @@ typedef struct hashtab {
 /*Table sizes*/
 #define MXUNIT 100
 
-typedef struct {
+#include "fio.h"
+
+typedef struct f2c_state_s {
     /*
         The variable read_non_native is set via the function zzsetnnread_.
         This variable has file scope; functions in this file use it 
@@ -442,10 +444,10 @@ typedef struct {
     char *f__fmtbuf;
     flag f__external;   /*1 if external io, 0 if internal */
 
-    int (*f__getn)(void);   /* for formatted input */
-    void (*f__putn)(int);   /* for formatted output */
-    int (*f__doed)(struct syl*, char*, ftnlen),(*f__doned)(struct syl*);
-    int (*f__dorevert)(void),(*f__donewrec)(void),(*f__doend)(void);
+    int (*f__getn)(struct f2c_state_s *);   /* for formatted input */
+    void (*f__putn)(struct f2c_state_s *, int);   /* for formatted output */
+    int (*f__doed)(struct f2c_state_s *, struct syl*, char*, ftnlen),(*f__doned)(struct f2c_state_s *, struct syl*);
+    int (*f__dorevert)(struct f2c_state_s *),(*f__donewrec)(struct f2c_state_s *),(*f__doend)(struct f2c_state_s *);
 
     flag f__sequential;   /*1 if sequential io, 0 if direct*/
     flag f__formatted;   /*1 if formatted io, 0 if unformatted*/
@@ -472,7 +474,7 @@ typedef struct {
 #ifdef KR_headers
      int (*f__lioproc)(), (*l_getc)(), (*l_ungetc)();
 #else
-     int (*f__lioproc)(ftnint*, char*, ftnlen, ftnint), (*l_getc)(void), (*l_ungetc)(int,FILE*);
+     int (*f__lioproc)(struct f2c_state_s*,ftnint*, char*, ftnlen, ftnint), (*l_getc)(struct f2c_state_s*), (*l_ungetc)(struct f2c_state_s*,int,FILE*);
 #endif
 
     flag f__lquit;
@@ -495,7 +497,10 @@ typedef struct {
     int colonseen;
 
 	char Alpha[256];
-	Alphanum[256];
+	char Alphanum[256];
+   char hex[256];
+
+   void *parent;
 } f2c_state_t;
 
 #define abs(x) ((x) >= 0 ? (x) : -(x))
@@ -524,7 +529,7 @@ typedef shortlogical (*K_fp)(...);
 typedef /* Character */ VOID (*H_fp)(...);
 typedef /* Subroutine */ int (*S_fp)(...);
 #else
-typedef int /* Unknown procedure type */ (*U_fp)();
+typedef int /* Unknown procedure type */ (*U_fp)(void *state);
 typedef shortint (*J_fp)(void *state);
 typedef integer (*I_fp)(void *state);
 typedef real (*R_fp)(void *state);
@@ -534,7 +539,7 @@ typedef /* Double Complex */ VOID (*Z_fp)(void *state);
 typedef logical (*L_fp)(void *state);
 typedef shortlogical (*K_fp)(void *state);
 typedef /* Character */ VOID (*H_fp)(void *state);
-typedef /* Subroutine */ int (*S_fp)(void *state);
+typedef /* Subroutine */ int (*S_fp)(void *state, ...);
 #endif
 /* E_fp is for real functions when -R is not specified */
 typedef VOID C_f; /* complex function */

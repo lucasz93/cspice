@@ -8,7 +8,7 @@
 
 
 extern ekops_init_t __ekops_init;
-static inline ekops_state_t* get_ekops_state(cspice_t* state) {
+static ekops_state_t* get_ekops_state(cspice_t* state) {
 	if (!state->ekops)
 		state->ekops = __cspice_allocate_module(sizeof(ekops_state_t),
 	 &__ekops_init, sizeof(__ekops_init));

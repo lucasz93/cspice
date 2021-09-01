@@ -8,7 +8,7 @@
 
 
 extern zzilusta_init_t __zzilusta_init;
-static inline zzilusta_state_t* get_zzilusta_state(cspice_t* state) {
+static zzilusta_state_t* get_zzilusta_state(cspice_t* state) {
 	if (!state->zzilusta)
 		state->zzilusta = __cspice_allocate_module(sizeof(
 	zzilusta_state_t), &__zzilusta_init, sizeof(__zzilusta_init));

@@ -8,7 +8,7 @@
 
 
 typedef int irftrn_state_t;
-static inline irftrn_state_t* get_irftrn_state(cspice_t* state) {
+static irftrn_state_t* get_irftrn_state(cspice_t* state) {
 	return 0;
 }
 

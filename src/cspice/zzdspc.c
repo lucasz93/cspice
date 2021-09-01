@@ -8,7 +8,7 @@
 
 
 typedef int zzdspc_state_t;
-static inline zzdspc_state_t* get_zzdspc_state(cspice_t* state) {
+static zzdspc_state_t* get_zzdspc_state(cspice_t* state) {
 	return 0;
 }
 
@@ -29,8 +29,8 @@ static inline zzdspc_state_t* get_zzdspc_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double d_mod(f2c_state_t*, doublereal *, doublereal *), sin(f2c_state_t*, 
-	    doublereal), cos(f2c_state_t*, doublereal);
+    double d_mod(f2c_state_t*, doublereal *, doublereal *), sin(doublereal), 
+	    cos(doublereal);
 
     /* Local variables */
     doublereal delt;
@@ -379,15 +379,11 @@ static inline zzdspc_state_t* get_zzdspc_state(cspice_t* state) {
 /*           NEAR - SYNCHRONOUS RESONANCE TERMS */
 
 	    if (*irez != 2) {
-		xndt = *del1 * sin(&__global_state->f2c, *xli - fasx2) + *
-			del2 * sin(&__global_state->f2c, (*xli - fasx4) * 2.) 
-			+ *del3 * sin(&__global_state->f2c, (*xli - fasx6) * 
-			3.);
+		xndt = *del1 * sin(*xli - fasx2) + *del2 * sin((*xli - fasx4) 
+			* 2.) + *del3 * sin((*xli - fasx6) * 3.);
 		xldot = *xni + *xfact;
-		xnddt = *del1 * cos(&__global_state->f2c, *xli - fasx2) + *
-			del2 * 2. * cos(&__global_state->f2c, (*xli - fasx4) *
-			 2.) + *del3 * 3. * cos(&__global_state->f2c, (*xli - 
-			fasx6) * 3.);
+		xnddt = *del1 * cos(*xli - fasx2) + *del2 * 2. * cos((*xli - 
+			fasx4) * 2.) + *del3 * 3. * cos((*xli - fasx6) * 3.);
 		xnddt *= xldot;
 	    } else {
 
@@ -396,29 +392,21 @@ static inline zzdspc_state_t* get_zzdspc_state(cspice_t* state) {
 		xomi = *argpo + *argpdot * *atime;
 		x2omi = xomi + xomi;
 		x2li = *xli + *xli;
-		xndt = *d2201 * sin(&__global_state->f2c, x2omi + *xli - g22) 
-			+ *d2211 * sin(&__global_state->f2c, *xli - g22) + *
-			d3210 * sin(&__global_state->f2c, xomi + *xli - g32) 
-			+ *d3222 * sin(&__global_state->f2c, -xomi + *xli - 
-			g32) + *d4410 * sin(&__global_state->f2c, x2omi + 
-			x2li - g44) + *d4422 * sin(&__global_state->f2c, x2li 
-			- g44) + *d5220 * sin(&__global_state->f2c, xomi + *
-			xli - g52) + *d5232 * sin(&__global_state->f2c, -xomi 
-			+ *xli - g52) + *d5421 * sin(&__global_state->f2c, 
-			xomi + x2li - g54) + *d5433 * sin(&
-			__global_state->f2c, -xomi + x2li - g54);
+		xndt = *d2201 * sin(x2omi + *xli - g22) + *d2211 * sin(*xli - 
+			g22) + *d3210 * sin(xomi + *xli - g32) + *d3222 * sin(
+			-xomi + *xli - g32) + *d4410 * sin(x2omi + x2li - g44)
+			 + *d4422 * sin(x2li - g44) + *d5220 * sin(xomi + *
+			xli - g52) + *d5232 * sin(-xomi + *xli - g52) + *
+			d5421 * sin(xomi + x2li - g54) + *d5433 * sin(-xomi + 
+			x2li - g54);
 		xldot = *xni + *xfact;
-		xnddt = *d2201 * cos(&__global_state->f2c, x2omi + *xli - g22)
-			 + *d2211 * cos(&__global_state->f2c, *xli - g22) + *
-			d3210 * cos(&__global_state->f2c, xomi + *xli - g32) 
-			+ *d3222 * cos(&__global_state->f2c, -xomi + *xli - 
-			g32) + *d5220 * cos(&__global_state->f2c, xomi + *xli 
-			- g52) + *d5232 * cos(&__global_state->f2c, -xomi + *
-			xli - g52) + (*d4410 * cos(&__global_state->f2c, 
-			x2omi + x2li - g44) + *d4422 * cos(&
-			__global_state->f2c, x2li - g44) + *d5421 * cos(&
-			__global_state->f2c, xomi + x2li - g54) + *d5433 * 
-			cos(&__global_state->f2c, -xomi + x2li - g54)) * 2.;
+		xnddt = *d2201 * cos(x2omi + *xli - g22) + *d2211 * cos(*xli 
+			- g22) + *d3210 * cos(xomi + *xli - g32) + *d3222 * 
+			cos(-xomi + *xli - g32) + *d5220 * cos(xomi + *xli - 
+			g52) + *d5232 * cos(-xomi + *xli - g52) + (*d4410 * 
+			cos(x2omi + x2li - g44) + *d4422 * cos(x2li - g44) + *
+			d5421 * cos(xomi + x2li - g54) + *d5433 * cos(-xomi + 
+			x2li - g54)) * 2.;
 		xnddt *= xldot;
 	    }
 

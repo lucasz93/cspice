@@ -8,7 +8,7 @@
 
 
 typedef int vequg_state_t;
-static inline vequg_state_t* get_vequg_state(cspice_t* state) {
+static vequg_state_t* get_vequg_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern ckw04e_init_t __ckw04e_init;
-static inline ckw04e_state_t* get_ckw04e_state(cspice_t* state) {
+static ckw04e_state_t* get_ckw04e_state(cspice_t* state) {
 	if (!state->ckw04e)
 		state->ckw04e = __cspice_allocate_module(sizeof(
 	ckw04e_state_t), &__ckw04e_init, sizeof(__ckw04e_init));

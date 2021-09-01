@@ -8,7 +8,7 @@
 
 
 extern rdtext_init_t __rdtext_init;
-static inline rdtext_state_t* get_rdtext_state(cspice_t* state) {
+static rdtext_state_t* get_rdtext_state(cspice_t* state) {
 	if (!state->rdtext)
 		state->rdtext = __cspice_allocate_module(sizeof(
 	rdtext_state_t), &__rdtext_init, sizeof(__rdtext_init));
@@ -1022,12 +1022,13 @@ L_cltext:
 /* Subroutine */ int rdtext_(cspice_t* __global_state, char *file, char *line,
 	 logical *eof, ftnlen file_len, ftnlen line_len)
 {
-    return rdtext_0_(0, file, line, eof, file_len, line_len);
+    return rdtext_0_(__global_state, 0, file, line, eof, file_len, line_len);
     }
 
 /* Subroutine */ int cltext_(cspice_t* __global_state, char *file, ftnlen 
 	file_len)
 {
-    return rdtext_0_(1, file, (char *)0, (logical *)0, file_len, (ftnint)0);
+    return rdtext_0_(__global_state, 1, file, (char *)0, (logical *)0, 
+	    file_len, (ftnint)0);
     }
 

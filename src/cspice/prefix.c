@@ -8,7 +8,7 @@
 
 
 typedef int prefix_state_t;
-static inline prefix_state_t* get_prefix_state(cspice_t* state) {
+static prefix_state_t* get_prefix_state(cspice_t* state) {
 	return 0;
 }
 

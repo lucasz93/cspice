@@ -8,7 +8,7 @@
 
 
 typedef int inslai_state_t;
-static inline inslai_state_t* get_inslai_state(cspice_t* state) {
+static inslai_state_t* get_inslai_state(cspice_t* state) {
 	return 0;
 }
 

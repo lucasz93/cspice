@@ -8,7 +8,7 @@
 
 
 extern zzascii_init_t __zzascii_init;
-static inline zzascii_state_t* get_zzascii_state(cspice_t* state) {
+static zzascii_state_t* get_zzascii_state(cspice_t* state) {
 	if (!state->zzascii)
 		state->zzascii = __cspice_allocate_module(sizeof(
 	zzascii_state_t), &__zzascii_init, sizeof(__zzascii_init));

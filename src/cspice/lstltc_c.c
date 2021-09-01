@@ -43,13 +43,13 @@
  
 */
 
+   #include "__cspice_state.h"
+   #undef abs
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
    #include "f2cMang.h"
-   #include "f2c.h"
-   #include "__cspice_state.h"
    #undef    lstltc_c
 
    SpiceInt lstltc_c ( void            * naif_state,

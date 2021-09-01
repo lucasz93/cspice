@@ -8,7 +8,7 @@
 
 
 typedef int lun2fn_state_t;
-static inline lun2fn_state_t* get_lun2fn_state(cspice_t* state) {
+static lun2fn_state_t* get_lun2fn_state(cspice_t* state) {
 	return 0;
 }
 

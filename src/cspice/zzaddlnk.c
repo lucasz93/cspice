@@ -8,7 +8,7 @@
 
 
 typedef int zzaddlnk_state_t;
-static inline zzaddlnk_state_t* get_zzaddlnk_state(cspice_t* state) {
+static zzaddlnk_state_t* get_zzaddlnk_state(cspice_t* state) {
 	return 0;
 }
 

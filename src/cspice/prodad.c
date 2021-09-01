@@ -8,7 +8,7 @@
 
 
 typedef int prodad_state_t;
-static inline prodad_state_t* get_prodad_state(cspice_t* state) {
+static prodad_state_t* get_prodad_state(cspice_t* state) {
 	return 0;
 }
 

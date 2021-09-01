@@ -8,7 +8,7 @@
 
 
 extern matchw_init_t __matchw_init;
-static inline matchw_state_t* get_matchw_state(cspice_t* state) {
+static matchw_state_t* get_matchw_state(cspice_t* state) {
 	if (!state->matchw)
 		state->matchw = __cspice_allocate_module(sizeof(
 	matchw_state_t), &__matchw_init, sizeof(__matchw_init));

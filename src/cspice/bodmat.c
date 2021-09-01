@@ -8,7 +8,7 @@
 
 
 typedef int bodmat_state_t;
-static inline bodmat_state_t* get_bodmat_state(cspice_t* state) {
+static bodmat_state_t* get_bodmat_state(cspice_t* state) {
 	return 0;
 }
 

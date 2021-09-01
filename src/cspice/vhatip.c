@@ -8,7 +8,7 @@
 
 
 typedef int vhatip_state_t;
-static inline vhatip_state_t* get_vhatip_state(cspice_t* state) {
+static vhatip_state_t* get_vhatip_state(cspice_t* state) {
 	return 0;
 }
 

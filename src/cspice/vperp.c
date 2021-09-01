@@ -8,7 +8,7 @@
 
 
 typedef int vperp_state_t;
-static inline vperp_state_t* get_vperp_state(cspice_t* state) {
+static vperp_state_t* get_vperp_state(cspice_t* state) {
 	return 0;
 }
 

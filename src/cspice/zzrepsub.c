@@ -8,7 +8,7 @@
 
 
 extern zzrepsub_init_t __zzrepsub_init;
-static inline zzrepsub_state_t* get_zzrepsub_state(cspice_t* state) {
+static zzrepsub_state_t* get_zzrepsub_state(cspice_t* state) {
 	if (!state->zzrepsub)
 		state->zzrepsub = __cspice_allocate_module(sizeof(
 	zzrepsub_state_t), &__zzrepsub_init, sizeof(__zzrepsub_init));

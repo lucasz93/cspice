@@ -8,7 +8,7 @@
 
 
 extern dasrwr_init_t __dasrwr_init;
-static inline dasrwr_state_t* get_dasrwr_state(cspice_t* state) {
+static dasrwr_state_t* get_dasrwr_state(cspice_t* state) {
 	if (!state->dasrwr)
 		state->dasrwr = __cspice_allocate_module(sizeof(
 	dasrwr_state_t), &__dasrwr_init, sizeof(__dasrwr_init));
@@ -4161,88 +4161,88 @@ L_daswbr:
 	first, integer *last, doublereal *datad, integer *datai, char *datac, 
 	ftnlen recc_len, ftnlen datac_len)
 {
-    return dasrwr_0_(0, handle, recno, recc, recd, reci, first, last, datad, 
-	    datai, datac, recc_len, datac_len);
+    return dasrwr_0_(__global_state, 0, handle, recno, recc, recd, reci, 
+	    first, last, datad, datai, datac, recc_len, datac_len);
     }
 
 /* Subroutine */ int dasrrd_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *first, integer *last, doublereal *datad)
 {
-    return dasrwr_0_(1, handle, recno, (char *)0, (doublereal *)0, (integer *)
-	    0, first, last, datad, (integer *)0, (char *)0, (ftnint)0, (
-	    ftnint)0);
+    return dasrwr_0_(__global_state, 1, handle, recno, (char *)0, (doublereal 
+	    *)0, (integer *)0, first, last, datad, (integer *)0, (char *)0, (
+	    ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dasrri_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *first, integer *last, integer *datai)
 {
-    return dasrwr_0_(2, handle, recno, (char *)0, (doublereal *)0, (integer *)
-	    0, first, last, (doublereal *)0, datai, (char *)0, (ftnint)0, (
-	    ftnint)0);
+    return dasrwr_0_(__global_state, 2, handle, recno, (char *)0, (doublereal 
+	    *)0, (integer *)0, first, last, (doublereal *)0, datai, (char *)0,
+	     (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dasrrc_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *first, integer *last, char *datac, ftnlen 
 	datac_len)
 {
-    return dasrwr_0_(3, handle, recno, (char *)0, (doublereal *)0, (integer *)
-	    0, first, last, (doublereal *)0, (integer *)0, datac, (ftnint)0, 
-	    datac_len);
+    return dasrwr_0_(__global_state, 3, handle, recno, (char *)0, (doublereal 
+	    *)0, (integer *)0, first, last, (doublereal *)0, (integer *)0, 
+	    datac, (ftnint)0, datac_len);
     }
 
 /* Subroutine */ int daswrd_(cspice_t* __global_state, integer *handle, 
 	integer *recno, doublereal *recd)
 {
-    return dasrwr_0_(4, handle, recno, (char *)0, recd, (integer *)0, (
-	    integer *)0, (integer *)0, (doublereal *)0, (integer *)0, (char *)
-	    0, (ftnint)0, (ftnint)0);
+    return dasrwr_0_(__global_state, 4, handle, recno, (char *)0, recd, (
+	    integer *)0, (integer *)0, (integer *)0, (doublereal *)0, (
+	    integer *)0, (char *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int daswri_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *reci)
 {
-    return dasrwr_0_(5, handle, recno, (char *)0, (doublereal *)0, reci, (
-	    integer *)0, (integer *)0, (doublereal *)0, (integer *)0, (char *)
-	    0, (ftnint)0, (ftnint)0);
+    return dasrwr_0_(__global_state, 5, handle, recno, (char *)0, (doublereal 
+	    *)0, reci, (integer *)0, (integer *)0, (doublereal *)0, (integer *
+	    )0, (char *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int daswrc_(cspice_t* __global_state, integer *handle, 
 	integer *recno, char *recc, ftnlen recc_len)
 {
-    return dasrwr_0_(6, handle, recno, recc, (doublereal *)0, (integer *)0, (
-	    integer *)0, (integer *)0, (doublereal *)0, (integer *)0, (char *)
-	    0, recc_len, (ftnint)0);
+    return dasrwr_0_(__global_state, 6, handle, recno, recc, (doublereal *)0, 
+	    (integer *)0, (integer *)0, (integer *)0, (doublereal *)0, (
+	    integer *)0, (char *)0, recc_len, (ftnint)0);
     }
 
 /* Subroutine */ int dasurd_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *first, integer *last, doublereal *datad)
 {
-    return dasrwr_0_(7, handle, recno, (char *)0, (doublereal *)0, (integer *)
-	    0, first, last, datad, (integer *)0, (char *)0, (ftnint)0, (
-	    ftnint)0);
+    return dasrwr_0_(__global_state, 7, handle, recno, (char *)0, (doublereal 
+	    *)0, (integer *)0, first, last, datad, (integer *)0, (char *)0, (
+	    ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dasuri_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *first, integer *last, integer *datai)
 {
-    return dasrwr_0_(8, handle, recno, (char *)0, (doublereal *)0, (integer *)
-	    0, first, last, (doublereal *)0, datai, (char *)0, (ftnint)0, (
-	    ftnint)0);
+    return dasrwr_0_(__global_state, 8, handle, recno, (char *)0, (doublereal 
+	    *)0, (integer *)0, first, last, (doublereal *)0, datai, (char *)0,
+	     (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dasurc_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *first, integer *last, char *datac, ftnlen 
 	datac_len)
 {
-    return dasrwr_0_(9, handle, recno, (char *)0, (doublereal *)0, (integer *)
-	    0, first, last, (doublereal *)0, (integer *)0, datac, (ftnint)0, 
-	    datac_len);
+    return dasrwr_0_(__global_state, 9, handle, recno, (char *)0, (doublereal 
+	    *)0, (integer *)0, first, last, (doublereal *)0, (integer *)0, 
+	    datac, (ftnint)0, datac_len);
     }
 
 /* Subroutine */ int daswbr_(cspice_t* __global_state, integer *handle)
 {
-    return dasrwr_0_(10, handle, (integer *)0, (char *)0, (doublereal *)0, (
-	    integer *)0, (integer *)0, (integer *)0, (doublereal *)0, (
-	    integer *)0, (char *)0, (ftnint)0, (ftnint)0);
+    return dasrwr_0_(__global_state, 10, handle, (integer *)0, (char *)0, (
+	    doublereal *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    doublereal *)0, (integer *)0, (char *)0, (ftnint)0, (ftnint)0);
     }
 

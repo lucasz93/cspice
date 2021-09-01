@@ -8,7 +8,7 @@
 
 
 typedef int twovxf_state_t;
-static inline twovxf_state_t* get_twovxf_state(cspice_t* state) {
+static twovxf_state_t* get_twovxf_state(cspice_t* state) {
 	return 0;
 }
 

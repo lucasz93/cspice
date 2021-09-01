@@ -8,7 +8,7 @@
 
 
 extern syrend_init_t __syrend_init;
-static inline syrend_state_t* get_syrend_state(cspice_t* state) {
+static syrend_state_t* get_syrend_state(cspice_t* state) {
 	if (!state->syrend)
 		state->syrend = __cspice_allocate_module(sizeof(
 	syrend_state_t), &__syrend_init, sizeof(__syrend_init));

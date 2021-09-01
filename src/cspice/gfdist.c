@@ -8,7 +8,7 @@
 
 
 extern gfdist_init_t __gfdist_init;
-static inline gfdist_state_t* get_gfdist_state(cspice_t* state) {
+static gfdist_state_t* get_gfdist_state(cspice_t* state) {
 	if (!state->gfdist)
 		state->gfdist = __cspice_allocate_module(sizeof(
 	gfdist_state_t), &__gfdist_init, sizeof(__gfdist_init));

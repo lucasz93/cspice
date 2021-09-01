@@ -8,7 +8,7 @@
 
 
 typedef int reordl_state_t;
-static inline reordl_state_t* get_reordl_state(cspice_t* state) {
+static reordl_state_t* get_reordl_state(cspice_t* state) {
 	return 0;
 }
 

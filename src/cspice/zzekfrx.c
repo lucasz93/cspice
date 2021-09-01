@@ -8,7 +8,7 @@
 
 
 extern zzekfrx_init_t __zzekfrx_init;
-static inline zzekfrx_state_t* get_zzekfrx_state(cspice_t* state) {
+static zzekfrx_state_t* get_zzekfrx_state(cspice_t* state) {
 	if (!state->zzekfrx)
 		state->zzekfrx = __cspice_allocate_module(sizeof(
 	zzekfrx_state_t), &__zzekfrx_init, sizeof(__zzekfrx_init));

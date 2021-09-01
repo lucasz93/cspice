@@ -8,7 +8,7 @@
 
 
 extern zzddhgsd_init_t __zzddhgsd_init;
-static inline zzddhgsd_state_t* get_zzddhgsd_state(cspice_t* state) {
+static zzddhgsd_state_t* get_zzddhgsd_state(cspice_t* state) {
 	if (!state->zzddhgsd)
 		state->zzddhgsd = __cspice_allocate_module(sizeof(
 	zzddhgsd_state_t), &__zzddhgsd_init, sizeof(__zzddhgsd_init));

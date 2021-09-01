@@ -8,7 +8,7 @@
 
 
 extern zzinlat0_init_t __zzinlat0_init;
-static inline zzinlat0_state_t* get_zzinlat0_state(cspice_t* state) {
+static zzinlat0_state_t* get_zzinlat0_state(cspice_t* state) {
 	if (!state->zzinlat0)
 		state->zzinlat0 = __cspice_allocate_module(sizeof(
 	zzinlat0_state_t), &__zzinlat0_init, sizeof(__zzinlat0_init));

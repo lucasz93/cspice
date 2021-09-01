@@ -8,7 +8,7 @@
 
 
 typedef int alltru_state_t;
-static inline alltru_state_t* get_alltru_state(cspice_t* state) {
+static alltru_state_t* get_alltru_state(cspice_t* state) {
 	return 0;
 }
 

@@ -151,7 +151,7 @@
    is that f2c.h defines macros that conflict with stdlib.h on some
    systems.  It's simpler to just replicate the few typedefs we need.
 */
-
+#ifndef F2C_INCLUDE
 #if (    defined( CSPICE_ALPHA_DIGITAL_UNIX    )      \
       || defined( CSPICE_PC_CYGWIN_64BIT_GCC )        \
       || defined( CSPICE_PC_LINUX_64BIT_GCC    )      \
@@ -174,13 +174,13 @@
    Type S_fp is used for subroutines.
    Type U_fp is used for functions of unknown type.
    */
-   typedef VOID       (*H_fp)(void *state);
-   typedef doublereal (*D_fp)(void *state);
-   typedef doublereal (*E_fp)(void *state);
-   typedef int        (*S_fp)(void *state);
-   typedef int        (*U_fp)(v);
-   typedef integer    (*I_fp)(void *state);
-   typedef logical    (*L_fp)(void *state);
+   typedef VOID       (*H_fp)(void *state, ...);
+   typedef doublereal (*D_fp)(void *state, ...);
+   typedef doublereal (*E_fp)(void *state, ...);
+   typedef int        (*S_fp)(void *state, ...);
+   typedef int        (*U_fp)(void *state, ...);
+   typedef integer    (*I_fp)(void *state, ...);
+   typedef logical    (*L_fp)(void *state, ...);
 
 #else
 
@@ -197,16 +197,16 @@
    Type S_fp is used for subroutines.
    Type U_fp is used for functions of unknown type.
    */
-   typedef VOID       (*H_fp)(void *state);
-   typedef doublereal (*D_fp)(void *state);
-   typedef doublereal (*E_fp)(void *state);
-   typedef int        (*S_fp)(void *state);
-   typedef int        (*U_fp)(void *state);
-   typedef integer    (*I_fp)(void *state);
-   typedef logical    (*L_fp)(void *state);
+   typedef VOID       (*H_fp)(void *state, ...);
+   typedef doublereal (*D_fp)(void *state, ...);
+   typedef doublereal (*E_fp)(void *state, ...);
+   typedef int        (*S_fp)(void *state, ...);
+   typedef int        (*U_fp)(void *state, ...);
+   typedef integer    (*I_fp)(void *state, ...);
+   typedef logical    (*L_fp)(void *state, ...);
 
 #endif
-
+#endif /* !F2C_INCLUDE */
 
 #ifdef __cplusplus
    extern "C" { 

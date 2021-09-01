@@ -33,7 +33,7 @@ char *ap_end(f2c_state_t *f2c, char *s)
 		errno = 100;
 		return(NULL);
 	}
-	f__fatal(100, "bad string");
+	f__fatal(f2c, 100, "bad string");
 	/*NOTREACHED*/ return 0;
 }
  static
@@ -416,9 +416,9 @@ loop:	switch(type_f((p= &f2c->f__syl[f2c->f__pc])->op))
 	default:
 		fprintf(stderr,"unknown code in do_fio: %d\n%s\n",
 			p->op,f2c->f__fmtbuf);
-		err(f2c->f__elist->cierr,100,"do_fio");
+		err(f2c,f2c->f__elist->cierr,100,"do_fio");
 	case NED:
-		if((*f2c->f__doned)(p))
+		if((*f2c->f__doned)(f2c,p))
 		{	f2c->f__pc++;
 			goto loop;
 		}
@@ -431,13 +431,13 @@ loop:	switch(type_f((p= &f2c->f__syl[f2c->f__pc])->op))
 			goto loop;
 		}
 		if(ptr==NULL)
-			return((*f2c->f__doend)());
+			return((*f2c->f__doend)(f2c));
 		f2c->f__cnt[f2c->f__cp]--;
 		f2c->f__workdone=1;
-		if((n=(*f2c->f__doed)(p,ptr,len))>0)
-			errfl(f2c->f__elist->cierr,errno,"fmt");
+		if((n=(*f2c->f__doed)(f2c,p,ptr,len))>0)
+			errfl(f2c,f2c->f__elist->cierr,errno,"fmt");
 		if(n<0)
-			err(f2c->f__elist->ciend,(EOF),"fmt");
+			err(f2c,f2c->f__elist->ciend,(EOF),"fmt");
 		continue;
 	case STACK:
 		f2c->f__cnt[++f2c->f__cp]=p->p1;
@@ -460,13 +460,13 @@ loop:	switch(type_f((p= &f2c->f__syl[f2c->f__pc])->op))
 		f2c->f__rp=f2c->f__cp=0;
 		f2c->f__pc = p->p1;
 		if(ptr==NULL)
-			return((*f2c->f__doend)());
+			return((*f2c->f__doend)(f2c));
 		if(!f2c->f__workdone) return(0);
-		if((n=(*f2c->f__dorevert)()) != 0) return(n);
+		if((n=(*f2c->f__dorevert)(f2c)) != 0) return(n);
 		goto loop;
 	case COLON:
 		if(ptr==NULL)
-			return((*f2c->f__doend)());
+			return((*f2c->f__doend)(f2c));
 		f2c->f__pc++;
 		goto loop;
 	case NONL:

@@ -8,7 +8,7 @@
 
 
 extern dskz02_init_t __dskz02_init;
-static inline dskz02_state_t* get_dskz02_state(cspice_t* state) {
+static dskz02_state_t* get_dskz02_state(cspice_t* state) {
 	if (!state->dskz02)
 		state->dskz02 = __cspice_allocate_module(sizeof(
 	dskz02_state_t), &__dskz02_init, sizeof(__dskz02_init));

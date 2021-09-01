@@ -8,7 +8,7 @@
 
 
 typedef int zzlatbox_state_t;
-static inline zzlatbox_state_t* get_zzlatbox_state(cspice_t* state) {
+static zzlatbox_state_t* get_zzlatbox_state(cspice_t* state) {
 	return 0;
 }
 
@@ -21,7 +21,7 @@ static inline zzlatbox_state_t* get_zzlatbox_state(cspice_t* state) {
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal diag[3];
@@ -289,16 +289,16 @@ static inline zzlatbox_state_t* get_zzlatbox_state(cspice_t* state) {
 /*     absolute value of the latitude is maximum. */
 
     if (minlat >= 0.) {
-	outrad = cos(&__global_state->f2c, minlat) * maxr;
-	inrad = cos(&__global_state->f2c, maxlat) * minr;
+	outrad = cos(minlat) * maxr;
+	inrad = cos(maxlat) * minr;
     } else if (maxlat <= 0.) {
-	outrad = cos(&__global_state->f2c, maxlat) * maxr;
-	inrad = cos(&__global_state->f2c, minlat) * minr;
+	outrad = cos(maxlat) * maxr;
+	inrad = cos(minlat) * minr;
     } else {
 	outrad = maxr;
 /* Computing MAX */
 	d__1 = abs(maxlat), d__2 = abs(minlat);
-	inrad = cos(&__global_state->f2c, (max(d__1,d__2))) * minr;
+	inrad = cos((max(d__1,d__2))) * minr;
     }
 
 /*     Let MIDLON be the longitude of the midpoint of the element's */
@@ -312,9 +312,9 @@ static inline zzlatbox_state_t* get_zzlatbox_state(cspice_t* state) {
 /*     where "radius" is defined as the distance from the Z axis. */
 
     if (hdlon <= halfpi_(__global_state)) {
-	*lr = outrad - inrad * cos(&__global_state->f2c, hdlon);
+	*lr = outrad - inrad * cos(hdlon);
     } else {
-	*lr = (1. - cos(&__global_state->f2c, hdlon)) * outrad;
+	*lr = (1. - cos(hdlon)) * outrad;
     }
 
 /*     The tangential length of bounding box depends on the longitude */
@@ -324,21 +324,21 @@ static inline zzlatbox_state_t* get_zzlatbox_state(cspice_t* state) {
     if (hdlon > halfpi_(__global_state)) {
 	*lt = outrad * 2.;
     } else {
-	*lt = outrad * 2. * sin(&__global_state->f2c, hdlon);
+	*lt = outrad * 2. * sin(hdlon);
     }
 
 /*     The height bounds are derived from the lowest and highest points */
 /*     on the element. */
 
     if (minlat >= 0.) {
-	maxz = maxr * sin(&__global_state->f2c, maxlat);
-	minz = minr * sin(&__global_state->f2c, minlat);
+	maxz = maxr * sin(maxlat);
+	minz = minr * sin(minlat);
     } else if (maxlat <= 0.) {
-	maxz = minr * sin(&__global_state->f2c, maxlat);
-	minz = maxr * sin(&__global_state->f2c, minlat);
+	maxz = minr * sin(maxlat);
+	minz = maxr * sin(minlat);
     } else {
-	maxz = maxr * sin(&__global_state->f2c, maxlat);
-	minz = maxr * sin(&__global_state->f2c, minlat);
+	maxz = maxr * sin(maxlat);
+	minz = maxr * sin(minlat);
     }
     *lz = maxz - minz;
 

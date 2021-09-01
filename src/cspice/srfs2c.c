@@ -8,7 +8,7 @@
 
 
 typedef int srfs2c_state_t;
-static inline srfs2c_state_t* get_srfs2c_state(cspice_t* state) {
+static srfs2c_state_t* get_srfs2c_state(cspice_t* state) {
 	return 0;
 }
 

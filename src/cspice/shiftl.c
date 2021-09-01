@@ -8,7 +8,7 @@
 
 
 typedef int shiftl_state_t;
-static inline shiftl_state_t* get_shiftl_state(cspice_t* state) {
+static shiftl_state_t* get_shiftl_state(cspice_t* state) {
 	return 0;
 }
 

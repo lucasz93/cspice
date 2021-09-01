@@ -8,7 +8,7 @@
 
 
 typedef int somfls_state_t;
-static inline somfls_state_t* get_somfls_state(cspice_t* state) {
+static somfls_state_t* get_somfls_state(cspice_t* state) {
 	return 0;
 }
 

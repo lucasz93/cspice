@@ -8,7 +8,7 @@
 
 
 typedef int stlabx_state_t;
-static inline stlabx_state_t* get_stlabx_state(cspice_t* state) {
+static stlabx_state_t* get_stlabx_state(cspice_t* state) {
 	return 0;
 }
 

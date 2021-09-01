@@ -190,7 +190,7 @@
    white space during translation, since it will be convenient to keep the 
    same array dimensions when we return the sorted array.
    */
-   C2F_MapFixStrArr ( "shellc_c", 
+   C2F_MapFixStrArr ( naif_state, "shellc_c", 
                       ndim, lenvals, array, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c(naif_state) )
@@ -223,7 +223,7 @@
    /*
    Convert the output array from Fortran to C style. 
    */
-   F2C_ConvertTrStrArr ( ndim, lenvals, (SpiceChar *)array );
+   F2C_ConvertTrStrArr ( naif_state, ndim, lenvals, (SpiceChar *)array );
 
 
 } /* End shellc_c */

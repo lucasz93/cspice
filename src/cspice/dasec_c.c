@@ -300,7 +300,7 @@
    */
    if ( *n > 0 )
    {
-      F2C_ConvertTrStrArr ( *n,  buflen,  (SpiceChar *)buffer );
+      F2C_ConvertTrStrArr ( naif_state, *n,  buflen,  (SpiceChar *)buffer );
    }
 
 

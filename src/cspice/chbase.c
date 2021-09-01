@@ -8,7 +8,7 @@
 
 
 typedef int chbase_state_t;
-static inline chbase_state_t* get_chbase_state(cspice_t* state) {
+static chbase_state_t* get_chbase_state(cspice_t* state) {
 	return 0;
 }
 

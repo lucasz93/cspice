@@ -8,7 +8,7 @@
 
 
 extern gfposc_init_t __gfposc_init;
-static inline gfposc_state_t* get_gfposc_state(cspice_t* state) {
+static gfposc_state_t* get_gfposc_state(cspice_t* state) {
 	if (!state->gfposc)
 		state->gfposc = __cspice_allocate_module(sizeof(
 	gfposc_state_t), &__gfposc_init, sizeof(__gfposc_init));

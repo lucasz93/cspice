@@ -54,16 +54,17 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "__cspice_state.h"
+#undef abs
 #include "SpiceUsr.h"
 #include "SpiceZfc.h"
 #include "SpiceZst.h"
 #include "zzerror.h"
-#include "__cspice_state.h"
 
 #define     TRC_LEN             32
 #define     MAXMOD              100
 
-const char * zzerror( long cnt )
+const char * zzerror( void *naif_state, long cnt )
 
 /*
 
@@ -224,7 +225,7 @@ const char * zzerror( long cnt )
 
 */
    {
-   cspice_user_state_t* user = &__cspice_get_state()->user;
+   cspice_user_state_t * user = &((cspice_t *)naif_state)->user;
 
    /*
    Local variables. Tag the 'msg_short' as static so the memory
@@ -265,7 +266,7 @@ const char * zzerror( long cnt )
    /*
    Retrieve the depth of the call traceback stack.
    */
-   (void) trcdep_( &depth );
+   (void) trcdep_( naif_state, &depth );
 
    /*
    Check 'depth' as less-than or equal-to MAXMOD. Signal a 
@@ -273,7 +274,7 @@ const char * zzerror( long cnt )
    */
    if ( depth > MAXMOD )
       {
-      reset_c();
+      reset_c(naif_state);
 
       sprintf(user->zzerror.msg_short, depth_err, depth, MAXMOD );
       return(user->zzerror.msg_short);
@@ -292,13 +293,13 @@ const char * zzerror( long cnt )
       from the trace stack. No SPICE call name has a string length longer
       than TRC_LEN characters.
       */
-      (void) trcnam_( (integer *) &i, trname, (ftnlen) TRC_LEN );
+      (void) trcnam_( naif_state, (integer *) &i, trname, (ftnlen) TRC_LEN );
 
       /* 
       The f2c code returns a FORTRAN type string, so null terminate
       the string for C.
       */
-      F2C_ConvertStr( TRC_LEN, trname);
+      F2C_ConvertStr( naif_state, TRC_LEN, trname);
 
       /* 
       Create the trace list string by concatenation. Add '->' as a
@@ -317,27 +318,27 @@ const char * zzerror( long cnt )
    Retrieve the short message from the error subsystem. The string has
    form "SPICE(MSGNAME)".
    */
-   (void) getsms_(user->zzerror.msg_short, (SpiceInt) sizeof user->zzerror.msg_short);
+   (void) getsms_(naif_state, user->zzerror.msg_short, (SpiceInt) sizeof user->zzerror.msg_short);
 
    /* 
    Null terminate the FORTRAN 'msg_short' string for use in C routines.
    */
-   F2C_ConvertStr( 2*MSG_LEN, user->zzerror.msg_short);
+   F2C_ConvertStr( naif_state, 2*MSG_LEN, user->zzerror.msg_short);
 
    /*
    Obtain the long message string, a brief description of the error. 
    */
-   (void) getlms_(msg_long, (ftnlen) sizeof(msg_long));
+   (void) getlms_(naif_state, msg_long, (ftnlen) sizeof(msg_long));
 
    /*
    Null terminate the FORTRAN 'msg_long' string for use in C routines.
    */
-   F2C_ConvertStr( MSG_LEN, msg_long);
+   F2C_ConvertStr( naif_state, MSG_LEN, msg_long);
 
    /*
    Remember to reset the error system, so subsequent calls work.
    */
-   reset_c();
+   reset_c(naif_state);
 
    /*
    Combine the short, long and trace strings into a single string, then

@@ -8,7 +8,7 @@
 
 
 typedef int dlafns_state_t;
-static inline dlafns_state_t* get_dlafns_state(cspice_t* state) {
+static dlafns_state_t* get_dlafns_state(cspice_t* state) {
 	return 0;
 }
 

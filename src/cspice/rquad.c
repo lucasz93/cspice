@@ -8,7 +8,7 @@
 
 
 extern rquad_init_t __rquad_init;
-static inline rquad_state_t* get_rquad_state(cspice_t* state) {
+static rquad_state_t* get_rquad_state(cspice_t* state) {
 	if (!state->rquad)
 		state->rquad = __cspice_allocate_module(sizeof(rquad_state_t),
 	 &__rquad_init, sizeof(__rquad_init));
@@ -24,7 +24,7 @@ static inline rquad_state_t* get_rquad_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal scale;
@@ -318,21 +318,19 @@ static inline rquad_state_t* get_rquad_state(cspice_t* state) {
 
 /*              ROOT1 will contain the root of larger magnitude. */
 
-		root1[0] = (-lin + sqrt(&__global_state->f2c, discrm)) / (sqr 
-			* 2.);
+		root1[0] = (-lin + sqrt(discrm)) / (sqr * 2.);
 		root2[0] = con / sqr / root1[0];
 	    } else if (lin > 0.) {
 
 /*              ROOT2 will contain the root of larger magnitude. */
 
-		root2[0] = (-lin - sqrt(&__global_state->f2c, discrm)) / (sqr 
-			* 2.);
+		root2[0] = (-lin - sqrt(discrm)) / (sqr * 2.);
 		root1[0] = con / sqr / root2[0];
 	    } else {
 
 /*              The roots have the same magnitude. */
 
-		root1[0] = sqrt(&__global_state->f2c, discrm) / (sqr * 2.);
+		root1[0] = sqrt(discrm) / (sqr * 2.);
 		root2[0] = -root1[0];
 	    }
 
@@ -344,7 +342,7 @@ static inline rquad_state_t* get_rquad_state(cspice_t* state) {
 /*           magnitudes. */
 
 	    root1[0] = -lin / (sqr * 2.);
-	    root1[1] = sqrt(&__global_state->f2c, -discrm) / (sqr * 2.);
+	    root1[1] = sqrt(-discrm) / (sqr * 2.);
 	    root2[0] = root1[0];
 	    root2[1] = -root1[1];
 	}

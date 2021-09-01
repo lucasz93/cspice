@@ -8,7 +8,7 @@
 
 
 extern benum_init_t __benum_init;
-static inline benum_state_t* get_benum_state(cspice_t* state) {
+static benum_state_t* get_benum_state(cspice_t* state) {
 	if (!state->benum)
 		state->benum = __cspice_allocate_module(sizeof(benum_state_t),
 	 &__benum_init, sizeof(__benum_init));

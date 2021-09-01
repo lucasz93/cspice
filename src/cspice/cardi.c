@@ -8,7 +8,7 @@
 
 
 typedef int cardi_state_t;
-static inline cardi_state_t* get_cardi_state(cspice_t* state) {
+static cardi_state_t* get_cardi_state(cspice_t* state) {
 	return 0;
 }
 

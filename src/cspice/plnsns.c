@@ -8,7 +8,7 @@
 
 
 extern plnsns_init_t __plnsns_init;
-static inline plnsns_state_t* get_plnsns_state(cspice_t* state) {
+static plnsns_state_t* get_plnsns_state(cspice_t* state) {
 	if (!state->plnsns)
 		state->plnsns = __cspice_allocate_module(sizeof(
 	plnsns_state_t), &__plnsns_init, sizeof(__plnsns_init));

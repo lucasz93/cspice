@@ -8,7 +8,7 @@
 
 
 extern dafps_init_t __dafps_init;
-static inline dafps_state_t* get_dafps_state(cspice_t* state) {
+static dafps_state_t* get_dafps_state(cspice_t* state) {
 	if (!state->dafps)
 		state->dafps = __cspice_allocate_module(sizeof(dafps_state_t),
 	 &__dafps_init, sizeof(__dafps_init));
@@ -491,12 +491,12 @@ L_dafus:
 /* Subroutine */ int dafps_(cspice_t* __global_state, integer *nd, integer *
 	ni, doublereal *dc, integer *ic, doublereal *sum)
 {
-    return dafps_0_(0, nd, ni, dc, ic, sum);
+    return dafps_0_(__global_state, 0, nd, ni, dc, ic, sum);
     }
 
 /* Subroutine */ int dafus_(cspice_t* __global_state, doublereal *sum, 
 	integer *nd, integer *ni, doublereal *dc, integer *ic)
 {
-    return dafps_0_(1, nd, ni, dc, ic, sum);
+    return dafps_0_(__global_state, 1, nd, ni, dc, ic, sum);
     }
 

@@ -8,7 +8,7 @@
 
 
 extern sydupc_init_t __sydupc_init;
-static inline sydupc_state_t* get_sydupc_state(cspice_t* state) {
+static sydupc_state_t* get_sydupc_state(cspice_t* state) {
 	if (!state->sydupc)
 		state->sydupc = __cspice_allocate_module(sizeof(
 	sydupc_state_t), &__sydupc_init, sizeof(__sydupc_init));

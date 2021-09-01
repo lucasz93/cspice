@@ -8,7 +8,7 @@
 
 
 extern zzgfrpwk_init_t __zzgfrpwk_init;
-static inline zzgfrpwk_state_t* get_zzgfrpwk_state(cspice_t* state) {
+static zzgfrpwk_state_t* get_zzgfrpwk_state(cspice_t* state) {
 	if (!state->zzgfrpwk)
 		state->zzgfrpwk = __cspice_allocate_module(sizeof(
 	zzgfrpwk_state_t), &__zzgfrpwk_init, sizeof(__zzgfrpwk_init));
@@ -1247,43 +1247,45 @@ L_zzgfwkmo:
 	doublereal *total, doublereal *freq, integer *tcheck, char *begin, 
 	char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len)
 {
-    return zzgfrpwk_0_(0, unit, total, freq, tcheck, begin, end, incr, 
-	    begin_len, end_len);
+    return zzgfrpwk_0_(__global_state, 0, unit, total, freq, tcheck, begin, 
+	    end, incr, begin_len, end_len);
     }
 
 /* Subroutine */ int zzgftswk_(cspice_t* __global_state, doublereal *total, 
 	doublereal *freq, integer *tcheck, char *begin, char *end, ftnlen 
 	begin_len, ftnlen end_len)
 {
-    return zzgfrpwk_0_(1, (integer *)0, total, freq, tcheck, begin, end, (
-	    doublereal *)0, begin_len, end_len);
+    return zzgfrpwk_0_(__global_state, 1, (integer *)0, total, freq, tcheck, 
+	    begin, end, (doublereal *)0, begin_len, end_len);
     }
 
 /* Subroutine */ int zzgfwkin_(cspice_t* __global_state, doublereal *incr)
 {
-    return zzgfrpwk_0_(2, (integer *)0, (doublereal *)0, (doublereal *)0, (
-	    integer *)0, (char *)0, (char *)0, incr, (ftnint)0, (ftnint)0);
+    return zzgfrpwk_0_(__global_state, 2, (integer *)0, (doublereal *)0, (
+	    doublereal *)0, (integer *)0, (char *)0, (char *)0, incr, (ftnint)
+	    0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfwkad_(cspice_t* __global_state, doublereal *freq, 
 	integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen 
 	end_len)
 {
-    return zzgfrpwk_0_(3, (integer *)0, (doublereal *)0, freq, tcheck, begin, 
-	    end, (doublereal *)0, begin_len, end_len);
+    return zzgfrpwk_0_(__global_state, 3, (integer *)0, (doublereal *)0, freq,
+	     tcheck, begin, end, (doublereal *)0, begin_len, end_len);
     }
 
 /* Subroutine */ int zzgfwkun_(cspice_t* __global_state, integer *unit)
 {
-    return zzgfrpwk_0_(4, unit, (doublereal *)0, (doublereal *)0, (integer *)
-	    0, (char *)0, (char *)0, (doublereal *)0, (ftnint)0, (ftnint)0);
+    return zzgfrpwk_0_(__global_state, 4, unit, (doublereal *)0, (doublereal *
+	    )0, (integer *)0, (char *)0, (char *)0, (doublereal *)0, (ftnint)
+	    0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfwkmo_(cspice_t* __global_state, integer *unit, 
 	doublereal *total, doublereal *freq, integer *tcheck, char *begin, 
 	char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len)
 {
-    return zzgfrpwk_0_(5, unit, total, freq, tcheck, begin, end, incr, 
-	    begin_len, end_len);
+    return zzgfrpwk_0_(__global_state, 5, unit, total, freq, tcheck, begin, 
+	    end, incr, begin_len, end_len);
     }
 

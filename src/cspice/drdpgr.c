@@ -8,7 +8,7 @@
 
 
 extern drdpgr_init_t __drdpgr_init;
-static inline drdpgr_state_t* get_drdpgr_state(cspice_t* state) {
+static drdpgr_state_t* get_drdpgr_state(cspice_t* state) {
 	if (!state->drdpgr)
 		state->drdpgr = __cspice_allocate_module(sizeof(
 	drdpgr_state_t), &__drdpgr_init, sizeof(__drdpgr_init));

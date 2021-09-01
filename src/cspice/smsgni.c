@@ -8,7 +8,7 @@
 
 
 typedef int smsgni_state_t;
-static inline smsgni_state_t* get_smsgni_state(cspice_t* state) {
+static smsgni_state_t* get_smsgni_state(cspice_t* state) {
 	return 0;
 }
 

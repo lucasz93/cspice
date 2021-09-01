@@ -8,7 +8,7 @@
 
 
 typedef int vsclip_state_t;
-static inline vsclip_state_t* get_vsclip_state(cspice_t* state) {
+static vsclip_state_t* get_vsclip_state(cspice_t* state) {
 	return 0;
 }
 

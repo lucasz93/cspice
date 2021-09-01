@@ -8,7 +8,7 @@
 
 
 extern bedec_init_t __bedec_init;
-static inline bedec_state_t* get_bedec_state(cspice_t* state) {
+static bedec_state_t* get_bedec_state(cspice_t* state) {
 	if (!state->bedec)
 		state->bedec = __cspice_allocate_module(sizeof(bedec_state_t),
 	 &__bedec_init, sizeof(__bedec_init));

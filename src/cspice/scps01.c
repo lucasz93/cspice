@@ -8,7 +8,7 @@
 
 
 extern scps01_init_t __scps01_init;
-static inline scps01_state_t* get_scps01_state(cspice_t* state) {
+static scps01_state_t* get_scps01_state(cspice_t* state) {
 	if (!state->scps01)
 		state->scps01 = __cspice_allocate_module(sizeof(
 	scps01_state_t), &__scps01_init, sizeof(__scps01_init));

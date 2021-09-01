@@ -8,7 +8,7 @@
 
 
 typedef int pltvol_state_t;
-static inline pltvol_state_t* get_pltvol_state(cspice_t* state) {
+static pltvol_state_t* get_pltvol_state(cspice_t* state) {
 	return 0;
 }
 

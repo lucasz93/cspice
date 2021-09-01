@@ -8,7 +8,7 @@
 
 
 typedef int zzpltchk_state_t;
-static inline zzpltchk_state_t* get_zzpltchk_state(cspice_t* state) {
+static zzpltchk_state_t* get_zzpltchk_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern cke03_init_t __cke03_init;
-static inline cke03_state_t* get_cke03_state(cspice_t* state) {
+static cke03_state_t* get_cke03_state(cspice_t* state) {
 	if (!state->cke03)
 		state->cke03 = __cspice_allocate_module(sizeof(cke03_state_t),
 	 &__cke03_init, sizeof(__cke03_init));

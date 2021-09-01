@@ -8,7 +8,7 @@
 
 
 typedef int lnkan_state_t;
-static inline lnkan_state_t* get_lnkan_state(cspice_t* state) {
+static lnkan_state_t* get_lnkan_state(cspice_t* state) {
 	return 0;
 }
 

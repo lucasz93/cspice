@@ -62,6 +62,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZad.h"
    #include "SpiceZmc.h"
+   #include "signal1.h"
    #undef gffove_c
 
    void gffove_c ( void               * naif_state,
@@ -1580,7 +1581,7 @@
 
       if ( newHandler )
       {
-         defSigHandler = signal ( SIGINT, gfinth_c );
+         defSigHandler = signal_user ( SIGINT, gfinth_c, naif_state );
 
          if ( defSigHandler == SIG_ERR )
          {

@@ -8,7 +8,7 @@
 
 
 typedef int xposbl_state_t;
-static inline xposbl_state_t* get_xposbl_state(cspice_t* state) {
+static xposbl_state_t* get_xposbl_state(cspice_t* state) {
 	return 0;
 }
 

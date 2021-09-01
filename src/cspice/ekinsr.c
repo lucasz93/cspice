@@ -8,7 +8,7 @@
 
 
 extern ekinsr_init_t __ekinsr_init;
-static inline ekinsr_state_t* get_ekinsr_state(cspice_t* state) {
+static ekinsr_state_t* get_ekinsr_state(cspice_t* state) {
 	if (!state->ekinsr)
 		state->ekinsr = __cspice_allocate_module(sizeof(
 	ekinsr_state_t), &__ekinsr_init, sizeof(__ekinsr_init));

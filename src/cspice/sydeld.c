@@ -8,7 +8,7 @@
 
 
 extern sydeld_init_t __sydeld_init;
-static inline sydeld_state_t* get_sydeld_state(cspice_t* state) {
+static sydeld_state_t* get_sydeld_state(cspice_t* state) {
 	if (!state->sydeld)
 		state->sydeld = __cspice_allocate_module(sizeof(
 	sydeld_state_t), &__sydeld_init, sizeof(__sydeld_init));

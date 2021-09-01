@@ -8,7 +8,7 @@
 
 
 typedef int lnkini_state_t;
-static inline lnkini_state_t* get_lnkini_state(cspice_t* state) {
+static lnkini_state_t* get_lnkini_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int repmct_state_t;
-static inline repmct_state_t* get_repmct_state(cspice_t* state) {
+static repmct_state_t* get_repmct_state(cspice_t* state) {
 	return 0;
 }
 

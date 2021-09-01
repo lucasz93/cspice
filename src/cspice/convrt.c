@@ -8,7 +8,7 @@
 
 
 extern convrt_init_t __convrt_init;
-static inline convrt_state_t* get_convrt_state(cspice_t* state) {
+static convrt_state_t* get_convrt_state(cspice_t* state) {
 	if (!state->convrt)
 		state->convrt = __cspice_allocate_module(sizeof(
 	convrt_state_t), &__convrt_init, sizeof(__convrt_init));

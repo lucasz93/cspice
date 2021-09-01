@@ -8,7 +8,7 @@
 
 
 extern zzekrmch_init_t __zzekrmch_init;
-static inline zzekrmch_state_t* get_zzekrmch_state(cspice_t* state) {
+static zzekrmch_state_t* get_zzekrmch_state(cspice_t* state) {
 	if (!state->zzekrmch)
 		state->zzekrmch = __cspice_allocate_module(sizeof(
 	zzekrmch_state_t), &__zzekrmch_init, sizeof(__zzekrmch_init));

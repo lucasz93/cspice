@@ -8,7 +8,7 @@
 
 
 extern dasioc_init_t __dasioc_init;
-static inline dasioc_state_t* get_dasioc_state(cspice_t* state) {
+static dasioc_state_t* get_dasioc_state(cspice_t* state) {
 	if (!state->dasioc)
 		state->dasioc = __cspice_allocate_module(sizeof(
 	dasioc_state_t), &__dasioc_init, sizeof(__dasioc_init));

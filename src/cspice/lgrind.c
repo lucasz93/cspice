@@ -8,7 +8,7 @@
 
 
 typedef int lgrind_state_t;
-static inline lgrind_state_t* get_lgrind_state(cspice_t* state) {
+static lgrind_state_t* get_lgrind_state(cspice_t* state) {
 	return 0;
 }
 

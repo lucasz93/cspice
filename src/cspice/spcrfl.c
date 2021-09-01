@@ -8,7 +8,7 @@
 
 
 extern spcrfl_init_t __spcrfl_init;
-static inline spcrfl_state_t* get_spcrfl_state(cspice_t* state) {
+static spcrfl_state_t* get_spcrfl_state(cspice_t* state) {
 	if (!state->spcrfl)
 		state->spcrfl = __cspice_allocate_module(sizeof(
 	spcrfl_state_t), &__spcrfl_init, sizeof(__spcrfl_init));
@@ -835,12 +835,12 @@ L100003:
 /* Subroutine */ int spcrfl_(cspice_t* __global_state, integer *handle, char *
 	line, logical *eoc, ftnlen line_len)
 {
-    return spcrfl_0_(0, handle, line, eoc, line_len);
+    return spcrfl_0_(__global_state, 0, handle, line, eoc, line_len);
     }
 
 /* Subroutine */ int spcrnl_(cspice_t* __global_state, char *line, logical *
 	eoc, ftnlen line_len)
 {
-    return spcrfl_0_(1, (integer *)0, line, eoc, line_len);
+    return spcrfl_0_(__global_state, 1, (integer *)0, line, eoc, line_len);
     }
 

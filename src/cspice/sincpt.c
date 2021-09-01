@@ -8,7 +8,7 @@
 
 
 extern sincpt_init_t __sincpt_init;
-static inline sincpt_state_t* get_sincpt_state(cspice_t* state) {
+static sincpt_state_t* get_sincpt_state(cspice_t* state) {
 	if (!state->sincpt)
 		state->sincpt = __cspice_allocate_module(sizeof(
 	sincpt_state_t), &__sincpt_init, sizeof(__sincpt_init));

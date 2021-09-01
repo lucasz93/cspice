@@ -8,7 +8,7 @@
 
 
 extern dafwda_init_t __dafwda_init;
-static inline dafwda_state_t* get_dafwda_state(cspice_t* state) {
+static dafwda_state_t* get_dafwda_state(cspice_t* state) {
 	if (!state->dafwda)
 		state->dafwda = __cspice_allocate_module(sizeof(
 	dafwda_state_t), &__dafwda_init, sizeof(__dafwda_init));

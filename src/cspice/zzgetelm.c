@@ -8,7 +8,7 @@
 
 
 extern zzgetelm_init_t __zzgetelm_init;
-static inline zzgetelm_state_t* get_zzgetelm_state(cspice_t* state) {
+static zzgetelm_state_t* get_zzgetelm_state(cspice_t* state) {
 	if (!state->zzgetelm)
 		state->zzgetelm = __cspice_allocate_module(sizeof(
 	zzgetelm_state_t), &__zzgetelm_init, sizeof(__zzgetelm_init));

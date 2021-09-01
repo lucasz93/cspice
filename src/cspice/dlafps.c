@@ -8,7 +8,7 @@
 
 
 typedef int dlafps_state_t;
-static inline dlafps_state_t* get_dlafps_state(cspice_t* state) {
+static dlafps_state_t* get_dlafps_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern gfocce_init_t __gfocce_init;
-static inline gfocce_state_t* get_gfocce_state(cspice_t* state) {
+static gfocce_state_t* get_gfocce_state(cspice_t* state) {
 	if (!state->gfocce)
 		state->gfocce = __cspice_allocate_module(sizeof(
 	gfocce_state_t), &__gfocce_init, sizeof(__gfocce_init));

@@ -8,7 +8,7 @@
 
 
 typedef int posr_state_t;
-static inline posr_state_t* get_posr_state(cspice_t* state) {
+static posr_state_t* get_posr_state(cspice_t* state) {
 	return 0;
 }
 

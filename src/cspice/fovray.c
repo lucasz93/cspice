@@ -8,7 +8,7 @@
 
 
 typedef int fovray_state_t;
-static inline fovray_state_t* get_fovray_state(cspice_t* state) {
+static fovray_state_t* get_fovray_state(cspice_t* state) {
 	return 0;
 }
 

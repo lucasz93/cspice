@@ -8,7 +8,7 @@
 
 
 typedef int axisar_state_t;
-static inline axisar_state_t* get_axisar_state(cspice_t* state) {
+static axisar_state_t* get_axisar_state(cspice_t* state) {
 	return 0;
 }
 

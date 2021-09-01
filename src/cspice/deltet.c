@@ -8,7 +8,7 @@
 
 
 extern deltet_init_t __deltet_init;
-static inline deltet_state_t* get_deltet_state(cspice_t* state) {
+static deltet_state_t* get_deltet_state(cspice_t* state) {
 	if (!state->deltet)
 		state->deltet = __cspice_allocate_module(sizeof(
 	deltet_state_t), &__deltet_init, sizeof(__deltet_init));
@@ -30,7 +30,7 @@ static inline deltet_state_t* get_deltet_state(cspice_t* state) {
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
 	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
-    double d_nint(f2c_state_t*, doublereal *), sin(f2c_state_t*, doublereal);
+    double d_nint(f2c_state_t*, doublereal *), sin(doublereal);
 
     /* Local variables */
     char type__[4];
@@ -412,8 +412,8 @@ static inline deltet_state_t* get_deltet_state(cspice_t* state) {
 			ftnlen)395)];
 		aet = d_nint(&__global_state->f2c, &d__1);
 		ma = m[0] + m[1] * aet;
-		ea = ma + eb * sin(&__global_state->f2c, ma);
-		ettai = k * sin(&__global_state->f2c, ea);
+		ea = ma + eb * sin(ma);
+		ettai = k * sin(ea);
 		et = dleap[(i__2 = (i__ << 1) - 1) < 400 && 0 <= i__2 ? i__2 :
 			 s_rnge(&__global_state->f2c, "dleap", i__2, "deltet_"
 			, (ftnlen)401)] + dta + dleap[(i__3 = (i__ << 1) - 2) 
@@ -450,8 +450,8 @@ static inline deltet_state_t* get_deltet_state(cspice_t* state) {
 	aet = d_nint(&__global_state->f2c, &d__1);
     }
     ma = m[0] + m[1] * aet;
-    ea = ma + eb * sin(&__global_state->f2c, ma);
-    ettai = k * sin(&__global_state->f2c, ea);
+    ea = ma + eb * sin(ma);
+    ettai = k * sin(ea);
     *delta = dta + leaps + ettai;
     chkout_(__global_state, "DELTET", (ftnlen)6);
     return 0;

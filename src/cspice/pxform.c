@@ -8,7 +8,7 @@
 
 
 extern pxform_init_t __pxform_init;
-static inline pxform_state_t* get_pxform_state(cspice_t* state) {
+static pxform_state_t* get_pxform_state(cspice_t* state) {
 	if (!state->pxform)
 		state->pxform = __cspice_allocate_module(sizeof(
 	pxform_state_t), &__pxform_init, sizeof(__pxform_init));

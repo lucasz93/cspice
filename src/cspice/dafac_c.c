@@ -230,7 +230,7 @@
    The input buffer contains C-style strings; we must pass a 
    Fortran-style buffer to dafac_.
    */
-   C2F_MapStrArr ( "dafac_c", 
+   C2F_MapStrArr ( naif_state, "dafac_c", 
                    n, lenvals, buffer, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c(naif_state) )

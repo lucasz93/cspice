@@ -8,7 +8,7 @@
 
 
 typedef int zzchrlat_state_t;
-static inline zzchrlat_state_t* get_zzchrlat_state(cspice_t* state) {
+static zzchrlat_state_t* get_zzchrlat_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,8 +20,7 @@ static inline zzchrlat_state_t* get_zzchrlat_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), 
-	    atan2(f2c_state_t*, doublereal, doublereal);
+    double sin(doublereal), cos(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
     doublereal mlat;
@@ -477,9 +476,7 @@ static inline zzchrlat_state_t* get_zzchrlat_state(cspice_t* state) {
 /*     the two-argument arctangent function and well-behaved */
 /*     trig functions as input arguments: */
 
-    *eptlat = atan2(&__global_state->f2c, sin(&__global_state->f2c, mlat) * 
-	    cos(&__global_state->f2c, *dlon / 2), cos(&__global_state->f2c, 
-	    mlat));
+    *eptlat = atan2(sin(mlat) * cos(*dlon / 2), cos(mlat));
     return 0;
 } /* zzchrlat_ */
 

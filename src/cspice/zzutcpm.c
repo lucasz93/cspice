@@ -8,7 +8,7 @@
 
 
 extern zzutcpm_init_t __zzutcpm_init;
-static inline zzutcpm_state_t* get_zzutcpm_state(cspice_t* state) {
+static zzutcpm_state_t* get_zzutcpm_state(cspice_t* state) {
 	if (!state->zzutcpm)
 		state->zzutcpm = __cspice_allocate_module(sizeof(
 	zzutcpm_state_t), &__zzutcpm_init, sizeof(__zzutcpm_init));

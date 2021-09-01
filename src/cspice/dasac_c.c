@@ -245,7 +245,7 @@
    /*
    Map the input buffer to a Fortran-style buffer. 
    */
-   C2F_MapStrArr ( "dasac_c", n, buflen, buffer, &fCvalsLen, &fCvalsArr );
+   C2F_MapStrArr ( naif_state, "dasac_c", n, buflen, buffer, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c(naif_state) )
    {

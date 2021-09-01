@@ -8,7 +8,7 @@
 
 
 extern countc_init_t __countc_init;
-static inline countc_state_t* get_countc_state(cspice_t* state) {
+static countc_state_t* get_countc_state(cspice_t* state) {
 	if (!state->countc)
 		state->countc = __cspice_allocate_module(sizeof(
 	countc_state_t), &__countc_init, sizeof(__countc_init));

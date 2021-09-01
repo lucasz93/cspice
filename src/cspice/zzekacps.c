@@ -8,7 +8,7 @@
 
 
 extern zzekacps_init_t __zzekacps_init;
-static inline zzekacps_state_t* get_zzekacps_state(cspice_t* state) {
+static zzekacps_state_t* get_zzekacps_state(cspice_t* state) {
 	if (!state->zzekacps)
 		state->zzekacps = __cspice_allocate_module(sizeof(
 	zzekacps_state_t), &__zzekacps_init, sizeof(__zzekacps_init));

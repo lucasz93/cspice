@@ -8,7 +8,7 @@
 
 
 extern recpgr_init_t __recpgr_init;
-static inline recpgr_state_t* get_recpgr_state(cspice_t* state) {
+static recpgr_state_t* get_recpgr_state(cspice_t* state) {
 	if (!state->recpgr)
 		state->recpgr = __cspice_allocate_module(sizeof(
 	recpgr_state_t), &__recpgr_init, sizeof(__recpgr_init));

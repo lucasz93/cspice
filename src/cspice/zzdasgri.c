@@ -8,7 +8,7 @@
 
 
 extern zzdasgri_init_t __zzdasgri_init;
-static inline zzdasgri_state_t* get_zzdasgri_state(cspice_t* state) {
+static zzdasgri_state_t* get_zzdasgri_state(cspice_t* state) {
 	if (!state->zzdasgri)
 		state->zzdasgri = __cspice_allocate_module(sizeof(
 	zzdasgri_state_t), &__zzdasgri_init, sizeof(__zzdasgri_init));

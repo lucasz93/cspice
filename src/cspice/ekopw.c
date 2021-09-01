@@ -8,7 +8,7 @@
 
 
 typedef int ekopw_state_t;
-static inline ekopw_state_t* get_ekopw_state(cspice_t* state) {
+static ekopw_state_t* get_ekopw_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern syenqc_init_t __syenqc_init;
-static inline syenqc_state_t* get_syenqc_state(cspice_t* state) {
+static syenqc_state_t* get_syenqc_state(cspice_t* state) {
 	if (!state->syenqc)
 		state->syenqc = __cspice_allocate_module(sizeof(
 	syenqc_state_t), &__syenqc_init, sizeof(__syenqc_init));

@@ -8,7 +8,7 @@
 
 
 typedef int mequg_state_t;
-static inline mequg_state_t* get_mequg_state(cspice_t* state) {
+static mequg_state_t* get_mequg_state(cspice_t* state) {
 	return 0;
 }
 

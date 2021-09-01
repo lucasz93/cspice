@@ -8,7 +8,7 @@
 
 
 extern dasacr_init_t __dasacr_init;
-static inline dasacr_state_t* get_dasacr_state(cspice_t* state) {
+static dasacr_state_t* get_dasacr_state(cspice_t* state) {
 	if (!state->dasacr)
 		state->dasacr = __cspice_allocate_module(sizeof(
 	dasacr_state_t), &__dasacr_init, sizeof(__dasacr_init));

@@ -8,7 +8,7 @@
 
 
 typedef int vcrss_state_t;
-static inline vcrss_state_t* get_vcrss_state(cspice_t* state) {
+static vcrss_state_t* get_vcrss_state(cspice_t* state) {
 	return 0;
 }
 

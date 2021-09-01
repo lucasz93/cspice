@@ -8,7 +8,7 @@
 
 
 typedef int exists_state_t;
-static inline exists_state_t* get_exists_state(cspice_t* state) {
+static exists_state_t* get_exists_state(cspice_t* state) {
 	return 0;
 }
 

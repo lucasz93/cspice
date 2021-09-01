@@ -8,7 +8,7 @@
 
 
 typedef int dvhat_state_t;
-static inline dvhat_state_t* get_dvhat_state(cspice_t* state) {
+static dvhat_state_t* get_dvhat_state(cspice_t* state) {
 	return 0;
 }
 

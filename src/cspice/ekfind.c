@@ -8,7 +8,7 @@
 
 
 extern ekfind_init_t __ekfind_init;
-static inline ekfind_state_t* get_ekfind_state(cspice_t* state) {
+static ekfind_state_t* get_ekfind_state(cspice_t* state) {
 	if (!state->ekfind)
 		state->ekfind = __cspice_allocate_module(sizeof(
 	ekfind_state_t), &__ekfind_init, sizeof(__ekfind_init));

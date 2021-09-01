@@ -8,7 +8,7 @@
 
 
 extern sgfpkt_init_t __sgfpkt_init;
-static inline sgfpkt_state_t* get_sgfpkt_state(cspice_t* state) {
+static sgfpkt_state_t* get_sgfpkt_state(cspice_t* state) {
 	if (!state->sgfpkt)
 		state->sgfpkt = __cspice_allocate_module(sizeof(
 	sgfpkt_state_t), &__sgfpkt_init, sizeof(__sgfpkt_init));

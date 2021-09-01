@@ -8,7 +8,7 @@
 
 
 extern gfrfov_init_t __gfrfov_init;
-static inline gfrfov_state_t* get_gfrfov_state(cspice_t* state) {
+static gfrfov_state_t* get_gfrfov_state(cspice_t* state) {
 	if (!state->gfrfov)
 		state->gfrfov = __cspice_allocate_module(sizeof(
 	gfrfov_state_t), &__gfrfov_init, sizeof(__gfrfov_init));

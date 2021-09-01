@@ -141,7 +141,7 @@ int   trcdep_(integer *depth);
 int   trcnam_(integer *index, char *name__, ftnlen name_len);
 
 
-integer s_rnge(char *varn, ftnint offset, char *procn, ftnint line)
+integer s_rnge(f2c_state_t *f2c, char *varn, ftnint offset, char *procn, ftnint line)
   {
 
    SpiceChar      errproc[ERRLEN];
@@ -259,7 +259,7 @@ integer s_rnge(char *varn, ftnint offset, char *procn, ftnint line)
          The f2c code returns a FORTRAN type string, so null terminate
          the string for C.
          */
-         F2C_ConvertStr( TRC_LEN, trname);
+         F2C_ConvertStr( f2c->parent, TRC_LEN, trname);
 
          /*
          Create the trace list string by concatenation. Add '->' as a

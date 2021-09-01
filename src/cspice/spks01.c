@@ -8,7 +8,7 @@
 
 
 extern spks01_init_t __spks01_init;
-static inline spks01_state_t* get_spks01_state(cspice_t* state) {
+static spks01_state_t* get_spks01_state(cspice_t* state) {
 	if (!state->spks01)
 		state->spks01 = __cspice_allocate_module(sizeof(
 	spks01_state_t), &__spks01_init, sizeof(__spks01_init));

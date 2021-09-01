@@ -8,7 +8,7 @@
 
 
 extern surfpt_init_t __surfpt_init;
-static inline surfpt_state_t* get_surfpt_state(cspice_t* state) {
+static surfpt_state_t* get_surfpt_state(cspice_t* state) {
 	if (!state->surfpt)
 		state->surfpt = __cspice_allocate_module(sizeof(
 	surfpt_state_t), &__surfpt_init, sizeof(__surfpt_init));
@@ -34,7 +34,7 @@ static inline surfpt_state_t* get_surfpt_state(cspice_t* state) {
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
     /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
 	    integer *, ftnlen);
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal pmag;
@@ -489,7 +489,7 @@ static inline surfpt_state_t* get_surfpt_state(cspice_t* state) {
 
 /* Computing MAX */
     d__1 = 0., d__2 = 1 - pmag * pmag;
-    scale = sqrt(&__global_state->f2c, (max(d__1,d__2)));
+    scale = sqrt((max(d__1,d__2)));
 
 /*     Find the intercept point on the unit sphere. */
 

@@ -8,7 +8,7 @@
 
 
 extern zzdsksbi_init_t __zzdsksbi_init;
-static inline zzdsksbi_state_t* get_zzdsksbi_state(cspice_t* state) {
+static zzdsksbi_state_t* get_zzdsksbi_state(cspice_t* state) {
 	if (!state->zzdsksbi)
 		state->zzdsksbi = __cspice_allocate_module(sizeof(
 	zzdsksbi_state_t), &__zzdsksbi_init, sizeof(__zzdsksbi_init));

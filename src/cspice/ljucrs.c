@@ -8,7 +8,7 @@
 
 
 extern ljucrs_init_t __ljucrs_init;
-static inline ljucrs_state_t* get_ljucrs_state(cspice_t* state) {
+static ljucrs_state_t* get_ljucrs_state(cspice_t* state) {
 	if (!state->ljucrs)
 		state->ljucrs = __cspice_allocate_module(sizeof(
 	ljucrs_state_t), &__ljucrs_init, sizeof(__ljucrs_init));

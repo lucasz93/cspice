@@ -8,7 +8,7 @@
 
 
 typedef int repmd_state_t;
-static inline repmd_state_t* get_repmd_state(cspice_t* state) {
+static repmd_state_t* get_repmd_state(cspice_t* state) {
 	return 0;
 }
 

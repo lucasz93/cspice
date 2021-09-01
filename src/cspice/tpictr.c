@@ -8,7 +8,7 @@
 
 
 typedef int tpictr_state_t;
-static inline tpictr_state_t* get_tpictr_state(cspice_t* state) {
+static tpictr_state_t* get_tpictr_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern inrypl_init_t __inrypl_init;
-static inline inrypl_state_t* get_inrypl_state(cspice_t* state) {
+static inrypl_state_t* get_inrypl_state(cspice_t* state) {
 	if (!state->inrypl)
 		state->inrypl = __cspice_allocate_module(sizeof(
 	inrypl_state_t), &__inrypl_init, sizeof(__inrypl_init));

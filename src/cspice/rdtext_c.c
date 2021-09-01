@@ -243,7 +243,7 @@
    
 
    /* The string, line, is a Fortranish type string. Convert to C. */
-   F2C_ConvertStr ( lenout, line );
+   F2C_ConvertStr ( naif_state, lenout, line );
 
 
    /* Checkout. */

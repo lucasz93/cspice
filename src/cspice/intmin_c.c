@@ -42,6 +42,7 @@
  
 */
 
+   #include "__cspice_state.h"
    #include "SpiceUsr.h"
 
    SpiceInt intmin_c (void *naif_state) 
@@ -185,19 +186,15 @@
    /*
    Static variables
    */
-   /* MECHSOFT: Not critical state. Safe to keep thread local. */
-   static _Thread_local  SpiceBoolean first = SPICETRUE;
-   static _Thread_local  SpiceInt     value;
+   cspice_user_state_t * user = &((cspice_t *)naif_state)->user;
 
-
-
-   if ( first )
+   if ( user->intmin_c.first )
    {
-      value = intmin_(naif_state);
-      first = SPICEFALSE;
+      user->intmin_c.value = intmin_(naif_state);
+      user->intmin_c.first = SPICEFALSE;
    }
    
-   return ( value );
+   return ( user->intmin_c.value );
    
 
 } /* End intmin_c */

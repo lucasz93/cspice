@@ -8,7 +8,7 @@
 
 
 extern zzrytpdt_init_t __zzrytpdt_init;
-static inline zzrytpdt_state_t* get_zzrytpdt_state(cspice_t* state) {
+static zzrytpdt_state_t* get_zzrytpdt_state(cspice_t* state) {
 	if (!state->zzrytpdt)
 		state->zzrytpdt = __cspice_allocate_module(sizeof(
 	zzrytpdt_state_t), &__zzrytpdt_init, sizeof(__zzrytpdt_init));
@@ -28,7 +28,7 @@ static inline zzrytpdt_state_t* get_zzrytpdt_state(cspice_t* state) {
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal emin;
@@ -1030,7 +1030,7 @@ static inline zzrytpdt_state_t* get_zzrytpdt_state(cspice_t* state) {
 /*     2*pi radians. Note that MAXLON > MINLON at this point. */
 
     loncov = maxlon - minlon;
-    if (cos(&__global_state->f2c, loncov) < 1.) {
+    if (cos(loncov) < 1.) {
 
 /*        We have distinct longitude boundaries. Go to work. */
 
@@ -1038,8 +1038,8 @@ static inline zzrytpdt_state_t* get_zzrytpdt_state(cspice_t* state) {
 /*        Check the longitude boundaries. Try the plane of western */
 /*        longitude first. */
 
-	d__1 = sin(&__global_state->f2c, minlon);
-	d__2 = -cos(&__global_state->f2c, minlon);
+	d__1 = sin(minlon);
+	d__2 = -cos(minlon);
 	vpack_(__global_state, &d__1, &d__2, &__state->c_b37, westb);
 	s = (vnorm_(__global_state, vertex) + maxr) * 1.1;
 	zzinrypl_(__global_state, vertex, udir, westb, &__state->c_b37, &s, &
@@ -1087,8 +1087,8 @@ static inline zzrytpdt_state_t* get_zzrytpdt_state(cspice_t* state) {
 
 /*        Try the plane of eastern longitude next. */
 
-	d__1 = -sin(&__global_state->f2c, maxlon);
-	d__2 = cos(&__global_state->f2c, maxlon);
+	d__1 = -sin(maxlon);
+	d__2 = cos(maxlon);
 	vpack_(__global_state, &d__1, &d__2, &__state->c_b37, eastb);
 	zzinrypl_(__global_state, vertex, udir, eastb, &__state->c_b37, &s, &
 		nx, srfx);

@@ -8,7 +8,7 @@
 
 
 extern zzgftreb_init_t __zzgftreb_init;
-static inline zzgftreb_state_t* get_zzgftreb_state(cspice_t* state) {
+static zzgftreb_state_t* get_zzgftreb_state(cspice_t* state) {
 	if (!state->zzgftreb)
 		state->zzgftreb = __cspice_allocate_module(sizeof(
 	zzgftreb_state_t), &__zzgftreb_init, sizeof(__zzgftreb_init));

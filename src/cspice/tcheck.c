@@ -8,7 +8,7 @@
 
 
 extern tcheck_init_t __tcheck_init;
-static inline tcheck_state_t* get_tcheck_state(cspice_t* state) {
+static tcheck_state_t* get_tcheck_state(cspice_t* state) {
 	if (!state->tcheck)
 		state->tcheck = __cspice_allocate_module(sizeof(
 	tcheck_state_t), &__tcheck_init, sizeof(__tcheck_init));
@@ -928,21 +928,23 @@ L_tchckd:
 	*type__, logical *mods, char *modify, logical *ok, char *error, 
 	ftnlen type_len, ftnlen modify_len, ftnlen error_len)
 {
-    return tcheck_0_(0, tvec, type__, mods, modify, ok, error, type_len, 
-	    modify_len, error_len);
+    return tcheck_0_(__global_state, 0, tvec, type__, mods, modify, ok, error,
+	     type_len, modify_len, error_len);
     }
 
 /* Subroutine */ int tparch_(cspice_t* __global_state, char *type__, ftnlen 
 	type_len)
 {
-    return tcheck_0_(1, (doublereal *)0, type__, (logical *)0, (char *)0, (
-	    logical *)0, (char *)0, type_len, (ftnint)0, (ftnint)0);
+    return tcheck_0_(__global_state, 1, (doublereal *)0, type__, (logical *)0,
+	     (char *)0, (logical *)0, (char *)0, type_len, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int tchckd_(cspice_t* __global_state, char *type__, ftnlen 
 	type_len)
 {
-    return tcheck_0_(2, (doublereal *)0, type__, (logical *)0, (char *)0, (
-	    logical *)0, (char *)0, type_len, (ftnint)0, (ftnint)0);
+    return tcheck_0_(__global_state, 2, (doublereal *)0, type__, (logical *)0,
+	     (char *)0, (logical *)0, (char *)0, type_len, (ftnint)0, (ftnint)
+	    0);
     }
 

@@ -8,7 +8,7 @@
 
 
 extern pi_init_t __pi_init;
-static inline pi_state_t* get_pi_state(cspice_t* state) {
+static pi_state_t* get_pi_state(cspice_t* state) {
 	if (!state->pi)
 		state->pi = __cspice_allocate_module(sizeof(pi_state_t), &
 	__pi_init, sizeof(__pi_init));
@@ -26,7 +26,7 @@ doublereal pi_(cspice_t* __global_state)
     doublereal ret_val;
 
     /* Builtin functions */
-    double acos(f2c_state_t*, doublereal);
+    double acos(doublereal);
 
 
     /* Module state */
@@ -164,7 +164,7 @@ doublereal pi_(cspice_t* __global_state)
 /*     What is there to say? */
 
     if (__state->value == 0.) {
-	__state->value = acos(&__global_state->f2c, -1.);
+	__state->value = acos(-1.);
     }
     ret_val = __state->value;
     return ret_val;

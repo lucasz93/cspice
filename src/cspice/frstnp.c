@@ -8,7 +8,7 @@
 
 
 typedef int frstnp_state_t;
-static inline frstnp_state_t* get_frstnp_state(cspice_t* state) {
+static frstnp_state_t* get_frstnp_state(cspice_t* state) {
 	return 0;
 }
 

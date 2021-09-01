@@ -8,7 +8,7 @@
 
 
 typedef int q2m_state_t;
-static inline q2m_state_t* get_q2m_state(cspice_t* state) {
+static q2m_state_t* get_q2m_state(cspice_t* state) {
 	return 0;
 }
 

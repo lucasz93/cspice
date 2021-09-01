@@ -59,7 +59,8 @@
    #include "SpiceZmc.h"
 
 
-   void subsol_pl02 ( SpiceInt               handle,
+   void subsol_pl02 ( void                 * naif_state,
+                      SpiceInt               handle,
                       ConstSpiceDLADescr   * dladsc,
                       ConstSpiceChar       * method,
                       ConstSpiceChar       * target,
@@ -860,7 +861,7 @@
    /*
    Prototypes 
    */
-   int dskgd_(integer *handle, integer *dladsc, doublereal *dskdsc);
+   int dskgd_(void *naif_state, integer *handle, integer *dladsc, doublereal *dskdsc);
 
 
    /*
@@ -925,12 +926,13 @@
    Check the aberration correction string:  reject transmission
    corrections. 
    */
-   ljust_ ( ( char * ) abcorr,
+   ljust_ ( naif_state,
+            ( char * ) abcorr,
             ( char * ) loccor,
             ( ftnlen ) strlen(abcorr),
             ( ftnlen ) CORLEN-1         );
 
-   if (  matchi_c( loccor, "X*", '*', '?' )  )
+   if (  matchi_c( naif_state, loccor, "X*", '*', '?' )  )
    {
       setmsg_c ( naif_state, "Input aberration correction specification # "
                  "calls for transmission-style corrections."    );
@@ -943,9 +945,9 @@
    /*
    Obtain integer codes for the target and observer. 
    */ 
-   bods2c_c ( target, &trgcde, &found );
+   bods2c_c ( naif_state, target, &trgcde, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subsol_pl02" );
       return;
@@ -963,9 +965,9 @@
       return;
    }
 
-   bods2c_c ( obsrvr, &obscde, &found );
+   bods2c_c ( naif_state, obsrvr, &obscde, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subsol_pl02" );
       return;
@@ -1000,9 +1002,9 @@
    Get the name of the default body-fixed reference frame associated with
    the target body.
    */
-   cidfrm_c ( trgcde, FRNMLN, &frcode, frname, &found );
+   cidfrm_c ( naif_state, trgcde, FRNMLN, &frcode, frname, &found );
  
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subsol_pl02" );
       return;
@@ -1044,11 +1046,12 @@
    /*
    Call the f2c'd "get DSK descriptor" routine.
    */
-   dskgd_ ( ( integer    * ) &handle,
+   dskgd_ ( naif_state,
+            ( integer    * ) &handle,
             ( integer    * ) fDLADescr,
             ( doublereal * ) fDSKDescr  );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subsol_pl02" );
       return;
@@ -1090,15 +1093,16 @@
    body-fixed reference frame.  Let `ettarg' the epoch associated with
    the target.
    */
-   spkezp_c ( trgcde, et, frname, abcorr, obscde, trgpos, &lttarg );
+   spkezp_c ( naif_state, trgcde, et, frname, abcorr, obscde, trgpos, &lttarg );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subsol_pl02" );
       return;
    }
 
-   zzcorepc_ ( ( char        * ) abcorr,
+   zzcorepc_ ( naif_state,
+               ( char        * ) abcorr,
                ( doublereal  * ) &et, 
                ( doublereal  * ) &lttarg, 
                ( doublereal  * ) &ettarg, 
@@ -1108,9 +1112,9 @@
    Now find the apparent position of the Sun as seen from the
    target center at `ettarg'. 
    */
-   spkpos_c ( "Sun", ettarg, frname, abcorr, target, sunpos, &ltsun );
+   spkpos_c ( naif_state, "Sun", ettarg, frname, abcorr, target, sunpos, &ltsun );
    
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subsol_pl02" );
       return;
@@ -1126,16 +1130,16 @@
    Determine the ray's vertex and direction vector. The way we define
    this vector depends on our computation method.
    */
-   if (  eqstr_c( method, "intercept" )  )
+   if (  eqstr_c( naif_state, method, "intercept" )  )
    {
       /*
       The ray points from the Sun towards the target's center.
       */
-      vminus_c ( sunpos, raydir );      
-      vhat_c   ( raydir, raydir );
+      vminus_c ( naif_state, sunpos, raydir );      
+      vhat_c   ( naif_state, raydir, raydir );
    }
 
-   else if (  eqstr_c( method, "ellipsoid near point" )  )
+   else if (  eqstr_c( naif_state, method, "ellipsoid near point" )  )
    {
       /*
       The ray we wish to use points towards the closest point to the
@@ -1144,15 +1148,15 @@
 
       Fetch the radii of the reference ellipsoid. 
       */
-      bodvrd_c ( target, "RADII", 3, &n, radii );
+      bodvrd_c ( naif_state, target, "RADII", 3, &n, radii );
 
-      nearpt_c ( sunpos, radii[0], radii[1], radii[2], npt, &npalt );
+      nearpt_c ( naif_state, sunpos, radii[0], radii[1], radii[2], npt, &npalt );
 
       /*
       Check for failure here because unavailability of ellipsoid 
       radii is a possibility. 
       */
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
          chkout_c ( naif_state, "subsol_pl02" );
          return;
@@ -1161,8 +1165,8 @@
       /*
       Now we can compute the ray's direction vector. 
       */
-      vsub_c ( npt,     sunpos, raydir );
-      vhat_c ( raydir,          raydir );
+      vsub_c ( naif_state, npt,     sunpos, raydir );
+      vhat_c ( naif_state, raydir,          raydir );
       
    }
    else
@@ -1180,9 +1184,9 @@
    Find the surface intercept defined by the vertex, ray direction,
    and surface plate model.  This is the sub-solar point `spoint'.
    */
-   dskx02_c ( handle, dladsc, sunpos, raydir, plateID, spoint, &found );
+   dskx02_c ( naif_state, handle, dladsc, sunpos, raydir, plateID, spoint, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subsol_pl02" );
       return;
@@ -1203,9 +1207,9 @@
    /*
    Find the range from observer to sub-solar point. 
    */   
-   vminus_c ( trgpos, obspos );
+   vminus_c ( naif_state, trgpos, obspos );
 
-   *dist = vdist_c ( spoint, obspos );
+   *dist = vdist_c ( naif_state, spoint, obspos );
 
 
    /*

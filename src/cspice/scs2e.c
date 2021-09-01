@@ -8,7 +8,7 @@
 
 
 typedef int scs2e_state_t;
-static inline scs2e_state_t* get_scs2e_state(cspice_t* state) {
+static scs2e_state_t* get_scs2e_state(cspice_t* state) {
 	return 0;
 }
 

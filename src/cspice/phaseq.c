@@ -8,7 +8,7 @@
 
 
 extern phaseq_init_t __phaseq_init;
-static inline phaseq_state_t* get_phaseq_state(cspice_t* state) {
+static phaseq_state_t* get_phaseq_state(cspice_t* state) {
 	if (!state->phaseq)
 		state->phaseq = __cspice_allocate_module(sizeof(
 	phaseq_state_t), &__phaseq_init, sizeof(__phaseq_init));

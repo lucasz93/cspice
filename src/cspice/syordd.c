@@ -8,7 +8,7 @@
 
 
 typedef int syordd_state_t;
-static inline syordd_state_t* get_syordd_state(cspice_t* state) {
+static syordd_state_t* get_syordd_state(cspice_t* state) {
 	return 0;
 }
 

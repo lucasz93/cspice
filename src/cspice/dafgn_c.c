@@ -284,7 +284,7 @@
    /*
    Convert the output string to C style.
    */
-   F2C_ConvertStr ( lenout, name );
+   F2C_ConvertStr ( naif_state, lenout, name );
    
 
    chkout_c ( naif_state, "dafgn_c" );

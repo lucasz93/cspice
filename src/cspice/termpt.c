@@ -8,7 +8,7 @@
 
 
 extern termpt_init_t __termpt_init;
-static inline termpt_state_t* get_termpt_state(cspice_t* state) {
+static termpt_state_t* get_termpt_state(cspice_t* state) {
 	if (!state->termpt)
 		state->termpt = __cspice_allocate_module(sizeof(
 	termpt_state_t), &__termpt_init, sizeof(__termpt_init));

@@ -8,7 +8,7 @@
 
 
 typedef int zzcvpool_state_t;
-static inline zzcvpool_state_t* get_zzcvpool_state(cspice_t* state) {
+static zzcvpool_state_t* get_zzcvpool_state(cspice_t* state) {
 	return 0;
 }
 

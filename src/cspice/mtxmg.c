@@ -8,7 +8,7 @@
 
 
 typedef int mtxmg_state_t;
-static inline mtxmg_state_t* get_mtxmg_state(cspice_t* state) {
+static mtxmg_state_t* get_mtxmg_state(cspice_t* state) {
 	return 0;
 }
 

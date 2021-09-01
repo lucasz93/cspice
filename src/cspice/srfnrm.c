@@ -8,7 +8,7 @@
 
 
 extern srfnrm_init_t __srfnrm_init;
-static inline srfnrm_state_t* get_srfnrm_state(cspice_t* state) {
+static srfnrm_state_t* get_srfnrm_state(cspice_t* state) {
 	if (!state->srfnrm)
 		state->srfnrm = __cspice_allocate_module(sizeof(
 	srfnrm_state_t), &__srfnrm_init, sizeof(__srfnrm_init));

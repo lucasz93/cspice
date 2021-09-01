@@ -8,7 +8,7 @@
 
 
 extern lnkxsl_init_t __lnkxsl_init;
-static inline lnkxsl_state_t* get_lnkxsl_state(cspice_t* state) {
+static lnkxsl_state_t* get_lnkxsl_state(cspice_t* state) {
 	if (!state->lnkxsl)
 		state->lnkxsl = __cspice_allocate_module(sizeof(
 	lnkxsl_state_t), &__lnkxsl_init, sizeof(__lnkxsl_init));

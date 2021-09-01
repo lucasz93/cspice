@@ -8,7 +8,7 @@
 
 
 extern ekpsel_init_t __ekpsel_init;
-static inline ekpsel_state_t* get_ekpsel_state(cspice_t* state) {
+static ekpsel_state_t* get_ekpsel_state(cspice_t* state) {
 	if (!state->ekpsel)
 		state->ekpsel = __cspice_allocate_module(sizeof(
 	ekpsel_state_t), &__ekpsel_init, sizeof(__ekpsel_init));

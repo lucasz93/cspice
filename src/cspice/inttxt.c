@@ -8,7 +8,7 @@
 
 
 extern inttxt_init_t __inttxt_init;
-static inline inttxt_state_t* get_inttxt_state(cspice_t* state) {
+static inttxt_state_t* get_inttxt_state(cspice_t* state) {
 	if (!state->inttxt)
 		state->inttxt = __cspice_allocate_module(sizeof(
 	inttxt_state_t), &__inttxt_init, sizeof(__inttxt_init));

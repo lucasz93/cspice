@@ -8,7 +8,7 @@
 
 
 typedef int txtopn_state_t;
-static inline txtopn_state_t* get_txtopn_state(cspice_t* state) {
+static txtopn_state_t* get_txtopn_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern zzpdcmpl_init_t __zzpdcmpl_init;
-static inline zzpdcmpl_state_t* get_zzpdcmpl_state(cspice_t* state) {
+static zzpdcmpl_state_t* get_zzpdcmpl_state(cspice_t* state) {
 	if (!state->zzpdcmpl)
 		state->zzpdcmpl = __cspice_allocate_module(sizeof(
 	zzpdcmpl_state_t), &__zzpdcmpl_init, sizeof(__zzpdcmpl_init));

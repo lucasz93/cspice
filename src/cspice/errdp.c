@@ -8,7 +8,7 @@
 
 
 extern errdp_init_t __errdp_init;
-static inline errdp_state_t* get_errdp_state(cspice_t* state) {
+static errdp_state_t* get_errdp_state(cspice_t* state) {
 	if (!state->errdp)
 		state->errdp = __cspice_allocate_module(sizeof(errdp_state_t),
 	 &__errdp_init, sizeof(__errdp_init));

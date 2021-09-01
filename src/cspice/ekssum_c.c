@@ -396,12 +396,12 @@
      
    */
    
-   F2C_ConvertStr ( SPICE_EK_TSTRLN, segsum->tabnam );
+   F2C_ConvertStr ( naif_state, SPICE_EK_TSTRLN, segsum->tabnam );
    
    segsum->nrows   =   segdsc[NRIDX];
    segsum->ncols   =   segdsc[NCIDX];
    
-   F2C_ConvertTrStrArr (  segsum -> ncols, 
+   F2C_ConvertTrStrArr ( naif_state,  segsum -> ncols, 
                           SPICE_EK_CSTRLN, 
                           ( SpiceChar * ) (segsum->cnames) );
    
@@ -422,7 +422,7 @@
    /*
    Convert the Fortran-style string tabnam to a C-style string.
    */
-   F2C_ConvertStr ( SPICE_EK_TSTRLN,  segsum->tabnam );
+   F2C_ConvertStr ( naif_state, SPICE_EK_TSTRLN,  segsum->tabnam );
    
    
    /*

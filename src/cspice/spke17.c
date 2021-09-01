@@ -8,7 +8,7 @@
 
 
 typedef int spke17_state_t;
-static inline spke17_state_t* get_spke17_state(cspice_t* state) {
+static spke17_state_t* get_spke17_state(cspice_t* state) {
 	return 0;
 }
 
@@ -17,7 +17,7 @@ static inline spke17_state_t* get_spke17_state(cspice_t* state) {
 	doublereal *recin, doublereal *state)
 {
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal a;
@@ -254,7 +254,7 @@ static inline spke17_state_t* get_spke17_state(cspice_t* state) {
     a = recin[1];
     h__ = recin[2];
     k = recin[3];
-    ecc = sqrt(&__global_state->f2c, h__ * h__ + k * k);
+    ecc = sqrt(h__ * h__ + k * k);
     rapole = recin[10];
     decpol = recin[11];
 

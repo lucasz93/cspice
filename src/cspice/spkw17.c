@@ -8,7 +8,7 @@
 
 
 extern spkw17_init_t __spkw17_init;
-static inline spkw17_state_t* get_spkw17_state(cspice_t* state) {
+static spkw17_state_t* get_spkw17_state(cspice_t* state) {
 	if (!state->spkw17)
 		state->spkw17 = __cspice_allocate_module(sizeof(
 	spkw17_state_t), &__spkw17_init, sizeof(__spkw17_init));
@@ -27,7 +27,7 @@ static inline spkw17_state_t* get_spkw17_state(cspice_t* state) {
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal a;
@@ -356,7 +356,7 @@ static inline spkw17_state_t* get_spkw17_state(cspice_t* state) {
     a = record[1];
     h__ = record[2];
     k = record[3];
-    ecc = sqrt(&__global_state->f2c, h__ * h__ + k * k);
+    ecc = sqrt(h__ * h__ + k * k);
 
 /*     Check all the inputs here for obvious failures.  It's much */
 /*     better to check them now and quit than it is to get a bogus */

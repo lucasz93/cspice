@@ -8,7 +8,7 @@
 
 
 extern vprjp_init_t __vprjp_init;
-static inline vprjp_state_t* get_vprjp_state(cspice_t* state) {
+static vprjp_state_t* get_vprjp_state(cspice_t* state) {
 	if (!state->vprjp)
 		state->vprjp = __cspice_allocate_module(sizeof(vprjp_state_t),
 	 &__vprjp_init, sizeof(__vprjp_init));

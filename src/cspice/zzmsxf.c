@@ -8,7 +8,7 @@
 
 
 typedef int zzmsxf_state_t;
-static inline zzmsxf_state_t* get_zzmsxf_state(cspice_t* state) {
+static zzmsxf_state_t* get_zzmsxf_state(cspice_t* state) {
 	return 0;
 }
 

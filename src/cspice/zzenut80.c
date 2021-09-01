@@ -8,7 +8,7 @@
 
 
 extern zzenut80_init_t __zzenut80_init;
-static inline zzenut80_state_t* get_zzenut80_state(cspice_t* state) {
+static zzenut80_state_t* get_zzenut80_state(cspice_t* state) {
 	if (!state->zzenut80)
 		state->zzenut80 = __cspice_allocate_module(sizeof(
 	zzenut80_state_t), &__zzenut80_init, sizeof(__zzenut80_init));

@@ -8,7 +8,7 @@
 
 
 typedef int zzinvelt_state_t;
-static inline zzinvelt_state_t* get_zzinvelt_state(cspice_t* state) {
+static zzinvelt_state_t* get_zzinvelt_state(cspice_t* state) {
 	return 0;
 }
 

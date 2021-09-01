@@ -8,7 +8,7 @@
 
 
 extern putlms_init_t __putlms_init;
-static inline putlms_state_t* get_putlms_state(cspice_t* state) {
+static putlms_state_t* get_putlms_state(cspice_t* state) {
 	if (!state->putlms)
 		state->putlms = __cspice_allocate_module(sizeof(
 	putlms_state_t), &__putlms_init, sizeof(__putlms_init));
@@ -367,12 +367,12 @@ L_getlms:
 /* Subroutine */ int putlms_(cspice_t* __global_state, char *msg, ftnlen 
 	msg_len)
 {
-    return putlms_0_(0, msg, msg_len);
+    return putlms_0_(__global_state, 0, msg, msg_len);
     }
 
 /* Subroutine */ int getlms_(cspice_t* __global_state, char *msg, ftnlen 
 	msg_len)
 {
-    return putlms_0_(1, msg, msg_len);
+    return putlms_0_(__global_state, 1, msg, msg_len);
     }
 

@@ -8,7 +8,7 @@
 
 
 extern zzdynvai_init_t __zzdynvai_init;
-static inline zzdynvai_state_t* get_zzdynvai_state(cspice_t* state) {
+static zzdynvai_state_t* get_zzdynvai_state(cspice_t* state) {
 	if (!state->zzdynvai)
 		state->zzdynvai = __cspice_allocate_module(sizeof(
 	zzdynvai_state_t), &__zzdynvai_init, sizeof(__zzdynvai_init));

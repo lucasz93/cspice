@@ -8,7 +8,7 @@
 
 
 extern daft2b_init_t __daft2b_init;
-static inline daft2b_state_t* get_daft2b_state(cspice_t* state) {
+static daft2b_state_t* get_daft2b_state(cspice_t* state) {
 	if (!state->daft2b)
 		state->daft2b = __cspice_allocate_module(sizeof(
 	daft2b_state_t), &__daft2b_init, sizeof(__daft2b_init));

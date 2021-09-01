@@ -8,7 +8,7 @@
 
 
 extern ekrced_init_t __ekrced_init;
-static inline ekrced_state_t* get_ekrced_state(cspice_t* state) {
+static ekrced_state_t* get_ekrced_state(cspice_t* state) {
 	if (!state->ekrced)
 		state->ekrced = __cspice_allocate_module(sizeof(
 	ekrced_state_t), &__ekrced_init, sizeof(__ekrced_init));

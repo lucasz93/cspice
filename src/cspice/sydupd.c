@@ -8,7 +8,7 @@
 
 
 extern sydupd_init_t __sydupd_init;
-static inline sydupd_state_t* get_sydupd_state(cspice_t* state) {
+static sydupd_state_t* get_sydupd_state(cspice_t* state) {
 	if (!state->sydupd)
 		state->sydupd = __cspice_allocate_module(sizeof(
 	sydupd_state_t), &__sydupd_init, sizeof(__sydupd_init));

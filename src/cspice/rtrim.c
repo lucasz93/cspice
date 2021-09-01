@@ -8,7 +8,7 @@
 
 
 typedef int rtrim_state_t;
-static inline rtrim_state_t* get_rtrim_state(cspice_t* state) {
+static rtrim_state_t* get_rtrim_state(cspice_t* state) {
 	return 0;
 }
 

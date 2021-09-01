@@ -8,7 +8,7 @@
 
 
 extern zzgapool_init_t __zzgapool_init;
-static inline zzgapool_state_t* get_zzgapool_state(cspice_t* state) {
+static zzgapool_state_t* get_zzgapool_state(cspice_t* state) {
 	if (!state->zzgapool)
 		state->zzgapool = __cspice_allocate_module(sizeof(
 	zzgapool_state_t), &__zzgapool_init, sizeof(__zzgapool_init));

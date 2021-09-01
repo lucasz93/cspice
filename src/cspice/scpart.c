@@ -8,7 +8,7 @@
 
 
 extern scpart_init_t __scpart_init;
-static inline scpart_state_t* get_scpart_state(cspice_t* state) {
+static scpart_state_t* get_scpart_state(cspice_t* state) {
 	if (!state->scpart)
 		state->scpart = __cspice_allocate_module(sizeof(
 	scpart_state_t), &__scpart_init, sizeof(__scpart_init));

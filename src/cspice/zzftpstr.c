@@ -8,7 +8,7 @@
 
 
 extern zzftpstr_init_t __zzftpstr_init;
-static inline zzftpstr_state_t* get_zzftpstr_state(cspice_t* state) {
+static zzftpstr_state_t* get_zzftpstr_state(cspice_t* state) {
 	if (!state->zzftpstr)
 		state->zzftpstr = __cspice_allocate_module(sizeof(
 	zzftpstr_state_t), &__zzftpstr_init, sizeof(__zzftpstr_init));

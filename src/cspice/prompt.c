@@ -8,7 +8,7 @@
 
 
 extern prompt_init_t __prompt_init;
-static inline prompt_state_t* get_prompt_state(cspice_t* state) {
+static prompt_state_t* get_prompt_state(cspice_t* state) {
 	if (!state->prompt)
 		state->prompt = __cspice_allocate_module(sizeof(
 	prompt_state_t), &__prompt_init, sizeof(__prompt_init));

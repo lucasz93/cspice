@@ -8,7 +8,7 @@
 
 
 extern syreni_init_t __syreni_init;
-static inline syreni_state_t* get_syreni_state(cspice_t* state) {
+static syreni_state_t* get_syreni_state(cspice_t* state) {
 	if (!state->syreni)
 		state->syreni = __cspice_allocate_module(sizeof(
 	syreni_state_t), &__syreni_init, sizeof(__syreni_init));

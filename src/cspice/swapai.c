@@ -8,7 +8,7 @@
 
 
 typedef int swapai_state_t;
-static inline swapai_state_t* get_swapai_state(cspice_t* state) {
+static swapai_state_t* get_swapai_state(cspice_t* state) {
 	return 0;
 }
 

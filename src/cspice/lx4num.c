@@ -8,7 +8,7 @@
 
 
 typedef int lx4num_state_t;
-static inline lx4num_state_t* get_lx4num_state(cspice_t* state) {
+static lx4num_state_t* get_lx4num_state(cspice_t* state) {
 	return 0;
 }
 

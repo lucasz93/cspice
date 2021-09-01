@@ -8,7 +8,7 @@
 
 
 extern ekssum_init_t __ekssum_init;
-static inline ekssum_state_t* get_ekssum_state(cspice_t* state) {
+static ekssum_state_t* get_ekssum_state(cspice_t* state) {
 	if (!state->ekssum)
 		state->ekssum = __cspice_allocate_module(sizeof(
 	ekssum_state_t), &__ekssum_init, sizeof(__ekssum_init));

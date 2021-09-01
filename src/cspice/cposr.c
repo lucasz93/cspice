@@ -8,7 +8,7 @@
 
 
 typedef int cposr_state_t;
-static inline cposr_state_t* get_cposr_state(cspice_t* state) {
+static cposr_state_t* get_cposr_state(cspice_t* state) {
 	return 0;
 }
 

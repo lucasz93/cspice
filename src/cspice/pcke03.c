@@ -8,7 +8,7 @@
 
 
 extern pcke03_init_t __pcke03_init;
-static inline pcke03_state_t* get_pcke03_state(cspice_t* state) {
+static pcke03_state_t* get_pcke03_state(cspice_t* state) {
 	if (!state->pcke03)
 		state->pcke03 = __cspice_allocate_module(sizeof(
 	pcke03_state_t), &__pcke03_init, sizeof(__pcke03_init));

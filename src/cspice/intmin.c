@@ -44,7 +44,7 @@
    #include <limits.h>
    #include "SpiceUsr.h"
 
-   SpiceInt intmin_ () 
+   SpiceInt intmin_ (void *naif_state) 
 
 /*
 

@@ -49,7 +49,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void sce2c_c ( SpiceInt       sc,
+   void sce2c_c ( void         * naif_state,
+                  SpiceInt       sc,
                   SpiceDouble    et,
                   SpiceDouble  * sclkdp ) 
 
@@ -265,7 +266,8 @@
    /*
    Do the conversion.
    */
-   sce2c_ ( ( integer    * ) &sc, 
+   sce2c_ ( naif_state,
+            ( integer    * ) &sc, 
             ( doublereal * ) &et, 
             ( doublereal * ) sclkdp );
 

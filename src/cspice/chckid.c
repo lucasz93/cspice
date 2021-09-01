@@ -8,7 +8,7 @@
 
 
 typedef int chckid_state_t;
-static inline chckid_state_t* get_chckid_state(cspice_t* state) {
+static chckid_state_t* get_chckid_state(cspice_t* state) {
 	return 0;
 }
 

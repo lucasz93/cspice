@@ -8,7 +8,7 @@
 
 
 extern daffa_init_t __daffa_init;
-static inline daffa_state_t* get_daffa_state(cspice_t* state) {
+static daffa_state_t* get_daffa_state(cspice_t* state) {
 	if (!state->daffa)
 		state->daffa = __cspice_allocate_module(sizeof(daffa_state_t),
 	 &__daffa_init, sizeof(__daffa_init));
@@ -4946,72 +4946,74 @@ L_dafcs:
 /* Subroutine */ int daffa_(cspice_t* __global_state, integer *handle, 
 	doublereal *sum, char *name__, logical *found, ftnlen name_len)
 {
-    return daffa_0_(0, handle, sum, name__, found, name_len);
+    return daffa_0_(__global_state, 0, handle, sum, name__, found, name_len);
     }
 
 /* Subroutine */ int dafbfs_(cspice_t* __global_state, integer *handle)
 {
-    return daffa_0_(1, handle, (doublereal *)0, (char *)0, (logical *)0, (
-	    ftnint)0);
+    return daffa_0_(__global_state, 1, handle, (doublereal *)0, (char *)0, (
+	    logical *)0, (ftnint)0);
     }
 
 /* Subroutine */ int daffna_(cspice_t* __global_state, logical *found)
 {
-    return daffa_0_(2, (integer *)0, (doublereal *)0, (char *)0, found, (
-	    ftnint)0);
+    return daffa_0_(__global_state, 2, (integer *)0, (doublereal *)0, (char *)
+	    0, found, (ftnint)0);
     }
 
 /* Subroutine */ int dafbbs_(cspice_t* __global_state, integer *handle)
 {
-    return daffa_0_(3, handle, (doublereal *)0, (char *)0, (logical *)0, (
-	    ftnint)0);
+    return daffa_0_(__global_state, 3, handle, (doublereal *)0, (char *)0, (
+	    logical *)0, (ftnint)0);
     }
 
 /* Subroutine */ int daffpa_(cspice_t* __global_state, logical *found)
 {
-    return daffa_0_(4, (integer *)0, (doublereal *)0, (char *)0, found, (
-	    ftnint)0);
+    return daffa_0_(__global_state, 4, (integer *)0, (doublereal *)0, (char *)
+	    0, found, (ftnint)0);
     }
 
 /* Subroutine */ int dafgs_(cspice_t* __global_state, doublereal *sum)
 {
-    return daffa_0_(5, (integer *)0, sum, (char *)0, (logical *)0, (ftnint)0);
+    return daffa_0_(__global_state, 5, (integer *)0, sum, (char *)0, (logical 
+	    *)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafgn_(cspice_t* __global_state, char *name__, ftnlen 
 	name_len)
 {
-    return daffa_0_(6, (integer *)0, (doublereal *)0, name__, (logical *)0, 
-	    name_len);
+    return daffa_0_(__global_state, 6, (integer *)0, (doublereal *)0, name__, 
+	    (logical *)0, name_len);
     }
 
 /* Subroutine */ int dafgh_(cspice_t* __global_state, integer *handle)
 {
-    return daffa_0_(7, handle, (doublereal *)0, (char *)0, (logical *)0, (
-	    ftnint)0);
+    return daffa_0_(__global_state, 7, handle, (doublereal *)0, (char *)0, (
+	    logical *)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafrs_(cspice_t* __global_state, doublereal *sum)
 {
-    return daffa_0_(8, (integer *)0, sum, (char *)0, (logical *)0, (ftnint)0);
+    return daffa_0_(__global_state, 8, (integer *)0, sum, (char *)0, (logical 
+	    *)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafrn_(cspice_t* __global_state, char *name__, ftnlen 
 	name_len)
 {
-    return daffa_0_(9, (integer *)0, (doublereal *)0, name__, (logical *)0, 
-	    name_len);
+    return daffa_0_(__global_state, 9, (integer *)0, (doublereal *)0, name__, 
+	    (logical *)0, name_len);
     }
 
 /* Subroutine */ int dafws_(cspice_t* __global_state, doublereal *sum)
 {
-    return daffa_0_(10, (integer *)0, sum, (char *)0, (logical *)0, (ftnint)0)
-	    ;
+    return daffa_0_(__global_state, 10, (integer *)0, sum, (char *)0, (
+	    logical *)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafcs_(cspice_t* __global_state, integer *handle)
 {
-    return daffa_0_(11, handle, (doublereal *)0, (char *)0, (logical *)0, (
-	    ftnint)0);
+    return daffa_0_(__global_state, 11, handle, (doublereal *)0, (char *)0, (
+	    logical *)0, (ftnint)0);
     }
 

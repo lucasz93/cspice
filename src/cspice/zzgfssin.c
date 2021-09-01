@@ -8,7 +8,7 @@
 
 
 extern zzgfssin_init_t __zzgfssin_init;
-static inline zzgfssin_state_t* get_zzgfssin_state(cspice_t* state) {
+static zzgfssin_state_t* get_zzgfssin_state(cspice_t* state) {
 	if (!state->zzgfssin)
 		state->zzgfssin = __cspice_allocate_module(sizeof(
 	zzgfssin_state_t), &__zzgfssin_init, sizeof(__zzgfssin_init));

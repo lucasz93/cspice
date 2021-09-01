@@ -8,6 +8,8 @@
 #include "stddef.h"
 #endif
 
+struct f2c_state_s;
+
 #ifndef SEEK_SET
 #define SEEK_SET 0
 #define SEEK_CUR 1
@@ -57,28 +59,28 @@ extern int c_sfe(), err__fl(), xrd_SL(), f__putbuf();
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern void x_putc(int);
+extern void x_putc(struct f2c_state_s *,int);
 extern long f__inode(char*,int*);
 extern void sig_die(char*,int);
-extern void f__fatal(int,char*);
-extern int t_runc(alist*);
-extern int f__nowreading(unit*), f__nowwriting(unit*);
-extern int fk_open(int,int,ftnint);
-extern int en_fio(void);
-extern void f_init(void);
-extern int t_putc(int), x_wSL(void);
+extern void f__fatal(struct f2c_state_s*,int,char*);
+extern int t_runc(struct f2c_state_s*,alist*);
+extern int f__nowreading(struct f2c_state_s*,unit*), f__nowwriting(struct f2c_state_s*,unit*);
+extern int fk_open(struct f2c_state_s*, int,int,ftnint);
+extern int en_fio(struct f2c_state_s*);
+extern void f_init(struct f2c_state_s*);
+extern int t_putc(int), x_wSL(struct f2c_state_s *);
 extern void b_char(char*,char*,ftnlen), g_char(char*,ftnlen,char*);
-extern int c_sfe(f2c_state_t *,cilist*), z_rnew(void);
+extern int c_sfe(struct f2c_state_s *,cilist*), z_rnew(struct f2c_state_s *);
 extern int isatty(int);
-extern int err__fl(int,int,char*);
-extern int xrd_SL(void);
-extern int f__putbuf(int);
+extern int err__fl(struct f2c_state_s*,int,int,char*);
+extern int xrd_SL(struct f2c_state_s *);
+extern int f__putbuf(struct f2c_state_s *,int);
 #ifdef __cplusplus
 	}
 #endif
 #endif
-#define err(f,m,s) {if(f) errno= m; else f__fatal(m,s); return(m);}
-#define errfl(f,m,s) return err__fl((int)f,m,s)
+#define err(f2c,f,m,s) {if(f) errno= m; else f__fatal(f2c,m,s); return(m);}
+#define errfl(f2c,f,m,s) return err__fl(f2c,(int)f,m,s)
 
 #define WRITE	1
 #define READ	2

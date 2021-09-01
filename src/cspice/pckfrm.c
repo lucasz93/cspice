@@ -8,7 +8,7 @@
 
 
 extern pckfrm_init_t __pckfrm_init;
-static inline pckfrm_state_t* get_pckfrm_state(cspice_t* state) {
+static pckfrm_state_t* get_pckfrm_state(cspice_t* state) {
 	if (!state->pckfrm)
 		state->pckfrm = __cspice_allocate_module(sizeof(
 	pckfrm_state_t), &__pckfrm_init, sizeof(__pckfrm_init));

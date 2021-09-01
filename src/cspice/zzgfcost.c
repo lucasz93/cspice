@@ -8,7 +8,7 @@
 
 
 typedef int zzgfcost_state_t;
-static inline zzgfcost_state_t* get_zzgfcost_state(cspice_t* state) {
+static zzgfcost_state_t* get_zzgfcost_state(cspice_t* state) {
 	return 0;
 }
 

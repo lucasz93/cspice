@@ -8,7 +8,7 @@
 
 
 extern gfrprt_init_t __gfrprt_init;
-static inline gfrprt_state_t* get_gfrprt_state(cspice_t* state) {
+static gfrprt_state_t* get_gfrprt_state(cspice_t* state) {
 	if (!state->gfrprt)
 		state->gfrprt = __cspice_allocate_module(sizeof(
 	gfrprt_state_t), &__gfrprt_init, sizeof(__gfrprt_init));
@@ -1143,27 +1143,28 @@ L_gfrepf:
 	char *begmss, char *endmss, doublereal *ivbeg, doublereal *ivend, 
 	doublereal *time, ftnlen begmss_len, ftnlen endmss_len)
 {
-    return gfrprt_0_(0, window, begmss, endmss, ivbeg, ivend, time, 
-	    begmss_len, endmss_len);
+    return gfrprt_0_(__global_state, 0, window, begmss, endmss, ivbeg, ivend, 
+	    time, begmss_len, endmss_len);
     }
 
 /* Subroutine */ int gfrepi_(cspice_t* __global_state, doublereal *window, 
 	char *begmss, char *endmss, ftnlen begmss_len, ftnlen endmss_len)
 {
-    return gfrprt_0_(1, window, begmss, endmss, (doublereal *)0, (doublereal *
-	    )0, (doublereal *)0, begmss_len, endmss_len);
+    return gfrprt_0_(__global_state, 1, window, begmss, endmss, (doublereal *)
+	    0, (doublereal *)0, (doublereal *)0, begmss_len, endmss_len);
     }
 
 /* Subroutine */ int gfrepu_(cspice_t* __global_state, doublereal *ivbeg, 
 	doublereal *ivend, doublereal *time)
 {
-    return gfrprt_0_(2, (doublereal *)0, (char *)0, (char *)0, ivbeg, ivend, 
-	    time, (ftnint)0, (ftnint)0);
+    return gfrprt_0_(__global_state, 2, (doublereal *)0, (char *)0, (char *)0,
+	     ivbeg, ivend, time, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int gfrepf_(cspice_t* __global_state)
 {
-    return gfrprt_0_(3, (doublereal *)0, (char *)0, (char *)0, (doublereal *)
-	    0, (doublereal *)0, (doublereal *)0, (ftnint)0, (ftnint)0);
+    return gfrprt_0_(__global_state, 3, (doublereal *)0, (char *)0, (char *)0,
+	     (doublereal *)0, (doublereal *)0, (doublereal *)0, (ftnint)0, (
+	    ftnint)0);
     }
 

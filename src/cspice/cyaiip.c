@@ -8,7 +8,7 @@
 
 
 typedef int cyaiip_state_t;
-static inline cyaiip_state_t* get_cyaiip_state(cspice_t* state) {
+static cyaiip_state_t* get_cyaiip_state(cspice_t* state) {
 	return 0;
 }
 

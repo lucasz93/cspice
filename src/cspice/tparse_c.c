@@ -385,7 +385,7 @@
    /*
    Convert the error message from Fortran to C style.
    */
-   F2C_ConvertStr ( lenout, errmsg );
+   F2C_ConvertStr ( naif_state, lenout, errmsg );
    
    
 } /* End tparse_c */

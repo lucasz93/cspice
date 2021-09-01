@@ -8,7 +8,7 @@
 
 
 extern zzdynvac_init_t __zzdynvac_init;
-static inline zzdynvac_state_t* get_zzdynvac_state(cspice_t* state) {
+static zzdynvac_state_t* get_zzdynvac_state(cspice_t* state) {
 	if (!state->zzdynvac)
 		state->zzdynvac = __cspice_allocate_module(sizeof(
 	zzdynvac_state_t), &__zzdynvac_init, sizeof(__zzdynvac_init));

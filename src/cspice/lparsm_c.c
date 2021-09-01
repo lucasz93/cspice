@@ -289,7 +289,7 @@
    trailing blanks from output tokens.
    */
    
-   F2C_ConvertTrStrArr ( *n, lenout, (char *) items );
+   F2C_ConvertTrStrArr ( naif_state, *n, lenout, (char *) items );
 
 
    chkout_c ( naif_state, "lparsm_c" );

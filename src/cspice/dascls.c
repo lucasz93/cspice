@@ -8,7 +8,7 @@
 
 
 extern dascls_init_t __dascls_init;
-static inline dascls_state_t* get_dascls_state(cspice_t* state) {
+static dascls_state_t* get_dascls_state(cspice_t* state) {
 	if (!state->dascls)
 		state->dascls = __cspice_allocate_module(sizeof(
 	dascls_state_t), &__dascls_init, sizeof(__dascls_init));

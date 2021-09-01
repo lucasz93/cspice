@@ -8,7 +8,7 @@
 
 
 extern zzdynoad_init_t __zzdynoad_init;
-static inline zzdynoad_state_t* get_zzdynoad_state(cspice_t* state) {
+static zzdynoad_state_t* get_zzdynoad_state(cspice_t* state) {
 	if (!state->zzdynoad)
 		state->zzdynoad = __cspice_allocate_module(sizeof(
 	zzdynoad_state_t), &__zzdynoad_init, sizeof(__zzdynoad_init));

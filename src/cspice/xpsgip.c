@@ -8,7 +8,7 @@
 
 
 typedef int xpsgip_state_t;
-static inline xpsgip_state_t* get_xpsgip_state(cspice_t* state) {
+static xpsgip_state_t* get_xpsgip_state(cspice_t* state) {
 	return 0;
 }
 

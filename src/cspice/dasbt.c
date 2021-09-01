@@ -8,7 +8,7 @@
 
 
 extern dasbt_init_t __dasbt_init;
-static inline dasbt_state_t* get_dasbt_state(cspice_t* state) {
+static dasbt_state_t* get_dasbt_state(cspice_t* state) {
 	if (!state->dasbt)
 		state->dasbt = __cspice_allocate_module(sizeof(dasbt_state_t),
 	 &__dasbt_init, sizeof(__dasbt_init));

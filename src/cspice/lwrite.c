@@ -8,7 +8,7 @@
 donewrec(f2c_state_t *f2c)
 {
 	if (f2c->f__recpos)
-		(*f2c->f__donewrec)();
+		(*f2c->f__donewrec)(f2c);
 	}
 
  static VOID
@@ -21,7 +21,7 @@ lwrt_I(f2c_state_t *f2c, longint n)
 	char *p;
 	int ndigit, sign;
 
-	p = f__icvt(n, &ndigit, &sign, 10);
+	p = f__icvt(f2c, n, &ndigit, &sign, 10);
 	if(f2c->f__recpos + ndigit >= f2c->L_len)
 		donewrec(f2c);
 	PUT(f2c, ' ');
@@ -39,7 +39,7 @@ lwrt_L(f2c_state_t *f2c, ftnint n, ftnlen len)
 {
 	if(f2c->f__recpos+LLOGW>=f2c->L_len)
 		donewrec(f2c);
-	wrt_L((Uint *)&n,LLOGW, len);
+	wrt_L(f2c,(Uint *)&n,LLOGW, len);
 }
  static VOID
 #ifdef KR_headers
@@ -174,12 +174,12 @@ l_put(f2c_state_t *f2c, register char *s)
 #ifdef KR_headers
 	register void (*pn)() = f2c->f__putn;
 #else
-	register void (*pn)(int) = f2c->f__putn;
+	register void (*pn)(f2c_state_t *,int) = f2c->f__putn;
 #endif
 	register int c;
 
 	while(c = *s++)
-		(*pn)(c);
+		(*pn)(f2c,c);
 	}
 
  static VOID
@@ -221,7 +221,7 @@ lwrt_C(f2c_state_t *f2c, double a, double b)
 	l_put(f2c,ba);
 	PUT(f2c, ',');
 	if (f2c->f__recpos + bl >= f2c->L_len) {
-		(*f2c->f__donewrec)();
+		(*f2c->f__donewrec)(f2c);
 #ifndef OMIT_BLANK_CC
 		PUT(f2c, ' ');
 #endif
@@ -245,7 +245,7 @@ l_write(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len, ftnint type)
 	{
 		switch((int)type)
 		{
-		default: f__fatal(204,"unknown type in lio");
+		default: f__fatal(f2c,204,"unknown type in lio");
 		case TYINT1:
 			x = Ptr->flchar;
 			goto xint;

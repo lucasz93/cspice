@@ -8,7 +8,7 @@
 
 
 extern matchi_init_t __matchi_init;
-static inline matchi_state_t* get_matchi_state(cspice_t* state) {
+static matchi_state_t* get_matchi_state(cspice_t* state) {
 	if (!state->matchi)
 		state->matchi = __cspice_allocate_module(sizeof(
 	matchi_state_t), &__matchi_init, sizeof(__matchi_init));

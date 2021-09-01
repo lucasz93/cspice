@@ -8,7 +8,7 @@
 
 
 extern zzgfpau_init_t __zzgfpau_init;
-static inline zzgfpau_state_t* get_zzgfpau_state(cspice_t* state) {
+static zzgfpau_state_t* get_zzgfpau_state(cspice_t* state) {
 	if (!state->zzgfpau)
 		state->zzgfpau = __cspice_allocate_module(sizeof(
 	zzgfpau_state_t), &__zzgfpau_init, sizeof(__zzgfpau_init));
@@ -1156,46 +1156,46 @@ L_zzgfpax:
 	ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen 
 	xabcor_len)
 {
-    return zzgfpau_0_(0, target, illmn, abcorr, obsrvr, udfunc, et, decres, 
-	    rvl, xtarg, xillmn, xabcor, xobs, xablk, target_len, illmn_len, 
-	    abcorr_len, obsrvr_len, xabcor_len);
+    return zzgfpau_0_(__global_state, 0, target, illmn, abcorr, obsrvr, 
+	    udfunc, et, decres, rvl, xtarg, xillmn, xabcor, xobs, xablk, 
+	    target_len, illmn_len, abcorr_len, obsrvr_len, xabcor_len);
     }
 
 /* Subroutine */ int zzgfpain_(cspice_t* __global_state, char *target, char *
 	illmn, char *abcorr, char *obsrvr, ftnlen target_len, ftnlen 
 	illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
-    return zzgfpau_0_(1, target, illmn, abcorr, obsrvr, (U_fp)0, (doublereal *
-	    )0, (logical *)0, (doublereal *)0, (integer *)0, (integer *)0, (
-	    char *)0, (integer *)0, (logical *)0, target_len, illmn_len, 
-	    abcorr_len, obsrvr_len, (ftnint)0);
+    return zzgfpau_0_(__global_state, 1, target, illmn, abcorr, obsrvr, (U_fp)
+	    0, (doublereal *)0, (logical *)0, (doublereal *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, (logical *)0, target_len, 
+	    illmn_len, abcorr_len, obsrvr_len, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfpadc_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *decres)
 {
-    return zzgfpau_0_(2, (char *)0, (char *)0, (char *)0, (char *)0, udfunc, 
-	    et, decres, (doublereal *)0, (integer *)0, (integer *)0, (char *)
-	    0, (integer *)0, (logical *)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfpau_0_(__global_state, 2, (char *)0, (char *)0, (char *)0, (
+	    char *)0, udfunc, et, decres, (doublereal *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, (logical *)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfpagq_(cspice_t* __global_state, doublereal *et, 
 	doublereal *rvl)
 {
-    return zzgfpau_0_(3, (char *)0, (char *)0, (char *)0, (char *)0, (U_fp)0, 
-	    et, (logical *)0, rvl, (integer *)0, (integer *)0, (char *)0, (
-	    integer *)0, (logical *)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfpau_0_(__global_state, 3, (char *)0, (char *)0, (char *)0, (
+	    char *)0, (U_fp)0, et, (logical *)0, rvl, (integer *)0, (integer *
+	    )0, (char *)0, (integer *)0, (logical *)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfpax_(cspice_t* __global_state, integer *xtarg, 
 	integer *xillmn, char *xabcor, integer *xobs, logical *xablk, ftnlen 
 	xabcor_len)
 {
-    return zzgfpau_0_(4, (char *)0, (char *)0, (char *)0, (char *)0, (U_fp)0, 
-	    (doublereal *)0, (logical *)0, (doublereal *)0, xtarg, xillmn, 
-	    xabcor, xobs, xablk, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, 
-	    xabcor_len);
+    return zzgfpau_0_(__global_state, 4, (char *)0, (char *)0, (char *)0, (
+	    char *)0, (U_fp)0, (doublereal *)0, (logical *)0, (doublereal *)0,
+	     xtarg, xillmn, xabcor, xobs, xablk, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, xabcor_len);
     }
 

@@ -8,7 +8,7 @@
 
 
 typedef int zzidmap_state_t;
-static inline zzidmap_state_t* get_zzidmap_state(cspice_t* state) {
+static zzidmap_state_t* get_zzidmap_state(cspice_t* state) {
 	return 0;
 }
 

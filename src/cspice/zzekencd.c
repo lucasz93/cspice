@@ -8,7 +8,7 @@
 
 
 extern zzekencd_init_t __zzekencd_init;
-static inline zzekencd_state_t* get_zzekencd_state(cspice_t* state) {
+static zzekencd_state_t* get_zzekencd_state(cspice_t* state) {
 	if (!state->zzekencd)
 		state->zzekencd = __cspice_allocate_module(sizeof(
 	zzekencd_state_t), &__zzekencd_init, sizeof(__zzekencd_init));

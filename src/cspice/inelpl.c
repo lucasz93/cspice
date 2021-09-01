@@ -8,7 +8,7 @@
 
 
 extern inelpl_init_t __inelpl_init;
-static inline inelpl_state_t* get_inelpl_state(cspice_t* state) {
+static inelpl_state_t* get_inelpl_state(cspice_t* state) {
 	if (!state->inelpl)
 		state->inelpl = __cspice_allocate_module(sizeof(
 	inelpl_state_t), &__inelpl_init, sizeof(__inelpl_init));
@@ -24,9 +24,8 @@ static inline inelpl_state_t* get_inelpl_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double acos(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
-	    doublereal), cos(f2c_state_t*, doublereal), sin(f2c_state_t*, 
-	    doublereal);
+    double acos(doublereal), atan2(doublereal, doublereal), cos(doublereal), 
+	    sin(doublereal);
 
     /* Local variables */
     doublereal beta;
@@ -553,9 +552,8 @@ static inline inelpl_state_t* get_inelpl_state(cspice_t* state) {
 
 /*     The values of theta are the angles we seek. */
 
-    alpha = acos(&__global_state->f2c, const__ / vnormg_(__global_state, v, &
-	    __state->c__2));
-    beta = atan2(&__global_state->f2c, v[1], v[0]);
+    alpha = acos(const__ / vnormg_(__global_state, v, &__state->c__2));
+    beta = atan2(v[1], v[0]);
     angle1 = beta - alpha;
     angle2 = beta + alpha;
 
@@ -587,12 +585,12 @@ static inline inelpl_state_t* get_inelpl_state(cspice_t* state) {
 
 /*     Compute the intersection points. */
 
-    d__1 = cos(&__global_state->f2c, angle1);
-    d__2 = sin(&__global_state->f2c, angle1);
+    d__1 = cos(angle1);
+    d__2 = sin(angle1);
     vlcom3_(__global_state, &__state->c_b26, center, &d__1, smajor, &d__2, 
 	    sminor, xpt1);
-    d__1 = cos(&__global_state->f2c, angle2);
-    d__2 = sin(&__global_state->f2c, angle2);
+    d__1 = cos(angle2);
+    d__2 = sin(angle2);
     vlcom3_(__global_state, &__state->c_b26, center, &d__1, smajor, &d__2, 
 	    sminor, xpt2);
     chkout_(__global_state, "INELPL", (ftnlen)6);

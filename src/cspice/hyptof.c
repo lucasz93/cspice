@@ -8,7 +8,7 @@
 
 
 extern hyptof_init_t __hyptof_init;
-static inline hyptof_state_t* get_hyptof_state(cspice_t* state) {
+static hyptof_state_t* get_hyptof_state(cspice_t* state) {
 	if (!state->hyptof)
 		state->hyptof = __cspice_allocate_module(sizeof(
 	hyptof_state_t), &__hyptof_init, sizeof(__hyptof_init));
@@ -27,8 +27,7 @@ static inline hyptof_state_t* get_hyptof_state(cspice_t* state) {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    double log(f2c_state_t*, doublereal), sqrt(f2c_state_t*, doublereal), 
-	    sinh(f2c_state_t*, doublereal);
+    double log(doublereal), sqrt(doublereal), sinh(doublereal);
 
     /* Local variables */
     doublereal diff;
@@ -255,7 +254,7 @@ static inline hyptof_state_t* get_hyptof_state(cspice_t* state) {
     }
     if (__state->first) {
 	__state->first = FALSE_;
-	__state->maxlog = log(&__global_state->f2c, dpmax_(__global_state));
+	__state->maxlog = log(dpmax_(__global_state));
     }
     if (*ecc < 1.) {
 	sigerr_(__global_state, "SPICE(WRONGCONIC)", (ftnlen)17);
@@ -370,12 +369,10 @@ static inline hyptof_state_t* get_hyptof_state(cspice_t* state) {
 
 /* Computing 2nd power */
     d__1 = m / *ecc;
-    lower = log(&__global_state->f2c, m / *ecc + sqrt(&__global_state->f2c, 
-	    d__1 * d__1 + 1.));
+    lower = log(m / *ecc + sqrt(d__1 * d__1 + 1.));
 /* Computing MIN */
     d__3 = m * 6. / *ecc;
-    d__1 = dcbrt_(__global_state, &d__3), d__2 = __state->maxlog - log(&
-	    __global_state->f2c, *ecc);
+    d__1 = dcbrt_(__global_state, &d__3), d__2 = __state->maxlog - log(*ecc);
     upper = min(d__1,d__2);
     upper = max(lower,upper);
 
@@ -394,7 +391,7 @@ static inline hyptof_state_t* get_hyptof_state(cspice_t* state) {
     d__3 = upper, d__4 = upper * .5 + lower * .5;
     d__1 = lower, d__2 = min(d__3,d__4);
     middle = max(d__1,d__2);
-    midval = *ecc * sinh(&__global_state->f2c, middle) - middle - m;
+    midval = *ecc * sinh(middle) - middle - m;
     diff = upper - lower;
 
 /*     Finally pick a reasonable upper bound on the number of loop */
@@ -431,7 +428,7 @@ static inline hyptof_state_t* get_hyptof_state(cspice_t* state) {
 	    diff = 0.;
 	} else {
 	    diff = upper - lower;
-	    midval = *ecc * sinh(&__global_state->f2c, middle) - middle - m;
+	    midval = *ecc * sinh(middle) - middle - m;
 	}
     }
 

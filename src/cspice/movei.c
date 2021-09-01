@@ -8,7 +8,7 @@
 
 
 typedef int movei_state_t;
-static inline movei_state_t* get_movei_state(cspice_t* state) {
+static movei_state_t* get_movei_state(cspice_t* state) {
 	return 0;
 }
 

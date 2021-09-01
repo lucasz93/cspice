@@ -8,7 +8,7 @@
 
 
 extern zzgfdiu_init_t __zzgfdiu_init;
-static inline zzgfdiu_state_t* get_zzgfdiu_state(cspice_t* state) {
+static zzgfdiu_state_t* get_zzgfdiu_state(cspice_t* state) {
 	if (!state->zzgfdiu)
 		state->zzgfdiu = __cspice_allocate_module(sizeof(
 	zzgfdiu_state_t), &__zzgfdiu_init, sizeof(__zzgfdiu_init));
@@ -882,29 +882,31 @@ L_zzgfdigq:
 	doublereal *dist, ftnlen target_len, ftnlen abcorr_len, ftnlen 
 	obsrvr_len)
 {
-    return zzgfdiu_0_(0, target, abcorr, obsrvr, udfunc, et, decres, dist, 
-	    target_len, abcorr_len, obsrvr_len);
+    return zzgfdiu_0_(__global_state, 0, target, abcorr, obsrvr, udfunc, et, 
+	    decres, dist, target_len, abcorr_len, obsrvr_len);
     }
 
 /* Subroutine */ int zzgfdiin_(cspice_t* __global_state, char *target, char *
 	abcorr, char *obsrvr, ftnlen target_len, ftnlen abcorr_len, ftnlen 
 	obsrvr_len)
 {
-    return zzgfdiu_0_(1, target, abcorr, obsrvr, (U_fp)0, (doublereal *)0, (
-	    logical *)0, (doublereal *)0, target_len, abcorr_len, obsrvr_len);
+    return zzgfdiu_0_(__global_state, 1, target, abcorr, obsrvr, (U_fp)0, (
+	    doublereal *)0, (logical *)0, (doublereal *)0, target_len, 
+	    abcorr_len, obsrvr_len);
     }
 
 /* Subroutine */ int zzgfdidc_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *decres)
 {
-    return zzgfdiu_0_(2, (char *)0, (char *)0, (char *)0, udfunc, et, decres, 
-	    (doublereal *)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return zzgfdiu_0_(__global_state, 2, (char *)0, (char *)0, (char *)0, 
+	    udfunc, et, decres, (doublereal *)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int zzgfdigq_(cspice_t* __global_state, doublereal *et, 
 	doublereal *dist)
 {
-    return zzgfdiu_0_(3, (char *)0, (char *)0, (char *)0, (U_fp)0, et, (
-	    logical *)0, dist, (ftnint)0, (ftnint)0, (ftnint)0);
+    return zzgfdiu_0_(__global_state, 3, (char *)0, (char *)0, (char *)0, (
+	    U_fp)0, et, (logical *)0, dist, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 

@@ -406,7 +406,8 @@
       cvalsPtr[i] =  (SpiceChar *)lines  +  ( i * lineln );
    }
    
-   status = C2F_CreateStrArr (  NELTS, 
+   status = C2F_CreateStrArr (  naif_state,
+                                NELTS, 
                                 ( ConstSpiceChar ** ) cvalsPtr, 
                                 &fCvalsLen, 
                                 &fCvalsArr                      );

@@ -8,7 +8,7 @@
 
 
 extern ekbseg_init_t __ekbseg_init;
-static inline ekbseg_state_t* get_ekbseg_state(cspice_t* state) {
+static ekbseg_state_t* get_ekbseg_state(cspice_t* state) {
 	if (!state->ekbseg)
 		state->ekbseg = __cspice_allocate_module(sizeof(
 	ekbseg_state_t), &__ekbseg_init, sizeof(__ekbseg_init));

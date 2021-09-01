@@ -8,7 +8,7 @@
 
 
 typedef int dskgd_state_t;
-static inline dskgd_state_t* get_dskgd_state(cspice_t* state) {
+static dskgd_state_t* get_dskgd_state(cspice_t* state) {
 	return 0;
 }
 

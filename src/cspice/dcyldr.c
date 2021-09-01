@@ -8,7 +8,7 @@
 
 
 typedef int dcyldr_state_t;
-static inline dcyldr_state_t* get_dcyldr_state(cspice_t* state) {
+static dcyldr_state_t* get_dcyldr_state(cspice_t* state) {
 	return 0;
 }
 

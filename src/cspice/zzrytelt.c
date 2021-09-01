@@ -8,7 +8,7 @@
 
 
 typedef int zzrytelt_state_t;
-static inline zzrytelt_state_t* get_zzrytelt_state(cspice_t* state) {
+static zzrytelt_state_t* get_zzrytelt_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern dcbrt_init_t __dcbrt_init;
-static inline dcbrt_state_t* get_dcbrt_state(cspice_t* state) {
+static dcbrt_state_t* get_dcbrt_state(cspice_t* state) {
 	if (!state->dcbrt)
 		state->dcbrt = __cspice_allocate_module(sizeof(dcbrt_state_t),
 	 &__dcbrt_init, sizeof(__dcbrt_init));

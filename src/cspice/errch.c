@@ -8,7 +8,7 @@
 
 
 extern errch_init_t __errch_init;
-static inline errch_state_t* get_errch_state(cspice_t* state) {
+static errch_state_t* get_errch_state(cspice_t* state) {
 	if (!state->errch)
 		state->errch = __cspice_allocate_module(sizeof(errch_state_t),
 	 &__errch_init, sizeof(__errch_init));

@@ -8,7 +8,7 @@
 
 
 extern zzektres_init_t __zzektres_init;
-static inline zzektres_state_t* get_zzektres_state(cspice_t* state) {
+static zzektres_state_t* get_zzektres_state(cspice_t* state) {
 	if (!state->zzektres)
 		state->zzektres = __cspice_allocate_module(sizeof(
 	zzektres_state_t), &__zzektres_init, sizeof(__zzektres_init));

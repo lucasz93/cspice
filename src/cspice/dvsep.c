@@ -8,7 +8,7 @@
 
 
 typedef int dvsep_state_t;
-static inline dvsep_state_t* get_dvsep_state(cspice_t* state) {
+static dvsep_state_t* get_dvsep_state(cspice_t* state) {
 	return 0;
 }
 

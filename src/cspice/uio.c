@@ -12,9 +12,9 @@ do_us(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len)
 	{
 		f2c->f__recpos += (int)(*number * len);
 		if(f2c->f__recpos>f2c->f__reclen)
-			err(f2c->f__elist->cierr, 110, "do_us");
+			err(f2c,f2c->f__elist->cierr, 110, "do_us");
 		if (fread(ptr,(int)len,(int)(*number),f2c->f__cf) != *number)
-			err(f2c->f__elist->ciend, EOF, "do_us");
+			err(f2c,f2c->f__elist->ciend, EOF, "do_us");
 		return(0);
 	}
 	else
@@ -32,7 +32,7 @@ integer do_ud(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len)
 {
 	f2c->f__recpos += (int)(*number * len);
 	if(f2c->f__recpos > f2c->f__curunit->url && f2c->f__curunit->url!=1)
-		err(f2c->f__elist->cierr,110,"do_ud");
+		err(f2c,f2c->f__elist->cierr,110,"do_ud");
 	if(f2c->f__reading)
 	{
 #ifdef Pad_UDread
@@ -43,13 +43,13 @@ integer do_ud(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len)
 #endif
 		if (!(i = fread(ptr,(int)len,(int)(*number),f2c->f__cf))
 		 && !(f2c->f__recpos - *number*len))
-			err(f2c->f__elist->cierr,EOF,"do_ud")
+			err(f2c,f2c->f__elist->cierr,EOF,"do_ud")
 		if (i < *number)
 			memset(ptr + i*len, 0, (*number - i)*len);
 		return 0;
 #else
 		if(fread(ptr,(int)len,(int)(*number),f2c->f__cf) != *number)
-			err(f2c->f__elist->cierr,EOF,"do_ud")
+			err(f2c,f2c->f__elist->cierr,EOF,"do_ud")
 		else return(0);
 #endif
 	}

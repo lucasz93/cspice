@@ -8,7 +8,7 @@
 
 
 extern qdq2av_init_t __qdq2av_init;
-static inline qdq2av_state_t* get_qdq2av_state(cspice_t* state) {
+static qdq2av_state_t* get_qdq2av_state(cspice_t* state) {
 	if (!state->qdq2av)
 		state->qdq2av = __cspice_allocate_module(sizeof(
 	qdq2av_state_t), &__qdq2av_init, sizeof(__qdq2av_init));

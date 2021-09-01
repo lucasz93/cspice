@@ -8,7 +8,7 @@
 
 
 extern pool_init_t __pool_init;
-static inline pool_state_t* get_pool_state(cspice_t* state) {
+static pool_state_t* get_pool_state(cspice_t* state) {
 	if (!state->pool)
 		state->pool = __cspice_allocate_module(sizeof(pool_state_t), &
 	__pool_init, sizeof(__pool_init));
@@ -8687,171 +8687,175 @@ L_zzpctrck:
 	 ftnlen agent_len, ftnlen cvals_len, ftnlen type_len, ftnlen 
 	uwvars_len, ftnlen uwagnt_len)
 {
-    return pool_0_(0, kernel, unit, name__, names, nnames, agent, n, values, 
-	    found, update, start, room, cvals, ivals, type__, uwvars, uwptrs, 
-	    uwpool, uwagnt, usrctr, kernel_len, name_len, names_len, 
-	    agent_len, cvals_len, type_len, uwvars_len, uwagnt_len);
+    return pool_0_(__global_state, 0, kernel, unit, name__, names, nnames, 
+	    agent, n, values, found, update, start, room, cvals, ivals, 
+	    type__, uwvars, uwptrs, uwpool, uwagnt, usrctr, kernel_len, 
+	    name_len, names_len, agent_len, cvals_len, type_len, uwvars_len, 
+	    uwagnt_len);
     }
 
 /* Subroutine */ int clpool_(cspice_t* __global_state)
 {
-    return pool_0_(1, (char *)0, (integer *)0, (char *)0, (char *)0, (integer 
-	    *)0, (char *)0, (integer *)0, (doublereal *)0, (logical *)0, (
-	    logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, 
-	    (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
-	    integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
-	    0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 1, (char *)0, (integer *)0, (char *)0, (
+	    char *)0, (integer *)0, (char *)0, (integer *)0, (doublereal *)0, 
+	    (logical *)0, (logical *)0, (integer *)0, (integer *)0, (char *)0,
+	     (integer *)0, (char *)0, (char *)0, (integer *)0, (integer *)0, (
+	    char *)0, (integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int ldpool_(cspice_t* __global_state, char *kernel, ftnlen 
 	kernel_len)
 {
-    return pool_0_(2, kernel, (integer *)0, (char *)0, (char *)0, (integer *)
-	    0, (char *)0, (integer *)0, (doublereal *)0, (logical *)0, (
-	    logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, 
-	    (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
-	    integer *)0, kernel_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
-	    0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 2, kernel, (integer *)0, (char *)0, (char *
+	    )0, (integer *)0, (char *)0, (integer *)0, (doublereal *)0, (
+	    logical *)0, (logical *)0, (integer *)0, (integer *)0, (char *)0, 
+	    (integer *)0, (char *)0, (char *)0, (integer *)0, (integer *)0, (
+	    char *)0, (integer *)0, kernel_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int rtpool_(cspice_t* __global_state, char *name__, integer *
 	n, doublereal *values, logical *found, ftnlen name_len)
 {
-    return pool_0_(3, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, values, found, (logical *)0, (integer *)0, (
-	    integer *)0, (char *)0, (integer *)0, (char *)0, (char *)0, (
-	    integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
-	    name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0);
-    }
-
-/* Subroutine */ int expool_(cspice_t* __global_state, char *name__, logical *
-	found, ftnlen name_len)
-{
-    return pool_0_(4, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, (integer *)0, (doublereal *)0, found, (logical *)0, 
-	    (integer *)0, (integer *)0, (char *)0, (integer *)0, (char *)0, (
+    return pool_0_(__global_state, 3, (char *)0, (integer *)0, name__, (char *
+	    )0, (integer *)0, (char *)0, n, values, found, (logical *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (char *)0, (
 	    char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
 	    ftnint)0, name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
 	    ftnint)0, (ftnint)0);
     }
 
+/* Subroutine */ int expool_(cspice_t* __global_state, char *name__, logical *
+	found, ftnlen name_len)
+{
+    return pool_0_(__global_state, 4, (char *)0, (integer *)0, name__, (char *
+	    )0, (integer *)0, (char *)0, (integer *)0, (doublereal *)0, found,
+	     (logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *)
+	    0, (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
+	    integer *)0, (ftnint)0, name_len, (ftnint)0, (ftnint)0, (ftnint)0,
+	     (ftnint)0, (ftnint)0, (ftnint)0);
+    }
+
 /* Subroutine */ int wrpool_(cspice_t* __global_state, integer *unit)
 {
-    return pool_0_(5, (char *)0, unit, (char *)0, (char *)0, (integer *)0, (
-	    char *)0, (integer *)0, (doublereal *)0, (logical *)0, (logical *)
-	    0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (char *)0,
-	     (char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 5, (char *)0, unit, (char *)0, (char *)0, (
+	    integer *)0, (char *)0, (integer *)0, (doublereal *)0, (logical *)
+	    0, (logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *
+	    )0, (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
+	    integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int swpool_(cspice_t* __global_state, char *agent, integer *
 	nnames, char *names, ftnlen agent_len, ftnlen names_len)
 {
-    return pool_0_(6, (char *)0, (integer *)0, (char *)0, names, nnames, 
-	    agent, (integer *)0, (doublereal *)0, (logical *)0, (logical *)0, 
-	    (integer *)0, (integer *)0, (char *)0, (integer *)0, (char *)0, (
-	    char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
-	    ftnint)0, (ftnint)0, names_len, agent_len, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 6, (char *)0, (integer *)0, (char *)0, 
+	    names, nnames, agent, (integer *)0, (doublereal *)0, (logical *)0,
+	     (logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *)
+	    0, (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
+	    integer *)0, (ftnint)0, (ftnint)0, names_len, agent_len, (ftnint)
+	    0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int cvpool_(cspice_t* __global_state, char *agent, logical *
 	update, ftnlen agent_len)
 {
-    return pool_0_(7, (char *)0, (integer *)0, (char *)0, (char *)0, (integer 
-	    *)0, agent, (integer *)0, (doublereal *)0, (logical *)0, update, (
-	    integer *)0, (integer *)0, (char *)0, (integer *)0, (char *)0, (
-	    char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, agent_len, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 7, (char *)0, (integer *)0, (char *)0, (
+	    char *)0, (integer *)0, agent, (integer *)0, (doublereal *)0, (
+	    logical *)0, update, (integer *)0, (integer *)0, (char *)0, (
+	    integer *)0, (char *)0, (char *)0, (integer *)0, (integer *)0, (
+	    char *)0, (integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    agent_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int gcpool_(cspice_t* __global_state, char *name__, integer *
 	start, integer *room, integer *n, char *cvals, logical *found, ftnlen 
 	name_len, ftnlen cvals_len)
 {
-    return pool_0_(8, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, (doublereal *)0, found, (logical *)0, start, 
-	    room, cvals, (integer *)0, (char *)0, (char *)0, (integer *)0, (
-	    integer *)0, (char *)0, (integer *)0, (ftnint)0, name_len, (
-	    ftnint)0, (ftnint)0, cvals_len, (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 8, (char *)0, (integer *)0, name__, (char *
+	    )0, (integer *)0, (char *)0, n, (doublereal *)0, found, (logical *
+	    )0, start, room, cvals, (integer *)0, (char *)0, (char *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
+	    name_len, (ftnint)0, (ftnint)0, cvals_len, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int gdpool_(cspice_t* __global_state, char *name__, integer *
 	start, integer *room, integer *n, doublereal *values, logical *found, 
 	ftnlen name_len)
 {
-    return pool_0_(9, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, values, found, (logical *)0, start, room, (char *
-	    )0, (integer *)0, (char *)0, (char *)0, (integer *)0, (integer *)
-	    0, (char *)0, (integer *)0, (ftnint)0, name_len, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 9, (char *)0, (integer *)0, name__, (char *
+	    )0, (integer *)0, (char *)0, n, values, found, (logical *)0, 
+	    start, room, (char *)0, (integer *)0, (char *)0, (char *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
+	    name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int gipool_(cspice_t* __global_state, char *name__, integer *
 	start, integer *room, integer *n, integer *ivals, logical *found, 
 	ftnlen name_len)
 {
-    return pool_0_(10, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, (doublereal *)0, found, (logical *)0, start, 
-	    room, (char *)0, ivals, (char *)0, (char *)0, (integer *)0, (
-	    integer *)0, (char *)0, (integer *)0, (ftnint)0, name_len, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 10, (char *)0, (integer *)0, name__, (char 
+	    *)0, (integer *)0, (char *)0, n, (doublereal *)0, found, (logical 
+	    *)0, start, room, (char *)0, ivals, (char *)0, (char *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
+	    name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int dtpool_(cspice_t* __global_state, char *name__, logical *
 	found, integer *n, char *type__, ftnlen name_len, ftnlen type_len)
 {
-    return pool_0_(11, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, (doublereal *)0, found, (logical *)0, (integer *)
-	    0, (integer *)0, (char *)0, (integer *)0, type__, (char *)0, (
-	    integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
-	    name_len, (ftnint)0, (ftnint)0, (ftnint)0, type_len, (ftnint)0, (
-	    ftnint)0);
+    return pool_0_(__global_state, 11, (char *)0, (integer *)0, name__, (char 
+	    *)0, (integer *)0, (char *)0, n, (doublereal *)0, found, (logical 
+	    *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, type__, 
+	    (char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
+	    ftnint)0, name_len, (ftnint)0, (ftnint)0, (ftnint)0, type_len, (
+	    ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int pcpool_(cspice_t* __global_state, char *name__, integer *
 	n, char *cvals, ftnlen name_len, ftnlen cvals_len)
 {
-    return pool_0_(12, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, (doublereal *)0, (logical *)0, (logical *)0, (
-	    integer *)0, (integer *)0, cvals, (integer *)0, (char *)0, (char *
-	    )0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)
-	    0, name_len, (ftnint)0, (ftnint)0, cvals_len, (ftnint)0, (ftnint)
-	    0, (ftnint)0);
+    return pool_0_(__global_state, 12, (char *)0, (integer *)0, name__, (char 
+	    *)0, (integer *)0, (char *)0, n, (doublereal *)0, (logical *)0, (
+	    logical *)0, (integer *)0, (integer *)0, cvals, (integer *)0, (
+	    char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
+	    integer *)0, (ftnint)0, name_len, (ftnint)0, (ftnint)0, cvals_len,
+	     (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int pdpool_(cspice_t* __global_state, char *name__, integer *
 	n, doublereal *values, ftnlen name_len)
 {
-    return pool_0_(13, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, values, (logical *)0, (logical *)0, (integer *)0,
-	     (integer *)0, (char *)0, (integer *)0, (char *)0, (char *)0, (
-	    integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
-	    name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0);
+    return pool_0_(__global_state, 13, (char *)0, (integer *)0, name__, (char 
+	    *)0, (integer *)0, (char *)0, n, values, (logical *)0, (logical *)
+	    0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (char *)0,
+	     (char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
+	    ftnint)0, name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int pipool_(cspice_t* __global_state, char *name__, integer *
 	n, integer *ivals, ftnlen name_len)
 {
-    return pool_0_(14, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, (doublereal *)0, (logical *)0, (logical *)0, (
-	    integer *)0, (integer *)0, (char *)0, ivals, (char *)0, (char *)0,
-	     (integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
-	    name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0);
+    return pool_0_(__global_state, 14, (char *)0, (integer *)0, name__, (char 
+	    *)0, (integer *)0, (char *)0, n, (doublereal *)0, (logical *)0, (
+	    logical *)0, (integer *)0, (integer *)0, (char *)0, ivals, (char *
+	    )0, (char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)
+	    0, (ftnint)0, name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int lmpool_(cspice_t* __global_state, char *cvals, integer *
 	n, ftnlen cvals_len)
 {
-    return pool_0_(15, (char *)0, (integer *)0, (char *)0, (char *)0, (
-	    integer *)0, (char *)0, n, (doublereal *)0, (logical *)0, (
-	    logical *)0, (integer *)0, (integer *)0, cvals, (integer *)0, (
-	    char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
+    return pool_0_(__global_state, 15, (char *)0, (integer *)0, (char *)0, (
+	    char *)0, (integer *)0, (char *)0, n, (doublereal *)0, (logical *)
+	    0, (logical *)0, (integer *)0, (integer *)0, cvals, (integer *)0, 
+	    (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
 	    integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, 
 	    cvals_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
@@ -8859,67 +8863,68 @@ L_zzpctrck:
 /* Subroutine */ int szpool_(cspice_t* __global_state, char *name__, integer *
 	n, logical *found, ftnlen name_len)
 {
-    return pool_0_(16, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, (doublereal *)0, found, (logical *)0, (integer *)
-	    0, (integer *)0, (char *)0, (integer *)0, (char *)0, (char *)0, (
-	    integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
-	    name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0);
+    return pool_0_(__global_state, 16, (char *)0, (integer *)0, name__, (char 
+	    *)0, (integer *)0, (char *)0, n, (doublereal *)0, found, (logical 
+	    *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (char *)
+	    0, (char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0,
+	     (ftnint)0, name_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dvpool_(cspice_t* __global_state, char *name__, ftnlen 
 	name_len)
 {
-    return pool_0_(17, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, (integer *)0, (doublereal *)0, (logical *)0, (
-	    logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, 
-	    (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
-	    integer *)0, (ftnint)0, name_len, (ftnint)0, (ftnint)0, (ftnint)0,
-	     (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 17, (char *)0, (integer *)0, name__, (char 
+	    *)0, (integer *)0, (char *)0, (integer *)0, (doublereal *)0, (
+	    logical *)0, (logical *)0, (integer *)0, (integer *)0, (char *)0, 
+	    (integer *)0, (char *)0, (char *)0, (integer *)0, (integer *)0, (
+	    char *)0, (integer *)0, (ftnint)0, name_len, (ftnint)0, (ftnint)0,
+	     (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int gnpool_(cspice_t* __global_state, char *name__, integer *
 	start, integer *room, integer *n, char *cvals, logical *found, ftnlen 
 	name_len, ftnlen cvals_len)
 {
-    return pool_0_(18, (char *)0, (integer *)0, name__, (char *)0, (integer *)
-	    0, (char *)0, n, (doublereal *)0, found, (logical *)0, start, 
-	    room, cvals, (integer *)0, (char *)0, (char *)0, (integer *)0, (
-	    integer *)0, (char *)0, (integer *)0, (ftnint)0, name_len, (
-	    ftnint)0, (ftnint)0, cvals_len, (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 18, (char *)0, (integer *)0, name__, (char 
+	    *)0, (integer *)0, (char *)0, n, (doublereal *)0, found, (logical 
+	    *)0, start, room, cvals, (integer *)0, (char *)0, (char *)0, (
+	    integer *)0, (integer *)0, (char *)0, (integer *)0, (ftnint)0, 
+	    name_len, (ftnint)0, (ftnint)0, cvals_len, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int dwpool_(cspice_t* __global_state, char *agent, ftnlen 
 	agent_len)
 {
-    return pool_0_(19, (char *)0, (integer *)0, (char *)0, (char *)0, (
-	    integer *)0, agent, (integer *)0, (doublereal *)0, (logical *)0, (
-	    logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, 
-	    (char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, (
-	    integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, agent_len, (ftnint)
-	    0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 19, (char *)0, (integer *)0, (char *)0, (
+	    char *)0, (integer *)0, agent, (integer *)0, (doublereal *)0, (
+	    logical *)0, (logical *)0, (integer *)0, (integer *)0, (char *)0, 
+	    (integer *)0, (char *)0, (char *)0, (integer *)0, (integer *)0, (
+	    char *)0, (integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    agent_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzvupool_(cspice_t* __global_state, char *uwvars, 
 	integer *uwptrs, integer *uwpool, char *uwagnt, ftnlen uwvars_len, 
 	ftnlen uwagnt_len)
 {
-    return pool_0_(20, (char *)0, (integer *)0, (char *)0, (char *)0, (
-	    integer *)0, (char *)0, (integer *)0, (doublereal *)0, (logical *)
-	    0, (logical *)0, (integer *)0, (integer *)0, (char *)0, (integer *
-	    )0, (char *)0, uwvars, uwptrs, uwpool, uwagnt, (integer *)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, 
-	    uwvars_len, uwagnt_len);
+    return pool_0_(__global_state, 20, (char *)0, (integer *)0, (char *)0, (
+	    char *)0, (integer *)0, (char *)0, (integer *)0, (doublereal *)0, 
+	    (logical *)0, (logical *)0, (integer *)0, (integer *)0, (char *)0,
+	     (integer *)0, (char *)0, uwvars, uwptrs, uwpool, uwagnt, (
+	    integer *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, uwvars_len, uwagnt_len);
     }
 
 /* Subroutine */ int zzpctrck_(cspice_t* __global_state, integer *usrctr, 
 	logical *update)
 {
-    return pool_0_(21, (char *)0, (integer *)0, (char *)0, (char *)0, (
-	    integer *)0, (char *)0, (integer *)0, (doublereal *)0, (logical *)
-	    0, update, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
-	    char *)0, (char *)0, (integer *)0, (integer *)0, (char *)0, 
-	    usrctr, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0);
+    return pool_0_(__global_state, 21, (char *)0, (integer *)0, (char *)0, (
+	    char *)0, (integer *)0, (char *)0, (integer *)0, (doublereal *)0, 
+	    (logical *)0, update, (integer *)0, (integer *)0, (char *)0, (
+	    integer *)0, (char *)0, (char *)0, (integer *)0, (integer *)0, (
+	    char *)0, usrctr, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 

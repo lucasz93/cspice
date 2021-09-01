@@ -8,7 +8,7 @@
 
 
 typedef int zzekue06_state_t;
-static inline zzekue06_state_t* get_zzekue06_state(cspice_t* state) {
+static zzekue06_state_t* get_zzekue06_state(cspice_t* state) {
 	return 0;
 }
 

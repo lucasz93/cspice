@@ -15,20 +15,20 @@ mv_cur(f2c_state_t *f2c)	/* shouldn't use fseek because it insists on calling ff
 			f2c->f__recpos += cursor;
 			f2c->f__icptr += cursor;
 			if(f2c->f__recpos < 0)
-				err(f2c->f__elist->cierr, 110, "left off");
+				err(f2c,f2c->f__elist->cierr, 110, "left off");
 		}
 		else if(cursor > 0) {
 			if(f2c->f__recpos + cursor >= f2c->f__svic->icirlen)
-				err(f2c->f__elist->cierr, 110, "recend");
+				err(f2c,f2c->f__elist->cierr, 110, "recend");
 			if(f2c->f__hiwater <= f2c->f__recpos)
 				for(; cursor > 0; cursor--)
-					(*f2c->f__putn)(' ');
+					(*f2c->f__putn)(f2c,' ');
 			else if(f2c->f__hiwater <= f2c->f__recpos + cursor) {
 				cursor -= f2c->f__hiwater - f2c->f__recpos;
 				f2c->f__icptr += f2c->f__hiwater - f2c->f__recpos;
 				f2c->f__recpos = f2c->f__hiwater;
 				for(; cursor > 0; cursor--)
-					(*f2c->f__putn)(' ');
+					(*f2c->f__putn)(f2c,' ');
 			}
 			else {
 				f2c->f__icptr += cursor;
@@ -39,12 +39,12 @@ mv_cur(f2c_state_t *f2c)	/* shouldn't use fseek because it insists on calling ff
 	}
 	if (cursor > 0) {
 		if(f2c->f__hiwater <= f2c->f__recpos)
-			for(;cursor>0;cursor--) (*f2c->f__putn)(' ');
+			for(;cursor>0;cursor--) (*f2c->f__putn)(f2c,' ');
 		else if(f2c->f__hiwater <= f2c->f__recpos + cursor) {
 			cursor -= f2c->f__hiwater - f2c->f__recpos;
 			f2c->f__recpos = f2c->f__hiwater;
 			for(; cursor > 0; cursor--)
-				(*f2c->f__putn)(' ');
+				(*f2c->f__putn)(f2c,' ');
 		}
 		else {
 			f2c->f__recpos += cursor;
@@ -53,7 +53,7 @@ mv_cur(f2c_state_t *f2c)	/* shouldn't use fseek because it insists on calling ff
 	else if (cursor < 0)
 	{
 		if(cursor + f2c->f__recpos < 0)
-			err(f2c->f__elist->cierr,110,"left off");
+			err(f2c,f2c->f__elist->cierr,110,"left off");
 		if(f2c->f__hiwater < f2c->f__recpos)
 			f2c->f__hiwater = f2c->f__recpos;
 		f2c->f__recpos += cursor;
@@ -92,23 +92,23 @@ wrt_Z(f2c_state_t *f2c, Uint *n, int w, int minlen, ftnlen len)
 		w1++;
 	if (w1 > w)
 		for(i = 0; i < w; i++)
-			(*f2c->f__putn)('*');
+			(*f2c->f__putn)(f2c,'*');
 	else {
 		if ((minlen -= w1) > 0)
 			w1 += minlen;
 		while(--w >= w1)
-			(*f2c->f__putn)(' ');
+			(*f2c->f__putn)(f2c,' ');
 		while(--minlen >= 0)
-			(*f2c->f__putn)('0');
+			(*f2c->f__putn)(f2c,'0');
 		if (!(*s & 0xf0)) {
-			(*f2c->f__putn)(hex[*s & 0xf]);
+			(*f2c->f__putn)(f2c,hex[*s & 0xf]);
 			if (s == se)
 				return 0;
 			s += i;
 			}
 		for(;; s += i) {
-			(*f2c->f__putn)(hex[*s >> 4 & 0xf]);
-			(*f2c->f__putn)(hex[*s & 0xf]);
+			(*f2c->f__putn)(f2c,hex[*s >> 4 & 0xf]);
+			(*f2c->f__putn)(f2c,hex[*s & 0xf]);
 			if (s == se)
 				break;
 			}
@@ -131,16 +131,16 @@ wrt_I(f2c_state_t *f2c, Uint *n, int w, ftnlen len, register int base)
 	else if (len == sizeof(longint)) x = n->ili;
 #endif
 	else x=n->is;
-	ans=f__icvt(x,&ndigit,&sign, base);
+	ans=f__icvt(f2c,x,&ndigit,&sign, base);
 	spare=w-ndigit;
 	if(sign || f2c->f__cplus) spare--;
 	if(spare<0)
-		for(i=0;i<w;i++) (*f2c->f__putn)('*');
+		for(i=0;i<w;i++) (*f2c->f__putn)(f2c,'*');
 	else
-	{	for(i=0;i<spare;i++) (*f2c->f__putn)(' ');
-		if(sign) (*f2c->f__putn)('-');
-		else if(f2c->f__cplus) (*f2c->f__putn)('+');
-		for(i=0;i<ndigit;i++) (*f2c->f__putn)(*ans++);
+	{	for(i=0;i<spare;i++) (*f2c->f__putn)(f2c,' ');
+		if(sign) (*f2c->f__putn)(f2c,'-');
+		else if(f2c->f__cplus) (*f2c->f__putn)(f2c,'+');
+		for(i=0;i<ndigit;i++) (*f2c->f__putn)(f2c,*ans++);
 	}
 	return(0);
 }
@@ -159,26 +159,26 @@ wrt_IM(f2c_state_t *f2c, Uint *n, int w, int m, ftnlen len, int base)
 	else if (len == sizeof(longint)) x = n->ili;
 #endif
 	else x=n->is;
-	ans=f__icvt(x,&ndigit,&sign, base);
+	ans=f__icvt(f2c,x,&ndigit,&sign, base);
 	if(sign || f2c->f__cplus) xsign=1;
 	else xsign=0;
 	if(ndigit+xsign>w || m+xsign>w)
-	{	for(i=0;i<w;i++) (*f2c->f__putn)('*');
+	{	for(i=0;i<w;i++) (*f2c->f__putn)(f2c,'*');
 		return(0);
 	}
 	if(x==0 && m==0)
-	{	for(i=0;i<w;i++) (*f2c->f__putn)(' ');
+	{	for(i=0;i<w;i++) (*f2c->f__putn)(f2c,' ');
 		return(0);
 	}
 	if(ndigit>=m)
 		spare=w-ndigit-xsign;
 	else
 		spare=w-m-xsign;
-	for(i=0;i<spare;i++) (*f2c->f__putn)(' ');
-	if(sign) (*f2c->f__putn)('-');
-	else if(f2c->f__cplus) (*f2c->f__putn)('+');
-	for(i=0;i<m-ndigit;i++) (*f2c->f__putn)('0');
-	for(i=0;i<ndigit;i++) (*f2c->f__putn)(*ans++);
+	for(i=0;i<spare;i++) (*f2c->f__putn)(f2c,' ');
+	if(sign) (*f2c->f__putn)(f2c,'-');
+	else if(f2c->f__cplus) (*f2c->f__putn)(f2c,'+');
+	for(i=0;i<m-ndigit;i++) (*f2c->f__putn)(f2c,'0');
+	for(i=0;i<ndigit;i++) (*f2c->f__putn)(f2c,*ans++);
 	return(0);
 }
  static int
@@ -194,8 +194,8 @@ wrt_AP(f2c_state_t *f2c, char *s)
 		return i;
 	quote = *s++;
 	for(;*s;s++)
-	{	if(*s!=quote) (*f2c->f__putn)(*s);
-		else if(*++s==quote) (*f2c->f__putn)(*s);
+	{	if(*s!=quote) (*f2c->f__putn)(f2c,*s);
+		else if(*++s==quote) (*f2c->f__putn)(f2c,*s);
 		else return(1);
 	}
 	return(1);
@@ -211,7 +211,7 @@ wrt_H(f2c_state_t *f2c, int a, char *s)
 
 	if(f2c->f__cursor && (i = mv_cur(f2c)))
 		return i;
-	while(a--) (*f2c->f__putn)(*s++);
+	while(a--) (*f2c->f__putn)(f2c,*s++);
 	return(1);
 }
 #ifdef KR_headers
@@ -225,9 +225,9 @@ wrt_L(f2c_state_t *f2c, Uint *n, int len, ftnlen sz)
 	else if(sz == sizeof(char)) x = n->ic;
 	else x=n->is;
 	for(i=0;i<len-1;i++)
-		(*f2c->f__putn)(' ');
-	if(x) (*f2c->f__putn)('T');
-	else (*f2c->f__putn)('F');
+		(*f2c->f__putn)(f2c,' ');
+	if(x) (*f2c->f__putn)(f2c,'T');
+	else (*f2c->f__putn)(f2c,'F');
 	return(0);
 }
  static int
@@ -237,7 +237,7 @@ wrt_A(f2c,p,len) f2c_state_t *f2c; char *p; ftnlen len;
 wrt_A(f2c_state_t *f2c, char *p, ftnlen len)
 #endif
 {
-	while(len-- > 0) (*f2c->f__putn)(*p++);
+	while(len-- > 0) (*f2c->f__putn)(f2c,*p++);
 	return(0);
 }
  static int
@@ -249,10 +249,10 @@ wrt_AW(f2c_state_t *f2c, char * p, int w, ftnlen len)
 {
 	while(w>len)
 	{	w--;
-		(*f2c->f__putn)(' ');
+		(*f2c->f__putn)(f2c,' ');
 	}
 	while(w-- > 0)
-		(*f2c->f__putn)(*p++);
+		(*f2c->f__putn)(f2c,*p++);
 	return(0);
 }
 
@@ -268,7 +268,7 @@ wrt_G(f2c_state_t *f2c, ufloat *p, int w, int d, int e, ftnlen len)
 	if(x < 0 ) x = -x;
 	if(x<.1) {
 		if (x != 0.)
-			return(wrt_E(p,w,d,e,len));
+			return(wrt_E(f2c,p,w,d,e,len));
 		i = 1;
 		goto have_i;
 		}
@@ -279,12 +279,12 @@ wrt_G(f2c_state_t *f2c, ufloat *p, int w, int d, int e, ftnlen len)
 		f2c->f__scale = 0;
 		if(e==0) n=4;
 		else	n=e+2;
-		i=wrt_F(p,w-n,d-i,len);
-		for(j=0;j<n;j++) (*f2c->f__putn)(' ');
+		i=wrt_F(f2c,p,w-n,d-i,len);
+		for(j=0;j<n;j++) (*f2c->f__putn)(f2c,' ');
 		f2c->f__scale=oldscale;
 		return(i);
 	}
-	return(wrt_E(p,w,d,e,len));
+	return(wrt_E(f2c,p,w,d,e,len));
 }
 #ifdef KR_headers
 w_ed(f2c,p,ptr,len) f2c_state_t *f2c; struct syl *p; char *ptr; ftnlen len;
@@ -319,11 +319,11 @@ w_ed(f2c_state_t *f2c, struct syl *p, char *ptr, ftnlen len)
 	case D:
 	case E:
 	case EE:
-		return(wrt_E((ufloat *)ptr,p->p1,p->p2.i[0],p->p2.i[1],len));
+		return(wrt_E(f2c,(ufloat *)ptr,p->p1,p->p2.i[0],p->p2.i[1],len));
 	case G:
 	case GE:
 		return(wrt_G(f2c,(ufloat *)ptr,p->p1,p->p2.i[0],p->p2.i[1],len));
-	case F:	return(wrt_F((ufloat *)ptr,p->p1,p->p2.i[0],len));
+	case F:	return(wrt_F(f2c,(ufloat *)ptr,p->p1,p->p2.i[0],len));
 
 		/* Z and ZM assume 8-bit bytes. */
 
@@ -343,7 +343,7 @@ w_ned(f2c_state_t *f2c, struct syl *p)
 	default: fprintf(stderr,"w_ned, unexpected code: %d\n", p->op);
 		sig_die(f2c->f__fmtbuf, 1);
 	case SLASH:
-		return((*f2c->f__donewrec)());
+		return((*f2c->f__donewrec)(f2c));
 	case T: f2c->f__cursor = p->p1-f2c->f__recpos - 1;
 		return(1);
 	case TL: f2c->f__cursor -= p->p1;

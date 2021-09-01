@@ -8,7 +8,7 @@
 
 
 extern zzekjsrt_init_t __zzekjsrt_init;
-static inline zzekjsrt_state_t* get_zzekjsrt_state(cspice_t* state) {
+static zzekjsrt_state_t* get_zzekjsrt_state(cspice_t* state) {
 	if (!state->zzekjsrt)
 		state->zzekjsrt = __cspice_allocate_module(sizeof(
 	zzekjsrt_state_t), &__zzekjsrt_init, sizeof(__zzekjsrt_init));

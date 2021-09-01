@@ -466,7 +466,7 @@
    after the last non-blank character.  This operation is valid
    whether or not the SPICELIB routine signaled an error.
    */
-   F2C_ConvertStr ( lenout, sclkch );
+   F2C_ConvertStr ( naif_state, lenout, sclkch );
    
               
    chkout_c ( naif_state, "scdecd_c");

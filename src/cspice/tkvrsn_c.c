@@ -213,7 +213,7 @@
    /*
    Null-terminate the returned string.
    */ 
-   endPos = F_StrLen ( MAXLEN-1, verStr );
+   endPos = F_StrLen ( naif_state, MAXLEN-1, verStr );
    
    * ( verStr + endPos ) = NULLCHAR;
       

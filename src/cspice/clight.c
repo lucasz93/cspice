@@ -8,7 +8,7 @@
 
 
 typedef int clight_state_t;
-static inline clight_state_t* get_clight_state(cspice_t* state) {
+static clight_state_t* get_clight_state(cspice_t* state) {
 	return 0;
 }
 

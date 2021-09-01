@@ -8,7 +8,7 @@
 
 
 typedef int parsqs_state_t;
-static inline parsqs_state_t* get_parsqs_state(cspice_t* state) {
+static parsqs_state_t* get_parsqs_state(cspice_t* state) {
 	return 0;
 }
 

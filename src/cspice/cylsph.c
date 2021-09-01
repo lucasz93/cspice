@@ -8,7 +8,7 @@
 
 
 typedef int cylsph_state_t;
-static inline cylsph_state_t* get_cylsph_state(cspice_t* state) {
+static cylsph_state_t* get_cylsph_state(cspice_t* state) {
 	return 0;
 }
 
@@ -21,8 +21,7 @@ static inline cylsph_state_t* get_cylsph_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
-	    doublereal);
+    double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
     doublereal x;
@@ -202,8 +201,8 @@ static inline cylsph_state_t* get_cylsph_state(cspice_t* state) {
     } else {
 	x = *r__ / big;
 	y = *z__ / big;
-	rh = big * sqrt(&__global_state->f2c, x * x + y * y);
-	th = atan2(&__global_state->f2c, *r__, *z__);
+	rh = big * sqrt(x * x + y * y);
+	th = atan2(*r__, *z__);
     }
 
 /*     Move the results to output variables */

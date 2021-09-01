@@ -8,7 +8,7 @@
 
 
 extern zztwovxf_init_t __zztwovxf_init;
-static inline zztwovxf_state_t* get_zztwovxf_state(cspice_t* state) {
+static zztwovxf_state_t* get_zztwovxf_state(cspice_t* state) {
 	if (!state->zztwovxf)
 		state->zztwovxf = __cspice_allocate_module(sizeof(
 	zztwovxf_state_t), &__zztwovxf_init, sizeof(__zztwovxf_init));

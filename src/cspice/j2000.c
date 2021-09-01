@@ -8,7 +8,7 @@
 
 
 typedef int j2000_state_t;
-static inline j2000_state_t* get_j2000_state(cspice_t* state) {
+static j2000_state_t* get_j2000_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern rdkvar_init_t __rdkvar_init;
-static inline rdkvar_state_t* get_rdkvar_state(cspice_t* state) {
+static rdkvar_state_t* get_rdkvar_state(cspice_t* state) {
 	if (!state->rdkvar)
 		state->rdkvar = __cspice_allocate_module(sizeof(
 	rdkvar_state_t), &__rdkvar_init, sizeof(__rdkvar_init));

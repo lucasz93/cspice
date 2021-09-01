@@ -8,7 +8,7 @@
 
 
 extern zzspkfap_init_t __zzspkfap_init;
-static inline zzspkfap_state_t* get_zzspkfap_state(cspice_t* state) {
+static zzspkfap_state_t* get_zzspkfap_state(cspice_t* state) {
 	if (!state->zzspkfap)
 		state->zzspkfap = __cspice_allocate_module(sizeof(
 	zzspkfap_state_t), &__zzspkfap_init, sizeof(__zzspkfap_init));

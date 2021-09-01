@@ -8,7 +8,7 @@
 
 
 extern sysetc_init_t __sysetc_init;
-static inline sysetc_state_t* get_sysetc_state(cspice_t* state) {
+static sysetc_state_t* get_sysetc_state(cspice_t* state) {
 	if (!state->sysetc)
 		state->sysetc = __cspice_allocate_module(sizeof(
 	sysetc_state_t), &__sysetc_init, sizeof(__sysetc_init));

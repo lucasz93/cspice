@@ -8,7 +8,7 @@
 
 
 extern sgseqw_init_t __sgseqw_init;
-static inline sgseqw_state_t* get_sgseqw_state(cspice_t* state) {
+static sgseqw_state_t* get_sgseqw_state(cspice_t* state) {
 	if (!state->sgseqw)
 		state->sgseqw = __cspice_allocate_module(sizeof(
 	sgseqw_state_t), &__sgseqw_init, sizeof(__sgseqw_init));
@@ -4460,50 +4460,51 @@ L_sgwes:
 	integer *npkts, integer *pktsiz, doublereal *pktdat, integer *nrefs, 
 	doublereal *refdat, integer *idxtyp, ftnlen segid_len)
 {
-    return sgseqw_0_(0, handle, descr, segid, nconst, const__, npkts, pktsiz, 
-	    pktdat, nrefs, refdat, idxtyp, segid_len);
+    return sgseqw_0_(__global_state, 0, handle, descr, segid, nconst, const__,
+	     npkts, pktsiz, pktdat, nrefs, refdat, idxtyp, segid_len);
     }
 
 /* Subroutine */ int sgbwfs_(cspice_t* __global_state, integer *handle, 
 	doublereal *descr, char *segid, integer *nconst, doublereal *const__, 
 	integer *pktsiz, integer *idxtyp, ftnlen segid_len)
 {
-    return sgseqw_0_(1, handle, descr, segid, nconst, const__, (integer *)0, 
-	    pktsiz, (doublereal *)0, (integer *)0, (doublereal *)0, idxtyp, 
-	    segid_len);
+    return sgseqw_0_(__global_state, 1, handle, descr, segid, nconst, const__,
+	     (integer *)0, pktsiz, (doublereal *)0, (integer *)0, (doublereal 
+	    *)0, idxtyp, segid_len);
     }
 
 /* Subroutine */ int sgbwvs_(cspice_t* __global_state, integer *handle, 
 	doublereal *descr, char *segid, integer *nconst, doublereal *const__, 
 	integer *idxtyp, ftnlen segid_len)
 {
-    return sgseqw_0_(2, handle, descr, segid, nconst, const__, (integer *)0, (
-	    integer *)0, (doublereal *)0, (integer *)0, (doublereal *)0, 
-	    idxtyp, segid_len);
+    return sgseqw_0_(__global_state, 2, handle, descr, segid, nconst, const__,
+	     (integer *)0, (integer *)0, (doublereal *)0, (integer *)0, (
+	    doublereal *)0, idxtyp, segid_len);
     }
 
 /* Subroutine */ int sgwfpk_(cspice_t* __global_state, integer *handle, 
 	integer *npkts, doublereal *pktdat, integer *nrefs, doublereal *
 	refdat)
 {
-    return sgseqw_0_(3, handle, (doublereal *)0, (char *)0, (integer *)0, (
-	    doublereal *)0, npkts, (integer *)0, pktdat, nrefs, refdat, (
-	    integer *)0, (ftnint)0);
+    return sgseqw_0_(__global_state, 3, handle, (doublereal *)0, (char *)0, (
+	    integer *)0, (doublereal *)0, npkts, (integer *)0, pktdat, nrefs, 
+	    refdat, (integer *)0, (ftnint)0);
     }
 
 /* Subroutine */ int sgwvpk_(cspice_t* __global_state, integer *handle, 
 	integer *npkts, integer *pktsiz, doublereal *pktdat, integer *nrefs, 
 	doublereal *refdat)
 {
-    return sgseqw_0_(4, handle, (doublereal *)0, (char *)0, (integer *)0, (
-	    doublereal *)0, npkts, pktsiz, pktdat, nrefs, refdat, (integer *)
-	    0, (ftnint)0);
+    return sgseqw_0_(__global_state, 4, handle, (doublereal *)0, (char *)0, (
+	    integer *)0, (doublereal *)0, npkts, pktsiz, pktdat, nrefs, 
+	    refdat, (integer *)0, (ftnint)0);
     }
 
 /* Subroutine */ int sgwes_(cspice_t* __global_state, integer *handle)
 {
-    return sgseqw_0_(5, handle, (doublereal *)0, (char *)0, (integer *)0, (
-	    doublereal *)0, (integer *)0, (integer *)0, (doublereal *)0, (
-	    integer *)0, (doublereal *)0, (integer *)0, (ftnint)0);
+    return sgseqw_0_(__global_state, 5, handle, (doublereal *)0, (char *)0, (
+	    integer *)0, (doublereal *)0, (integer *)0, (integer *)0, (
+	    doublereal *)0, (integer *)0, (doublereal *)0, (integer *)0, (
+	    ftnint)0);
     }
 

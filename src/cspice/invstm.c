@@ -8,7 +8,7 @@
 
 
 extern invstm_init_t __invstm_init;
-static inline invstm_state_t* get_invstm_state(cspice_t* state) {
+static invstm_state_t* get_invstm_state(cspice_t* state) {
 	if (!state->invstm)
 		state->invstm = __cspice_allocate_module(sizeof(
 	invstm_state_t), &__invstm_init, sizeof(__invstm_init));

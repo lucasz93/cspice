@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
    
    
-   int moved_ ( doublereal   * arrfrm,
+   int moved_ ( void         * naif_state,
+                doublereal   * arrfrm,
                 integer      * ndim,
                 doublereal   * arrto  ) 
 

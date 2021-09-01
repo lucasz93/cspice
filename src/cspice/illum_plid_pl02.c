@@ -61,7 +61,8 @@
    #include "SpiceZmc.h"
  
 
-   void illum_plid_pl02 ( SpiceInt               handle,
+   void illum_plid_pl02 ( void                 * naif_state,
+                          SpiceInt               handle,
                           ConstSpiceDLADescr   * dladsc,
                           ConstSpiceChar       * target,
                           SpiceDouble            et,
@@ -1185,7 +1186,7 @@
    /*
    Prototypes 
    */
-   int dskgd_(integer *handle, integer *dladsc, doublereal *dskdsc);
+   int dskgd_(void *naif_state, integer *handle, integer *dladsc, doublereal *dskdsc);
 
 
    /*
@@ -1247,12 +1248,13 @@
    Check the aberration correction string:  reject transmission
    corrections. 
    */
-   ljust_ ( ( char * ) abcorr,
+   ljust_ ( naif_state, 
+            ( char * ) abcorr,
             ( char * ) loccor,
             ( ftnlen ) strlen(abcorr),
             ( ftnlen ) CORLEN-1         );
 
-   if (  matchi_c( loccor, "X*", '*', '?' )  )
+   if (  matchi_c( naif_state, loccor, "X*", '*', '?' )  )
    {
       setmsg_c ( naif_state, "Input aberration correction specification # "
                  "calls for transmission-style corrections."    );
@@ -1267,9 +1269,9 @@
    /*
    Obtain integer codes for the target and observer. 
    */ 
-   bods2c_c ( target, &trgcde, &found );
+   bods2c_c ( naif_state, target, &trgcde, &found );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "illum_plid_pl02" );
       return;
@@ -1287,9 +1289,9 @@
       return;
    }
 
-   bods2c_c ( obsrvr, &obscde, &found );
+   bods2c_c ( naif_state, obsrvr, &obscde, &found );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "illum_plid_pl02" );
       return;
@@ -1328,9 +1330,9 @@
    has type 2, we can't use the type 2 fetch routine for this operation.
    */
  
-   dskgd_c ( handle, dladsc, &dskdsc );
+   dskgd_c ( naif_state, handle, dladsc, &dskdsc );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_plid_pl02" );
       return;
@@ -1370,9 +1372,9 @@
    */
    frcode = dskdsc.frmcde;
    
-   frmnam_c ( frcode, FRNMLN, fixref );
+   frmnam_c ( naif_state, frcode, FRNMLN, fixref );
 
-   if ( eqstr_c( fixref, " " ) )
+   if ( eqstr_c( naif_state, fixref, " " ) )
    { 
       setmsg_c ( naif_state, "No body-fixed frame name is associated with "
                  "frame ID code #; a frame kernel must be "
@@ -1409,9 +1411,9 @@
  
    Get the outward normal vector at the input plate.
    */ 
-   dskn02_c ( handle, dladsc, plid, normal );
+   dskn02_c ( naif_state, handle, dladsc, plid, normal );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_plid_pl02" );
       return;
@@ -1424,19 +1426,21 @@
    the target-observer vector. Let `trgepc' be the epoch associated with
    the target.
    */
-   spkcpt_c ( spoint,   target, fixref, et,     fixref,
+   spkcpt_c ( naif_state, 
+              spoint,   target, fixref, et,     fixref,
               "TARGET", abcorr, obsrvr, trgsta, &lttarg );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_plid_pl02" );
       return;
    }
 
-   vequ_c   ( trgsta, srfvec );
-   vminus_c ( srfvec, obsvec );
+   vequ_c   ( naif_state, trgsta, srfvec );
+   vminus_c ( naif_state, srfvec, obsvec );
 
-   zzcorepc_ ( ( char        * ) abcorr,
+   zzcorepc_ ( naif_state, 
+               ( char        * ) abcorr,
                ( doublereal  * ) &et, 
                ( doublereal  * ) &lttarg, 
                ( doublereal  * ) trgepc, 
@@ -1446,10 +1450,11 @@
    Now find the apparent position of the Sun as seen from the
    target center at `trgepc'. 
    */
-   spkcpo_c ( "Sun",  *trgepc, fixref, "OBSERVER", abcorr, 
+   spkcpo_c ( naif_state, 
+              "Sun",  *trgepc, fixref, "OBSERVER", abcorr, 
               spoint, target,  fixref, sunsta,     &ltsun  );
  
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_plid_pl02" );
       return;
@@ -1460,9 +1465,9 @@
    separation in radians.
    */
 
-   *phase   =  vsep_c ( sunsta, obsvec );
-   *solar   =  vsep_c ( normal, sunsta );
-   *emissn  =  vsep_c ( normal, obsvec );
+   *phase   =  vsep_c ( naif_state, sunsta, obsvec );
+   *solar   =  vsep_c ( naif_state, normal, sunsta );
+   *emissn  =  vsep_c ( naif_state, normal, obsvec );
 
 
    /*
@@ -1475,11 +1480,11 @@
    maxrad = dskdsc.co3max;
    tol    = TOLSCL * maxrad;
    
-   vlcom_c ( 1.0, spoint, tol, normal, shiftpt );
+   vlcom_c ( naif_state, 1.0, spoint, tol, normal, shiftpt );
 
-   dskx02_c ( handle, dladsc, shiftpt, obsvec, &xplid, xpt, &found );
+   dskx02_c ( naif_state, handle, dladsc, shiftpt, obsvec, &xplid, xpt, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_plid_pl02" );
       return;
@@ -1491,23 +1496,23 @@
    numerical errors, take the emission angle into account.
    */
 
-   *visible = ( !found )  &&  ( *emissn < halfpi_c() );
+   *visible = ( !found )  &&  ( *emissn < halfpi_c(naif_state) );
 
 
    /*
    Perform the analogous computation for the surface point to sun
    vector. 
    */
-   dskx02_c ( handle, dladsc, shiftpt, sunsta, &xplid, xpt, &found );
+   dskx02_c ( naif_state, handle, dladsc, shiftpt, sunsta, &xplid, xpt, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_plid_pl02" );
       return;
    }
 
 
-   *lit = ( !found )  &&  ( *solar < halfpi_c() );
+   *lit = ( !found )  &&  ( *solar < halfpi_c(naif_state) );
    
 
    chkout_c ( naif_state, "illum_plid_pl02" );

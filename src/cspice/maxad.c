@@ -8,7 +8,7 @@
 
 
 typedef int maxad_state_t;
-static inline maxad_state_t* get_maxad_state(cspice_t* state) {
+static maxad_state_t* get_maxad_state(cspice_t* state) {
 	return 0;
 }
 

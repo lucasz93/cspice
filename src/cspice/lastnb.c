@@ -8,7 +8,7 @@
 
 
 typedef int lastnb_state_t;
-static inline lastnb_state_t* get_lastnb_state(cspice_t* state) {
+static lastnb_state_t* get_lastnb_state(cspice_t* state) {
 	return 0;
 }
 

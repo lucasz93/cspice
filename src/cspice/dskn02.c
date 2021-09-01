@@ -8,7 +8,7 @@
 
 
 extern dskn02_init_t __dskn02_init;
-static inline dskn02_state_t* get_dskn02_state(cspice_t* state) {
+static dskn02_state_t* get_dskn02_state(cspice_t* state) {
 	if (!state->dskn02)
 		state->dskn02 = __cspice_allocate_module(sizeof(
 	dskn02_state_t), &__dskn02_init, sizeof(__dskn02_init));

@@ -8,7 +8,7 @@
 
 
 extern tpartv_init_t __tpartv_init;
-static inline tpartv_state_t* get_tpartv_state(cspice_t* state) {
+static tpartv_state_t* get_tpartv_state(cspice_t* state) {
 	if (!state->tpartv)
 		state->tpartv = __cspice_allocate_module(sizeof(
 	tpartv_state_t), &__tpartv_init, sizeof(__tpartv_init));

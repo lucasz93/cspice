@@ -213,7 +213,7 @@
    The output file name is a Fortranish type string.
    Convert the string to C type.
    */
-   F2C_ConvertStr ( namlen, fname );
+   F2C_ConvertStr ( naif_state, namlen, fname );
 
 
    chkout_c ( naif_state, "dashfn_c" );

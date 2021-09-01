@@ -8,7 +8,7 @@
 
 
 extern dafrcr_init_t __dafrcr_init;
-static inline dafrcr_state_t* get_dafrcr_state(cspice_t* state) {
+static dafrcr_state_t* get_dafrcr_state(cspice_t* state) {
 	if (!state->dafrcr)
 		state->dafrcr = __cspice_allocate_module(sizeof(
 	dafrcr_state_t), &__dafrcr_init, sizeof(__dafrcr_init));

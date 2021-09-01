@@ -8,7 +8,7 @@
 
 
 typedef int dsphdr_state_t;
-static inline dsphdr_state_t* get_dsphdr_state(cspice_t* state) {
+static dsphdr_state_t* get_dsphdr_state(cspice_t* state) {
 	return 0;
 }
 

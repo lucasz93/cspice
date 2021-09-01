@@ -8,7 +8,7 @@
 
 
 extern sxform_init_t __sxform_init;
-static inline sxform_state_t* get_sxform_state(cspice_t* state) {
+static sxform_state_t* get_sxform_state(cspice_t* state) {
 	if (!state->sxform)
 		state->sxform = __cspice_allocate_module(sizeof(
 	sxform_state_t), &__sxform_init, sizeof(__sxform_init));

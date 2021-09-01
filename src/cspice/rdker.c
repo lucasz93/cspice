@@ -8,7 +8,7 @@
 
 
 extern rdker_init_t __rdker_init;
-static inline rdker_state_t* get_rdker_state(cspice_t* state) {
+static rdker_state_t* get_rdker_state(cspice_t* state) {
 	if (!state->rdker)
 		state->rdker = __cspice_allocate_module(sizeof(rdker_state_t),
 	 &__rdker_init, sizeof(__rdker_init));
@@ -1060,27 +1060,28 @@ L_rdklin:
 	line, integer *number, logical *eof, ftnlen kernel_len, ftnlen 
 	line_len)
 {
-    return rdker_0_(0, kernel, line, number, eof, kernel_len, line_len);
+    return rdker_0_(__global_state, 0, kernel, line, number, eof, kernel_len, 
+	    line_len);
     }
 
 /* Subroutine */ int rdknew_(cspice_t* __global_state, char *kernel, ftnlen 
 	kernel_len)
 {
-    return rdker_0_(1, kernel, (char *)0, (integer *)0, (logical *)0, 
-	    kernel_len, (ftnint)0);
+    return rdker_0_(__global_state, 1, kernel, (char *)0, (integer *)0, (
+	    logical *)0, kernel_len, (ftnint)0);
     }
 
 /* Subroutine */ int rdkdat_(cspice_t* __global_state, char *line, logical *
 	eof, ftnlen line_len)
 {
-    return rdker_0_(2, (char *)0, line, (integer *)0, eof, (ftnint)0, 
-	    line_len);
+    return rdker_0_(__global_state, 2, (char *)0, line, (integer *)0, eof, (
+	    ftnint)0, line_len);
     }
 
 /* Subroutine */ int rdklin_(cspice_t* __global_state, char *kernel, integer *
 	number, ftnlen kernel_len)
 {
-    return rdker_0_(3, kernel, (char *)0, number, (logical *)0, kernel_len, (
-	    ftnint)0);
+    return rdker_0_(__global_state, 3, kernel, (char *)0, number, (logical *)
+	    0, kernel_len, (ftnint)0);
     }
 

@@ -8,7 +8,7 @@
 
 
 extern xf2eul_init_t __xf2eul_init;
-static inline xf2eul_state_t* get_xf2eul_state(cspice_t* state) {
+static xf2eul_state_t* get_xf2eul_state(cspice_t* state) {
 	if (!state->xf2eul)
 		state->xf2eul = __cspice_allocate_module(sizeof(
 	xf2eul_state_t), &__xf2eul_init, sizeof(__xf2eul_init));
@@ -29,7 +29,7 @@ static inline xf2eul_state_t* get_xf2eul_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal drdt[9]	/* was [3][3] */;
@@ -786,14 +786,14 @@ static inline xf2eul_state_t* get_xf2eul_state(cspice_t* state) {
 
 /*     Compute the various sines and cosines that we need. */
 
-    ca = cos(&__global_state->f2c, eulang[0]);
-    sa = sin(&__global_state->f2c, eulang[0]);
+    ca = cos(eulang[0]);
+    sa = sin(eulang[0]);
     if (*axisa == *axisc) {
-	u = cos(&__global_state->f2c, eulang[1]);
-	v = d__ * sin(&__global_state->f2c, eulang[1]);
+	u = cos(eulang[1]);
+	v = d__ * sin(eulang[1]);
     } else {
-	u = -d__ * sin(&__global_state->f2c, eulang[1]);
-	v = cos(&__global_state->f2c, eulang[1]);
+	u = -d__ * sin(eulang[1]);
+	v = cos(eulang[1]);
     }
 
 /*     To avoid floating point overflows we make sure that we */
@@ -1172,14 +1172,14 @@ L_eul2xf:
 
 /*     Compute the various sines and cosines that we need. */
 
-    ca = cos(&__global_state->f2c, locang[0]);
-    sa = sin(&__global_state->f2c, locang[0]);
+    ca = cos(locang[0]);
+    sa = sin(locang[0]);
     if (locaxa == locaxc) {
-	u = cos(&__global_state->f2c, locang[1]);
-	v = d__ * sin(&__global_state->f2c, locang[1]);
+	u = cos(locang[1]);
+	v = d__ * sin(locang[1]);
     } else {
-	u = -d__ * sin(&__global_state->f2c, locang[1]);
-	v = cos(&__global_state->f2c, locang[1]);
+	u = -d__ * sin(locang[1]);
+	v = cos(locang[1]);
     }
 
 /*                            t */
@@ -1271,12 +1271,14 @@ L_eul2xf:
 	integer *axisa, integer *axisb, integer *axisc, doublereal *eulang, 
 	logical *unique)
 {
-    return xf2eul_0_(0, xform, axisa, axisb, axisc, eulang, unique);
+    return xf2eul_0_(__global_state, 0, xform, axisa, axisb, axisc, eulang, 
+	    unique);
     }
 
 /* Subroutine */ int eul2xf_(cspice_t* __global_state, doublereal *eulang, 
 	integer *axisa, integer *axisb, integer *axisc, doublereal *xform)
 {
-    return xf2eul_0_(1, xform, axisa, axisb, axisc, eulang, (logical *)0);
+    return xf2eul_0_(__global_state, 1, xform, axisa, axisb, axisc, eulang, (
+	    logical *)0);
     }
 

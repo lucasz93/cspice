@@ -8,7 +8,7 @@
 
 
 typedef int zztpats_state_t;
-static inline zztpats_state_t* get_zztpats_state(cspice_t* state) {
+static zztpats_state_t* get_zztpats_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern unitim_init_t __unitim_init;
-static inline unitim_state_t* get_unitim_state(cspice_t* state) {
+static unitim_state_t* get_unitim_state(cspice_t* state) {
 	if (!state->unitim)
 		state->unitim = __cspice_allocate_module(sizeof(
 	unitim_state_t), &__unitim_init, sizeof(__unitim_init));
@@ -35,7 +35,7 @@ doublereal unitim_(cspice_t* __global_state, doublereal *epoch, char *insys,
 	    ftnlen);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
 	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
-    double sin(f2c_state_t*, doublereal);
+    double sin(doublereal);
 
     /* Local variables */
     extern logical setc_(cspice_t*, char *, char *, char *, ftnlen, ftnlen, 
@@ -588,9 +588,8 @@ doublereal unitim_(cspice_t* __global_state, doublereal *epoch, char *insys,
 
     if (intdt && outtdb) {
 	tdt = mytime;
-	tdb = tdt + __state->k * sin(&__global_state->f2c, __state->m[0] + 
-		__state->m[1] * tdt + __state->eb * sin(&__global_state->f2c, 
-		__state->m[0] + __state->m[1] * tdt));
+	tdb = tdt + __state->k * sin(__state->m[0] + __state->m[1] * tdt + 
+		__state->eb * sin(__state->m[0] + __state->m[1] * tdt));
 	mytime = tdb;
     } else if (intdb && outtdt) {
 
@@ -717,10 +716,8 @@ doublereal unitim_(cspice_t* __global_state, doublereal *epoch, char *insys,
 	tdb = mytime;
 	tdt = tdb;
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    tdt = tdb - __state->k * sin(&__global_state->f2c, __state->m[0] 
-		    + __state->m[1] * tdt + __state->eb * sin(&
-		    __global_state->f2c, __state->m[0] + __state->m[1] * tdt))
-		    ;
+	    tdt = tdb - __state->k * sin(__state->m[0] + __state->m[1] * tdt 
+		    + __state->eb * sin(__state->m[0] + __state->m[1] * tdt));
 	}
 	mytime = tdt;
     }

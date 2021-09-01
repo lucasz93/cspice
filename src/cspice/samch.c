@@ -8,7 +8,7 @@
 
 
 typedef int samch_state_t;
-static inline samch_state_t* get_samch_state(cspice_t* state) {
+static samch_state_t* get_samch_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern idw2at_init_t __idw2at_init;
-static inline idw2at_state_t* get_idw2at_state(cspice_t* state) {
+static idw2at_state_t* get_idw2at_state(cspice_t* state) {
 	if (!state->idw2at)
 		state->idw2at = __cspice_allocate_module(sizeof(
 	idw2at_state_t), &__idw2at_init, sizeof(__idw2at_init));

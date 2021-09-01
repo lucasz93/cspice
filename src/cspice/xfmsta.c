@@ -8,7 +8,7 @@
 
 
 extern xfmsta_init_t __xfmsta_init;
-static inline xfmsta_state_t* get_xfmsta_state(cspice_t* state) {
+static xfmsta_state_t* get_xfmsta_state(cspice_t* state) {
 	if (!state->xfmsta)
 		state->xfmsta = __cspice_allocate_module(sizeof(
 	xfmsta_state_t), &__xfmsta_init, sizeof(__xfmsta_init));
@@ -29,7 +29,7 @@ static inline xfmsta_state_t* get_xfmsta_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
@@ -971,9 +971,8 @@ static inline xfmsta_state_t* get_xfmsta_state(cspice_t* state) {
 /*           divided by the equatorial radius is greater than DPMAX, */
 /*           a numeric overflow may occur, so an error is signaled. */
 
-	    if (sqrt(&__global_state->f2c, (d__1 = radii[0] - radii[2], abs(
-		    d__1))) / sqrt(&__global_state->f2c, (abs(radii[0]))) >= 
-		    sqrt(&__global_state->f2c, dpmax_(__global_state))) {
+	    if (sqrt((d__1 = radii[0] - radii[2], abs(d__1))) / sqrt((abs(
+		    radii[0]))) >= sqrt(dpmax_(__global_state))) {
 		setmsg_(__global_state, "The equatorial radius for # has a v"
 			"alue of # and a polar radius of #. The flattening co"
 			"efficient cannot be calculated due to numeric overfl"
@@ -1033,7 +1032,7 @@ static inline xfmsta_state_t* get_xfmsta_state(cspice_t* state) {
 /*     TOOBIG is used for preventing numerical overflow. The square */
 /*     roots of values are used to safely check if overflow will occur. */
 
-    toobig = sqrt(&__global_state->f2c, dpmax_(__global_state) / 100.);
+    toobig = sqrt(dpmax_(__global_state) / 100.);
     if (isys != 1) {
 
 /*        To rectangular... */
@@ -1104,14 +1103,12 @@ static inline xfmsta_state_t* get_xfmsta_state(cspice_t* state) {
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    for (j = 1; j <= 3; ++j) {
-		sqtmp = sqrt(&__global_state->f2c, (d__1 = jacobi[(i__1 = i__ 
-			+ j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
-			__global_state->f2c, "jacobi", i__1, "xfmsta_", (
-			ftnlen)1092)], abs(d__1))) * sqrt(&
-			__global_state->f2c, (d__2 = istate[(i__2 = j + 2) < 
-			6 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
-			"istate", i__2, "xfmsta_", (ftnlen)1092)], abs(d__2)))
-			;
+		sqtmp = sqrt((d__1 = jacobi[(i__1 = i__ + j * 3 - 4) < 9 && 0 
+			<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "jacobi"
+			, i__1, "xfmsta_", (ftnlen)1092)], abs(d__1))) * sqrt(
+			(d__2 = istate[(i__2 = j + 2) < 6 && 0 <= i__2 ? i__2 
+			: s_rnge(&__global_state->f2c, "istate", i__2, "xfms"
+			"ta_", (ftnlen)1092)], abs(d__2)));
 		if (sqtmp > toobig) {
 		    setmsg_(__global_state, "The product of the Jacobian and"
 			    " velocity may cause numeric overflow.", (ftnlen)
@@ -1314,13 +1311,12 @@ static inline xfmsta_state_t* get_xfmsta_state(cspice_t* state) {
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    for (j = 1; j <= 3; ++j) {
-		sqtmp = sqrt(&__global_state->f2c, (d__1 = jacobi[(i__1 = i__ 
-			+ j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
-			__global_state->f2c, "jacobi", i__1, "xfmsta_", (
-			ftnlen)1352)], abs(d__1))) * sqrt(&
-			__global_state->f2c, (d__2 = ivel[(i__2 = j - 1) < 3 
-			&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
-			"ivel", i__2, "xfmsta_", (ftnlen)1352)], abs(d__2)));
+		sqtmp = sqrt((d__1 = jacobi[(i__1 = i__ + j * 3 - 4) < 9 && 0 
+			<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "jacobi"
+			, i__1, "xfmsta_", (ftnlen)1352)], abs(d__1))) * sqrt(
+			(d__2 = ivel[(i__2 = j - 1) < 3 && 0 <= i__2 ? i__2 : 
+			s_rnge(&__global_state->f2c, "ivel", i__2, "xfmsta_", 
+			(ftnlen)1352)], abs(d__2)));
 		if (sqtmp > toobig) {
 		    setmsg_(__global_state, "The product of the Jacobian and"
 			    " velocity may cause numeric overflow.", (ftnlen)

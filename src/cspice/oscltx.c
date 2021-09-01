@@ -8,7 +8,7 @@
 
 
 extern oscltx_init_t __oscltx_init;
-static inline oscltx_state_t* get_oscltx_state(cspice_t* state) {
+static oscltx_state_t* get_oscltx_state(cspice_t* state) {
 	if (!state->oscltx)
 		state->oscltx = __cspice_allocate_module(sizeof(
 	oscltx_state_t), &__oscltx_init, sizeof(__oscltx_init));

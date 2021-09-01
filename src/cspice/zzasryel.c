@@ -8,7 +8,7 @@
 
 
 extern zzasryel_init_t __zzasryel_init;
-static inline zzasryel_state_t* get_zzasryel_state(cspice_t* state) {
+static zzasryel_state_t* get_zzasryel_state(cspice_t* state) {
 	if (!state->zzasryel)
 		state->zzasryel = __cspice_allocate_module(sizeof(
 	zzasryel_state_t), &__zzasryel_init, sizeof(__zzasryel_init));
@@ -27,8 +27,7 @@ static inline zzasryel_state_t* get_zzasryel_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
-	    f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal), sqrt(doublereal);
 
     /* Local variables */
     doublereal diff[3];
@@ -731,8 +730,8 @@ static inline zzasryel_state_t* get_zzasryel_state(cspice_t* state) {
     i__1 = npt - 1;
     for (i__ = 0; i__ <= i__1; ++i__) {
 	theta = i__ * delta;
-	d__1 = cos(&__global_state->f2c, theta);
-	d__2 = sin(&__global_state->f2c, theta);
+	d__1 = cos(theta);
+	d__2 = sin(theta);
 	vlcom3_(__global_state, &__state->c_b26, v2, &d__1, smajor, &d__2, 
 		sminor, diff);
 	vhat_(__global_state, diff, udiff);
@@ -775,7 +774,7 @@ static inline zzasryel_state_t* get_zzasryel_state(cspice_t* state) {
 /*                          UPPER  - LOWER                        2 */
 
 
-    gr = (3. - sqrt(&__global_state->f2c, 5.)) / 2.;
+    gr = (3. - sqrt(5.)) / 2.;
     lower = p2 / npt * (extidx - 1);
     upper = p2 / npt * (extidx + 1);
 
@@ -841,8 +840,8 @@ static inline zzasryel_state_t* get_zzasryel_state(cspice_t* state) {
 /*        BTWPRX.  To do this, we need the proxy function value at */
 /*        NEWPT. */
 
-	d__1 = cos(&__global_state->f2c, newpt);
-	d__2 = sin(&__global_state->f2c, newpt);
+	d__1 = cos(newpt);
+	d__2 = sin(newpt);
 	vlcom3_(__global_state, &__state->c_b26, v2, &d__1, smajor, &d__2, 
 		sminor, diff);
 	vhat_(__global_state, diff, udiff);

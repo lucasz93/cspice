@@ -8,7 +8,7 @@
 
 
 extern dasa2l_init_t __dasa2l_init;
-static inline dasa2l_state_t* get_dasa2l_state(cspice_t* state) {
+static dasa2l_state_t* get_dasa2l_state(cspice_t* state) {
 	if (!state->dasa2l)
 		state->dasa2l = __cspice_allocate_module(sizeof(
 	dasa2l_state_t), &__dasa2l_init, sizeof(__dasa2l_init));

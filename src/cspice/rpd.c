@@ -8,7 +8,7 @@
 
 
 extern rpd_init_t __rpd_init;
-static inline rpd_state_t* get_rpd_state(cspice_t* state) {
+static rpd_state_t* get_rpd_state(cspice_t* state) {
 	if (!state->rpd)
 		state->rpd = __cspice_allocate_module(sizeof(rpd_state_t), &
 	__rpd_init, sizeof(__rpd_init));
@@ -26,7 +26,7 @@ doublereal rpd_(cspice_t* __global_state)
     doublereal ret_val;
 
     /* Builtin functions */
-    double acos(f2c_state_t*, doublereal);
+    double acos(doublereal);
 
 
     /* Module state */
@@ -163,7 +163,7 @@ doublereal rpd_(cspice_t* __global_state)
 /*     What is there to say? */
 
     if (__state->value == 0.) {
-	__state->value = acos(&__global_state->f2c, -1.) / 180.;
+	__state->value = acos(-1.) / 180.;
     }
     ret_val = __state->value;
     return ret_val;

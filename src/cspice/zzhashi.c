@@ -8,7 +8,7 @@
 
 
 typedef int zzhashi_state_t;
-static inline zzhashi_state_t* get_zzhashi_state(cspice_t* state) {
+static zzhashi_state_t* get_zzhashi_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern ckmp06_init_t __ckmp06_init;
-static inline ckmp06_state_t* get_ckmp06_state(cspice_t* state) {
+static ckmp06_state_t* get_ckmp06_state(cspice_t* state) {
 	if (!state->ckmp06)
 		state->ckmp06 = __cspice_allocate_module(sizeof(
 	ckmp06_state_t), &__ckmp06_init, sizeof(__ckmp06_init));

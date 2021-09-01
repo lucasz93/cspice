@@ -8,7 +8,7 @@
 
 
 typedef int ljust_state_t;
-static inline ljust_state_t* get_ljust_state(cspice_t* state) {
+static ljust_state_t* get_ljust_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int xf2rav_state_t;
-static inline xf2rav_state_t* get_xf2rav_state(cspice_t* state) {
+static xf2rav_state_t* get_xf2rav_state(cspice_t* state) {
 	return 0;
 }
 

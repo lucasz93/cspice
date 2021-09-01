@@ -8,7 +8,7 @@
 
 
 extern zztime_init_t __zztime_init;
-static inline zztime_state_t* get_zztime_state(cspice_t* state) {
+static zztime_state_t* get_zztime_state(cspice_t* state) {
 	if (!state->zztime)
 		state->zztime = __cspice_allocate_module(sizeof(
 	zztime_state_t), &__zztime_init, sizeof(__zztime_init));
@@ -4387,73 +4387,76 @@ logical zztime_(cspice_t* __global_state, char *string, char *transl, char *
 	*e, logical *l2r, logical *yabbrv, ftnlen string_len, ftnlen 
 	transl_len, ftnlen letter_len, ftnlen error_len, ftnlen pic_len)
 {
-    return zztime_0_(0, string, transl, letter, error, pic, tvec, b, e, l2r, 
-	    yabbrv, string_len, transl_len, letter_len, error_len, pic_len);
+    return zztime_0_(__global_state, 0, string, transl, letter, error, pic, 
+	    tvec, b, e, l2r, yabbrv, string_len, transl_len, letter_len, 
+	    error_len, pic_len);
     }
 
 logical zzcmbt_(cspice_t* __global_state, char *string, char *letter, logical 
 	*l2r, ftnlen string_len, ftnlen letter_len)
 {
-    return zztime_0_(1, string, (char *)0, letter, (char *)0, (char *)0, (
-	    doublereal *)0, (integer *)0, (integer *)0, l2r, (logical *)0, 
-	    string_len, (ftnint)0, letter_len, (ftnint)0, (ftnint)0);
+    return zztime_0_(__global_state, 1, string, (char *)0, letter, (char *)0, 
+	    (char *)0, (doublereal *)0, (integer *)0, (integer *)0, l2r, (
+	    logical *)0, string_len, (ftnint)0, letter_len, (ftnint)0, (
+	    ftnint)0);
     }
 
 logical zzgrep_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
-    return zztime_0_(2, string, (char *)0, (char *)0, (char *)0, (char *)0, (
-	    doublereal *)0, (integer *)0, (integer *)0, (logical *)0, (
-	    logical *)0, string_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
-	    0);
+    return zztime_0_(__global_state, 2, string, (char *)0, (char *)0, (char *)
+	    0, (char *)0, (doublereal *)0, (integer *)0, (integer *)0, (
+	    logical *)0, (logical *)0, string_len, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0);
     }
 
 logical zzispt_(cspice_t* __global_state, char *string, integer *b, integer *
 	e, ftnlen string_len)
 {
-    return zztime_0_(3, string, (char *)0, (char *)0, (char *)0, (char *)0, (
-	    doublereal *)0, b, e, (logical *)0, (logical *)0, string_len, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return zztime_0_(__global_state, 3, string, (char *)0, (char *)0, (char *)
+	    0, (char *)0, (doublereal *)0, b, e, (logical *)0, (logical *)0, 
+	    string_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 logical zzist_(cspice_t* __global_state, char *letter, ftnlen letter_len)
 {
-    return zztime_0_(4, (char *)0, (char *)0, letter, (char *)0, (char *)0, (
-	    doublereal *)0, (integer *)0, (integer *)0, (logical *)0, (
-	    logical *)0, (ftnint)0, (ftnint)0, letter_len, (ftnint)0, (ftnint)
-	    0);
+    return zztime_0_(__global_state, 4, (char *)0, (char *)0, letter, (char *)
+	    0, (char *)0, (doublereal *)0, (integer *)0, (integer *)0, (
+	    logical *)0, (logical *)0, (ftnint)0, (ftnint)0, letter_len, (
+	    ftnint)0, (ftnint)0);
     }
 
 logical zznote_(cspice_t* __global_state, char *letter, integer *b, integer *
 	e, ftnlen letter_len)
 {
-    return zztime_0_(5, (char *)0, (char *)0, letter, (char *)0, (char *)0, (
-	    doublereal *)0, b, e, (logical *)0, (logical *)0, (ftnint)0, (
-	    ftnint)0, letter_len, (ftnint)0, (ftnint)0);
+    return zztime_0_(__global_state, 5, (char *)0, (char *)0, letter, (char *)
+	    0, (char *)0, (doublereal *)0, b, e, (logical *)0, (logical *)0, (
+	    ftnint)0, (ftnint)0, letter_len, (ftnint)0, (ftnint)0);
     }
 
 logical zzremt_(cspice_t* __global_state, char *letter, ftnlen letter_len)
 {
-    return zztime_0_(6, (char *)0, (char *)0, letter, (char *)0, (char *)0, (
-	    doublereal *)0, (integer *)0, (integer *)0, (logical *)0, (
-	    logical *)0, (ftnint)0, (ftnint)0, letter_len, (ftnint)0, (ftnint)
-	    0);
+    return zztime_0_(__global_state, 6, (char *)0, (char *)0, letter, (char *)
+	    0, (char *)0, (doublereal *)0, (integer *)0, (integer *)0, (
+	    logical *)0, (logical *)0, (ftnint)0, (ftnint)0, letter_len, (
+	    ftnint)0, (ftnint)0);
     }
 
 logical zzsubt_(cspice_t* __global_state, char *string, char *transl, logical 
 	*l2r, ftnlen string_len, ftnlen transl_len)
 {
-    return zztime_0_(7, string, transl, (char *)0, (char *)0, (char *)0, (
-	    doublereal *)0, (integer *)0, (integer *)0, l2r, (logical *)0, 
-	    string_len, transl_len, (ftnint)0, (ftnint)0, (ftnint)0);
+    return zztime_0_(__global_state, 7, string, transl, (char *)0, (char *)0, 
+	    (char *)0, (doublereal *)0, (integer *)0, (integer *)0, l2r, (
+	    logical *)0, string_len, transl_len, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 logical zztokns_(cspice_t* __global_state, char *string, char *error, ftnlen 
 	string_len, ftnlen error_len)
 {
-    return zztime_0_(8, string, (char *)0, (char *)0, error, (char *)0, (
-	    doublereal *)0, (integer *)0, (integer *)0, (logical *)0, (
-	    logical *)0, string_len, (ftnint)0, (ftnint)0, error_len, (ftnint)
-	    0);
+    return zztime_0_(__global_state, 8, string, (char *)0, (char *)0, error, (
+	    char *)0, (doublereal *)0, (integer *)0, (integer *)0, (logical *)
+	    0, (logical *)0, string_len, (ftnint)0, (ftnint)0, error_len, (
+	    ftnint)0);
     }
 
 logical zzunpck_(cspice_t* __global_state, char *string, logical *yabbrv, 
@@ -4461,16 +4464,16 @@ logical zzunpck_(cspice_t* __global_state, char *string, logical *yabbrv,
 	ftnlen string_len, ftnlen transl_len, ftnlen pic_len, ftnlen 
 	error_len)
 {
-    return zztime_0_(9, string, transl, (char *)0, error, pic, tvec, (integer 
-	    *)0, e, (logical *)0, yabbrv, string_len, transl_len, (ftnint)0, 
-	    error_len, pic_len);
+    return zztime_0_(__global_state, 9, string, transl, (char *)0, error, pic,
+	     tvec, (integer *)0, e, (logical *)0, yabbrv, string_len, 
+	    transl_len, (ftnint)0, error_len, pic_len);
     }
 
 logical zzvalt_(cspice_t* __global_state, char *string, integer *b, integer *
 	e, char *letter, ftnlen string_len, ftnlen letter_len)
 {
-    return zztime_0_(10, string, (char *)0, letter, (char *)0, (char *)0, (
-	    doublereal *)0, b, e, (logical *)0, (logical *)0, string_len, (
-	    ftnint)0, letter_len, (ftnint)0, (ftnint)0);
+    return zztime_0_(__global_state, 10, string, (char *)0, letter, (char *)0,
+	     (char *)0, (doublereal *)0, b, e, (logical *)0, (logical *)0, 
+	    string_len, (ftnint)0, letter_len, (ftnint)0, (ftnint)0);
     }
 

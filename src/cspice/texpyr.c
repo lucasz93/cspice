@@ -8,7 +8,7 @@
 
 
 extern texpyr_init_t __texpyr_init;
-static inline texpyr_state_t* get_texpyr_state(cspice_t* state) {
+static texpyr_state_t* get_texpyr_state(cspice_t* state) {
 	if (!state->texpyr)
 		state->texpyr = __cspice_allocate_module(sizeof(
 	texpyr_state_t), &__texpyr_init, sizeof(__texpyr_init));
@@ -321,11 +321,11 @@ L_tsetyr:
 
 /* Subroutine */ int texpyr_(cspice_t* __global_state, integer *year)
 {
-    return texpyr_0_(0, year);
+    return texpyr_0_(__global_state, 0, year);
     }
 
 /* Subroutine */ int tsetyr_(cspice_t* __global_state, integer *year)
 {
-    return texpyr_0_(1, year);
+    return texpyr_0_(__global_state, 1, year);
     }
 

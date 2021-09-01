@@ -8,7 +8,7 @@
 
 
 extern sydupi_init_t __sydupi_init;
-static inline sydupi_state_t* get_sydupi_state(cspice_t* state) {
+static sydupi_state_t* get_sydupi_state(cspice_t* state) {
 	if (!state->sydupi)
 		state->sydupi = __cspice_allocate_module(sizeof(
 	sydupi_state_t), &__sydupi_init, sizeof(__sydupi_init));

@@ -8,7 +8,7 @@
 
 
 extern gfstol_init_t __gfstol_init;
-static inline gfstol_state_t* get_gfstol_state(cspice_t* state) {
+static gfstol_state_t* get_gfstol_state(cspice_t* state) {
 	if (!state->gfstol)
 		state->gfstol = __cspice_allocate_module(sizeof(
 	gfstol_state_t), &__gfstol_init, sizeof(__gfstol_init));

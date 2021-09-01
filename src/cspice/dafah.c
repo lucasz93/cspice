@@ -8,7 +8,7 @@
 
 
 extern dafah_init_t __dafah_init;
-static inline dafah_state_t* get_dafah_state(cspice_t* state) {
+static dafah_state_t* get_dafah_state(cspice_t* state) {
 	if (!state->dafah)
 		state->dafah = __cspice_allocate_module(sizeof(dafah_state_t),
 	 &__dafah_init, sizeof(__dafah_init));
@@ -5268,103 +5268,109 @@ L_dafsih:
 	*handle, integer *unit, integer *fhset, char *access, ftnlen 
 	fname_len, ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len)
 {
-    return dafah_0_(0, fname, ftype, nd, ni, ifname, resv, handle, unit, 
-	    fhset, access, fname_len, ftype_len, ifname_len, access_len);
+    return dafah_0_(__global_state, 0, fname, ftype, nd, ni, ifname, resv, 
+	    handle, unit, fhset, access, fname_len, ftype_len, ifname_len, 
+	    access_len);
     }
 
 /* Subroutine */ int dafopr_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return dafah_0_(1, fname, (char *)0, (integer *)0, (integer *)0, (char *)
-	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, 
-	    fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 1, fname, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, handle, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dafopw_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return dafah_0_(2, fname, (char *)0, (integer *)0, (integer *)0, (char *)
-	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, 
-	    fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 2, fname, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, handle, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dafonw_(cspice_t* __global_state, char *fname, char *
 	ftype, integer *nd, integer *ni, char *ifname, integer *resv, integer 
 	*handle, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len)
 {
-    return dafah_0_(3, fname, ftype, nd, ni, ifname, resv, handle, (integer *)
-	    0, (integer *)0, (char *)0, fname_len, ftype_len, ifname_len, (
-	    ftnint)0);
+    return dafah_0_(__global_state, 3, fname, ftype, nd, ni, ifname, resv, 
+	    handle, (integer *)0, (integer *)0, (char *)0, fname_len, 
+	    ftype_len, ifname_len, (ftnint)0);
     }
 
 /* Subroutine */ int dafopn_(cspice_t* __global_state, char *fname, integer *
 	nd, integer *ni, char *ifname, integer *resv, integer *handle, ftnlen 
 	fname_len, ftnlen ifname_len)
 {
-    return dafah_0_(4, fname, (char *)0, nd, ni, ifname, resv, handle, (
-	    integer *)0, (integer *)0, (char *)0, fname_len, (ftnint)0, 
-	    ifname_len, (ftnint)0);
+    return dafah_0_(__global_state, 4, fname, (char *)0, nd, ni, ifname, resv,
+	     handle, (integer *)0, (integer *)0, (char *)0, fname_len, (
+	    ftnint)0, ifname_len, (ftnint)0);
     }
 
 /* Subroutine */ int dafcls_(cspice_t* __global_state, integer *handle)
 {
-    return dafah_0_(5, (char *)0, (char *)0, (integer *)0, (integer *)0, (
-	    char *)0, (integer *)0, handle, (integer *)0, (integer *)0, (char 
-	    *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 5, (char *)0, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, handle, (integer *)0, (
+	    integer *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dafhsf_(cspice_t* __global_state, integer *handle, 
 	integer *nd, integer *ni)
 {
-    return dafah_0_(6, (char *)0, (char *)0, nd, ni, (char *)0, (integer *)0, 
-	    handle, (integer *)0, (integer *)0, (char *)0, (ftnint)0, (ftnint)
-	    0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 6, (char *)0, (char *)0, nd, ni, (char *)
+	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafhlu_(cspice_t* __global_state, integer *handle, 
 	integer *unit)
 {
-    return dafah_0_(7, (char *)0, (char *)0, (integer *)0, (integer *)0, (
-	    char *)0, (integer *)0, handle, unit, (integer *)0, (char *)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 7, (char *)0, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, handle, unit, (integer *)0, 
+	    (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafluh_(cspice_t* __global_state, integer *unit, integer 
 	*handle)
 {
-    return dafah_0_(8, (char *)0, (char *)0, (integer *)0, (integer *)0, (
-	    char *)0, (integer *)0, handle, unit, (integer *)0, (char *)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 8, (char *)0, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, handle, unit, (integer *)0, 
+	    (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafhfn_(cspice_t* __global_state, integer *handle, char *
 	fname, ftnlen fname_len)
 {
-    return dafah_0_(9, fname, (char *)0, (integer *)0, (integer *)0, (char *)
-	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, 
-	    fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 9, fname, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, handle, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int daffnh_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return dafah_0_(10, fname, (char *)0, (integer *)0, (integer *)0, (char *)
-	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, 
-	    fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 10, fname, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, handle, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dafhof_(cspice_t* __global_state, integer *fhset)
 {
-    return dafah_0_(11, (char *)0, (char *)0, (integer *)0, (integer *)0, (
-	    char *)0, (integer *)0, (integer *)0, (integer *)0, fhset, (char *
-	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dafah_0_(__global_state, 11, (char *)0, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, (integer *)0, (integer *)0, 
+	    fhset, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafsih_(cspice_t* __global_state, integer *handle, char *
 	access, ftnlen access_len)
 {
-    return dafah_0_(12, (char *)0, (char *)0, (integer *)0, (integer *)0, (
-	    char *)0, (integer *)0, handle, (integer *)0, (integer *)0, 
-	    access, (ftnint)0, (ftnint)0, (ftnint)0, access_len);
+    return dafah_0_(__global_state, 12, (char *)0, (char *)0, (integer *)0, (
+	    integer *)0, (char *)0, (integer *)0, handle, (integer *)0, (
+	    integer *)0, access, (ftnint)0, (ftnint)0, (ftnint)0, access_len);
     }
 

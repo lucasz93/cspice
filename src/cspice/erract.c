@@ -8,7 +8,7 @@
 
 
 extern erract_init_t __erract_init;
-static inline erract_state_t* get_erract_state(cspice_t* state) {
+static erract_state_t* get_erract_state(cspice_t* state) {
 	if (!state->erract)
 		state->erract = __cspice_allocate_module(sizeof(
 	erract_state_t), &__erract_init, sizeof(__erract_init));

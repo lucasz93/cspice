@@ -8,7 +8,7 @@
 
 
 extern bodeul_init_t __bodeul_init;
-static inline bodeul_state_t* get_bodeul_state(cspice_t* state) {
+static bodeul_state_t* get_bodeul_state(cspice_t* state) {
 	if (!state->bodeul)
 		state->bodeul = __cspice_allocate_module(sizeof(
 	bodeul_state_t), &__bodeul_init, sizeof(__bodeul_init));
@@ -33,7 +33,7 @@ static inline bodeul_state_t* get_bodeul_state(cspice_t* state) {
     double d_mod(f2c_state_t*, doublereal *, doublereal *);
     integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
 	    integer, char *, integer);
-    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal);
+    double sin(doublereal), cos(doublereal);
 
     /* Local variables */
     char bref[32];
@@ -661,10 +661,10 @@ static inline bodeul_state_t* get_bodeul_state(cspice_t* state) {
 		    i__3, "bodeul_", (ftnlen)645)]) * rpd_(__global_state);
 	    sinth[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
 		    __global_state->f2c, "sinth", i__2, "bodeul_", (ftnlen)
-		    647)] = sin(&__global_state->f2c, theta);
+		    647)] = sin(theta);
 	    costh[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
 		    __global_state->f2c, "costh", i__2, "bodeul_", (ftnlen)
-		    648)] = cos(&__global_state->f2c, theta);
+		    648)] = cos(theta);
 	}
 	*ra += vdotg_(__global_state, ac, sinth, &na);
 	*dec += vdotg_(__global_state, dc, costh, &nd);

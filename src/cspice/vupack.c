@@ -8,7 +8,7 @@
 
 
 typedef int vupack_state_t;
-static inline vupack_state_t* get_vupack_state(cspice_t* state) {
+static vupack_state_t* get_vupack_state(cspice_t* state) {
 	return 0;
 }
 

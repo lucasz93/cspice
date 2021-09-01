@@ -8,7 +8,7 @@
 
 
 typedef int zzwind_state_t;
-static inline zzwind_state_t* get_zzwind_state(cspice_t* state) {
+static zzwind_state_t* get_zzwind_state(cspice_t* state) {
 	return 0;
 }
 

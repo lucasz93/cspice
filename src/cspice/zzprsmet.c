@@ -8,7 +8,7 @@
 
 
 extern zzprsmet_init_t __zzprsmet_init;
-static inline zzprsmet_state_t* get_zzprsmet_state(cspice_t* state) {
+static zzprsmet_state_t* get_zzprsmet_state(cspice_t* state) {
 	if (!state->zzprsmet)
 		state->zzprsmet = __cspice_allocate_module(sizeof(
 	zzprsmet_state_t), &__zzprsmet_init, sizeof(__zzprsmet_init));

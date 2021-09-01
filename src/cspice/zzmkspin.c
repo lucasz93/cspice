@@ -8,7 +8,7 @@
 
 
 extern zzmkspin_init_t __zzmkspin_init;
-static inline zzmkspin_state_t* get_zzmkspin_state(cspice_t* state) {
+static zzmkspin_state_t* get_zzmkspin_state(cspice_t* state) {
 	if (!state->zzmkspin)
 		state->zzmkspin = __cspice_allocate_module(sizeof(
 	zzmkspin_state_t), &__zzmkspin_init, sizeof(__zzmkspin_init));

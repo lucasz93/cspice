@@ -8,7 +8,7 @@
 
 
 extern zzfovaxi_init_t __zzfovaxi_init;
-static inline zzfovaxi_state_t* get_zzfovaxi_state(cspice_t* state) {
+static zzfovaxi_state_t* get_zzfovaxi_state(cspice_t* state) {
 	if (!state->zzfovaxi)
 		state->zzfovaxi = __cspice_allocate_module(sizeof(
 	zzfovaxi_state_t), &__zzfovaxi_init, sizeof(__zzfovaxi_init));

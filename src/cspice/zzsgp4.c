@@ -8,7 +8,7 @@
 
 
 extern zzsgp4_init_t __zzsgp4_init;
-static inline zzsgp4_state_t* get_zzsgp4_state(cspice_t* state) {
+static zzsgp4_state_t* get_zzsgp4_state(cspice_t* state) {
 	if (!state->zzsgp4)
 		state->zzsgp4 = __cspice_allocate_module(sizeof(
 	zzsgp4_state_t), &__zzsgp4_init, sizeof(__zzsgp4_init));
@@ -25,10 +25,9 @@ static inline zzsgp4_state_t* get_zzsgp4_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double pow_dd(f2c_state_t*, doublereal *, doublereal *), cos(f2c_state_t*,
-	     doublereal), sin(f2c_state_t*, doublereal), d_mod(f2c_state_t*, 
-	    doublereal *, doublereal *), sqrt(f2c_state_t*, doublereal), 
-	    atan2(f2c_state_t*, doublereal, doublereal);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *), cos(doublereal), 
+	    sin(doublereal), d_mod(f2c_state_t*, doublereal *, doublereal *), 
+	    sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
     doublereal eccm;
@@ -1281,8 +1280,8 @@ L_xxsgp4i:
 		* (etasq * .5 + 2.) + __state->ecco * (etasq * 2. + .5) - 
 		__state->j2 * tsi / (ao * psisq) * (__state->con41 * -3. * (
 		1. - eeta * 2. + etasq * (1.5 - eeta * .5)) + __state->x1mth2 
-		* .75 * (etasq * 2. - eeta * (etasq + 1.)) * cos(&
-		__global_state->f2c, __state->argpo * 2.)));
+		* .75 * (etasq * 2. - eeta * (etasq + 1.)) * cos(
+		__state->argpo * 2.)));
 	__state->cc5 = coef1 * 2. * ao * omeosq * ((etasq + eeta) * 2.75 + 1. 
 		+ eeta * etasq);
 	cosio4 = cosio2 * cosio2;
@@ -1298,8 +1297,7 @@ L_xxsgp4i:
 	__state->nodedot = xhdot1 + (temp2 * .5 * (4. - cosio2 * 19.) + temp3 
 		* 2. * (3. - cosio2 * 7.)) * cosio;
 	xpidot = __state->argpdot + __state->nodedot;
-	__state->omgcof = __state->bstar * cc3 * cos(&__global_state->f2c, 
-		__state->argpo);
+	__state->omgcof = __state->bstar * cc3 * cos(__state->argpo);
 	__state->xmcof = 0.;
 	if (__state->ecco > 1e-4) {
 	    __state->xmcof = -x2o3 * coef * __state->bstar / eeta;
@@ -1318,9 +1316,9 @@ L_xxsgp4i:
 	}
 	__state->aycof = __state->j3oj2 * -.5 * sinio;
 /* Computing 3rd power */
-	d__1 = __state->eta * cos(&__global_state->f2c, __state->mo) + 1.;
+	d__1 = __state->eta * cos(__state->mo) + 1.;
 	__state->delmo = d__1 * (d__1 * d__1);
-	__state->sinmao = sin(&__global_state->f2c, __state->mo);
+	__state->sinmao = sin(__state->mo);
 	__state->x7thm1 = cosio2 * 7. - 1.;
 
 /*           Deep Space Initialization */
@@ -1630,7 +1628,7 @@ L_xxsgp4e:
     if (! __state->dosimp) {
 	delomg = __state->omgcof * *t;
 /* Computing 3rd power */
-	d__1 = __state->eta * cos(&__global_state->f2c, xmdf) + 1.;
+	d__1 = __state->eta * cos(xmdf) + 1.;
 	delm = __state->xmcof * (d__1 * (d__1 * d__1) - __state->delmo);
 	temp = delomg + delm;
 	mm = xmdf + temp;
@@ -1639,8 +1637,7 @@ L_xxsgp4e:
 	t4 = t3 * *t;
 	tempa = tempa - __state->d2 * t2 - __state->d3 * t3 - __state->d4 * 
 		t4;
-	tempe += __state->bstar * __state->cc5 * (sin(&__global_state->f2c, 
-		mm) - __state->sinmao);
+	tempe += __state->bstar * __state->cc5 * (sin(mm) - __state->sinmao);
 	templ = templ + __state->t3cof * t3 + t4 * (__state->t4cof + *t * 
 		__state->t5cof);
     }
@@ -1721,8 +1718,8 @@ L_xxsgp4e:
 
 /*     Compute extra mean quantities */
 
-    sinim = sin(&__global_state->f2c, inclm);
-    cosim = cos(&__global_state->f2c, inclm);
+    sinim = sin(inclm);
+    cosim = cos(inclm);
 
 /*     Add lunar-solar periodics */
 
@@ -1766,8 +1763,8 @@ L_xxsgp4e:
 /*     Update for long period periodics if a deep space trajectory. */
 
     if (__state->dodeep) {
-	sinip = sin(&__global_state->f2c, xincp);
-	cosip = cos(&__global_state->f2c, xincp);
+	sinip = sin(xincp);
+	cosip = cos(xincp);
 	__state->aycof = __state->j3oj2 * -.5 * sinip;
 
 /*         sgp4fix for divide by zero with xincp = 180 deg */
@@ -1780,9 +1777,9 @@ L_xxsgp4e:
 		     / temp4;
 	}
     }
-    axnl = eccp * cos(&__global_state->f2c, argpp);
+    axnl = eccp * cos(argpp);
     temp = 1. / (am * (1. - eccp * eccp));
-    aynl = eccp * sin(&__global_state->f2c, argpp) + temp * __state->aycof;
+    aynl = eccp * sin(argpp) + temp * __state->aycof;
     xl = mp + argpp + nodep + temp * __state->xlcof * axnl;
 
 /*     Solve Kepler's equation. */
@@ -1799,8 +1796,8 @@ L_xxsgp4e:
     temp = 9999.9;
     while(temp >= 1e-12 && iter < 10) {
 	++iter;
-	sineo1 = sin(&__global_state->f2c, eo1);
-	coseo1 = cos(&__global_state->f2c, eo1);
+	sineo1 = sin(eo1);
+	coseo1 = cos(eo1);
 	tem5 = 1. - coseo1 * axnl - sineo1 * aynl;
 	tem5 = (u - aynl * coseo1 + axnl * sineo1 - eo1) / tem5;
 	temp = abs(tem5);
@@ -1830,13 +1827,13 @@ L_xxsgp4e:
 	return 0;
     }
     rl = am * (1. - ecose);
-    rdotl = sqrt(&__global_state->f2c, am) * esine / rl;
-    rvdotl = sqrt(&__global_state->f2c, pl) / rl;
-    betal = sqrt(&__global_state->f2c, 1. - el2);
+    rdotl = sqrt(am) * esine / rl;
+    rvdotl = sqrt(pl) / rl;
+    betal = sqrt(1. - el2);
     temp = esine / (betal + 1.);
     sinu = am / rl * (sineo1 - aynl - axnl * temp);
     cosu = am / rl * (coseo1 - axnl + aynl * temp);
-    su = atan2(&__global_state->f2c, sinu, cosu);
+    su = atan2(sinu, cosu);
     sin2u = (cosu + cosu) * sinu;
     cos2u = 1. - sinu * 2. * sinu;
     temp = 1. / pl;
@@ -1862,12 +1859,12 @@ L_xxsgp4e:
 
 /*     Orientation vectors. */
 
-    sinsu = sin(&__global_state->f2c, su);
-    cossu = cos(&__global_state->f2c, su);
-    snod = sin(&__global_state->f2c, xnode);
-    cnod = cos(&__global_state->f2c, xnode);
-    sini = sin(&__global_state->f2c, xinc);
-    cosi = cos(&__global_state->f2c, xinc);
+    sinsu = sin(su);
+    cossu = cos(su);
+    snod = sin(xnode);
+    cnod = cos(xnode);
+    sini = sin(xinc);
+    cosi = cos(xinc);
     xmx = -snod * cosi;
     xmy = cnod * cosi;
     ux = xmx * sinsu + cnod * cossu;
@@ -1904,20 +1901,20 @@ L_xxsgp4e:
 /* Subroutine */ int zzsgp4_(cspice_t* __global_state, doublereal *geophs, 
 	doublereal *elems, integer *opmode, doublereal *t, doublereal *state)
 {
-    return zzsgp4_0_(0, geophs, elems, opmode, t, state);
+    return zzsgp4_0_(__global_state, 0, geophs, elems, opmode, t, state);
     }
 
 /* Subroutine */ int xxsgp4i_(cspice_t* __global_state, doublereal *geophs, 
 	doublereal *elems, integer *opmode)
 {
-    return zzsgp4_0_(1, geophs, elems, opmode, (doublereal *)0, (doublereal *)
-	    0);
+    return zzsgp4_0_(__global_state, 1, geophs, elems, opmode, (doublereal *)
+	    0, (doublereal *)0);
     }
 
 /* Subroutine */ int xxsgp4e_(cspice_t* __global_state, doublereal *t, 
 	doublereal *state)
 {
-    return zzsgp4_0_(2, (doublereal *)0, (doublereal *)0, (integer *)0, t, 
-	    state);
+    return zzsgp4_0_(__global_state, 2, (doublereal *)0, (doublereal *)0, (
+	    integer *)0, t, state);
     }
 

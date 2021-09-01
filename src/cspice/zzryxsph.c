@@ -8,7 +8,7 @@
 
 
 extern zzryxsph_init_t __zzryxsph_init;
-static inline zzryxsph_state_t* get_zzryxsph_state(cspice_t* state) {
+static zzryxsph_state_t* get_zzryxsph_state(cspice_t* state) {
 	if (!state->zzryxsph)
 		state->zzryxsph = __cspice_allocate_module(sizeof(
 	zzryxsph_state_t), &__zzryxsph_init, sizeof(__zzryxsph_init));
@@ -24,7 +24,7 @@ static inline zzryxsph_state_t* get_zzryxsph_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal cpar;
@@ -193,7 +193,7 @@ static inline zzryxsph_state_t* get_zzryxsph_state(cspice_t* state) {
     }
 /* Computing MAX */
     d__1 = 0., d__2 = r2 - pmag2;
-    s = sqrt(&__global_state->f2c, (max(d__1,d__2)));
+    s = sqrt((max(d__1,d__2)));
     vmag2 = vdot_(__global_state, vertex, vertex);
     if (vmag2 > r2) {
 

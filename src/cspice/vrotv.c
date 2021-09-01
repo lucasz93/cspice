@@ -8,7 +8,7 @@
 
 
 extern vrotv_init_t __vrotv_init;
-static inline vrotv_state_t* get_vrotv_state(cspice_t* state) {
+static vrotv_state_t* get_vrotv_state(cspice_t* state) {
 	if (!state->vrotv)
 		state->vrotv = __cspice_allocate_module(sizeof(vrotv_state_t),
 	 &__vrotv_init, sizeof(__vrotv_init));
@@ -21,7 +21,7 @@ static inline vrotv_state_t* get_vrotv_state(cspice_t* state) {
 	doublereal *axis, doublereal *theta, doublereal *r__)
 {
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
@@ -252,8 +252,8 @@ static inline vrotv_state_t* get_vrotv_state(cspice_t* state) {
 /*     Compute COS(THETA)*V1 + SIN(THETA)*V2. This is V1 rotated about */
 /*     the AXIS in the plane normal to the axis, call the result RPLANE */
 
-    c__ = cos(&__global_state->f2c, *theta);
-    s = sin(&__global_state->f2c, *theta);
+    c__ = cos(*theta);
+    s = sin(*theta);
     vlcom_(__global_state, &c__, v1, &s, v2, rplane);
 
 /*     Add the rotated component in the normal plane to AXIS to the */

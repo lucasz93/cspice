@@ -8,7 +8,7 @@
 
 
 extern dasadi_init_t __dasadi_init;
-static inline dasadi_state_t* get_dasadi_state(cspice_t* state) {
+static dasadi_state_t* get_dasadi_state(cspice_t* state) {
 	if (!state->dasadi)
 		state->dasadi = __cspice_allocate_module(sizeof(
 	dasadi_state_t), &__dasadi_init, sizeof(__dasadi_init));

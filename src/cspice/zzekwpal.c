@@ -8,7 +8,7 @@
 
 
 extern zzekwpal_init_t __zzekwpal_init;
-static inline zzekwpal_state_t* get_zzekwpal_state(cspice_t* state) {
+static zzekwpal_state_t* get_zzekwpal_state(cspice_t* state) {
 	if (!state->zzekwpal)
 		state->zzekwpal = __cspice_allocate_module(sizeof(
 	zzekwpal_state_t), &__zzekwpal_init, sizeof(__zzekwpal_init));

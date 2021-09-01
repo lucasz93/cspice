@@ -8,7 +8,7 @@
 
 
 extern zzekinqc_init_t __zzekinqc_init;
-static inline zzekinqc_state_t* get_zzekinqc_state(cspice_t* state) {
+static zzekinqc_state_t* get_zzekinqc_state(cspice_t* state) {
 	if (!state->zzekinqc)
 		state->zzekinqc = __cspice_allocate_module(sizeof(
 	zzekinqc_state_t), &__zzekinqc_init, sizeof(__zzekinqc_init));

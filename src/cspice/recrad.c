@@ -8,7 +8,7 @@
 
 
 typedef int recrad_state_t;
-static inline recrad_state_t* get_recrad_state(cspice_t* state) {
+static recrad_state_t* get_recrad_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int uniond_state_t;
-static inline uniond_state_t* get_uniond_state(cspice_t* state) {
+static uniond_state_t* get_uniond_state(cspice_t* state) {
 	return 0;
 }
 

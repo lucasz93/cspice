@@ -8,7 +8,7 @@
 
 
 extern putact_init_t __putact_init;
-static inline putact_state_t* get_putact_state(cspice_t* state) {
+static putact_state_t* get_putact_state(cspice_t* state) {
 	if (!state->putact)
 		state->putact = __cspice_allocate_module(sizeof(
 	putact_state_t), &__putact_init, sizeof(__putact_init));
@@ -359,11 +359,11 @@ L_getact:
 
 /* Subroutine */ int putact_(cspice_t* __global_state, integer *action)
 {
-    return putact_0_(0, action);
+    return putact_0_(__global_state, 0, action);
     }
 
 /* Subroutine */ int getact_(cspice_t* __global_state, integer *action)
 {
-    return putact_0_(1, action);
+    return putact_0_(__global_state, 1, action);
     }
 

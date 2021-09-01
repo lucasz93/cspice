@@ -8,7 +8,7 @@
 
 
 extern spksub_init_t __spksub_init;
-static inline spksub_state_t* get_spksub_state(cspice_t* state) {
+static spksub_state_t* get_spksub_state(cspice_t* state) {
 	if (!state->spksub)
 		state->spksub = __cspice_allocate_module(sizeof(
 	spksub_state_t), &__spksub_init, sizeof(__spksub_init));

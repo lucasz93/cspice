@@ -8,7 +8,7 @@
 
 
 extern zzckcv04_init_t __zzckcv04_init;
-static inline zzckcv04_state_t* get_zzckcv04_state(cspice_t* state) {
+static zzckcv04_state_t* get_zzckcv04_state(cspice_t* state) {
 	if (!state->zzckcv04)
 		state->zzckcv04 = __cspice_allocate_module(sizeof(
 	zzckcv04_state_t), &__zzckcv04_init, sizeof(__zzckcv04_init));

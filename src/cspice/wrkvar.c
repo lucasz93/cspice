@@ -8,7 +8,7 @@
 
 
 extern wrkvar_init_t __wrkvar_init;
-static inline wrkvar_state_t* get_wrkvar_state(cspice_t* state) {
+static wrkvar_state_t* get_wrkvar_state(cspice_t* state) {
 	if (!state->wrkvar)
 		state->wrkvar = __cspice_allocate_module(sizeof(
 	wrkvar_state_t), &__wrkvar_init, sizeof(__wrkvar_init));

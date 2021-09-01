@@ -8,7 +8,7 @@
 
 
 typedef int cgv2el_state_t;
-static inline cgv2el_state_t* get_cgv2el_state(cspice_t* state) {
+static cgv2el_state_t* get_cgv2el_state(cspice_t* state) {
 	return 0;
 }
 

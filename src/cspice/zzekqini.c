@@ -8,7 +8,7 @@
 
 
 extern zzekqini_init_t __zzekqini_init;
-static inline zzekqini_state_t* get_zzekqini_state(cspice_t* state) {
+static zzekqini_state_t* get_zzekqini_state(cspice_t* state) {
 	if (!state->zzekqini)
 		state->zzekqini = __cspice_allocate_module(sizeof(
 	zzekqini_state_t), &__zzekqini_init, sizeof(__zzekqini_init));

@@ -520,7 +520,7 @@
    The string returned, output, is a Fortranish type string.
    Convert the string to C type. 
    */
-   F2C_ConvertStr ( lenout, output );
+   F2C_ConvertStr ( naif_state, lenout, output );
 
 
    chkout_c ( naif_state, "timout_c");

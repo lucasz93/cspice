@@ -8,7 +8,7 @@
 
 
 extern tostdo_init_t __tostdo_init;
-static inline tostdo_state_t* get_tostdo_state(cspice_t* state) {
+static tostdo_state_t* get_tostdo_state(cspice_t* state) {
 	if (!state->tostdo)
 		state->tostdo = __cspice_allocate_module(sizeof(
 	tostdo_state_t), &__tostdo_init, sizeof(__tostdo_init));

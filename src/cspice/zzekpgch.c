@@ -8,7 +8,7 @@
 
 
 extern zzekpgch_init_t __zzekpgch_init;
-static inline zzekpgch_state_t* get_zzekpgch_state(cspice_t* state) {
+static zzekpgch_state_t* get_zzekpgch_state(cspice_t* state) {
 	if (!state->zzekpgch)
 		state->zzekpgch = __cspice_allocate_module(sizeof(
 	zzekpgch_state_t), &__zzekpgch_init, sizeof(__zzekpgch_init));

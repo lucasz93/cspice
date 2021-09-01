@@ -8,7 +8,7 @@
 
 
 extern lspcn_init_t __lspcn_init;
-static inline lspcn_state_t* get_lspcn_state(cspice_t* state) {
+static lspcn_state_t* get_lspcn_state(cspice_t* state) {
 	if (!state->lspcn)
 		state->lspcn = __cspice_allocate_module(sizeof(lspcn_state_t),
 	 &__lspcn_init, sizeof(__lspcn_init));

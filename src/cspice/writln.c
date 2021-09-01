@@ -8,7 +8,7 @@
 
 
 extern writln_init_t __writln_init;
-static inline writln_state_t* get_writln_state(cspice_t* state) {
+static writln_state_t* get_writln_state(cspice_t* state) {
 	if (!state->writln)
 		state->writln = __cspice_allocate_module(sizeof(
 	writln_state_t), &__writln_init, sizeof(__writln_init));

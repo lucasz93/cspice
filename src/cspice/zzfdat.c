@@ -8,7 +8,7 @@
 
 
 extern zzfdat_init_t __zzfdat_init;
-static inline zzfdat_state_t* get_zzfdat_state(cspice_t* state) {
+static zzfdat_state_t* get_zzfdat_state(cspice_t* state) {
 	if (!state->zzfdat)
 		state->zzfdat = __cspice_allocate_module(sizeof(
 	zzfdat_state_t), &__zzfdat_init, sizeof(__zzfdat_init));

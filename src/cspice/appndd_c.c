@@ -173,7 +173,7 @@
       chkin_c  ( naif_state, "appndd_c"                                        );
       setmsg_c ( naif_state, "The cell cannot accommodate the addition of the "
                  "element *"                                       );
-      errdp_c  ( "*", item                                         );
+      errdp_c  ( naif_state, "*", item                                         );
       sigerr_c ( naif_state, "SPICE(CELLTOOSMALL)"                             );
       chkout_c ( naif_state, "appndd_c"                                        );
       return;

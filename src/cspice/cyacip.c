@@ -8,7 +8,7 @@
 
 
 typedef int cyacip_state_t;
-static inline cyacip_state_t* get_cyacip_state(cspice_t* state) {
+static cyacip_state_t* get_cyacip_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int pcwid_state_t;
-static inline pcwid_state_t* get_pcwid_state(cspice_t* state) {
+static pcwid_state_t* get_pcwid_state(cspice_t* state) {
 	return 0;
 }
 

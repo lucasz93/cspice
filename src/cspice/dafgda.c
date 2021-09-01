@@ -8,7 +8,7 @@
 
 
 typedef int dafgda_state_t;
-static inline dafgda_state_t* get_dafgda_state(cspice_t* state) {
+static dafgda_state_t* get_dafgda_state(cspice_t* state) {
 	return 0;
 }
 

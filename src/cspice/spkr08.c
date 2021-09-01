@@ -8,7 +8,7 @@
 
 
 extern spkr08_init_t __spkr08_init;
-static inline spkr08_state_t* get_spkr08_state(cspice_t* state) {
+static spkr08_state_t* get_spkr08_state(cspice_t* state) {
 	if (!state->spkr08)
 		state->spkr08 = __cspice_allocate_module(sizeof(
 	spkr08_state_t), &__spkr08_init, sizeof(__spkr08_init));

@@ -8,7 +8,7 @@
 
 
 typedef int odd_state_t;
-static inline odd_state_t* get_odd_state(cspice_t* state) {
+static odd_state_t* get_odd_state(cspice_t* state) {
 	return 0;
 }
 

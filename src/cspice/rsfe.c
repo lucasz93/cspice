@@ -114,7 +114,7 @@ xrd_SL(f2c_state_t *f2c)
    if(!f2c->f__curunit->uend)
       {
 
-      while ( !zzcheckeol( ch = getc(f2c->f__cf) )  )
+      while ( !zzcheckeol( f2c,ch = getc(f2c->f__cf) )  )
          {
          
          if (ch == EOF) 
@@ -148,7 +148,7 @@ x_getc(f2c_state_t *f2c)
    Does 'ch' represent an end-of-file, a \n or \r?
    If neither, return 'ch' to the caller.
    */
-   if(ch!=EOF && !zzcheckeol(ch) )
+   if(ch!=EOF && !zzcheckeol(f2c,ch) )
       {
       f2c->f__recpos++;
       return(ch);
@@ -158,7 +158,7 @@ x_getc(f2c_state_t *f2c)
    'ch' represents either a end-of-line or a newline, 
    return the platform native newline.
    */
-   if( zzcheckeol(ch) )
+   if( zzcheckeol(f2c,ch) )
       {
       (void) ungetc( '\n',f2c->f__cf);
       return('\n');
@@ -199,7 +199,7 @@ integer s_rsfe(f2c_state_t *f2c, cilist *a)
    
    if(!f2c->f__init) 
       {
-      f_init();
+      f_init(f2c);
       }
    
    f2c->f__reading          = 1;
@@ -207,7 +207,7 @@ integer s_rsfe(f2c_state_t *f2c, cilist *a)
    f2c->f__formatted        = 1;
    f2c->f__external         = 1;
 
-   if(n=c_sfe(a)) 
+   if(n=c_sfe(f2c,a)) 
       {
       return(n);
       }
@@ -218,16 +218,16 @@ integer s_rsfe(f2c_state_t *f2c, cilist *a)
    f2c->f__fmtbuf                     = a->cifmt;
    f2c->f__cf                         = f2c->f__curunit->ufd;
 
-   if(pars_f(f2c->f__fmtbuf)<0) 
+   if(pars_f(f2c,f2c->f__fmtbuf)<0) 
       {
-      err(a->cierr,100,"startio");
+      err(f2c,a->cierr,100,"startio");
       }
 
    f2c->f__getn             = x_getc;
    f2c->f__doed             = rd_ed;
    f2c->f__doned            = rd_ned;
    
-   fmt_bg();
+   fmt_bg(f2c);
    
    f2c->f__doend            = x_endp;
    f2c->f__donewrec         = xrd_SL;
@@ -235,14 +235,14 @@ integer s_rsfe(f2c_state_t *f2c, cilist *a)
    f2c->f__cblank           = f2c->f__curunit->ublnk;
    f2c->f__cplus            = 0;
    
-   if( f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit) )
+   if( f2c->f__curunit->uwrt && f__nowreading(f2c,f2c->f__curunit) )
       {
-      err(a->cierr,errno,"read start");
+      err(f2c,a->cierr,errno,"read start");
       }
    
    if(f2c->f__curunit->uend)
       {
-      err(f2c->f__elist->ciend,(EOF),"read start");
+      err(f2c,f2c->f__elist->ciend,(EOF),"read start");
       }
    
    return(0);

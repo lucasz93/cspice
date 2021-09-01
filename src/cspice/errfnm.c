@@ -8,7 +8,7 @@
 
 
 typedef int errfnm_state_t;
-static inline errfnm_state_t* get_errfnm_state(cspice_t* state) {
+static errfnm_state_t* get_errfnm_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern invort_init_t __invort_init;
-static inline invort_state_t* get_invort_state(cspice_t* state) {
+static invort_state_t* get_invort_state(cspice_t* state) {
 	if (!state->invort)
 		state->invort = __cspice_allocate_module(sizeof(
 	invort_state_t), &__invort_init, sizeof(__invort_init));

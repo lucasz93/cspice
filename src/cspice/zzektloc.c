@@ -8,7 +8,7 @@
 
 
 typedef int zzektloc_state_t;
-static inline zzektloc_state_t* get_zzektloc_state(cspice_t* state) {
+static zzektloc_state_t* get_zzektloc_state(cspice_t* state) {
 	return 0;
 }
 

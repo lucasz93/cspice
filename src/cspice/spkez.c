@@ -8,7 +8,7 @@
 
 
 extern spkez_init_t __spkez_init;
-static inline spkez_state_t* get_spkez_state(cspice_t* state) {
+static spkez_state_t* get_spkez_state(cspice_t* state) {
 	if (!state->spkez)
 		state->spkez = __cspice_allocate_module(sizeof(spkez_state_t),
 	 &__spkez_init, sizeof(__spkez_init));

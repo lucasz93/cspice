@@ -687,7 +687,7 @@
    /*
    Convert the error message to a C style string.
    */
-   F2C_ConvertStr ( msglen, errmsg );
+   F2C_ConvertStr ( naif_state, msglen, errmsg );
 
 
    /*
@@ -715,7 +715,7 @@
    First, map the Fortran-style strings returned by ekpsel_ to C
    style strings.
    */
-   F2C_ConvertStrArr ( *n, TYPSIZ, (SpiceChar *)locXtypes );
+   F2C_ConvertStrArr ( naif_state, *n, TYPSIZ, (SpiceChar *)locXtypes );
    
    
    for ( i = 0;  i < *n;  i++ )
@@ -757,7 +757,7 @@
    First, map the Fortran-style strings returned by ekpsel_ to C
    style strings.
    */
-   F2C_ConvertStrArr ( *n, EXPSIZ, (SpiceChar *)locXclass );
+   F2C_ConvertStrArr ( naif_state, *n, EXPSIZ, (SpiceChar *)locXclass );
    
    for ( i = 0;  i < *n;  i++ )
    {
@@ -793,13 +793,13 @@
    Convert the array of table names to a C style array of strings.  
    Null-terminate each string so as to eliminate trailing blanks.
    */
-   F2C_ConvertStrArr ( *n, tablen, (SpiceChar *)tabs );
+   F2C_ConvertStrArr ( naif_state, *n, tablen, (SpiceChar *)tabs );
 
    for ( i = 0;  i < *n;  i++ )
    {
       strptr = ((SpiceChar *)tabs) + i*tablen;
       
-      lastnb = F_StrLen ( tablen-1, strptr );
+      lastnb = F_StrLen ( naif_state, tablen-1, strptr );
       
       *( strptr + lastnb ) = (char)0;
    }
@@ -808,13 +808,13 @@
    Convert the array of column names to a C style array of strings.
    Null-terminate each string so as to eliminate trailing blanks.
    */
-   F2C_ConvertStrArr ( *n, collen, (SpiceChar *)cols );
+   F2C_ConvertStrArr ( naif_state, *n, collen, (SpiceChar *)cols );
 
    for ( i = 0;  i < *n;  i++ )
    {
       strptr = ((SpiceChar *)cols) + i*collen;
       
-      lastnb = F_StrLen ( collen-1, strptr );
+      lastnb = F_StrLen ( naif_state, collen-1, strptr );
       
       *( strptr + lastnb ) = (char)0;
    }

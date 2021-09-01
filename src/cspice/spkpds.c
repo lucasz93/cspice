@@ -8,7 +8,7 @@
 
 
 extern spkpds_init_t __spkpds_init;
-static inline spkpds_state_t* get_spkpds_state(cspice_t* state) {
+static spkpds_state_t* get_spkpds_state(cspice_t* state) {
 	if (!state->spkpds)
 		state->spkpds = __cspice_allocate_module(sizeof(
 	spkpds_state_t), &__spkpds_init, sizeof(__spkpds_init));

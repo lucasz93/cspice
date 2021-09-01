@@ -8,7 +8,7 @@
 
 
 typedef int zzekillt_state_t;
-static inline zzekillt_state_t* get_zzekillt_state(cspice_t* state) {
+static zzekillt_state_t* get_zzekillt_state(cspice_t* state) {
 	return 0;
 }
 

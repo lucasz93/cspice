@@ -8,7 +8,7 @@
 
 
 extern ckopn_init_t __ckopn_init;
-static inline ckopn_state_t* get_ckopn_state(cspice_t* state) {
+static ckopn_state_t* get_ckopn_state(cspice_t* state) {
 	if (!state->ckopn)
 		state->ckopn = __cspice_allocate_module(sizeof(ckopn_state_t),
 	 &__ckopn_init, sizeof(__ckopn_init));

@@ -8,7 +8,7 @@
 
 
 extern spkpos_init_t __spkpos_init;
-static inline spkpos_state_t* get_spkpos_state(cspice_t* state) {
+static spkpos_state_t* get_spkpos_state(cspice_t* state) {
 	if (!state->spkpos)
 		state->spkpos = __cspice_allocate_module(sizeof(
 	spkpos_state_t), &__spkpos_init, sizeof(__spkpos_init));

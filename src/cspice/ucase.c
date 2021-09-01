@@ -8,7 +8,7 @@
 
 
 extern ucase_init_t __ucase_init;
-static inline ucase_state_t* get_ucase_state(cspice_t* state) {
+static ucase_state_t* get_ucase_state(cspice_t* state) {
 	if (!state->ucase)
 		state->ucase = __cspice_allocate_module(sizeof(ucase_state_t),
 	 &__ucase_init, sizeof(__ucase_init));

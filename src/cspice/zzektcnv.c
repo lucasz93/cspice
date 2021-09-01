@@ -8,7 +8,7 @@
 
 
 extern zzektcnv_init_t __zzektcnv_init;
-static inline zzektcnv_state_t* get_zzektcnv_state(cspice_t* state) {
+static zzektcnv_state_t* get_zzektcnv_state(cspice_t* state) {
 	if (!state->zzektcnv)
 		state->zzektcnv = __cspice_allocate_module(sizeof(
 	zzektcnv_state_t), &__zzektcnv_init, sizeof(__zzektcnv_init));

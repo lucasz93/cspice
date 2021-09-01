@@ -8,7 +8,7 @@
 
 
 extern intord_init_t __intord_init;
-static inline intord_state_t* get_intord_state(cspice_t* state) {
+static intord_state_t* get_intord_state(cspice_t* state) {
 	if (!state->intord)
 		state->intord = __cspice_allocate_module(sizeof(
 	intord_state_t), &__intord_init, sizeof(__intord_init));

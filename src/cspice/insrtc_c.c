@@ -41,12 +41,11 @@
  
 */
 
+#include "__cspice_state.h"
 #include "SpiceUsr.h"
 #include "SpiceZfc.h"
 #include "SpiceZmc.h"
 #include "f2cMang.h"
-#include "f2c.h"
-#include "__cspice_state.h"
 
 
    void insrtc_c ( void            * naif_state,
@@ -244,7 +243,7 @@
    Let slen be the effective string length of the input item.
    Characters beyond the string length of the set are ignored.
    */
-   slen = mini_c ( 2, set->length, strlen(item) );
+   slen = mini_c ( naif_state, 2, set->length, strlen(item) );
 
 
    /*

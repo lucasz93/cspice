@@ -8,7 +8,7 @@
 
 
 typedef int ekuced_state_t;
-static inline ekuced_state_t* get_ekuced_state(cspice_t* state) {
+static ekuced_state_t* get_ekuced_state(cspice_t* state) {
 	return 0;
 }
 

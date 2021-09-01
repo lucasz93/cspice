@@ -8,7 +8,7 @@
 
 
 extern zzekkey_init_t __zzekkey_init;
-static inline zzekkey_state_t* get_zzekkey_state(cspice_t* state) {
+static zzekkey_state_t* get_zzekkey_state(cspice_t* state) {
 	if (!state->zzekkey)
 		state->zzekkey = __cspice_allocate_module(sizeof(
 	zzekkey_state_t), &__zzekkey_init, sizeof(__zzekkey_init));

@@ -8,7 +8,7 @@
 
 
 extern diags2_init_t __diags2_init;
-static inline diags2_state_t* get_diags2_state(cspice_t* state) {
+static diags2_state_t* get_diags2_state(cspice_t* state) {
 	if (!state->diags2)
 		state->diags2 = __cspice_allocate_module(sizeof(
 	diags2_state_t), &__diags2_init, sizeof(__diags2_init));

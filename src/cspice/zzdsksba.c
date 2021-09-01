@@ -8,7 +8,7 @@
 
 
 extern zzdsksba_init_t __zzdsksba_init;
-static inline zzdsksba_state_t* get_zzdsksba_state(cspice_t* state) {
+static zzdsksba_state_t* get_zzdsksba_state(cspice_t* state) {
 	if (!state->zzdsksba)
 		state->zzdsksba = __cspice_allocate_module(sizeof(
 	zzdsksba_state_t), &__zzdsksba_init, sizeof(__zzdsksba_init));

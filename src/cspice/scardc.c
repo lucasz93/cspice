@@ -8,7 +8,7 @@
 
 
 typedef int scardc_state_t;
-static inline scardc_state_t* get_scardc_state(cspice_t* state) {
+static scardc_state_t* get_scardc_state(cspice_t* state) {
 	return 0;
 }
 

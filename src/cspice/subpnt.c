@@ -8,7 +8,7 @@
 
 
 extern subpnt_init_t __subpnt_init;
-static inline subpnt_state_t* get_subpnt_state(cspice_t* state) {
+static subpnt_state_t* get_subpnt_state(cspice_t* state) {
 	if (!state->subpnt)
 		state->subpnt = __cspice_allocate_module(sizeof(
 	subpnt_state_t), &__subpnt_init, sizeof(__subpnt_init));

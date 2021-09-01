@@ -8,7 +8,7 @@
 
 
 extern sctran_init_t __sctran_init;
-static inline sctran_state_t* get_sctran_state(cspice_t* state) {
+static sctran_state_t* get_sctran_state(cspice_t* state) {
 	if (!state->sctran)
 		state->sctran = __cspice_allocate_module(sizeof(
 	sctran_state_t), &__sctran_init, sizeof(__sctran_init));
@@ -539,18 +539,18 @@ L_scid2n:
 /* Subroutine */ int sctran_(cspice_t* __global_state, char *clknam, integer *
 	clkid, logical *found, ftnlen clknam_len)
 {
-    return sctran_0_(0, clknam, clkid, found, clknam_len);
+    return sctran_0_(__global_state, 0, clknam, clkid, found, clknam_len);
     }
 
 /* Subroutine */ int scn2id_(cspice_t* __global_state, char *clknam, integer *
 	clkid, logical *found, ftnlen clknam_len)
 {
-    return sctran_0_(1, clknam, clkid, found, clknam_len);
+    return sctran_0_(__global_state, 1, clknam, clkid, found, clknam_len);
     }
 
 /* Subroutine */ int scid2n_(cspice_t* __global_state, integer *clkid, char *
 	clknam, logical *found, ftnlen clknam_len)
 {
-    return sctran_0_(2, clknam, clkid, found, clknam_len);
+    return sctran_0_(__global_state, 2, clknam, clkid, found, clknam_len);
     }
 

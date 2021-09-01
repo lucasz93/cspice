@@ -8,7 +8,7 @@
 
 
 extern pckcov_init_t __pckcov_init;
-static inline pckcov_state_t* get_pckcov_state(cspice_t* state) {
+static pckcov_state_t* get_pckcov_state(cspice_t* state) {
 	if (!state->pckcov)
 		state->pckcov = __cspice_allocate_module(sizeof(
 	pckcov_state_t), &__pckcov_init, sizeof(__pckcov_init));

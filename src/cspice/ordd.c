@@ -8,7 +8,7 @@
 
 
 typedef int ordd_state_t;
-static inline ordd_state_t* get_ordd_state(cspice_t* state) {
+static ordd_state_t* get_ordd_state(cspice_t* state) {
 	return 0;
 }
 

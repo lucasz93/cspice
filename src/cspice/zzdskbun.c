@@ -8,7 +8,7 @@
 
 
 extern zzdskbun_init_t __zzdskbun_init;
-static inline zzdskbun_state_t* get_zzdskbun_state(cspice_t* state) {
+static zzdskbun_state_t* get_zzdskbun_state(cspice_t* state) {
 	if (!state->zzdskbun)
 		state->zzdskbun = __cspice_allocate_module(sizeof(
 	zzdskbun_state_t), &__zzdskbun_init, sizeof(__zzdskbun_init));

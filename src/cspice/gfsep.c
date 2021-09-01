@@ -8,7 +8,7 @@
 
 
 extern gfsep_init_t __gfsep_init;
-static inline gfsep_state_t* get_gfsep_state(cspice_t* state) {
+static gfsep_state_t* get_gfsep_state(cspice_t* state) {
 	if (!state->gfsep)
 		state->gfsep = __cspice_allocate_module(sizeof(gfsep_state_t),
 	 &__gfsep_init, sizeof(__gfsep_init));

@@ -8,7 +8,7 @@
 
 
 extern zzrtnmat_init_t __zzrtnmat_init;
-static inline zzrtnmat_state_t* get_zzrtnmat_state(cspice_t* state) {
+static zzrtnmat_state_t* get_zzrtnmat_state(cspice_t* state) {
 	if (!state->zzrtnmat)
 		state->zzrtnmat = __cspice_allocate_module(sizeof(
 	zzrtnmat_state_t), &__zzrtnmat_init, sizeof(__zzrtnmat_init));
@@ -27,8 +27,7 @@ static inline zzrtnmat_state_t* get_zzrtnmat_state(cspice_t* state) {
     integer i__1, i__2;
 
     /* Builtin functions */
-    double atan2(f2c_state_t*, doublereal, doublereal), cos(f2c_state_t*, 
-	    doublereal), sin(f2c_state_t*, doublereal);
+    double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
@@ -250,13 +249,13 @@ static inline zzrtnmat_state_t* get_zzrtnmat_state(cspice_t* state) {
 /*        robust way of determining the longitude of V, even */
 /*        when the magnitude of V is very small. */
 
-	lon = atan2(&__global_state->f2c, v[1], v[0]);
+	lon = atan2(v[1], v[0]);
 
 /*        Let VLON be a unit vector in the x-y plane whose */
 /*        longitude is LON. */
 
-	vlon[0] = cos(&__global_state->f2c, lon);
-	vlon[1] = sin(&__global_state->f2c, lon);
+	vlon[0] = cos(lon);
+	vlon[1] = sin(lon);
 	vlon[2] = 0.;
 
 /*        We can compute the East and North vectors */

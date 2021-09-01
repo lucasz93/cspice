@@ -8,7 +8,7 @@
 
 
 extern sctype_init_t __sctype_init;
-static inline sctype_state_t* get_sctype_state(cspice_t* state) {
+static sctype_state_t* get_sctype_state(cspice_t* state) {
 	if (!state->sctype)
 		state->sctype = __cspice_allocate_module(sizeof(
 	sctype_state_t), &__sctype_init, sizeof(__sctype_init));

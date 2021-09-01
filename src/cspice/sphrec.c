@@ -8,7 +8,7 @@
 
 
 typedef int sphrec_state_t;
-static inline sphrec_state_t* get_sphrec_state(cspice_t* state) {
+static sphrec_state_t* get_sphrec_state(cspice_t* state) {
 	return 0;
 }
 
@@ -17,7 +17,7 @@ static inline sphrec_state_t* get_sphrec_state(cspice_t* state) {
 	doublereal *colat, doublereal *long__, doublereal *rectan)
 {
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal x;
@@ -204,11 +204,9 @@ static inline sphrec_state_t* get_sphrec_state(cspice_t* state) {
 /*     Convert to rectangular coordinates, storing in the results in */
 /*     temporary variables */
 
-    x = *r__ * cos(&__global_state->f2c, *long__) * sin(&__global_state->f2c, 
-	    *colat);
-    y = *r__ * sin(&__global_state->f2c, *long__) * sin(&__global_state->f2c, 
-	    *colat);
-    z__ = *r__ * cos(&__global_state->f2c, *colat);
+    x = *r__ * cos(*long__) * sin(*colat);
+    y = *r__ * sin(*long__) * sin(*colat);
+    z__ = *r__ * cos(*colat);
 
 /*     Move the results to the output variables */
 

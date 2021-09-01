@@ -8,7 +8,7 @@
 
 
 typedef int vnormg_state_t;
-static inline vnormg_state_t* get_vnormg_state(cspice_t* state) {
+static vnormg_state_t* get_vnormg_state(cspice_t* state) {
 	return 0;
 }
 
@@ -21,7 +21,7 @@ doublereal vnormg_(cspice_t* __global_state, doublereal *v1, integer *ndim)
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal v1max;
@@ -192,7 +192,7 @@ doublereal vnormg_(cspice_t* __global_state, doublereal *v1, integer *ndim)
 		    ftnlen)167)] / v1max;
 	    ret_val += a * a;
 	}
-	ret_val = v1max * sqrt(&__global_state->f2c, ret_val);
+	ret_val = v1max * sqrt(ret_val);
     }
 
     return ret_val;

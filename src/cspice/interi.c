@@ -8,7 +8,7 @@
 
 
 typedef int interi_state_t;
-static inline interi_state_t* get_interi_state(cspice_t* state) {
+static interi_state_t* get_interi_state(cspice_t* state) {
 	return 0;
 }
 

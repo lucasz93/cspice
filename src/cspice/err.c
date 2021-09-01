@@ -54,6 +54,7 @@ extern char *malloc();
 #undef min
 #undef max
 #include "stdlib.h"
+#include "stdio.h"
 #endif
 
 #include "fio.h"
@@ -358,7 +359,7 @@ int err__fl(f2c_state_t *f2c, int f, int m, char *s)
    if (!f)
       f__fatal(f2c, m, s);
    if (f2c->f__doend)
-      (*f2c->f__doend)();
+      (*f2c->f__doend)(f2c);
    return errno = m;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern eqchr_init_t __eqchr_init;
-static inline eqchr_state_t* get_eqchr_state(cspice_t* state) {
+static eqchr_state_t* get_eqchr_state(cspice_t* state) {
 	if (!state->eqchr)
 		state->eqchr = __cspice_allocate_module(sizeof(eqchr_state_t),
 	 &__eqchr_init, sizeof(__eqchr_init));
@@ -574,12 +574,12 @@ L_nechr:
 logical eqchr_(cspice_t* __global_state, char *a, char *b, ftnlen a_len, 
 	ftnlen b_len)
 {
-    return eqchr_0_(0, a, b, a_len, b_len);
+    return eqchr_0_(__global_state, 0, a, b, a_len, b_len);
     }
 
 logical nechr_(cspice_t* __global_state, char *a, char *b, ftnlen a_len, 
 	ftnlen b_len)
 {
-    return eqchr_0_(1, a, b, a_len, b_len);
+    return eqchr_0_(__global_state, 1, a, b, a_len, b_len);
     }
 

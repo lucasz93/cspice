@@ -8,7 +8,7 @@
 
 
 extern ckcov_init_t __ckcov_init;
-static inline ckcov_state_t* get_ckcov_state(cspice_t* state) {
+static ckcov_state_t* get_ckcov_state(cspice_t* state) {
 	if (!state->ckcov)
 		state->ckcov = __cspice_allocate_module(sizeof(ckcov_state_t),
 	 &__ckcov_init, sizeof(__ckcov_init));

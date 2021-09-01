@@ -8,7 +8,7 @@
 
 
 typedef int frstnb_state_t;
-static inline frstnb_state_t* get_frstnb_state(cspice_t* state) {
+static frstnb_state_t* get_frstnb_state(cspice_t* state) {
 	return 0;
 }
 

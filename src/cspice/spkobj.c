@@ -8,7 +8,7 @@
 
 
 extern spkobj_init_t __spkobj_init;
-static inline spkobj_state_t* get_spkobj_state(cspice_t* state) {
+static spkobj_state_t* get_spkobj_state(cspice_t* state) {
 	if (!state->spkobj)
 		state->spkobj = __cspice_allocate_module(sizeof(
 	spkobj_state_t), &__spkobj_init, sizeof(__spkobj_init));

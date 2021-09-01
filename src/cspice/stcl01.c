@@ -8,7 +8,7 @@
 
 
 extern stcl01_init_t __stcl01_init;
-static inline stcl01_state_t* get_stcl01_state(cspice_t* state) {
+static stcl01_state_t* get_stcl01_state(cspice_t* state) {
 	if (!state->stcl01)
 		state->stcl01 = __cspice_allocate_module(sizeof(
 	stcl01_state_t), &__stcl01_init, sizeof(__stcl01_init));

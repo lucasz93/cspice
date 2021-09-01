@@ -8,7 +8,7 @@
 
 
 extern zzdafgsr_init_t __zzdafgsr_init;
-static inline zzdafgsr_state_t* get_zzdafgsr_state(cspice_t* state) {
+static zzdafgsr_state_t* get_zzdafgsr_state(cspice_t* state) {
 	if (!state->zzdafgsr)
 		state->zzdafgsr = __cspice_allocate_module(sizeof(
 	zzdafgsr_state_t), &__zzdafgsr_init, sizeof(__zzdafgsr_init));

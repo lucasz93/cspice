@@ -8,7 +8,7 @@
 
 
 extern dsksrf_init_t __dsksrf_init;
-static inline dsksrf_state_t* get_dsksrf_state(cspice_t* state) {
+static dsksrf_state_t* get_dsksrf_state(cspice_t* state) {
 	if (!state->dsksrf)
 		state->dsksrf = __cspice_allocate_module(sizeof(
 	dsksrf_state_t), &__dsksrf_init, sizeof(__dsksrf_init));

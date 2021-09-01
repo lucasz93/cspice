@@ -8,7 +8,7 @@
 
 
 extern npedln_init_t __npedln_init;
-static inline npedln_state_t* get_npedln_state(cspice_t* state) {
+static npedln_state_t* get_npedln_state(cspice_t* state) {
 	if (!state->npedln)
 		state->npedln = __cspice_allocate_module(sizeof(
 	npedln_state_t), &__npedln_init, sizeof(__npedln_init));

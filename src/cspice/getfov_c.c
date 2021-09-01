@@ -658,8 +658,8 @@
    The strings returned, shape and frame, are Fortranish type strings.
    Convert the strings to C type.  
    */
-   F2C_ConvertStr ( shapelen, shape );
-   F2C_ConvertStr ( framelen, frame );
+   F2C_ConvertStr ( naif_state, shapelen, shape );
+   F2C_ConvertStr ( naif_state, framelen, frame );
 
    chkout_c ( naif_state, "getfov_c" );
 

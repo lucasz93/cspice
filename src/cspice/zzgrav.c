@@ -8,7 +8,7 @@
 
 
 typedef int zzgrav_state_t;
-static inline zzgrav_state_t* get_zzgrav_state(cspice_t* state) {
+static zzgrav_state_t* get_zzgrav_state(cspice_t* state) {
 	return 0;
 }
 
@@ -19,7 +19,7 @@ static inline zzgrav_state_t* get_zzgrav_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
 
     /* Module state */
@@ -325,8 +325,7 @@ static inline zzgrav_state_t* get_zzgrav_state(cspice_t* state) {
     grav[1] = 6378.135;
 /* Computing 3rd power */
     d__1 = grav[1];
-    grav[4] = 60. / sqrt(&__global_state->f2c, d__1 * (d__1 * d__1) / grav[7])
-	    ;
+    grav[4] = 60. / sqrt(d__1 * (d__1 * d__1) / grav[7]);
     grav[10] = 1. / grav[4];
     grav[13] = .001082616;
     grav[16] = -2.53881e-6;
@@ -339,8 +338,7 @@ static inline zzgrav_state_t* get_zzgrav_state(cspice_t* state) {
     grav[2] = 6378.137;
 /* Computing 3rd power */
     d__1 = grav[2];
-    grav[5] = 60. / sqrt(&__global_state->f2c, d__1 * (d__1 * d__1) / grav[8])
-	    ;
+    grav[5] = 60. / sqrt(d__1 * (d__1 * d__1) / grav[8]);
     grav[11] = 1. / grav[5];
     grav[14] = .00108262998905;
     grav[17] = -2.53215306e-6;

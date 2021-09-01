@@ -8,7 +8,7 @@
 
 
 typedef int unorm_state_t;
-static inline unorm_state_t* get_unorm_state(cspice_t* state) {
+static unorm_state_t* get_unorm_state(cspice_t* state) {
 	return 0;
 }
 

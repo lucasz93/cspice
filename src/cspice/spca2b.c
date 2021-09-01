@@ -8,7 +8,7 @@
 
 
 typedef int spca2b_state_t;
-static inline spca2b_state_t* get_spca2b_state(cspice_t* state) {
+static spca2b_state_t* get_spca2b_state(cspice_t* state) {
 	return 0;
 }
 

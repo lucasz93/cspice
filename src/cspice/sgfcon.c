@@ -8,7 +8,7 @@
 
 
 extern sgfcon_init_t __sgfcon_init;
-static inline sgfcon_state_t* get_sgfcon_state(cspice_t* state) {
+static sgfcon_state_t* get_sgfcon_state(cspice_t* state) {
 	if (!state->sgfcon)
 		state->sgfcon = __cspice_allocate_module(sizeof(
 	sgfcon_state_t), &__sgfcon_init, sizeof(__sgfcon_init));

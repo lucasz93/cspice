@@ -45,7 +45,7 @@
    #include <time.h>
    #include "SpiceUsr.h"
 
-   int zzcputim_ ( SpiceDouble *tvec ) 
+   int zzcputim_ ( void *naif_state, SpiceDouble *tvec ) 
 
 /*
 

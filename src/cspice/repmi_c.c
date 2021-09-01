@@ -360,7 +360,7 @@
    /*
    Convert the output string from Fortran to C style. 
    */
-   F2C_ConvertStr ( lenout, out );
+   F2C_ConvertStr ( naif_state, lenout, out );
    
 
 } /* End repmi_c */

@@ -408,7 +408,7 @@
    valid whether or not the CSPICE routine signaled an error or failed
    to translate the input code.
    */
-   F2C_ConvertStr ( srflen, srfstr );
+   F2C_ConvertStr ( naif_state, srflen, srfstr );
 
 
    chkout_c ( naif_state, "srfc2s_c" );

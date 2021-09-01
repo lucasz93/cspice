@@ -25,18 +25,9 @@ rd_Z(f2c_state_t *f2c, Uint *n, int w, ftnlen len)
 	long x[9];
 	char *s, *s0, *s1, *se, *t;
 	int ch, i, w1, w2;
-	static _Thread_local char hex[256];	/* MECHSOFT: Not critical state. Safe to keep thread local. */
 	static int one = 1;					/* MECHSOFT: Read only. Safe to keep static. */
 	int bad = 0;
 
-	if (!hex['0']) {
-		s = "0123456789";
-		while(ch = *s++)
-			hex[ch] = ch - '0' + 1;
-		s = "ABCDEF";
-		while(ch = *s++)
-			hex[ch] = hex[ch + 'a' - 'A'] = ch - 'A' + 11;
-		}
 	s = s0 = (char *)x;
 	s1 = (char *)&x[4];
 	se = (char *)&x[8];
@@ -48,7 +39,7 @@ rd_Z(f2c_state_t *f2c, Uint *n, int w, ftnlen len)
 			break;
 		w--;
 		if (ch > ' ') {
-			if (!hex[ch & 0xff])
+			if (!f2c->hex[ch & 0xff])
 				bad++;
 			*s++ = ch;
 			if (s == se) {
@@ -79,13 +70,13 @@ rd_Z(f2c_state_t *f2c, Uint *n, int w, ftnlen len)
 	if (w < w2)
 		s0 = s - (w << 1);
 	else if (w1 & 1) {
-		*t = hex[*s0++ & 0xff] - 1;
+		*t = f2c->hex[*s0++ & 0xff] - 1;
 		if (!--w)
 			return 0;
 		t += i;
 		}
 	do {
-		*t = hex[*s0 & 0xff]-1 << 4 | hex[s0[1] & 0xff]-1;
+		*t = f2c->hex[*s0 & 0xff]-1 << 4 | f2c->hex[s0[1] & 0xff]-1;
 		t += i;
 		s0 += 2;
 		}
@@ -367,7 +358,7 @@ rd_H(f2c_state_t *f2c, int n, char *s)
 #endif
 {	int i,ch;
 	for(i=0;i<n;i++)
-		if((ch=(*f2c->f__getn)())<0) return(ch);
+		if((ch=(*f2c->f__getn)(f2c))<0) return(ch);
 		else *s++ = ch=='\n'?' ':ch;
 	return(1);
 }
@@ -382,7 +373,7 @@ rd_POS(f2c_state_t *f2c, char *s)
 	quote= *s++;
 	for(;*s;s++)
 		if(*s==quote && *(s+1)!=quote) break;
-		else if((ch=(*f2c->f__getn)())<0) return(ch);
+		else if((ch=(*f2c->f__getn)(f2c))<0) return(ch);
 		else *s = ch=='\n'?' ':ch;
 	return(1);
 }
@@ -392,7 +383,7 @@ rd_ed(f2c,p,ptr,len) f2c_state_t *f2c; struct syl *p; char *ptr; ftnlen len;
 rd_ed(f2c_state_t *f2c, struct syl *p, char *ptr, ftnlen len)
 #endif
 {	int ch;
-	for(;f2c->f__cursor>0;f2c->f__cursor--) if((ch=(*f2c->f__getn)())<0) return(ch);
+	for(;f2c->f__cursor>0;f2c->f__cursor--) if((ch=(*f2c->f__getn)(f2c))<0) return(ch);
 	if(f2c->f__cursor<0)
 	{	if(f2c->f__recpos+f2c->f__cursor < 0) /*err(elist->cierr,110,"fmt")*/
 			f2c->f__cursor = -f2c->f__recpos;	/* is this in the standard? */
@@ -402,7 +393,7 @@ rd_ed(f2c_state_t *f2c, struct syl *p, char *ptr, ftnlen len)
 		else if(f2c->f__curunit && f2c->f__curunit->useek)
 			(void) fseek(f2c->f__cf,(long) f2c->f__cursor,SEEK_CUR);
 		else
-			err(f2c->f__elist->cierr,106,"fmt");
+			err(f2c,f2c->f__elist->cierr,106,"fmt");
 		f2c->f__recpos += f2c->f__cursor;
 		f2c->f__cursor=0;
 	}
@@ -461,7 +452,7 @@ rd_ned(f2c_state_t *f2c, struct syl *p)
 	case APOS:
 		return(rd_POS(f2c,p->p2.s));
 	case H:	return(rd_H(f2c,p->p1,p->p2.s));
-	case SLASH: return((*f2c->f__donewrec)());
+	case SLASH: return((*f2c->f__donewrec)(f2c));
 	case TR:
 	case X:	f2c->f__cursor += p->p1;
 		return(1);

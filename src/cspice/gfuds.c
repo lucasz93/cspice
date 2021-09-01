@@ -8,7 +8,7 @@
 
 
 extern gfuds_init_t __gfuds_init;
-static inline gfuds_state_t* get_gfuds_state(cspice_t* state) {
+static gfuds_state_t* get_gfuds_state(cspice_t* state) {
 	if (!state->gfuds)
 		state->gfuds = __cspice_allocate_module(sizeof(gfuds_state_t),
 	 &__gfuds_init, sizeof(__gfuds_init));

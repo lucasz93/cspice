@@ -8,7 +8,7 @@
 
 
 extern zzdsksel_init_t __zzdsksel_init;
-static inline zzdsksel_state_t* get_zzdsksel_state(cspice_t* state) {
+static zzdsksel_state_t* get_zzdsksel_state(cspice_t* state) {
 	if (!state->zzdsksel)
 		state->zzdsksel = __cspice_allocate_module(sizeof(
 	zzdsksel_state_t), &__zzdsksel_init, sizeof(__zzdsksel_init));
@@ -2510,104 +2510,106 @@ logical zzdsksel_(cspice_t* __global_state, integer *surfid, integer *nsurf,
 	framid, doublereal *pos, doublereal *et, integer *handle, integer *
 	dladsc, doublereal *dskdsc)
 {
-    return zzdsksel_0_(0, surfid, nsurf, srflst, bodyid, dclass, corsys, 
-	    corpar, cor1, cor2, framid, pos, et, handle, dladsc, dskdsc);
+    return zzdsksel_0_(__global_state, 0, surfid, nsurf, srflst, bodyid, 
+	    dclass, corsys, corpar, cor1, cor2, framid, pos, et, handle, 
+	    dladsc, dskdsc);
     }
 
 logical zzdsksbd_(cspice_t* __global_state, integer *bodyid)
 {
-    return zzdsksel_0_(1, (integer *)0, (integer *)0, (integer *)0, bodyid, (
-	    integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
-	    doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
-	    integer *)0, (integer *)0, (doublereal *)0);
+    return zzdsksel_0_(__global_state, 1, (integer *)0, (integer *)0, (
+	    integer *)0, bodyid, (integer *)0, (integer *)0, (doublereal *)0, 
+	    (doublereal *)0, (doublereal *)0, (integer *)0, (doublereal *)0, (
+	    doublereal *)0, (integer *)0, (integer *)0, (doublereal *)0);
     }
 
 logical zzdskbdc_(cspice_t* __global_state, integer *handle, integer *dladsc, 
 	doublereal *dskdsc)
 {
-    return zzdsksel_0_(2, (integer *)0, (integer *)0, (integer *)0, (integer *
-	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    (doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    handle, dladsc, dskdsc);
+    return zzdsksel_0_(__global_state, 2, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (doublereal *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, handle, dladsc, dskdsc);
     }
 
 logical zzdsknot_(cspice_t* __global_state, integer *handle, integer *dladsc, 
 	doublereal *dskdsc)
 {
-    return zzdsksel_0_(3, (integer *)0, (integer *)0, (integer *)0, (integer *
-	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    (doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    handle, dladsc, dskdsc);
+    return zzdsksel_0_(__global_state, 3, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (doublereal *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, handle, dladsc, dskdsc);
     }
 
 logical zzdsksit_(cspice_t* __global_state, integer *bodyid, integer *nsurf, 
 	integer *srflst, doublereal *et)
 {
-    return zzdsksel_0_(4, (integer *)0, nsurf, srflst, bodyid, (integer *)0, (
-	    integer *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0, (
-	    integer *)0, (doublereal *)0, et, (integer *)0, (integer *)0, (
-	    doublereal *)0);
+    return zzdsksel_0_(__global_state, 4, (integer *)0, nsurf, srflst, bodyid,
+	     (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
+	    doublereal *)0, (integer *)0, (doublereal *)0, et, (integer *)0, (
+	    integer *)0, (doublereal *)0);
     }
 
 logical zzdskcit_(cspice_t* __global_state, integer *handle, integer *dladsc, 
 	doublereal *dskdsc)
 {
-    return zzdsksel_0_(5, (integer *)0, (integer *)0, (integer *)0, (integer *
-	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    (doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    handle, dladsc, dskdsc);
+    return zzdsksel_0_(__global_state, 5, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (doublereal *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, handle, dladsc, dskdsc);
     }
 
 logical zzdskusc_(cspice_t* __global_state, integer *bodyid, doublereal *et, 
 	doublereal *cor1, doublereal *cor2)
 {
-    return zzdsksel_0_(6, (integer *)0, (integer *)0, (integer *)0, bodyid, (
-	    integer *)0, (integer *)0, (doublereal *)0, cor1, cor2, (integer *
-	    )0, (doublereal *)0, et, (integer *)0, (integer *)0, (doublereal *
-	    )0);
+    return zzdsksel_0_(__global_state, 6, (integer *)0, (integer *)0, (
+	    integer *)0, bodyid, (integer *)0, (integer *)0, (doublereal *)0, 
+	    cor1, cor2, (integer *)0, (doublereal *)0, et, (integer *)0, (
+	    integer *)0, (doublereal *)0);
     }
 
 logical zzdskumc_(cspice_t* __global_state, integer *handle, integer *dladsc, 
 	doublereal *dskdsc)
 {
-    return zzdsksel_0_(7, (integer *)0, (integer *)0, (integer *)0, (integer *
-	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    (doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    handle, dladsc, dskdsc);
+    return zzdsksel_0_(__global_state, 7, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (doublereal *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, handle, dladsc, dskdsc);
     }
 
 logical zzdskmsc_(cspice_t* __global_state, integer *bodyid, integer *surfid, 
 	integer *framid, integer *corsys, doublereal *corpar, doublereal *et, 
 	doublereal *cor1, doublereal *cor2)
 {
-    return zzdsksel_0_(8, surfid, (integer *)0, (integer *)0, bodyid, (
-	    integer *)0, corsys, corpar, cor1, cor2, framid, (doublereal *)0, 
-	    et, (integer *)0, (integer *)0, (doublereal *)0);
+    return zzdsksel_0_(__global_state, 8, surfid, (integer *)0, (integer *)0, 
+	    bodyid, (integer *)0, corsys, corpar, cor1, cor2, framid, (
+	    doublereal *)0, et, (integer *)0, (integer *)0, (doublereal *)0);
     }
 
 logical zzdskmmc_(cspice_t* __global_state, integer *handle, integer *dladsc, 
 	doublereal *dskdsc)
 {
-    return zzdsksel_0_(9, (integer *)0, (integer *)0, (integer *)0, (integer *
-	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    (doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    handle, dladsc, dskdsc);
+    return zzdsksel_0_(__global_state, 9, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (doublereal *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, handle, dladsc, dskdsc);
     }
 
 logical zzdsksrc_(cspice_t* __global_state, integer *surfid, integer *bodyid, 
 	integer *dclass, doublereal *et, integer *framid, doublereal *pos)
 {
-    return zzdsksel_0_(10, surfid, (integer *)0, (integer *)0, bodyid, dclass,
-	     (integer *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0, 
-	    framid, pos, et, (integer *)0, (integer *)0, (doublereal *)0);
+    return zzdsksel_0_(__global_state, 10, surfid, (integer *)0, (integer *)0,
+	     bodyid, dclass, (integer *)0, (doublereal *)0, (doublereal *)0, (
+	    doublereal *)0, framid, pos, et, (integer *)0, (integer *)0, (
+	    doublereal *)0);
     }
 
 logical zzdskmrc_(cspice_t* __global_state, integer *handle, integer *dladsc, 
 	doublereal *dskdsc)
 {
-    return zzdsksel_0_(11, (integer *)0, (integer *)0, (integer *)0, (integer 
-	    *)0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0,
-	     (doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
-	    handle, dladsc, dskdsc);
+    return zzdsksel_0_(__global_state, 11, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (doublereal *)0, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, handle, dladsc, dskdsc);
     }
 

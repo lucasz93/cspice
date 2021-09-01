@@ -8,7 +8,7 @@
 
 
 extern bodvcd_init_t __bodvcd_init;
-static inline bodvcd_state_t* get_bodvcd_state(cspice_t* state) {
+static bodvcd_state_t* get_bodvcd_state(cspice_t* state) {
 	if (!state->bodvcd)
 		state->bodvcd = __cspice_allocate_module(sizeof(
 	bodvcd_state_t), &__bodvcd_init, sizeof(__bodvcd_init));

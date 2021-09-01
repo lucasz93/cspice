@@ -8,7 +8,7 @@
 
 
 typedef int touchi_state_t;
-static inline touchi_state_t* get_touchi_state(cspice_t* state) {
+static touchi_state_t* get_touchi_state(cspice_t* state) {
 	return 0;
 }
 

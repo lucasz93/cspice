@@ -8,7 +8,7 @@
 
 
 typedef int dxtrct_state_t;
-static inline dxtrct_state_t* get_dxtrct_state(cspice_t* state) {
+static dxtrct_state_t* get_dxtrct_state(cspice_t* state) {
 	return 0;
 }
 

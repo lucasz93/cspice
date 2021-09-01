@@ -47,7 +47,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   int byebye_ ( char *status,   ftnlen statusLen )
+   int byebye_ ( void *naif_state,   char *status,   ftnlen statusLen )
 
 /*
 
@@ -166,7 +166,7 @@
    characters.
    */
 
-   if (  eqstr_ ( status, "SUCCESS", statusLen, 7 )  )
+   if (  eqstr_ ( naif_state, status, "SUCCESS", statusLen, 7 )  )
       {
       exit ( EXIT_SUCCESS );
       }

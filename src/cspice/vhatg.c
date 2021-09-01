@@ -8,7 +8,7 @@
 
 
 typedef int vhatg_state_t;
-static inline vhatg_state_t* get_vhatg_state(cspice_t* state) {
+static vhatg_state_t* get_vhatg_state(cspice_t* state) {
 	return 0;
 }
 

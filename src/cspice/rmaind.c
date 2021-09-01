@@ -8,7 +8,7 @@
 
 
 typedef int rmaind_state_t;
-static inline rmaind_state_t* get_rmaind_state(cspice_t* state) {
+static rmaind_state_t* get_rmaind_state(cspice_t* state) {
 	return 0;
 }
 

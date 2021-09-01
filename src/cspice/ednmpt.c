@@ -8,7 +8,7 @@
 
 
 extern ednmpt_init_t __ednmpt_init;
-static inline ednmpt_state_t* get_ednmpt_state(cspice_t* state) {
+static ednmpt_state_t* get_ednmpt_state(cspice_t* state) {
 	if (!state->ednmpt)
 		state->ednmpt = __cspice_allocate_module(sizeof(
 	ednmpt_state_t), &__ednmpt_init, sizeof(__ednmpt_init));

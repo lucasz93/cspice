@@ -393,7 +393,7 @@
    Convert the output name string to a null-terminated,
    C style string. 
    */
-   F2C_ConvertStr ( namelen, name );
+   F2C_ConvertStr ( naif_state, namelen, name );
 
 
 } /* End trcnam_c */

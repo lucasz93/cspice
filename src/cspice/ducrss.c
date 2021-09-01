@@ -8,7 +8,7 @@
 
 
 extern ducrss_init_t __ducrss_init;
-static inline ducrss_state_t* get_ducrss_state(cspice_t* state) {
+static ducrss_state_t* get_ducrss_state(cspice_t* state) {
 	if (!state->ducrss)
 		state->ducrss = __cspice_allocate_module(sizeof(
 	ducrss_state_t), &__ducrss_init, sizeof(__ducrss_init));

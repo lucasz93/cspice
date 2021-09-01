@@ -8,7 +8,7 @@
 
 
 typedef int cardc_state_t;
-static inline cardc_state_t* get_cardc_state(cspice_t* state) {
+static cardc_state_t* get_cardc_state(cspice_t* state) {
 	return 0;
 }
 

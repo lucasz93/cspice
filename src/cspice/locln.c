@@ -8,7 +8,7 @@
 
 
 extern locln_init_t __locln_init;
-static inline locln_state_t* get_locln_state(cspice_t* state) {
+static locln_state_t* get_locln_state(cspice_t* state) {
 	if (!state->locln)
 		state->locln = __cspice_allocate_module(sizeof(locln_state_t),
 	 &__locln_init, sizeof(__locln_init));

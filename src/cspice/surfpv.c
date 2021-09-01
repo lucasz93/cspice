@@ -8,7 +8,7 @@
 
 
 extern surfpv_init_t __surfpv_init;
-static inline surfpv_state_t* get_surfpv_state(cspice_t* state) {
+static surfpv_state_t* get_surfpv_state(cspice_t* state) {
 	if (!state->surfpv)
 		state->surfpv = __cspice_allocate_module(sizeof(
 	surfpv_state_t), &__surfpv_init, sizeof(__surfpv_init));

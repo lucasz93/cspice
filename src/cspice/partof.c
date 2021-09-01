@@ -8,7 +8,7 @@
 
 
 typedef int partof_state_t;
-static inline partof_state_t* get_partof_state(cspice_t* state) {
+static partof_state_t* get_partof_state(cspice_t* state) {
 	return 0;
 }
 

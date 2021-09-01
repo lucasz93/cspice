@@ -296,7 +296,7 @@
       We need to convert `cvals' into an array
       of n null-terminated strings each `lenout' long.
       */
-      F2C_ConvertTrStrArr ( *n, lenout, (char *)buffer );
+      F2C_ConvertTrStrArr ( naif_state, *n, lenout, (char *)buffer );
    }
  
    chkout_c ( naif_state, "dafec_c" );

@@ -8,7 +8,7 @@
 
 
 typedef int dvnorm_state_t;
-static inline dvnorm_state_t* get_dvnorm_state(cspice_t* state) {
+static dvnorm_state_t* get_dvnorm_state(cspice_t* state) {
 	return 0;
 }
 

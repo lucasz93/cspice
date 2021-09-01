@@ -8,7 +8,7 @@
 
 
 extern quote_init_t __quote_init;
-static inline quote_state_t* get_quote_state(cspice_t* state) {
+static quote_state_t* get_quote_state(cspice_t* state) {
 	if (!state->quote)
 		state->quote = __cspice_allocate_module(sizeof(quote_state_t),
 	 &__quote_init, sizeof(__quote_init));

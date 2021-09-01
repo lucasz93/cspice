@@ -8,7 +8,7 @@
 
 
 extern zzmobliq_init_t __zzmobliq_init;
-static inline zzmobliq_state_t* get_zzmobliq_state(cspice_t* state) {
+static zzmobliq_state_t* get_zzmobliq_state(cspice_t* state) {
 	if (!state->zzmobliq)
 		state->zzmobliq = __cspice_allocate_module(sizeof(
 	zzmobliq_state_t), &__zzmobliq_init, sizeof(__zzmobliq_init));

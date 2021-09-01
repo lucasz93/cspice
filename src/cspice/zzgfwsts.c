@@ -8,7 +8,7 @@
 
 
 extern zzgfwsts_init_t __zzgfwsts_init;
-static inline zzgfwsts_state_t* get_zzgfwsts_state(cspice_t* state) {
+static zzgfwsts_state_t* get_zzgfwsts_state(cspice_t* state) {
 	if (!state->zzgfwsts)
 		state->zzgfwsts = __cspice_allocate_module(sizeof(
 	zzgfwsts_state_t), &__zzgfwsts_init, sizeof(__zzgfwsts_init));

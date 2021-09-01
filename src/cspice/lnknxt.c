@@ -8,7 +8,7 @@
 
 
 extern lnknxt_init_t __lnknxt_init;
-static inline lnknxt_state_t* get_lnknxt_state(cspice_t* state) {
+static lnknxt_state_t* get_lnknxt_state(cspice_t* state) {
 	if (!state->lnknxt)
 		state->lnknxt = __cspice_allocate_module(sizeof(
 	lnknxt_state_t), &__lnknxt_init, sizeof(__lnknxt_init));

@@ -8,7 +8,7 @@
 
 
 extern syrenc_init_t __syrenc_init;
-static inline syrenc_state_t* get_syrenc_state(cspice_t* state) {
+static syrenc_state_t* get_syrenc_state(cspice_t* state) {
 	if (!state->syrenc)
 		state->syrenc = __cspice_allocate_module(sizeof(
 	syrenc_state_t), &__syrenc_init, sizeof(__syrenc_init));

@@ -8,7 +8,7 @@
 
 
 typedef int syselc_state_t;
-static inline syselc_state_t* get_syselc_state(cspice_t* state) {
+static syselc_state_t* get_syselc_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int brckti_state_t;
-static inline brckti_state_t* get_brckti_state(cspice_t* state) {
+static brckti_state_t* get_brckti_state(cspice_t* state) {
 	return 0;
 }
 

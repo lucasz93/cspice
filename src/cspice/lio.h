@@ -58,12 +58,12 @@ extern int l_read(), l_write();
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern int l_write(ftnint*, char*, ftnlen, ftnint);
-extern void x_wsne(cilist*);
-extern int c_le(cilist*);
-extern int l_read(ftnint*,char*,ftnlen,ftnint);
-extern integer e_rsle(void), e_wsle(void), s_wsne(cilist*);
-extern int z_rnew(void);
+extern int l_write(struct f2c_state_s *,ftnint*, char*, ftnlen, ftnint);
+extern void x_wsne(struct f2c_state_s *,cilist*);
+extern int c_le(struct f2c_state_s *, cilist*);
+extern int l_read(struct f2c_state_s *, ftnint*,char*,ftnlen,ftnint);
+extern integer e_rsle(struct f2c_state_s *), e_wsle(struct f2c_state_s *), s_wsne(struct f2c_state_s *,cilist*);
+extern int z_rnew(struct f2c_state_s *);
 #ifdef __cplusplus
 	}
 #endif

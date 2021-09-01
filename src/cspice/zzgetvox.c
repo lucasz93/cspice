@@ -8,7 +8,7 @@
 
 
 typedef int zzgetvox_state_t;
-static inline zzgetvox_state_t* get_zzgetvox_state(cspice_t* state) {
+static zzgetvox_state_t* get_zzgetvox_state(cspice_t* state) {
 	return 0;
 }
 

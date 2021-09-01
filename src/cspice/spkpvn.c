@@ -8,7 +8,7 @@
 
 
 extern spkpvn_init_t __spkpvn_init;
-static inline spkpvn_state_t* get_spkpvn_state(cspice_t* state) {
+static spkpvn_state_t* get_spkpvn_state(cspice_t* state) {
 	if (!state->spkpvn)
 		state->spkpvn = __cspice_allocate_module(sizeof(
 	spkpvn_state_t), &__spkpvn_init, sizeof(__spkpvn_init));

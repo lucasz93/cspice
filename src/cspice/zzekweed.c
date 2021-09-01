@@ -8,7 +8,7 @@
 
 
 extern zzekweed_init_t __zzekweed_init;
-static inline zzekweed_state_t* get_zzekweed_state(cspice_t* state) {
+static zzekweed_state_t* get_zzekweed_state(cspice_t* state) {
 	if (!state->zzekweed)
 		state->zzekweed = __cspice_allocate_module(sizeof(
 	zzekweed_state_t), &__zzekweed_init, sizeof(__zzekweed_init));

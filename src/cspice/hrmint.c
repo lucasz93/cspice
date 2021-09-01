@@ -8,7 +8,7 @@
 
 
 typedef int hrmint_state_t;
-static inline hrmint_state_t* get_hrmint_state(cspice_t* state) {
+static hrmint_state_t* get_hrmint_state(cspice_t* state) {
 	return 0;
 }
 

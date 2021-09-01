@@ -8,7 +8,7 @@
 
 
 typedef int dafra_state_t;
-static inline dafra_state_t* get_dafra_state(cspice_t* state) {
+static dafra_state_t* get_dafra_state(cspice_t* state) {
 	return 0;
 }
 

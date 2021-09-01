@@ -8,7 +8,7 @@
 
 
 extern ckobj_init_t __ckobj_init;
-static inline ckobj_state_t* get_ckobj_state(cspice_t* state) {
+static ckobj_state_t* get_ckobj_state(cspice_t* state) {
 	if (!state->ckobj)
 		state->ckobj = __cspice_allocate_module(sizeof(ckobj_state_t),
 	 &__ckobj_init, sizeof(__ckobj_init));

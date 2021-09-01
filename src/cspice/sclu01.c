@@ -8,7 +8,7 @@
 
 
 extern sclu01_init_t __sclu01_init;
-static inline sclu01_state_t* get_sclu01_state(cspice_t* state) {
+static sclu01_state_t* get_sclu01_state(cspice_t* state) {
 	if (!state->sclu01)
 		state->sclu01 = __cspice_allocate_module(sizeof(
 	sclu01_state_t), &__sclu01_init, sizeof(__sclu01_init));
@@ -1190,19 +1190,21 @@ L_scld01:
 	sc, integer *maxnv, integer *n, integer *ival, doublereal *dval, 
 	ftnlen name_len)
 {
-    return sclu01_0_(0, name__, sc, maxnv, n, ival, dval, name_len);
+    return sclu01_0_(__global_state, 0, name__, sc, maxnv, n, ival, dval, 
+	    name_len);
     }
 
 /* Subroutine */ int scli01_(cspice_t* __global_state, char *name__, integer *
 	sc, integer *maxnv, integer *n, integer *ival, ftnlen name_len)
 {
-    return sclu01_0_(1, name__, sc, maxnv, n, ival, (doublereal *)0, name_len)
-	    ;
+    return sclu01_0_(__global_state, 1, name__, sc, maxnv, n, ival, (
+	    doublereal *)0, name_len);
     }
 
 /* Subroutine */ int scld01_(cspice_t* __global_state, char *name__, integer *
 	sc, integer *maxnv, integer *n, doublereal *dval, ftnlen name_len)
 {
-    return sclu01_0_(2, name__, sc, maxnv, n, (integer *)0, dval, name_len);
+    return sclu01_0_(__global_state, 2, name__, sc, maxnv, n, (integer *)0, 
+	    dval, name_len);
     }
 

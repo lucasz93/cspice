@@ -8,7 +8,7 @@
 
 
 extern zzekpars_init_t __zzekpars_init;
-static inline zzekpars_state_t* get_zzekpars_state(cspice_t* state) {
+static zzekpars_state_t* get_zzekpars_state(cspice_t* state) {
 	if (!state->zzekpars)
 		state->zzekpars = __cspice_allocate_module(sizeof(
 	zzekpars_state_t), &__zzekpars_init, sizeof(__zzekpars_init));

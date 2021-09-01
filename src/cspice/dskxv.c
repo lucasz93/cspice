@@ -8,7 +8,7 @@
 
 
 extern dskxv_init_t __dskxv_init;
-static inline dskxv_state_t* get_dskxv_state(cspice_t* state) {
+static dskxv_state_t* get_dskxv_state(cspice_t* state) {
 	if (!state->dskxv)
 		state->dskxv = __cspice_allocate_module(sizeof(dskxv_state_t),
 	 &__dskxv_init, sizeof(__dskxv_init));

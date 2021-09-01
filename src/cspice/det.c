@@ -8,7 +8,7 @@
 
 
 typedef int det_state_t;
-static inline det_state_t* get_det_state(cspice_t* state) {
+static det_state_t* get_det_state(cspice_t* state) {
 	return 0;
 }
 

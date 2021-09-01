@@ -8,7 +8,7 @@
 
 
 typedef int zzcorepc_state_t;
-static inline zzcorepc_state_t* get_zzcorepc_state(cspice_t* state) {
+static zzcorepc_state_t* get_zzcorepc_state(cspice_t* state) {
 	return 0;
 }
 

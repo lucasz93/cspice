@@ -8,7 +8,7 @@
 
 
 typedef int filli_state_t;
-static inline filli_state_t* get_filli_state(cspice_t* state) {
+static filli_state_t* get_filli_state(cspice_t* state) {
 	return 0;
 }
 

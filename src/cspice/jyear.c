@@ -8,7 +8,7 @@
 
 
 typedef int jyear_state_t;
-static inline jyear_state_t* get_jyear_state(cspice_t* state) {
+static jyear_state_t* get_jyear_state(cspice_t* state) {
 	return 0;
 }
 

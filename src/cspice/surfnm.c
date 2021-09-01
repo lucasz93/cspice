@@ -8,7 +8,7 @@
 
 
 extern surfnm_init_t __surfnm_init;
-static inline surfnm_state_t* get_surfnm_state(cspice_t* state) {
+static surfnm_state_t* get_surfnm_state(cspice_t* state) {
 	if (!state->surfnm)
 		state->surfnm = __cspice_allocate_module(sizeof(
 	surfnm_state_t), &__surfnm_init, sizeof(__surfnm_init));

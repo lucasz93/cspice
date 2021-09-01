@@ -8,7 +8,7 @@
 
 
 extern m2eul_init_t __m2eul_init;
-static inline m2eul_state_t* get_m2eul_state(cspice_t* state) {
+static m2eul_state_t* get_m2eul_state(cspice_t* state) {
 	if (!state->m2eul)
 		state->m2eul = __cspice_allocate_module(sizeof(m2eul_state_t),
 	 &__m2eul_init, sizeof(__m2eul_init));
@@ -29,8 +29,7 @@ static inline m2eul_state_t* get_m2eul_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double acos(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
-	    doublereal), asin(f2c_state_t*, doublereal);
+    double acos(doublereal), atan2(doublereal, doublereal), asin(doublereal);
 
     /* Local variables */
     doublereal sign;
@@ -836,15 +835,15 @@ static inline m2eul_state_t* get_m2eul_state(cspice_t* state) {
 
 	if (degen) {
 	    *angle3 = 0.;
-	    *angle2 = acos(&__global_state->f2c, tmprot[8]);
-	    *angle1 = atan2(&__global_state->f2c, tmprot[3], tmprot[0]);
+	    *angle2 = acos(tmprot[8]);
+	    *angle1 = atan2(tmprot[3], tmprot[0]);
 	} else {
 
 /*           The normal case. */
 
-	    *angle3 = atan2(&__global_state->f2c, tmprot[6], tmprot[7]);
-	    *angle2 = acos(&__global_state->f2c, tmprot[8]);
-	    *angle1 = atan2(&__global_state->f2c, tmprot[2], -tmprot[5]);
+	    *angle3 = atan2(tmprot[6], tmprot[7]);
+	    *angle2 = acos(tmprot[8]);
+	    *angle1 = atan2(tmprot[2], -tmprot[5]);
 	}
     } else {
 
@@ -962,17 +961,15 @@ static inline m2eul_state_t* get_m2eul_state(cspice_t* state) {
 
 	if (degen) {
 	    *angle3 = 0.;
-	    *angle2 = asin(&__global_state->f2c, -tmprot[6]);
-	    *angle1 = sign * atan2(&__global_state->f2c, -tmprot[1], tmprot[4]
-		    );
+	    *angle2 = asin(-tmprot[6]);
+	    *angle1 = sign * atan2(-tmprot[1], tmprot[4]);
 	} else {
 
 /*           The normal case. */
 
-	    *angle3 = atan2(&__global_state->f2c, tmprot[7], tmprot[8]);
-	    *angle2 = asin(&__global_state->f2c, -tmprot[6]);
-	    *angle1 = sign * atan2(&__global_state->f2c, tmprot[3], tmprot[0])
-		    ;
+	    *angle3 = atan2(tmprot[7], tmprot[8]);
+	    *angle2 = asin(-tmprot[6]);
+	    *angle1 = sign * atan2(tmprot[3], tmprot[0]);
 	}
     }
     chkout_(__global_state, "M2EUL", (ftnlen)5);

@@ -8,7 +8,7 @@
 
 
 extern zzdskbux_init_t __zzdskbux_init;
-static inline zzdskbux_state_t* get_zzdskbux_state(cspice_t* state) {
+static zzdskbux_state_t* get_zzdskbux_state(cspice_t* state) {
 	if (!state->zzdskbux)
 		state->zzdskbux = __cspice_allocate_module(sizeof(
 	zzdskbux_state_t), &__zzdskbux_init, sizeof(__zzdskbux_init));

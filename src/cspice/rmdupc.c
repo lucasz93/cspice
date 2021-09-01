@@ -8,7 +8,7 @@
 
 
 typedef int rmdupc_state_t;
-static inline rmdupc_state_t* get_rmdupc_state(cspice_t* state) {
+static rmdupc_state_t* get_rmdupc_state(cspice_t* state) {
 	return 0;
 }
 

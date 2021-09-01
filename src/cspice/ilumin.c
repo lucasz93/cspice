@@ -8,7 +8,7 @@
 
 
 typedef int ilumin_state_t;
-static inline ilumin_state_t* get_ilumin_state(cspice_t* state) {
+static ilumin_state_t* get_ilumin_state(cspice_t* state) {
 	return 0;
 }
 

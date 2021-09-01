@@ -249,7 +249,7 @@
 
    /* Convert the output string to C. */
 
-   F2C_ConvertStr( lenout, string );
+   F2C_ConvertStr( naif_state, lenout, string );
 
 
    chkout_c ( naif_state, "etcal_c" );

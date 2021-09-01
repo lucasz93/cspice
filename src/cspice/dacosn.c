@@ -8,7 +8,7 @@
 
 
 typedef int dacosn_state_t;
-static inline dacosn_state_t* get_dacosn_state(cspice_t* state) {
+static dacosn_state_t* get_dacosn_state(cspice_t* state) {
 	return 0;
 }
 
@@ -19,7 +19,7 @@ doublereal dacosn_(cspice_t* __global_state, doublereal *arg, doublereal *tol)
     doublereal ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double acos(f2c_state_t*, doublereal);
+    double acos(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -158,7 +158,7 @@ doublereal dacosn_(cspice_t* __global_state, doublereal *arg, doublereal *tol)
 
 /* Computing MAX */
     d__1 = -1., d__2 = min(1.,*arg);
-    ret_val = acos(&__global_state->f2c, (max(d__1,d__2)));
+    ret_val = acos((max(d__1,d__2)));
 
 /*     Check that tolerance is non negative. */
 

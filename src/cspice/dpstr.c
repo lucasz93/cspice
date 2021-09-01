@@ -8,7 +8,7 @@
 
 
 extern dpstr_init_t __dpstr_init;
-static inline dpstr_state_t* get_dpstr_state(cspice_t* state) {
+static dpstr_state_t* get_dpstr_state(cspice_t* state) {
 	if (!state->dpstr)
 		state->dpstr = __cspice_allocate_module(sizeof(dpstr_state_t),
 	 &__dpstr_init, sizeof(__dpstr_init));

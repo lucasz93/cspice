@@ -8,7 +8,7 @@
 
 
 typedef int appndd_state_t;
-static inline appndd_state_t* get_appndd_state(cspice_t* state) {
+static appndd_state_t* get_appndd_state(cspice_t* state) {
 	return 0;
 }
 

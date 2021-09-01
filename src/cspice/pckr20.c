@@ -8,7 +8,7 @@
 
 
 extern pckr20_init_t __pckr20_init;
-static inline pckr20_state_t* get_pckr20_state(cspice_t* state) {
+static pckr20_state_t* get_pckr20_state(cspice_t* state) {
 	if (!state->pckr20)
 		state->pckr20 = __cspice_allocate_module(sizeof(
 	pckr20_state_t), &__pckr20_init, sizeof(__pckr20_init));

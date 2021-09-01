@@ -8,7 +8,7 @@
 
 
 extern accept_init_t __accept_init;
-static inline accept_state_t* get_accept_state(cspice_t* state) {
+static accept_state_t* get_accept_state(cspice_t* state) {
 	if (!state->accept)
 		state->accept = __cspice_allocate_module(sizeof(
 	accept_state_t), &__accept_init, sizeof(__accept_init));
@@ -321,11 +321,11 @@ L_allowd:
 
 logical accept_(cspice_t* __global_state, logical *ok)
 {
-    return accept_0_(0, ok);
+    return accept_0_(__global_state, 0, ok);
     }
 
 logical allowd_(cspice_t* __global_state)
 {
-    return accept_0_(1, (logical *)0);
+    return accept_0_(__global_state, 1, (logical *)0);
     }
 

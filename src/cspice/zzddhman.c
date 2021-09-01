@@ -8,7 +8,7 @@
 
 
 extern zzddhman_init_t __zzddhman_init;
-static inline zzddhman_state_t* get_zzddhman_state(cspice_t* state) {
+static zzddhman_state_t* get_zzddhman_state(cspice_t* state) {
 	if (!state->zzddhman)
 		state->zzddhman = __cspice_allocate_module(sizeof(
 	zzddhman_state_t), &__zzddhman_init, sizeof(__zzddhman_init));
@@ -3500,74 +3500,80 @@ L_zzddhluh:
 	logical *found, logical *kill, ftnlen arch_len, ftnlen fname_len, 
 	ftnlen method_len)
 {
-    return zzddhman_0_(0, lock, arch, fname, method, handle, unit, intamh, 
-	    intarc, intbff, native, found, kill, arch_len, fname_len, 
-	    method_len);
+    return zzddhman_0_(__global_state, 0, lock, arch, fname, method, handle, 
+	    unit, intamh, intarc, intbff, native, found, kill, arch_len, 
+	    fname_len, method_len);
     }
 
 /* Subroutine */ int zzddhopn_(cspice_t* __global_state, char *fname, char *
 	method, char *arch, integer *handle, ftnlen fname_len, ftnlen 
 	method_len, ftnlen arch_len)
 {
-    return zzddhman_0_(1, (logical *)0, arch, fname, method, handle, (integer 
-	    *)0, (integer *)0, (integer *)0, (integer *)0, (logical *)0, (
-	    logical *)0, (logical *)0, arch_len, fname_len, method_len);
+    return zzddhman_0_(__global_state, 1, (logical *)0, arch, fname, method, 
+	    handle, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    logical *)0, (logical *)0, (logical *)0, arch_len, fname_len, 
+	    method_len);
     }
 
 /* Subroutine */ int zzddhcls_(cspice_t* __global_state, integer *handle, 
 	char *arch, logical *kill, ftnlen arch_len)
 {
-    return zzddhman_0_(2, (logical *)0, arch, (char *)0, (char *)0, handle, (
-	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (logical *)
-	    0, (logical *)0, kill, arch_len, (ftnint)0, (ftnint)0);
+    return zzddhman_0_(__global_state, 2, (logical *)0, arch, (char *)0, (
+	    char *)0, handle, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (logical *)0, (logical *)0, kill, arch_len, (ftnint)
+	    0, (ftnint)0);
     }
 
 /* Subroutine */ int zzddhhlu_(cspice_t* __global_state, integer *handle, 
 	char *arch, logical *lock, integer *unit, ftnlen arch_len)
 {
-    return zzddhman_0_(3, lock, arch, (char *)0, (char *)0, handle, unit, (
-	    integer *)0, (integer *)0, (integer *)0, (logical *)0, (logical *)
-	    0, (logical *)0, arch_len, (ftnint)0, (ftnint)0);
+    return zzddhman_0_(__global_state, 3, lock, arch, (char *)0, (char *)0, 
+	    handle, unit, (integer *)0, (integer *)0, (integer *)0, (logical *
+	    )0, (logical *)0, (logical *)0, arch_len, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzddhunl_(cspice_t* __global_state, integer *handle, 
 	char *arch, ftnlen arch_len)
 {
-    return zzddhman_0_(4, (logical *)0, arch, (char *)0, (char *)0, handle, (
-	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (logical *)
-	    0, (logical *)0, (logical *)0, arch_len, (ftnint)0, (ftnint)0);
+    return zzddhman_0_(__global_state, 4, (logical *)0, arch, (char *)0, (
+	    char *)0, handle, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (logical *)0, (logical *)0, (logical *)0, arch_len, (
+	    ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzddhnfo_(cspice_t* __global_state, integer *handle, 
 	char *fname, integer *intarc, integer *intbff, integer *intamh, 
 	logical *found, ftnlen fname_len)
 {
-    return zzddhman_0_(5, (logical *)0, (char *)0, fname, (char *)0, handle, (
-	    integer *)0, intamh, intarc, intbff, (logical *)0, found, (
-	    logical *)0, (ftnint)0, fname_len, (ftnint)0);
+    return zzddhman_0_(__global_state, 5, (logical *)0, (char *)0, fname, (
+	    char *)0, handle, (integer *)0, intamh, intarc, intbff, (logical *
+	    )0, found, (logical *)0, (ftnint)0, fname_len, (ftnint)0);
     }
 
 /* Subroutine */ int zzddhisn_(cspice_t* __global_state, integer *handle, 
 	logical *native, logical *found)
 {
-    return zzddhman_0_(6, (logical *)0, (char *)0, (char *)0, (char *)0, 
-	    handle, (integer *)0, (integer *)0, (integer *)0, (integer *)0, 
-	    native, found, (logical *)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return zzddhman_0_(__global_state, 6, (logical *)0, (char *)0, (char *)0, 
+	    (char *)0, handle, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, native, found, (logical *)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int zzddhfnh_(cspice_t* __global_state, char *fname, integer 
 	*handle, logical *found, ftnlen fname_len)
 {
-    return zzddhman_0_(7, (logical *)0, (char *)0, fname, (char *)0, handle, (
-	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (logical *)
-	    0, found, (logical *)0, (ftnint)0, fname_len, (ftnint)0);
+    return zzddhman_0_(__global_state, 7, (logical *)0, (char *)0, fname, (
+	    char *)0, handle, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (logical *)0, found, (logical *)0, (ftnint)0, 
+	    fname_len, (ftnint)0);
     }
 
 /* Subroutine */ int zzddhluh_(cspice_t* __global_state, integer *unit, 
 	integer *handle, logical *found)
 {
-    return zzddhman_0_(8, (logical *)0, (char *)0, (char *)0, (char *)0, 
-	    handle, unit, (integer *)0, (integer *)0, (integer *)0, (logical *
-	    )0, found, (logical *)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return zzddhman_0_(__global_state, 8, (logical *)0, (char *)0, (char *)0, 
+	    (char *)0, handle, unit, (integer *)0, (integer *)0, (integer *)0,
+	     (logical *)0, found, (logical *)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 

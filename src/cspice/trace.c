@@ -8,7 +8,7 @@
 
 
 typedef int trace_state_t;
-static inline trace_state_t* get_trace_state(cspice_t* state) {
+static trace_state_t* get_trace_state(cspice_t* state) {
 	return 0;
 }
 

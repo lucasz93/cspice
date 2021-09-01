@@ -8,7 +8,7 @@
 
 
 extern stelab_init_t __stelab_init;
-static inline stelab_state_t* get_stelab_state(cspice_t* state) {
+static stelab_state_t* get_stelab_state(cspice_t* state) {
 	if (!state->stelab)
 		state->stelab = __cspice_allocate_module(sizeof(
 	stelab_state_t), &__stelab_init, sizeof(__stelab_init));
@@ -21,7 +21,7 @@ static inline stelab_state_t* get_stelab_state(cspice_t* state) {
 	doublereal *vobs, doublereal *appobj)
 {
     /* Builtin functions */
-    double asin(f2c_state_t*, doublereal);
+    double asin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
@@ -322,7 +322,7 @@ static inline stelab_state_t* get_stelab_state(cspice_t* state) {
 
     sinphi = vnorm_(__global_state, h__);
     if (sinphi != 0.) {
-	phi = asin(&__global_state->f2c, sinphi);
+	phi = asin(sinphi);
 	vrotv_(__global_state, pobj, h__, &phi, appobj);
     } else {
 	moved_(__global_state, pobj, &__state->c__3, appobj);

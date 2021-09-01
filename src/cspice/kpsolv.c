@@ -8,7 +8,7 @@
 
 
 typedef int kpsolv_state_t;
-static inline kpsolv_state_t* get_kpsolv_state(cspice_t* state) {
+static kpsolv_state_t* get_kpsolv_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,9 +20,9 @@ doublereal kpsolv_(cspice_t* __global_state, doublereal *evec)
     doublereal ret_val, d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
     integer i_dnnt(f2c_state_t*, doublereal *);
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal cosx;
@@ -210,7 +210,7 @@ doublereal kpsolv_(cspice_t* __global_state, doublereal *evec)
 		" is #.", (ftnlen)109);
 	errdp_(__global_state, "#", &h__, (ftnlen)1);
 	errdp_(__global_state, "#", &k, (ftnlen)1);
-	d__1 = sqrt(&__global_state->f2c, ecc2);
+	d__1 = sqrt(ecc2);
 	errdp_(__global_state, "#", &d__1, (ftnlen)1);
 	sigerr_(__global_state, "SPICE(EVECOUTOFRANGE)", (ftnlen)21);
 	chkout_(__global_state, "KPSOLV", (ftnlen)6);
@@ -236,7 +236,7 @@ doublereal kpsolv_(cspice_t* __global_state, doublereal *evec)
 
     y0 = -h__;
     xm = 0.;
-    ecc = sqrt(&__global_state->f2c, ecc2);
+    ecc = sqrt(ecc2);
     if (y0 > 0.) {
 	xu = 0.;
 	xl = -ecc;
@@ -273,8 +273,7 @@ doublereal kpsolv_(cspice_t* __global_state, doublereal *evec)
 
 /*        Compute Y at the midpoint of XU and XL */
 
-	yxm = xm - h__ * cos(&__global_state->f2c, xm) - k * sin(&
-		__global_state->f2c, xm);
+	yxm = xm - h__ * cos(xm) - k * sin(xm);
 
 /*        Determine the new upper and lower bounds. */
 
@@ -290,8 +289,8 @@ doublereal kpsolv_(cspice_t* __global_state, doublereal *evec)
 
     x = xm;
     for (i__ = 1; i__ <= 5; ++i__) {
-	cosx = cos(&__global_state->f2c, x);
-	sinx = sin(&__global_state->f2c, x);
+	cosx = cos(x);
+	sinx = sin(x);
 
 /*        Compute Y and Y' at X.  Use these to get the next */
 /*        iteration for X. */

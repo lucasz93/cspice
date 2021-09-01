@@ -8,7 +8,7 @@
 
 
 typedef int nplnpt_state_t;
-static inline nplnpt_state_t* get_nplnpt_state(cspice_t* state) {
+static nplnpt_state_t* get_nplnpt_state(cspice_t* state) {
 	return 0;
 }
 

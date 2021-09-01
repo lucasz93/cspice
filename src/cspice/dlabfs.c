@@ -8,7 +8,7 @@
 
 
 extern dlabfs_init_t __dlabfs_init;
-static inline dlabfs_state_t* get_dlabfs_state(cspice_t* state) {
+static dlabfs_state_t* get_dlabfs_state(cspice_t* state) {
 	if (!state->dlabfs)
 		state->dlabfs = __cspice_allocate_module(sizeof(
 	dlabfs_state_t), &__dlabfs_init, sizeof(__dlabfs_init));

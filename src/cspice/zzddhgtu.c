@@ -8,7 +8,7 @@
 
 
 typedef int zzddhgtu_state_t;
-static inline zzddhgtu_state_t* get_zzddhgtu_state(cspice_t* state) {
+static zzddhgtu_state_t* get_zzddhgtu_state(cspice_t* state) {
 	return 0;
 }
 

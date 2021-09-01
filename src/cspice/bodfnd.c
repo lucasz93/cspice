@@ -8,7 +8,7 @@
 
 
 extern bodfnd_init_t __bodfnd_init;
-static inline bodfnd_state_t* get_bodfnd_state(cspice_t* state) {
+static bodfnd_state_t* get_bodfnd_state(cspice_t* state) {
 	if (!state->bodfnd)
 		state->bodfnd = __cspice_allocate_module(sizeof(
 	bodfnd_state_t), &__bodfnd_init, sizeof(__bodfnd_init));

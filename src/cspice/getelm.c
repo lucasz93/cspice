@@ -8,7 +8,7 @@
 
 
 typedef int getelm_state_t;
-static inline getelm_state_t* get_getelm_state(cspice_t* state) {
+static getelm_state_t* get_getelm_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern errdev_init_t __errdev_init;
-static inline errdev_state_t* get_errdev_state(cspice_t* state) {
+static errdev_state_t* get_errdev_state(cspice_t* state) {
 	if (!state->errdev)
 		state->errdev = __cspice_allocate_module(sizeof(
 	errdev_state_t), &__errdev_init, sizeof(__errdev_init));

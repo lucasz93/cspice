@@ -8,7 +8,7 @@
 
 
 extern wrencc_init_t __wrencc_init;
-static inline wrencc_state_t* get_wrencc_state(cspice_t* state) {
+static wrencc_state_t* get_wrencc_state(cspice_t* state) {
 	if (!state->wrencc)
 		state->wrencc = __cspice_allocate_module(sizeof(
 	wrencc_state_t), &__wrencc_init, sizeof(__wrencc_init));

@@ -8,7 +8,7 @@
 
 
 typedef int vlcomg_state_t;
-static inline vlcomg_state_t* get_vlcomg_state(cspice_t* state) {
+static vlcomg_state_t* get_vlcomg_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int mxmtg_state_t;
-static inline mxmtg_state_t* get_mxmtg_state(cspice_t* state) {
+static mxmtg_state_t* get_mxmtg_state(cspice_t* state) {
 	return 0;
 }
 

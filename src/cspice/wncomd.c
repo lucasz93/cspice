@@ -8,7 +8,7 @@
 
 
 extern wncomd_init_t __wncomd_init;
-static inline wncomd_state_t* get_wncomd_state(cspice_t* state) {
+static wncomd_state_t* get_wncomd_state(cspice_t* state) {
 	if (!state->wncomd)
 		state->wncomd = __cspice_allocate_module(sizeof(
 	wncomd_state_t), &__wncomd_init, sizeof(__wncomd_init));

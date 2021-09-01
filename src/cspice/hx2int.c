@@ -8,7 +8,7 @@
 
 
 extern hx2int_init_t __hx2int_init;
-static inline hx2int_state_t* get_hx2int_state(cspice_t* state) {
+static hx2int_state_t* get_hx2int_state(cspice_t* state) {
 	if (!state->hx2int)
 		state->hx2int = __cspice_allocate_module(sizeof(
 	hx2int_state_t), &__hx2int_init, sizeof(__hx2int_init));

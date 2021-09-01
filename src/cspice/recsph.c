@@ -8,7 +8,7 @@
 
 
 typedef int recsph_state_t;
-static inline recsph_state_t* get_recsph_state(cspice_t* state) {
+static recsph_state_t* get_recsph_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,8 +20,7 @@ static inline recsph_state_t* get_recsph_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
-	    doublereal);
+    double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
     doublereal x;
@@ -206,15 +205,14 @@ static inline recsph_state_t* get_recsph_state(cspice_t* state) {
 	x = rectan[0] / big;
 	y = rectan[1] / big;
 	z__ = rectan[2] / big;
-	*r__ = big * sqrt(&__global_state->f2c, x * x + y * y + z__ * z__);
-	*colat = atan2(&__global_state->f2c, sqrt(&__global_state->f2c, x * x 
-		+ y * y), z__);
+	*r__ = big * sqrt(x * x + y * y + z__ * z__);
+	*colat = atan2(sqrt(x * x + y * y), z__);
 	x = rectan[0];
 	y = rectan[1];
 	if (x == 0. && y == 0.) {
 	    *long__ = 0.;
 	} else {
-	    *long__ = atan2(&__global_state->f2c, y, x);
+	    *long__ = atan2(y, x);
 	}
     } else {
 	*r__ = 0.;

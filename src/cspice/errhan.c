@@ -8,7 +8,7 @@
 
 
 extern errhan_init_t __errhan_init;
-static inline errhan_state_t* get_errhan_state(cspice_t* state) {
+static errhan_state_t* get_errhan_state(cspice_t* state) {
 	if (!state->errhan)
 		state->errhan = __cspice_allocate_module(sizeof(
 	errhan_state_t), &__errhan_init, sizeof(__errhan_init));

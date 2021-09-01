@@ -8,7 +8,7 @@
 
 
 extern ckgpav_init_t __ckgpav_init;
-static inline ckgpav_state_t* get_ckgpav_state(cspice_t* state) {
+static ckgpav_state_t* get_ckgpav_state(cspice_t* state) {
 	if (!state->ckgpav)
 		state->ckgpav = __cspice_allocate_module(sizeof(
 	ckgpav_state_t), &__ckgpav_init, sizeof(__ckgpav_init));

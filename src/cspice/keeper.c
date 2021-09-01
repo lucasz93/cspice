@@ -8,7 +8,7 @@
 
 
 extern keeper_init_t __keeper_init;
-static inline keeper_state_t* get_keeper_state(cspice_t* state) {
+static keeper_state_t* get_keeper_state(cspice_t* state) {
 	if (!state->keeper)
 		state->keeper = __cspice_allocate_module(sizeof(
 	keeper_state_t), &__keeper_init, sizeof(__keeper_init));
@@ -3265,24 +3265,25 @@ L_unload:
 	*source, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen 
 	filtyp_len, ftnlen source_len)
 {
-    return keeper_0_(0, which, kind, file, count, filtyp, handle, source, 
-	    found, kind_len, file_len, filtyp_len, source_len);
+    return keeper_0_(__global_state, 0, which, kind, file, count, filtyp, 
+	    handle, source, found, kind_len, file_len, filtyp_len, source_len)
+	    ;
     }
 
 /* Subroutine */ int furnsh_(cspice_t* __global_state, char *file, ftnlen 
 	file_len)
 {
-    return keeper_0_(1, (integer *)0, (char *)0, file, (integer *)0, (char *)
-	    0, (integer *)0, (char *)0, (logical *)0, (ftnint)0, file_len, (
-	    ftnint)0, (ftnint)0);
+    return keeper_0_(__global_state, 1, (integer *)0, (char *)0, file, (
+	    integer *)0, (char *)0, (integer *)0, (char *)0, (logical *)0, (
+	    ftnint)0, file_len, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int ktotal_(cspice_t* __global_state, char *kind, integer *
 	count, ftnlen kind_len)
 {
-    return keeper_0_(2, (integer *)0, kind, (char *)0, count, (char *)0, (
-	    integer *)0, (char *)0, (logical *)0, kind_len, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return keeper_0_(__global_state, 2, (integer *)0, kind, (char *)0, count, 
+	    (char *)0, (integer *)0, (char *)0, (logical *)0, kind_len, (
+	    ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int kdata_(cspice_t* __global_state, integer *which, char *
@@ -3290,31 +3291,32 @@ L_unload:
 	logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, 
 	ftnlen source_len)
 {
-    return keeper_0_(3, which, kind, file, (integer *)0, filtyp, handle, 
-	    source, found, kind_len, file_len, filtyp_len, source_len);
+    return keeper_0_(__global_state, 3, which, kind, file, (integer *)0, 
+	    filtyp, handle, source, found, kind_len, file_len, filtyp_len, 
+	    source_len);
     }
 
 /* Subroutine */ int kinfo_(cspice_t* __global_state, char *file, char *
 	filtyp, char *source, integer *handle, logical *found, ftnlen 
 	file_len, ftnlen filtyp_len, ftnlen source_len)
 {
-    return keeper_0_(4, (integer *)0, (char *)0, file, (integer *)0, filtyp, 
-	    handle, source, found, (ftnint)0, file_len, filtyp_len, 
-	    source_len);
+    return keeper_0_(__global_state, 4, (integer *)0, (char *)0, file, (
+	    integer *)0, filtyp, handle, source, found, (ftnint)0, file_len, 
+	    filtyp_len, source_len);
     }
 
 /* Subroutine */ int kclear_(cspice_t* __global_state)
 {
-    return keeper_0_(5, (integer *)0, (char *)0, (char *)0, (integer *)0, (
-	    char *)0, (integer *)0, (char *)0, (logical *)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0);
+    return keeper_0_(__global_state, 5, (integer *)0, (char *)0, (char *)0, (
+	    integer *)0, (char *)0, (integer *)0, (char *)0, (logical *)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int unload_(cspice_t* __global_state, char *file, ftnlen 
 	file_len)
 {
-    return keeper_0_(6, (integer *)0, (char *)0, file, (integer *)0, (char *)
-	    0, (integer *)0, (char *)0, (logical *)0, (ftnint)0, file_len, (
-	    ftnint)0, (ftnint)0);
+    return keeper_0_(__global_state, 6, (integer *)0, (char *)0, file, (
+	    integer *)0, (char *)0, (integer *)0, (char *)0, (logical *)0, (
+	    ftnint)0, file_len, (ftnint)0, (ftnint)0);
     }
 

@@ -8,7 +8,7 @@
 
 
 extern spkltc_init_t __spkltc_init;
-static inline spkltc_state_t* get_spkltc_state(cspice_t* state) {
+static spkltc_state_t* get_spkltc_state(cspice_t* state) {
 	if (!state->spkltc)
 		state->spkltc = __cspice_allocate_module(sizeof(
 	spkltc_state_t), &__spkltc_init, sizeof(__spkltc_init));

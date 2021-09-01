@@ -8,7 +8,7 @@
 
 
 typedef int dafrwa_state_t;
-static inline dafrwa_state_t* get_dafrwa_state(cspice_t* state) {
+static dafrwa_state_t* get_dafrwa_state(cspice_t* state) {
 	return 0;
 }
 
@@ -320,12 +320,12 @@ L_dafarw:
 /* Subroutine */ int dafrwa_(cspice_t* __global_state, integer *recno, 
 	integer *wordno, integer *addr__)
 {
-    return dafrwa_0_(0, recno, wordno, addr__);
+    return dafrwa_0_(__global_state, 0, recno, wordno, addr__);
     }
 
 /* Subroutine */ int dafarw_(cspice_t* __global_state, integer *addr__, 
 	integer *recno, integer *wordno)
 {
-    return dafrwa_0_(1, recno, wordno, addr__);
+    return dafrwa_0_(__global_state, 1, recno, wordno, addr__);
     }
 

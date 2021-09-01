@@ -12,6 +12,46 @@
 
 typedef struct {
     struct {
+        int first;
+        double value;
+    } dpmax_c;
+
+    struct {
+        int first;
+        double value;
+    } dpmin_c;
+
+    struct {
+        double value;
+    } dpr_c;
+
+    struct {
+        double value;
+    } halfpi_c;
+
+    struct {
+        int first;
+        double value;
+    } intmax_c;
+
+    struct {
+        int first;
+        double value;
+    } intmin_c;
+
+    struct {
+        double value;
+    } pi_c;
+
+    struct {
+        double value;
+    } rpd_c;
+
+    struct {
+        double value;
+    } twopi_c;
+
+    struct {
         /*
         The function pointer list is accessed by the functions
 
@@ -50,6 +90,16 @@ typedef struct {
 
 static void __cspice_init_user(cspice_user_state_t *user)
 {
+    user->dpmax_c.first = 1;
+    user->dpmin_c.first = 1;
+    user->dpr_c.value = 0.;
+    user->halfpi_c.value = 0.;
+    user->intmax_c.first = 1;
+    user->intmin_c.first = 1;
+    user->pi_c.value = 0.;
+    user->rpd_c.value = 0.;
+    user->twopi_c.value = 0.;
+
     user->zzalloc.count = 0;
 
     user->zzerrorinit.first = SPICETRUE;

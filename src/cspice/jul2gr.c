@@ -8,7 +8,7 @@
 
 
 extern jul2gr_init_t __jul2gr_init;
-static inline jul2gr_state_t* get_jul2gr_state(cspice_t* state) {
+static jul2gr_state_t* get_jul2gr_state(cspice_t* state) {
 	if (!state->jul2gr)
 		state->jul2gr = __cspice_allocate_module(sizeof(
 	jul2gr_state_t), &__jul2gr_init, sizeof(__jul2gr_init));
@@ -820,12 +820,12 @@ L_gr2jul:
 /* Subroutine */ int jul2gr_(cspice_t* __global_state, integer *year, integer 
 	*month, integer *day, integer *doy)
 {
-    return jul2gr_0_(0, year, month, day, doy);
+    return jul2gr_0_(__global_state, 0, year, month, day, doy);
     }
 
 /* Subroutine */ int gr2jul_(cspice_t* __global_state, integer *year, integer 
 	*month, integer *day, integer *doy)
 {
-    return jul2gr_0_(1, year, month, day, doy);
+    return jul2gr_0_(__global_state, 1, year, month, day, doy);
     }
 

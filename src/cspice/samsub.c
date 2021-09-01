@@ -8,7 +8,7 @@
 
 
 typedef int samsub_state_t;
-static inline samsub_state_t* get_samsub_state(cspice_t* state) {
+static samsub_state_t* get_samsub_state(cspice_t* state) {
 	return 0;
 }
 

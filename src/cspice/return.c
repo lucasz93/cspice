@@ -8,7 +8,7 @@
 
 
 typedef int return_state_t;
-static inline return_state_t* get_return_state(cspice_t* state) {
+static return_state_t* get_return_state(cspice_t* state) {
 	return 0;
 }
 

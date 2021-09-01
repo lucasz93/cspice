@@ -8,7 +8,7 @@
 
 
 extern zzgfsolv_init_t __zzgfsolv_init;
-static inline zzgfsolv_state_t* get_zzgfsolv_state(cspice_t* state) {
+static zzgfsolv_state_t* get_zzgfsolv_state(cspice_t* state) {
 	if (!state->zzgfsolv)
 		state->zzgfsolv = __cspice_allocate_module(sizeof(
 	zzgfsolv_state_t), &__zzgfsolv_init, sizeof(__zzgfsolv_init));

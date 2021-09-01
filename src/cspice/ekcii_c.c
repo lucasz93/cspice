@@ -335,7 +335,7 @@
    /*
    Convert the output column name to a C-style string. 
    */
-   F2C_ConvertStr ( lenout, column );
+   F2C_ConvertStr ( naif_state, lenout, column );
 
 
    /*

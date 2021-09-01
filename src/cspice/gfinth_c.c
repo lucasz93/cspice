@@ -47,7 +47,7 @@
 
    #include <signal.h>
    #include "SpiceUsr.h"
- 
+   #include "signal1.h"
 
    void gfinth_c ( void *naif_state, int sigcode ) 
 
@@ -125,7 +125,7 @@
           /.
           Make gfinth_c the handler for the SIGINT signal.
           ./
-          previousHandler = signal ( SIGINT, gfinth_c );
+          previousHandler = signal_user ( SIGINT, gfinth_c, naif_state );
 
           if ( previousHandler == SIG_ERR )
           {
@@ -199,7 +199,7 @@
       Re-establish this routine as the signal handler
       for SIGINT. 
       */
-      handler = signal ( SIGINT, gfinth_c );
+      handler = signal_user ( SIGINT, gfinth_c, naif_state );
 
       if ( handler == SIG_ERR )
       {

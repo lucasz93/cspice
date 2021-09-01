@@ -8,7 +8,7 @@
 
 
 extern zzgfilu_init_t __zzgfilu_init;
-static inline zzgfilu_state_t* get_zzgfilu_state(cspice_t* state) {
+static zzgfilu_state_t* get_zzgfilu_state(cspice_t* state) {
 	if (!state->zzgfilu)
 		state->zzgfilu = __cspice_allocate_module(sizeof(
 	zzgfilu_state_t), &__zzgfilu_init, sizeof(__zzgfilu_init));
@@ -1132,9 +1132,10 @@ L_zzgfilgq:
 	ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen 
 	abcorr_len, ftnlen obsrvr_len)
 {
-    return zzgfilu_0_(0, method, angtyp, target, illum, fixref, abcorr, 
-	    obsrvr, spoint, et, udfunc, decres, angle, method_len, angtyp_len,
-	     target_len, illum_len, fixref_len, abcorr_len, obsrvr_len);
+    return zzgfilu_0_(__global_state, 0, method, angtyp, target, illum, 
+	    fixref, abcorr, obsrvr, spoint, et, udfunc, decres, angle, 
+	    method_len, angtyp_len, target_len, illum_len, fixref_len, 
+	    abcorr_len, obsrvr_len);
     }
 
 /* Subroutine */ int zzgfilin_(cspice_t* __global_state, char *method, char *
@@ -1143,27 +1144,27 @@ L_zzgfilgq:
 	ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen 
 	abcorr_len, ftnlen obsrvr_len)
 {
-    return zzgfilu_0_(1, method, angtyp, target, illum, fixref, abcorr, 
-	    obsrvr, spoint, (doublereal *)0, (U_fp)0, (logical *)0, (
-	    doublereal *)0, method_len, angtyp_len, target_len, illum_len, 
-	    fixref_len, abcorr_len, obsrvr_len);
+    return zzgfilu_0_(__global_state, 1, method, angtyp, target, illum, 
+	    fixref, abcorr, obsrvr, spoint, (doublereal *)0, (U_fp)0, (
+	    logical *)0, (doublereal *)0, method_len, angtyp_len, target_len, 
+	    illum_len, fixref_len, abcorr_len, obsrvr_len);
     }
 
 /* Subroutine */ int zzgfildc_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *decres)
 {
-    return zzgfilu_0_(2, (char *)0, (char *)0, (char *)0, (char *)0, (char *)
-	    0, (char *)0, (char *)0, (doublereal *)0, et, udfunc, decres, (
-	    doublereal *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0);
+    return zzgfilu_0_(__global_state, 2, (char *)0, (char *)0, (char *)0, (
+	    char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, et, 
+	    udfunc, decres, (doublereal *)0, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfilgq_(cspice_t* __global_state, doublereal *et, 
 	doublereal *angle)
 {
-    return zzgfilu_0_(3, (char *)0, (char *)0, (char *)0, (char *)0, (char *)
-	    0, (char *)0, (char *)0, (doublereal *)0, et, (U_fp)0, (logical *)
-	    0, angle, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfilu_0_(__global_state, 3, (char *)0, (char *)0, (char *)0, (
+	    char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, et, (
+	    U_fp)0, (logical *)0, angle, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 

@@ -8,7 +8,7 @@
 
 
 typedef int vzero_state_t;
-static inline vzero_state_t* get_vzero_state(cspice_t* state) {
+static vzero_state_t* get_vzero_state(cspice_t* state) {
 	return 0;
 }
 

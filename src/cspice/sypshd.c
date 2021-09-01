@@ -8,7 +8,7 @@
 
 
 extern sypshd_init_t __sypshd_init;
-static inline sypshd_state_t* get_sypshd_state(cspice_t* state) {
+static sypshd_state_t* get_sypshd_state(cspice_t* state) {
 	if (!state->sypshd)
 		state->sypshd = __cspice_allocate_module(sizeof(
 	sypshd_state_t), &__sypshd_init, sizeof(__sypshd_init));

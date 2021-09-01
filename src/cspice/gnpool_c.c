@@ -346,7 +346,7 @@
    /*
    Convert the output array from Fortran to C style.
    */
-   F2C_ConvertStrArr ( *n, lenout, (char * ) kvars );
+   F2C_ConvertStrArr ( naif_state, *n, lenout, (char * ) kvars );
  
    /*
    Eliminate any trailing white space left by F2C_ConvertStrArr.
@@ -366,7 +366,7 @@
          The length expected by F2C_ConvertStr is the C string length,
          so we pass in lenout.
          */
-         F2C_ConvertStr ( lenout, strptr );
+         F2C_ConvertStr ( naif_state, lenout, strptr );
       }
    }
  

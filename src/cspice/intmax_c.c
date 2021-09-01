@@ -42,6 +42,7 @@
  
 */
 
+   #include "__cspice_state.h"
    #include "SpiceUsr.h"
 
    SpiceInt intmax_c (void *naif_state) 
@@ -190,19 +191,15 @@
    /*
    Static variables
    */
-   /* MECHSOFT: Not critical state. Safe to keep thread local. */
-   static _Thread_local SpiceBoolean first = SPICETRUE;
-   static _Thread_local SpiceInt     value;
+   cspice_user_state_t * user = &((cspice_t *)naif_state)->user;
 
-
-
-   if ( first )
+   if ( user->intmax_c.first )
    {
-      value = intmax_(naif_state);
-      first = SPICEFALSE;
+      user->intmax_c.value = intmax_(naif_state);
+      user->intmax_c.first = SPICEFALSE;
    }
    
-   return ( value );
+   return ( user->intmax_c.value );
    
 
 } /* End intmax_c */

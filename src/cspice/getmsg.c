@@ -8,7 +8,7 @@
 
 
 extern getmsg_init_t __getmsg_init;
-static inline getmsg_state_t* get_getmsg_state(cspice_t* state) {
+static getmsg_state_t* get_getmsg_state(cspice_t* state) {
 	if (!state->getmsg)
 		state->getmsg = __cspice_allocate_module(sizeof(
 	getmsg_state_t), &__getmsg_init, sizeof(__getmsg_init));

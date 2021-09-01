@@ -8,7 +8,7 @@
 
 
 typedef int expln_state_t;
-static inline expln_state_t* get_expln_state(cspice_t* state) {
+static expln_state_t* get_expln_state(cspice_t* state) {
 	return 0;
 }
 

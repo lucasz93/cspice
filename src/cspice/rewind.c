@@ -9,14 +9,14 @@ integer f_rew(f2c_state_t *f2c, alist *a)
 {
 	unit *b;
 	if(a->aunit>=MXUNIT || a->aunit<0)
-		err(a->aerr,101,"rewind");
+		err(f2c,a->aerr,101,"rewind");
 	b = &f2c->f__units[a->aunit];
 	if(b->ufd == NULL || b->uwrt == 3)
 		return(0);
 	if(!b->useek)
-		err(a->aerr,106,"rewind")
+		err(f2c,a->aerr,106,"rewind")
 	if(b->uwrt) {
-		(void) t_runc(a);
+		(void) t_runc(f2c,a);
 		b->uwrt = 3;
 		}
 	rewind(b->ufd);

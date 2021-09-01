@@ -8,7 +8,7 @@
 
 
 extern pgrrec_init_t __pgrrec_init;
-static inline pgrrec_state_t* get_pgrrec_state(cspice_t* state) {
+static pgrrec_state_t* get_pgrrec_state(cspice_t* state) {
 	if (!state->pgrrec)
 		state->pgrrec = __cspice_allocate_module(sizeof(
 	pgrrec_state_t), &__pgrrec_init, sizeof(__pgrrec_init));

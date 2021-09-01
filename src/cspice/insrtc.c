@@ -8,7 +8,7 @@
 
 
 typedef int insrtc_state_t;
-static inline insrtc_state_t* get_insrtc_state(cspice_t* state) {
+static insrtc_state_t* get_insrtc_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern srfxpt_init_t __srfxpt_init;
-static inline srfxpt_state_t* get_srfxpt_state(cspice_t* state) {
+static srfxpt_state_t* get_srfxpt_state(cspice_t* state) {
 	if (!state->srfxpt)
 		state->srfxpt = __cspice_allocate_module(sizeof(
 	srfxpt_state_t), &__srfxpt_init, sizeof(__srfxpt_init));

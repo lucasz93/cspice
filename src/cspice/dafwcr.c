@@ -8,7 +8,7 @@
 
 
 extern dafwcr_init_t __dafwcr_init;
-static inline dafwcr_state_t* get_dafwcr_state(cspice_t* state) {
+static dafwcr_state_t* get_dafwcr_state(cspice_t* state) {
 	if (!state->dafwcr)
 		state->dafwcr = __cspice_allocate_module(sizeof(
 	dafwcr_state_t), &__dafwcr_init, sizeof(__dafwcr_init));

@@ -59,6 +59,7 @@
    #include "SpiceZmc.h"
    #include "SpiceZfc.h"
    #include "SpiceZad.h"
+   #include "signal1.h"
 
 
    void gfocce_c ( void               * naif_state,
@@ -1388,7 +1389,7 @@
 
       if ( newHandler )
       {
-         defSigHandler = signal ( SIGINT, gfinth_c );
+         defSigHandler = signal_user ( SIGINT, gfinth_c, naif_state );
 
          if ( defSigHandler == SIG_ERR )
          {

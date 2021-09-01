@@ -3,13 +3,23 @@
 #include "__cspice_state.h"
 #undef abs
 #include <stdlib.h>
+#include <string.h>
 void* cspice_alloc() {
+	int ch;
+	char *s;
 	cspice_t* state = calloc(1, sizeof(cspice_t));
 	f2c_state_t* f2c = &state->f2c;
+	f2c->parent = state;
 	f2c->read_non_native = 0;
 	f2c->f__init = 0;
 	f2c->f__buf = f2c->f__buf0;
 	f2c->f__buflen = sizeof(f2c->f__buf0);
+	s = "0123456789";
+	while(ch = *s++)
+		f2c->hex[ch] = ch - '0' + 1;
+	s = "ABCDEF";
+	while(ch = *s++)
+		f2c->hex[ch] = f2c->hex[ch + 'a' - 'A'] = ch - 'A' + 11;
 #ifdef USER_T
 	__cspice_init_user(&state->user);
 #endif
@@ -193,7 +203,6 @@ void* cspice_copy(void* s) {
 	if (state->getmsg) copy->getmsg = __cspice_allocate_module(sizeof(*copy->getmsg), state->getmsg, sizeof(*copy->getmsg));
 	if (state->gfdist) copy->gfdist = __cspice_allocate_module(sizeof(*copy->gfdist), state->gfdist, sizeof(*copy->gfdist));
 	if (state->gfevnt) copy->gfevnt = __cspice_allocate_module(sizeof(*copy->gfevnt), state->gfevnt, sizeof(*copy->gfevnt));
-	if (state->gffove) copy->gffove = __cspice_allocate_module(sizeof(*copy->gffove), state->gffove, sizeof(*copy->gffove));
 	if (state->gfilum) copy->gfilum = __cspice_allocate_module(sizeof(*copy->gfilum), state->gfilum, sizeof(*copy->gfilum));
 	if (state->gfocce) copy->gfocce = __cspice_allocate_module(sizeof(*copy->gfocce), state->gfocce, sizeof(*copy->gfocce));
 	if (state->gfoclt) copy->gfoclt = __cspice_allocate_module(sizeof(*copy->gfoclt), state->gfoclt, sizeof(*copy->gfoclt));
@@ -526,7 +535,6 @@ void* cspice_copy(void* s) {
 	if (state->zzddhppf) copy->zzddhppf = __cspice_allocate_module(sizeof(*copy->zzddhppf), state->zzddhppf, sizeof(*copy->zzddhppf));
 	if (state->zzdiv) copy->zzdiv = __cspice_allocate_module(sizeof(*copy->zzdiv), state->zzdiv, sizeof(*copy->zzdiv));
 	if (state->zzdskbbl) copy->zzdskbbl = __cspice_allocate_module(sizeof(*copy->zzdskbbl), state->zzdskbbl, sizeof(*copy->zzdskbbl));
-	if (state->zzdskbsr) copy->zzdskbsr = __cspice_allocate_module(sizeof(*copy->zzdskbsr), state->zzdskbsr, sizeof(*copy->zzdskbsr));
 	if (state->zzdskbun) copy->zzdskbun = __cspice_allocate_module(sizeof(*copy->zzdskbun), state->zzdskbun, sizeof(*copy->zzdskbun));
 	if (state->zzdskbux) copy->zzdskbux = __cspice_allocate_module(sizeof(*copy->zzdskbux), state->zzdskbux, sizeof(*copy->zzdskbux));
 	if (state->zzdsksba) copy->zzdsksba = __cspice_allocate_module(sizeof(*copy->zzdsksba), state->zzdsksba, sizeof(*copy->zzdsksba));
@@ -667,27 +675,20 @@ void* cspice_copy(void* s) {
 	if (state->zzgfcoq) copy->zzgfcoq = __cspice_allocate_module(sizeof(*copy->zzgfcoq), state->zzgfcoq, sizeof(*copy->zzgfcoq));
 	if (state->zzgfcou) copy->zzgfcou = __cspice_allocate_module(sizeof(*copy->zzgfcou), state->zzgfcou, sizeof(*copy->zzgfcou));
 	if (state->zzgfcprx) copy->zzgfcprx = __cspice_allocate_module(sizeof(*copy->zzgfcprx), state->zzgfcprx, sizeof(*copy->zzgfcprx));
-	if (state->zzgfcslv) copy->zzgfcslv = __cspice_allocate_module(sizeof(*copy->zzgfcslv), state->zzgfcslv, sizeof(*copy->zzgfcslv));
 	if (state->zzgfdiu) copy->zzgfdiu = __cspice_allocate_module(sizeof(*copy->zzgfdiu), state->zzgfdiu, sizeof(*copy->zzgfdiu));
 	if (state->zzgffvu) copy->zzgffvu = __cspice_allocate_module(sizeof(*copy->zzgffvu), state->zzgffvu, sizeof(*copy->zzgffvu));
 	if (state->zzgfilu) copy->zzgfilu = __cspice_allocate_module(sizeof(*copy->zzgfilu), state->zzgfilu, sizeof(*copy->zzgfilu));
-	if (state->zzgflong) copy->zzgflong = __cspice_allocate_module(sizeof(*copy->zzgflong), state->zzgflong, sizeof(*copy->zzgflong));
 	if (state->zzgfocu) copy->zzgfocu = __cspice_allocate_module(sizeof(*copy->zzgfocu), state->zzgfocu, sizeof(*copy->zzgfocu));
 	if (state->zzgfpau) copy->zzgfpau = __cspice_allocate_module(sizeof(*copy->zzgfpau), state->zzgfpau, sizeof(*copy->zzgfpau));
 	if (state->zzgfref) copy->zzgfref = __cspice_allocate_module(sizeof(*copy->zzgfref), state->zzgfref, sizeof(*copy->zzgfref));
-	if (state->zzgfrel) copy->zzgfrel = __cspice_allocate_module(sizeof(*copy->zzgfrel), state->zzgfrel, sizeof(*copy->zzgfrel));
-	if (state->zzgfrelx) copy->zzgfrelx = __cspice_allocate_module(sizeof(*copy->zzgfrelx), state->zzgfrelx, sizeof(*copy->zzgfrelx));
 	if (state->zzgfrpwk) copy->zzgfrpwk = __cspice_allocate_module(sizeof(*copy->zzgfrpwk), state->zzgfrpwk, sizeof(*copy->zzgfrpwk));
 	if (state->zzgfrru) copy->zzgfrru = __cspice_allocate_module(sizeof(*copy->zzgfrru), state->zzgfrru, sizeof(*copy->zzgfrru));
 	if (state->zzgfsolv) copy->zzgfsolv = __cspice_allocate_module(sizeof(*copy->zzgfsolv), state->zzgfsolv, sizeof(*copy->zzgfsolv));
-	if (state->zzgfsolvx) copy->zzgfsolvx = __cspice_allocate_module(sizeof(*copy->zzgfsolvx), state->zzgfsolvx, sizeof(*copy->zzgfsolvx));
 	if (state->zzgfspq) copy->zzgfspq = __cspice_allocate_module(sizeof(*copy->zzgfspq), state->zzgfspq, sizeof(*copy->zzgfspq));
 	if (state->zzgfspu) copy->zzgfspu = __cspice_allocate_module(sizeof(*copy->zzgfspu), state->zzgfspu, sizeof(*copy->zzgfspu));
 	if (state->zzgfssin) copy->zzgfssin = __cspice_allocate_module(sizeof(*copy->zzgfssin), state->zzgfssin, sizeof(*copy->zzgfssin));
 	if (state->zzgfssob) copy->zzgfssob = __cspice_allocate_module(sizeof(*copy->zzgfssob), state->zzgfssob, sizeof(*copy->zzgfssob));
 	if (state->zzgftreb) copy->zzgftreb = __cspice_allocate_module(sizeof(*copy->zzgftreb), state->zzgftreb, sizeof(*copy->zzgftreb));
-	if (state->zzgfudb) copy->zzgfudb = __cspice_allocate_module(sizeof(*copy->zzgfudb), state->zzgfudb, sizeof(*copy->zzgfudb));
-	if (state->zzgfudlt) copy->zzgfudlt = __cspice_allocate_module(sizeof(*copy->zzgfudlt), state->zzgfudlt, sizeof(*copy->zzgfudlt));
 	if (state->zzgfwsts) copy->zzgfwsts = __cspice_allocate_module(sizeof(*copy->zzgfwsts), state->zzgfwsts, sizeof(*copy->zzgfwsts));
 	if (state->zzholdd) copy->zzholdd = __cspice_allocate_module(sizeof(*copy->zzholdd), state->zzholdd, sizeof(*copy->zzholdd));
 	if (state->zzhsi) copy->zzhsi = __cspice_allocate_module(sizeof(*copy->zzhsi), state->zzhsi, sizeof(*copy->zzhsi));
@@ -739,12 +740,8 @@ void* cspice_copy(void* s) {
 	if (state->zzspkas1) copy->zzspkas1 = __cspice_allocate_module(sizeof(*copy->zzspkas1), state->zzspkas1, sizeof(*copy->zzspkas1));
 	if (state->zzspkez0) copy->zzspkez0 = __cspice_allocate_module(sizeof(*copy->zzspkez0), state->zzspkez0, sizeof(*copy->zzspkez0));
 	if (state->zzspkez1) copy->zzspkez1 = __cspice_allocate_module(sizeof(*copy->zzspkez1), state->zzspkez1, sizeof(*copy->zzspkez1));
-	if (state->zzspkfao) copy->zzspkfao = __cspice_allocate_module(sizeof(*copy->zzspkfao), state->zzspkfao, sizeof(*copy->zzspkfao));
 	if (state->zzspkfap) copy->zzspkfap = __cspice_allocate_module(sizeof(*copy->zzspkfap), state->zzspkfap, sizeof(*copy->zzspkfap));
 	if (state->zzspkfat) copy->zzspkfat = __cspice_allocate_module(sizeof(*copy->zzspkfat), state->zzspkfat, sizeof(*copy->zzspkfat));
-	if (state->zzspkflt) copy->zzspkflt = __cspice_allocate_module(sizeof(*copy->zzspkflt), state->zzspkflt, sizeof(*copy->zzspkflt));
-	if (state->zzspkfzo) copy->zzspkfzo = __cspice_allocate_module(sizeof(*copy->zzspkfzo), state->zzspkfzo, sizeof(*copy->zzspkfzo));
-	if (state->zzspkfzt) copy->zzspkfzt = __cspice_allocate_module(sizeof(*copy->zzspkfzt), state->zzspkfzt, sizeof(*copy->zzspkfzt));
 	if (state->zzspkgo0) copy->zzspkgo0 = __cspice_allocate_module(sizeof(*copy->zzspkgo0), state->zzspkgo0, sizeof(*copy->zzspkgo0));
 	if (state->zzspkgo1) copy->zzspkgo1 = __cspice_allocate_module(sizeof(*copy->zzspkgo1), state->zzspkgo1, sizeof(*copy->zzspkgo1));
 	if (state->zzspkgp0) copy->zzspkgp0 = __cspice_allocate_module(sizeof(*copy->zzspkgp0), state->zzspkgp0, sizeof(*copy->zzspkgp0));
@@ -760,7 +757,6 @@ void* cspice_copy(void* s) {
 	if (state->zzsrftrn) copy->zzsrftrn = __cspice_allocate_module(sizeof(*copy->zzsrftrn), state->zzsrftrn, sizeof(*copy->zzsrftrn));
 	if (state->zzstelab) copy->zzstelab = __cspice_allocate_module(sizeof(*copy->zzstelab), state->zzstelab, sizeof(*copy->zzstelab));
 	if (state->zztangnt) copy->zztangnt = __cspice_allocate_module(sizeof(*copy->zztangnt), state->zztangnt, sizeof(*copy->zztangnt));
-	if (state->zztanslv) copy->zztanslv = __cspice_allocate_module(sizeof(*copy->zztanslv), state->zztanslv, sizeof(*copy->zztanslv));
 	if (state->zztanutl) copy->zztanutl = __cspice_allocate_module(sizeof(*copy->zztanutl), state->zztanutl, sizeof(*copy->zztanutl));
 	if (state->zzteme) copy->zzteme = __cspice_allocate_module(sizeof(*copy->zzteme), state->zzteme, sizeof(*copy->zzteme));
 	if (state->zztime) copy->zztime = __cspice_allocate_module(sizeof(*copy->zztime), state->zztime, sizeof(*copy->zztime));
@@ -955,7 +951,6 @@ void cspice_free(void* s) {
 	if (state->getmsg) free(state->getmsg);
 	if (state->gfdist) free(state->gfdist);
 	if (state->gfevnt) free(state->gfevnt);
-	if (state->gffove) free(state->gffove);
 	if (state->gfilum) free(state->gfilum);
 	if (state->gfocce) free(state->gfocce);
 	if (state->gfoclt) free(state->gfoclt);
@@ -1288,7 +1283,6 @@ void cspice_free(void* s) {
 	if (state->zzddhppf) free(state->zzddhppf);
 	if (state->zzdiv) free(state->zzdiv);
 	if (state->zzdskbbl) free(state->zzdskbbl);
-	if (state->zzdskbsr) free(state->zzdskbsr);
 	if (state->zzdskbun) free(state->zzdskbun);
 	if (state->zzdskbux) free(state->zzdskbux);
 	if (state->zzdsksba) free(state->zzdsksba);
@@ -1429,27 +1423,20 @@ void cspice_free(void* s) {
 	if (state->zzgfcoq) free(state->zzgfcoq);
 	if (state->zzgfcou) free(state->zzgfcou);
 	if (state->zzgfcprx) free(state->zzgfcprx);
-	if (state->zzgfcslv) free(state->zzgfcslv);
 	if (state->zzgfdiu) free(state->zzgfdiu);
 	if (state->zzgffvu) free(state->zzgffvu);
 	if (state->zzgfilu) free(state->zzgfilu);
-	if (state->zzgflong) free(state->zzgflong);
 	if (state->zzgfocu) free(state->zzgfocu);
 	if (state->zzgfpau) free(state->zzgfpau);
 	if (state->zzgfref) free(state->zzgfref);
-	if (state->zzgfrel) free(state->zzgfrel);
-	if (state->zzgfrelx) free(state->zzgfrelx);
 	if (state->zzgfrpwk) free(state->zzgfrpwk);
 	if (state->zzgfrru) free(state->zzgfrru);
 	if (state->zzgfsolv) free(state->zzgfsolv);
-	if (state->zzgfsolvx) free(state->zzgfsolvx);
 	if (state->zzgfspq) free(state->zzgfspq);
 	if (state->zzgfspu) free(state->zzgfspu);
 	if (state->zzgfssin) free(state->zzgfssin);
 	if (state->zzgfssob) free(state->zzgfssob);
 	if (state->zzgftreb) free(state->zzgftreb);
-	if (state->zzgfudb) free(state->zzgfudb);
-	if (state->zzgfudlt) free(state->zzgfudlt);
 	if (state->zzgfwsts) free(state->zzgfwsts);
 	if (state->zzholdd) free(state->zzholdd);
 	if (state->zzhsi) free(state->zzhsi);
@@ -1501,12 +1488,8 @@ void cspice_free(void* s) {
 	if (state->zzspkas1) free(state->zzspkas1);
 	if (state->zzspkez0) free(state->zzspkez0);
 	if (state->zzspkez1) free(state->zzspkez1);
-	if (state->zzspkfao) free(state->zzspkfao);
 	if (state->zzspkfap) free(state->zzspkfap);
 	if (state->zzspkfat) free(state->zzspkfat);
-	if (state->zzspkflt) free(state->zzspkflt);
-	if (state->zzspkfzo) free(state->zzspkfzo);
-	if (state->zzspkfzt) free(state->zzspkfzt);
 	if (state->zzspkgo0) free(state->zzspkgo0);
 	if (state->zzspkgo1) free(state->zzspkgo1);
 	if (state->zzspkgp0) free(state->zzspkgp0);
@@ -1522,7 +1505,6 @@ void cspice_free(void* s) {
 	if (state->zzsrftrn) free(state->zzsrftrn);
 	if (state->zzstelab) free(state->zzstelab);
 	if (state->zztangnt) free(state->zztangnt);
-	if (state->zztanslv) free(state->zztanslv);
 	if (state->zztanutl) free(state->zztanutl);
 	if (state->zzteme) free(state->zzteme);
 	if (state->zztime) free(state->zztime);

@@ -8,7 +8,7 @@
 
 
 typedef int gfrefn_state_t;
-static inline gfrefn_state_t* get_gfrefn_state(cspice_t* state) {
+static gfrefn_state_t* get_gfrefn_state(cspice_t* state) {
 	return 0;
 }
 

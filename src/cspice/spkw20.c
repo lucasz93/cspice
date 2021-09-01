@@ -8,7 +8,7 @@
 
 
 extern spkw20_init_t __spkw20_init;
-static inline spkw20_state_t* get_spkw20_state(cspice_t* state) {
+static spkw20_state_t* get_spkw20_state(cspice_t* state) {
 	if (!state->spkw20)
 		state->spkw20 = __cspice_allocate_module(sizeof(
 	spkw20_state_t), &__spkw20_init, sizeof(__spkw20_init));

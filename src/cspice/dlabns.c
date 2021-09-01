@@ -8,7 +8,7 @@
 
 
 extern dlabns_init_t __dlabns_init;
-static inline dlabns_state_t* get_dlabns_state(cspice_t* state) {
+static dlabns_state_t* get_dlabns_state(cspice_t* state) {
 	if (!state->dlabns)
 		state->dlabns = __cspice_allocate_module(sizeof(
 	dlabns_state_t), &__dlabns_init, sizeof(__dlabns_init));

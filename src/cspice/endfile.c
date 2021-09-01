@@ -24,7 +24,7 @@ integer f_end(f2c_state_t *f2c, alist *a)
 	unit *b;
 	FILE *tf;
 
-	if(a->aunit>=MXUNIT || a->aunit<0) err(a->aerr,101,"endfile");
+	if(a->aunit>=MXUNIT || a->aunit<0) err(f2c,a->aerr,101,"endfile");
 	b = &f2c->f__units[a->aunit];
 	if(b->ufd==NULL) {
 		char nbuf[10];
@@ -115,6 +115,6 @@ done1:
 done:
 	f2c->f__cf = b->ufd = bf;
 	if (rc)
-		err(a->aerr,111,"endfile");
+		err(f2c,a->aerr,111,"endfile");
 	return 0;
 	}

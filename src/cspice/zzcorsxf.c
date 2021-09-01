@@ -8,7 +8,7 @@
 
 
 extern zzcorsxf_init_t __zzcorsxf_init;
-static inline zzcorsxf_state_t* get_zzcorsxf_state(cspice_t* state) {
+static zzcorsxf_state_t* get_zzcorsxf_state(cspice_t* state) {
 	if (!state->zzcorsxf)
 		state->zzcorsxf = __cspice_allocate_module(sizeof(
 	zzcorsxf_state_t), &__zzcorsxf_init, sizeof(__zzcorsxf_init));

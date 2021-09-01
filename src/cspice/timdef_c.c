@@ -342,7 +342,7 @@
 
       /* Convert our Fortran string to C. */
 
-      F2C_ConvertStr( lenout, value );
+      F2C_ConvertStr( naif_state, lenout, value );
 
       }
 

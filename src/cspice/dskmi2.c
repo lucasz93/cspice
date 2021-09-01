@@ -8,7 +8,7 @@
 
 
 extern dskmi2_init_t __dskmi2_init;
-static inline dskmi2_state_t* get_dskmi2_state(cspice_t* state) {
+static dskmi2_state_t* get_dskmi2_state(cspice_t* state) {
 	if (!state->dskmi2)
 		state->dskmi2 = __cspice_allocate_module(sizeof(
 	dskmi2_state_t), &__dskmi2_init, sizeof(__dskmi2_init));

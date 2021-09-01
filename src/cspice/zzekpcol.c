@@ -8,7 +8,7 @@
 
 
 extern zzekpcol_init_t __zzekpcol_init;
-static inline zzekpcol_state_t* get_zzekpcol_state(cspice_t* state) {
+static zzekpcol_state_t* get_zzekpcol_state(cspice_t* state) {
 	if (!state->zzekpcol)
 		state->zzekpcol = __cspice_allocate_module(sizeof(
 	zzekpcol_state_t), &__zzekpcol_init, sizeof(__zzekpcol_init));

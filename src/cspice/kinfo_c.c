@@ -310,8 +310,8 @@
    Convert the output strings from Fortran style to C style.  Set 
    the SpiceBoolean output found flag.
    */
-   F2C_ConvertStr( typlen, filtyp );
-   F2C_ConvertStr( srclen, source );
+   F2C_ConvertStr( naif_state, typlen, filtyp );
+   F2C_ConvertStr( naif_state, srclen, source );
 
    *found = fnd;
 

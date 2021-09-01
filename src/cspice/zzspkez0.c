@@ -8,7 +8,7 @@
 
 
 extern zzspkez0_init_t __zzspkez0_init;
-static inline zzspkez0_state_t* get_zzspkez0_state(cspice_t* state) {
+static zzspkez0_state_t* get_zzspkez0_state(cspice_t* state) {
 	if (!state->zzspkez0)
 		state->zzspkez0 = __cspice_allocate_module(sizeof(
 	zzspkez0_state_t), &__zzspkez0_init, sizeof(__zzspkez0_init));

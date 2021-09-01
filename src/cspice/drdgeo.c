@@ -8,7 +8,7 @@
 
 
 typedef int drdgeo_state_t;
-static inline drdgeo_state_t* get_drdgeo_state(cspice_t* state) {
+static drdgeo_state_t* get_drdgeo_state(cspice_t* state) {
 	return 0;
 }
 
@@ -18,8 +18,7 @@ static inline drdgeo_state_t* get_drdgeo_state(cspice_t* state) {
 	doublereal *jacobi)
 {
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
-	    f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal), sqrt(doublereal);
 
     /* Local variables */
     doublereal clat;
@@ -437,16 +436,16 @@ static inline drdgeo_state_t* get_drdgeo_state(cspice_t* state) {
 /*     We're going to need the sine and cosine of LAT and LONG many */
 /*     times.  We'll just compute them once. */
 
-    clat = cos(&__global_state->f2c, *lat);
-    clon = cos(&__global_state->f2c, *long__);
-    slat = sin(&__global_state->f2c, *lat);
-    slon = sin(&__global_state->f2c, *long__);
+    clat = cos(*lat);
+    clon = cos(*long__);
+    slat = sin(*lat);
+    slon = sin(*long__);
 
 /*     Referring to the G given in the header we have... */
 
     flat = 1. - *f;
     flat2 = flat * flat;
-    g = sqrt(&__global_state->f2c, clat * clat + flat2 * slat * slat);
+    g = sqrt(clat * clat + flat2 * slat * slat);
     g2 = g * g;
     dgdlat = (flat2 - 1.) * slat * clat / g;
 

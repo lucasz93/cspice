@@ -42,6 +42,7 @@
  
 */
 
+   #include "__cspice_state.h"
    #include "SpiceUsr.h"
 
    SpiceDouble dpmin_c (void *naif_state) 
@@ -108,7 +109,7 @@
       
       winsiz    =  2;
       window[0] =  dpmin_c();
-      window[1] =  dpmax_c() ;
+      window[1] =  dpmin_c() ;
 
       scardd_ ( &winsiz, window ); 
       
@@ -141,24 +142,15 @@
 */
 
 { /* Begin dpmin_c */
+   cspice_user_state_t * user = &((cspice_t *)naif_state)->user;
 
-   /*
-   Static variables
-   */
-
-   /* MECHSOFT: Safe to persist between contexts. */
-   static _Thread_local SpiceBoolean first = SPICETRUE;
-   static _Thread_local SpiceDouble  value;
-
-
-
-   if ( first )
+   if ( user->dpmin_c.first )
    {
-      value = dpmin_(naif_state);
-      first = SPICEFALSE;
+      user->dpmin_c.value = dpmin_(naif_state);
+      user->dpmin_c.first = SPICEFALSE;
    }
    
-   return ( value );
+   return ( user->dpmin_c.value );
    
 
 } /* End dpmin_c */

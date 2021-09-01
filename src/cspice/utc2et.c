@@ -8,7 +8,7 @@
 
 
 typedef int utc2et_state_t;
-static inline utc2et_state_t* get_utc2et_state(cspice_t* state) {
+static utc2et_state_t* get_utc2et_state(cspice_t* state) {
 	return 0;
 }
 

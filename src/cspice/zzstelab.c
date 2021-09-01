@@ -8,7 +8,7 @@
 
 
 extern zzstelab_init_t __zzstelab_init;
-static inline zzstelab_state_t* get_zzstelab_state(cspice_t* state) {
+static zzstelab_state_t* get_zzstelab_state(cspice_t* state) {
 	if (!state->zzstelab)
 		state->zzstelab = __cspice_allocate_module(sizeof(
 	zzstelab_state_t), &__zzstelab_init, sizeof(__zzstelab_init));
@@ -26,7 +26,7 @@ static inline zzstelab_state_t* get_zzstelab_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
@@ -438,7 +438,7 @@ static inline zzstelab_state_t* get_zzstelab_state(cspice_t* state) {
     s = vnorm_(__global_state, vp) / clight_(__global_state);
 /* Computing MAX */
     d__1 = 0., d__2 = 1 - s * s;
-    c__ = sqrt(&__global_state->f2c, (max(d__1,d__2)));
+    c__ = sqrt((max(d__1,d__2)));
     if (c__ == 0.) {
 
 /*        C will be used as a divisor later (in the computation */
@@ -597,7 +597,7 @@ static inline zzstelab_state_t* get_zzstelab_state(cspice_t* state) {
 	    s = vnorm_(__global_state, vp) / clight_(__global_state);
 /* Computing MAX */
 	    d__1 = 0., d__2 = 1 - s * s;
-	    c__ = sqrt(&__global_state->f2c, (max(d__1,d__2)));
+	    c__ = sqrt((max(d__1,d__2)));
 
 /*           Compute the vector offset of the correction. */
 

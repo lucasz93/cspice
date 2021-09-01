@@ -8,7 +8,7 @@
 
 
 extern dnearp_init_t __dnearp_init;
-static inline dnearp_state_t* get_dnearp_state(cspice_t* state) {
+static dnearp_state_t* get_dnearp_state(cspice_t* state) {
 	if (!state->dnearp)
 		state->dnearp = __cspice_allocate_module(sizeof(
 	dnearp_state_t), &__dnearp_init, sizeof(__dnearp_init));

@@ -8,7 +8,7 @@
 
 
 extern ckbsr_init_t __ckbsr_init;
-static inline ckbsr_state_t* get_ckbsr_state(cspice_t* state) {
+static ckbsr_state_t* get_ckbsr_state(cspice_t* state) {
 	if (!state->ckbsr)
 		state->ckbsr = __cspice_allocate_module(sizeof(ckbsr_state_t),
 	 &__ckbsr_init, sizeof(__ckbsr_init));
@@ -4599,44 +4599,45 @@ L_ckhave:
 	needav, doublereal *descr, char *segid, logical *found, ftnlen 
 	fname_len, ftnlen segid_len)
 {
-    return ckbsr_0_(0, fname, handle, inst, sclkdp, tol, needav, descr, segid,
-	     found, fname_len, segid_len);
+    return ckbsr_0_(__global_state, 0, fname, handle, inst, sclkdp, tol, 
+	    needav, descr, segid, found, fname_len, segid_len);
     }
 
 /* Subroutine */ int cklpf_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return ckbsr_0_(1, fname, handle, (integer *)0, (doublereal *)0, (
-	    doublereal *)0, (logical *)0, (doublereal *)0, (char *)0, (
-	    logical *)0, fname_len, (ftnint)0);
+    return ckbsr_0_(__global_state, 1, fname, handle, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (logical *)0, (doublereal *)0, (
+	    char *)0, (logical *)0, fname_len, (ftnint)0);
     }
 
 /* Subroutine */ int ckupf_(cspice_t* __global_state, integer *handle)
 {
-    return ckbsr_0_(2, (char *)0, handle, (integer *)0, (doublereal *)0, (
-	    doublereal *)0, (logical *)0, (doublereal *)0, (char *)0, (
-	    logical *)0, (ftnint)0, (ftnint)0);
+    return ckbsr_0_(__global_state, 2, (char *)0, handle, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (logical *)0, (doublereal *)0, (
+	    char *)0, (logical *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int ckbss_(cspice_t* __global_state, integer *inst, 
 	doublereal *sclkdp, doublereal *tol, logical *needav)
 {
-    return ckbsr_0_(3, (char *)0, (integer *)0, inst, sclkdp, tol, needav, (
-	    doublereal *)0, (char *)0, (logical *)0, (ftnint)0, (ftnint)0);
+    return ckbsr_0_(__global_state, 3, (char *)0, (integer *)0, inst, sclkdp, 
+	    tol, needav, (doublereal *)0, (char *)0, (logical *)0, (ftnint)0, 
+	    (ftnint)0);
     }
 
 /* Subroutine */ int cksns_(cspice_t* __global_state, integer *handle, 
 	doublereal *descr, char *segid, logical *found, ftnlen segid_len)
 {
-    return ckbsr_0_(4, (char *)0, handle, (integer *)0, (doublereal *)0, (
-	    doublereal *)0, (logical *)0, descr, segid, found, (ftnint)0, 
-	    segid_len);
+    return ckbsr_0_(__global_state, 4, (char *)0, handle, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (logical *)0, descr, segid, 
+	    found, (ftnint)0, segid_len);
     }
 
 /* Subroutine */ int ckhave_(cspice_t* __global_state, logical *found)
 {
-    return ckbsr_0_(5, (char *)0, (integer *)0, (integer *)0, (doublereal *)0,
-	     (doublereal *)0, (logical *)0, (doublereal *)0, (char *)0, found,
-	     (ftnint)0, (ftnint)0);
+    return ckbsr_0_(__global_state, 5, (char *)0, (integer *)0, (integer *)0, 
+	    (doublereal *)0, (doublereal *)0, (logical *)0, (doublereal *)0, (
+	    char *)0, found, (ftnint)0, (ftnint)0);
     }
 

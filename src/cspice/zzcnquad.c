@@ -8,7 +8,7 @@
 
 
 extern zzcnquad_init_t __zzcnquad_init;
-static inline zzcnquad_state_t* get_zzcnquad_state(cspice_t* state) {
+static zzcnquad_state_t* get_zzcnquad_state(cspice_t* state) {
 	if (!state->zzcnquad)
 		state->zzcnquad = __cspice_allocate_module(sizeof(
 	zzcnquad_state_t), &__zzcnquad_init, sizeof(__zzcnquad_init));
@@ -29,7 +29,7 @@ static inline zzcnquad_state_t* get_zzcnquad_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
     double d_sign(f2c_state_t*, doublereal *, doublereal *);
 
@@ -234,8 +234,7 @@ static inline zzcnquad_state_t* get_zzcnquad_state(cspice_t* state) {
 /*     solution. */
 
     if (__state->first) {
-	__state->invub = sqrt(&__global_state->f2c, dpmax_(__global_state)) / 
-		200.;
+	__state->invub = sqrt(dpmax_(__global_state)) / 200.;
 	__state->first = FALSE_;
     }
 

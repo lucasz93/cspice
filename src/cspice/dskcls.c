@@ -8,7 +8,7 @@
 
 
 typedef int dskcls_state_t;
-static inline dskcls_state_t* get_dskcls_state(cspice_t* state) {
+static dskcls_state_t* get_dskcls_state(cspice_t* state) {
 	return 0;
 }
 

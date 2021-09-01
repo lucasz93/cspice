@@ -8,7 +8,7 @@
 
 
 extern zznrmlon_init_t __zznrmlon_init;
-static inline zznrmlon_state_t* get_zznrmlon_state(cspice_t* state) {
+static zznrmlon_state_t* get_zznrmlon_state(cspice_t* state) {
 	if (!state->zznrmlon)
 		state->zznrmlon = __cspice_allocate_module(sizeof(
 	zznrmlon_state_t), &__zznrmlon_init, sizeof(__zznrmlon_init));

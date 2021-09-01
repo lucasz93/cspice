@@ -8,7 +8,7 @@
 
 
 typedef int dasrfr_state_t;
-static inline dasrfr_state_t* get_dasrfr_state(cspice_t* state) {
+static dasrfr_state_t* get_dasrfr_state(cspice_t* state) {
 	return 0;
 }
 

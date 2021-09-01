@@ -8,7 +8,7 @@
 
 
 extern sigdgt_init_t __sigdgt_init;
-static inline sigdgt_state_t* get_sigdgt_state(cspice_t* state) {
+static sigdgt_state_t* get_sigdgt_state(cspice_t* state) {
 	if (!state->sigdgt)
 		state->sigdgt = __cspice_allocate_module(sizeof(
 	sigdgt_state_t), &__sigdgt_init, sizeof(__sigdgt_init));

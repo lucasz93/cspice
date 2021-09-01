@@ -8,7 +8,7 @@
 
 
 extern intstr_init_t __intstr_init;
-static inline intstr_state_t* get_intstr_state(cspice_t* state) {
+static intstr_state_t* get_intstr_state(cspice_t* state) {
 	if (!state->intstr)
 		state->intstr = __cspice_allocate_module(sizeof(
 	intstr_state_t), &__intstr_init, sizeof(__intstr_init));

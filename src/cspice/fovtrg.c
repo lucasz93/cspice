@@ -8,7 +8,7 @@
 
 
 extern fovtrg_init_t __fovtrg_init;
-static inline fovtrg_state_t* get_fovtrg_state(cspice_t* state) {
+static fovtrg_state_t* get_fovtrg_state(cspice_t* state) {
 	if (!state->fovtrg)
 		state->fovtrg = __cspice_allocate_module(sizeof(
 	fovtrg_state_t), &__fovtrg_init, sizeof(__fovtrg_init));

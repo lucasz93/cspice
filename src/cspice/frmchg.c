@@ -8,7 +8,7 @@
 
 
 extern frmchg_init_t __frmchg_init;
-static inline frmchg_state_t* get_frmchg_state(cspice_t* state) {
+static frmchg_state_t* get_frmchg_state(cspice_t* state) {
 	if (!state->frmchg)
 		state->frmchg = __cspice_allocate_module(sizeof(
 	frmchg_state_t), &__frmchg_init, sizeof(__frmchg_init));

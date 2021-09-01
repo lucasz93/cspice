@@ -8,7 +8,7 @@
 
 
 extern lnkilb_init_t __lnkilb_init;
-static inline lnkilb_state_t* get_lnkilb_state(cspice_t* state) {
+static lnkilb_state_t* get_lnkilb_state(cspice_t* state) {
 	if (!state->lnkilb)
 		state->lnkilb = __cspice_allocate_module(sizeof(
 	lnkilb_state_t), &__lnkilb_init, sizeof(__lnkilb_init));

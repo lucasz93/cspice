@@ -8,7 +8,7 @@
 
 
 extern zzprscor_init_t __zzprscor_init;
-static inline zzprscor_state_t* get_zzprscor_state(cspice_t* state) {
+static zzprscor_state_t* get_zzprscor_state(cspice_t* state) {
 	if (!state->zzprscor)
 		state->zzprscor = __cspice_allocate_module(sizeof(
 	zzprscor_state_t), &__zzprscor_init, sizeof(__zzprscor_init));

@@ -8,7 +8,7 @@
 
 
 extern halfpi_init_t __halfpi_init;
-static inline halfpi_state_t* get_halfpi_state(cspice_t* state) {
+static halfpi_state_t* get_halfpi_state(cspice_t* state) {
 	if (!state->halfpi)
 		state->halfpi = __cspice_allocate_module(sizeof(
 	halfpi_state_t), &__halfpi_init, sizeof(__halfpi_init));
@@ -26,7 +26,7 @@ doublereal halfpi_(cspice_t* __global_state)
     doublereal ret_val;
 
     /* Builtin functions */
-    double acos(f2c_state_t*, doublereal);
+    double acos(doublereal);
 
 
     /* Module state */
@@ -185,7 +185,7 @@ doublereal halfpi_(cspice_t* __global_state)
 /*     What is there to say? */
 
     if (__state->value == 0.) {
-	__state->value = acos(&__global_state->f2c, -1.) * .5;
+	__state->value = acos(-1.) * .5;
     }
     ret_val = __state->value;
     return ret_val;

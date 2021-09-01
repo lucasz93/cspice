@@ -8,7 +8,7 @@
 
 
 typedef int dafa2b_state_t;
-static inline dafa2b_state_t* get_dafa2b_state(cspice_t* state) {
+static dafa2b_state_t* get_dafa2b_state(cspice_t* state) {
 	return 0;
 }
 

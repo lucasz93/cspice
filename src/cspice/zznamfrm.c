@@ -8,7 +8,7 @@
 
 
 typedef int zznamfrm_state_t;
-static inline zznamfrm_state_t* get_zznamfrm_state(cspice_t* state) {
+static zznamfrm_state_t* get_zznamfrm_state(cspice_t* state) {
 	return 0;
 }
 

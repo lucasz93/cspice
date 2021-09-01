@@ -8,7 +8,7 @@
 
 
 extern dski02_init_t __dski02_init;
-static inline dski02_state_t* get_dski02_state(cspice_t* state) {
+static dski02_state_t* get_dski02_state(cspice_t* state) {
 	if (!state->dski02)
 		state->dski02 = __cspice_allocate_module(sizeof(
 	dski02_state_t), &__dski02_init, sizeof(__dski02_init));

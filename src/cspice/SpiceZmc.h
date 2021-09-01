@@ -860,7 +860,7 @@ use CHKOSTR_VAL, which is defined below.
          ndim     =  (CCell)->size  +  SPICE_CELL_CTRLSZ;            \
          lenvals  =  (CCell)->length;                                \
                                                                      \
-         C2F_MapFixStrArr ( (caller),      ndim,    lenvals,         \
+         C2F_MapFixStrArr ( naif, (caller),      ndim,    lenvals,   \
                             (CCell)->base, (fLen),  (fCell)  );      \
                                                                      \
          if ( !failed_c(naif) )                                      \
@@ -974,7 +974,7 @@ use CHKOSTR_VAL, which is defined below.
          /*                                                          \
          Convert the output array from Fortran to C style.           \
          */                                                          \
-         F2C_ConvertTrStrArr ( ndim, lenvals, (SpiceChar *)array );  \
+         F2C_ConvertTrStrArr ( naif, ndim, lenvals, (SpiceChar *)array );  \
                                                                      \
          /*                                                          \
          Sync the size and cardinality of the C cell.                \

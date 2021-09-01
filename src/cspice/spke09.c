@@ -8,7 +8,7 @@
 
 
 extern spke09_init_t __spke09_init;
-static inline spke09_state_t* get_spke09_state(cspice_t* state) {
+static spke09_state_t* get_spke09_state(cspice_t* state) {
 	if (!state->spke09)
 		state->spke09 = __cspice_allocate_module(sizeof(
 	spke09_state_t), &__spke09_init, sizeof(__spke09_init));

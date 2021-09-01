@@ -8,7 +8,7 @@
 
 
 extern syseti_init_t __syseti_init;
-static inline syseti_state_t* get_syseti_state(cspice_t* state) {
+static syseti_state_t* get_syseti_state(cspice_t* state) {
 	if (!state->syseti)
 		state->syseti = __cspice_allocate_module(sizeof(
 	syseti_state_t), &__syseti_init, sizeof(__syseti_init));

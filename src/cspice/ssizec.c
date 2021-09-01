@@ -8,7 +8,7 @@
 
 
 extern ssizec_init_t __ssizec_init;
-static inline ssizec_state_t* get_ssizec_state(cspice_t* state) {
+static ssizec_state_t* get_ssizec_state(cspice_t* state) {
 	if (!state->ssizec)
 		state->ssizec = __cspice_allocate_module(sizeof(
 	ssizec_state_t), &__ssizec_init, sizeof(__ssizec_init));

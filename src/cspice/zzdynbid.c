@@ -8,7 +8,7 @@
 
 
 extern zzdynbid_init_t __zzdynbid_init;
-static inline zzdynbid_state_t* get_zzdynbid_state(cspice_t* state) {
+static zzdynbid_state_t* get_zzdynbid_state(cspice_t* state) {
 	if (!state->zzdynbid)
 		state->zzdynbid = __cspice_allocate_module(sizeof(
 	zzdynbid_state_t), &__zzdynbid_init, sizeof(__zzdynbid_init));

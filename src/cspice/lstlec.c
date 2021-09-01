@@ -8,7 +8,7 @@
 
 
 typedef int lstlec_state_t;
-static inline lstlec_state_t* get_lstlec_state(cspice_t* state) {
+static lstlec_state_t* get_lstlec_state(cspice_t* state) {
 	return 0;
 }
 

@@ -43,12 +43,11 @@
  
 */
 
+   #include "__cspice_state.h"
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "f2cMang.h"
-   #include "f2c.h"
-   #include "__cspice_state.h"
    #undef    bsrchc_c
 
 

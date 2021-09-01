@@ -8,7 +8,7 @@
 
 
 typedef int tyear_state_t;
-static inline tyear_state_t* get_tyear_state(cspice_t* state) {
+static tyear_state_t* get_tyear_state(cspice_t* state) {
 	return 0;
 }
 

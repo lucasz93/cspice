@@ -8,7 +8,7 @@
 
 
 typedef int zzbodvcd_state_t;
-static inline zzbodvcd_state_t* get_zzbodvcd_state(cspice_t* state) {
+static zzbodvcd_state_t* get_zzbodvcd_state(cspice_t* state) {
 	return 0;
 }
 

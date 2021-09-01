@@ -8,7 +8,7 @@
 
 
 typedef int spke18_state_t;
-static inline spke18_state_t* get_spke18_state(cspice_t* state) {
+static spke18_state_t* get_spke18_state(cspice_t* state) {
 	return 0;
 }
 

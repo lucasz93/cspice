@@ -8,7 +8,7 @@
 
 
 extern zzwind2d_init_t __zzwind2d_init;
-static inline zzwind2d_state_t* get_zzwind2d_state(cspice_t* state) {
+static zzwind2d_state_t* get_zzwind2d_state(cspice_t* state) {
 	if (!state->zzwind2d)
 		state->zzwind2d = __cspice_allocate_module(sizeof(
 	zzwind2d_state_t), &__zzwind2d_init, sizeof(__zzwind2d_init));

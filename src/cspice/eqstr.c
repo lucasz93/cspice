@@ -8,7 +8,7 @@
 
 
 typedef int eqstr_state_t;
-static inline eqstr_state_t* get_eqstr_state(cspice_t* state) {
+static eqstr_state_t* get_eqstr_state(cspice_t* state) {
 	return 0;
 }
 

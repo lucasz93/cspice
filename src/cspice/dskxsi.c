@@ -8,7 +8,7 @@
 
 
 extern dskxsi_init_t __dskxsi_init;
-static inline dskxsi_state_t* get_dskxsi_state(cspice_t* state) {
+static dskxsi_state_t* get_dskxsi_state(cspice_t* state) {
 	if (!state->dskxsi)
 		state->dskxsi = __cspice_allocate_module(sizeof(
 	dskxsi_state_t), &__dskxsi_init, sizeof(__dskxsi_init));

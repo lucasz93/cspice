@@ -8,7 +8,7 @@
 
 
 typedef int sharpr_state_t;
-static inline sharpr_state_t* get_sharpr_state(cspice_t* state) {
+static sharpr_state_t* get_sharpr_state(cspice_t* state) {
 	return 0;
 }
 

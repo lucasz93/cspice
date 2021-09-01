@@ -8,7 +8,7 @@
 
 
 extern eqncpv_init_t __eqncpv_init;
-static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
+static eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
 	if (!state->eqncpv)
 		state->eqncpv = __cspice_allocate_module(sizeof(
 	eqncpv_state_t), &__eqncpv_init, sizeof(__eqncpv_init));
@@ -28,9 +28,8 @@ static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), cos(
-	    f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
-	    doublereal *);
+    double sqrt(doublereal), sin(doublereal), cos(doublereal), d_mod(
+	    f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal nfac;
@@ -398,7 +397,7 @@ static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
 	chkout_(__global_state, "EQNCPV", (ftnlen)6);
 	return 0;
     }
-    ecc = sqrt(&__global_state->f2c, eqel[1] * eqel[1] + eqel[2] * eqel[2]);
+    ecc = sqrt(eqel[1] * eqel[1] + eqel[2] * eqel[2]);
     if (ecc > .9) {
 	setmsg_(__global_state, "The routine EQNCPV can reliably evaluate st"
 		"ates from equinoctial elements if the eccentricity of the or"
@@ -416,10 +415,10 @@ static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
 /*     Form the transformation from planetary equator to the inertial */
 /*     reference frame. */
 
-    sa = sin(&__global_state->f2c, *rapol);
-    ca = cos(&__global_state->f2c, *rapol);
-    sd = sin(&__global_state->f2c, *decpol);
-    cd = cos(&__global_state->f2c, *decpol);
+    sa = sin(*rapol);
+    ca = cos(*rapol);
+    sd = sin(*decpol);
+    cd = cos(*decpol);
     trans[0] = -sa;
     trans[3] = -ca * sd;
     trans[6] = ca * cd;
@@ -476,8 +475,8 @@ static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
 
     dlpdt = eqel[6];
     dlp = dt * dlpdt;
-    can = cos(&__global_state->f2c, dlp);
-    san = sin(&__global_state->f2c, dlp);
+    can = cos(dlp);
+    san = sin(dlp);
     h__ = eqel[1] * can + eqel[2] * san;
     k = eqel[2] * can - eqel[1] * san;
 
@@ -503,8 +502,8 @@ static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
 
     nodedt = eqel[8];
     node = dt * nodedt;
-    cn = cos(&__global_state->f2c, node);
-    sn = sin(&__global_state->f2c, node);
+    cn = cos(node);
+    sn = sin(node);
     p = eqel[4] * cn + eqel[5] * sn;
     q = eqel[5] * cn - eqel[4] * sn;
     mldt = eqel[7];
@@ -517,7 +516,7 @@ static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
 
 /*     Form Broucke's beta parameter */
 
-    b = sqrt(&__global_state->f2c, 1. - h__ * h__ - k * k);
+    b = sqrt(1. - h__ * h__ - k * k);
     b = 1. / (b + 1.);
 
 /*     Construct the coordinate axes */
@@ -541,8 +540,8 @@ static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
 
 /*     Trigonometric functions of the eccentric longitude */
 
-    sf = sin(&__global_state->f2c, eecan);
-    cf = cos(&__global_state->f2c, eecan);
+    sf = sin(eecan);
+    cf = cos(eecan);
 
 /*     Position in the orbit plane */
 

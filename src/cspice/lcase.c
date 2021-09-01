@@ -8,7 +8,7 @@
 
 
 extern lcase_init_t __lcase_init;
-static inline lcase_state_t* get_lcase_state(cspice_t* state) {
+static lcase_state_t* get_lcase_state(cspice_t* state) {
 	if (!state->lcase)
 		state->lcase = __cspice_allocate_module(sizeof(lcase_state_t),
 	 &__lcase_init, sizeof(__lcase_init));

@@ -8,7 +8,7 @@
 
 
 extern zzbodtrn_init_t __zzbodtrn_init;
-static inline zzbodtrn_state_t* get_zzbodtrn_state(cspice_t* state) {
+static zzbodtrn_state_t* get_zzbodtrn_state(cspice_t* state) {
 	if (!state->zzbodtrn)
 		state->zzbodtrn = __cspice_allocate_module(sizeof(
 	zzbodtrn_state_t), &__zzbodtrn_init, sizeof(__zzbodtrn_init));
@@ -2938,46 +2938,47 @@ L_zzbctrck:
 	integer *code, logical *found, integer *usrctr, logical *update, 
 	ftnlen name_len)
 {
-    return zzbodtrn_0_(0, name__, code, found, usrctr, update, name_len);
+    return zzbodtrn_0_(__global_state, 0, name__, code, found, usrctr, update,
+	     name_len);
     }
 
 /* Subroutine */ int zzbodn2c_(cspice_t* __global_state, char *name__, 
 	integer *code, logical *found, ftnlen name_len)
 {
-    return zzbodtrn_0_(1, name__, code, found, (integer *)0, (logical *)0, 
-	    name_len);
+    return zzbodtrn_0_(__global_state, 1, name__, code, found, (integer *)0, (
+	    logical *)0, name_len);
     }
 
 /* Subroutine */ int zzbodc2n_(cspice_t* __global_state, integer *code, char *
 	name__, logical *found, ftnlen name_len)
 {
-    return zzbodtrn_0_(2, name__, code, found, (integer *)0, (logical *)0, 
-	    name_len);
+    return zzbodtrn_0_(__global_state, 2, name__, code, found, (integer *)0, (
+	    logical *)0, name_len);
     }
 
 /* Subroutine */ int zzboddef_(cspice_t* __global_state, char *name__, 
 	integer *code, ftnlen name_len)
 {
-    return zzbodtrn_0_(3, name__, code, (logical *)0, (integer *)0, (logical *
-	    )0, name_len);
+    return zzbodtrn_0_(__global_state, 3, name__, code, (logical *)0, (
+	    integer *)0, (logical *)0, name_len);
     }
 
 /* Subroutine */ int zzbodkik_(cspice_t* __global_state)
 {
-    return zzbodtrn_0_(4, (char *)0, (integer *)0, (logical *)0, (integer *)0,
-	     (logical *)0, (ftnint)0);
+    return zzbodtrn_0_(__global_state, 4, (char *)0, (integer *)0, (logical *)
+	    0, (integer *)0, (logical *)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzbodrst_(cspice_t* __global_state)
 {
-    return zzbodtrn_0_(5, (char *)0, (integer *)0, (logical *)0, (integer *)0,
-	     (logical *)0, (ftnint)0);
+    return zzbodtrn_0_(__global_state, 5, (char *)0, (integer *)0, (logical *)
+	    0, (integer *)0, (logical *)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzbctrck_(cspice_t* __global_state, integer *usrctr, 
 	logical *update)
 {
-    return zzbodtrn_0_(6, (char *)0, (integer *)0, (logical *)0, usrctr, 
-	    update, (ftnint)0);
+    return zzbodtrn_0_(__global_state, 6, (char *)0, (integer *)0, (logical *)
+	    0, usrctr, update, (ftnint)0);
     }
 

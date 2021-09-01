@@ -8,7 +8,7 @@
 
 
 typedef int removc_state_t;
-static inline removc_state_t* get_removc_state(cspice_t* state) {
+static removc_state_t* get_removc_state(cspice_t* state) {
 	return 0;
 }
 

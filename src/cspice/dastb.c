@@ -8,7 +8,7 @@
 
 
 extern dastb_init_t __dastb_init;
-static inline dastb_state_t* get_dastb_state(cspice_t* state) {
+static dastb_state_t* get_dastb_state(cspice_t* state) {
 	if (!state->dastb)
 		state->dastb = __cspice_allocate_module(sizeof(dastb_state_t),
 	 &__dastb_init, sizeof(__dastb_init));

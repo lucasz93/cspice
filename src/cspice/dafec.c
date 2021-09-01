@@ -8,7 +8,7 @@
 
 
 extern dafec_init_t __dafec_init;
-static inline dafec_state_t* get_dafec_state(cspice_t* state) {
+static dafec_state_t* get_dafec_state(cspice_t* state) {
 	if (!state->dafec)
 		state->dafec = __cspice_allocate_module(sizeof(dafec_state_t),
 	 &__dafec_init, sizeof(__dafec_init));

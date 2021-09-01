@@ -8,7 +8,7 @@
 
 
 extern edterm_init_t __edterm_init;
-static inline edterm_state_t* get_edterm_state(cspice_t* state) {
+static edterm_state_t* get_edterm_state(cspice_t* state) {
 	if (!state->edterm)
 		state->edterm = __cspice_allocate_module(sizeof(
 	edterm_state_t), &__edterm_init, sizeof(__edterm_init));

@@ -8,7 +8,7 @@
 
 
 extern ekopn_init_t __ekopn_init;
-static inline ekopn_state_t* get_ekopn_state(cspice_t* state) {
+static ekopn_state_t* get_ekopn_state(cspice_t* state) {
 	if (!state->ekopn)
 		state->ekopn = __cspice_allocate_module(sizeof(ekopn_state_t),
 	 &__ekopn_init, sizeof(__ekopn_init));

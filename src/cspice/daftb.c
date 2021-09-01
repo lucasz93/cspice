@@ -8,7 +8,7 @@
 
 
 extern daftb_init_t __daftb_init;
-static inline daftb_state_t* get_daftb_state(cspice_t* state) {
+static daftb_state_t* get_daftb_state(cspice_t* state) {
 	if (!state->daftb)
 		state->daftb = __cspice_allocate_module(sizeof(daftb_state_t),
 	 &__daftb_init, sizeof(__daftb_init));

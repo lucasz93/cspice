@@ -9,7 +9,7 @@ static int i_getc(f2c_state_t *f2c)
 	if(f2c->f__recpos >= f2c->f__svic->icirlen) {
 		if (f2c->f__recpos++ == f2c->f__svic->icirlen)
 			return '\n';
-		z_rnew();
+		z_rnew(f2c);
 		}
 	f2c->f__recpos++;
 	if(f2c->f__icptr >= f2c->f__icend)
@@ -27,7 +27,7 @@ int i_ungetc(f2c_state_t *f2c, int ch, FILE *f)
 	if (--f2c->f__recpos == f2c->f__svic->icirlen)
 		return '\n';
 	if (f2c->f__recpos < -1)
-		err(f2c->f__svic->icierr,110,"recend");
+		err(f2c,f2c->f__svic->icierr,110,"recend");
 	/* *--icptr == ch, and icptr may point to read-only memory */
 	return *--f2c->f__icptr /* = ch */;
 	}

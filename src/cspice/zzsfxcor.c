@@ -8,7 +8,7 @@
 
 
 extern zzsfxcor_init_t __zzsfxcor_init;
-static inline zzsfxcor_state_t* get_zzsfxcor_state(cspice_t* state) {
+static zzsfxcor_state_t* get_zzsfxcor_state(cspice_t* state) {
 	if (!state->zzsfxcor)
 		state->zzsfxcor = __cspice_allocate_module(sizeof(
 	zzsfxcor_state_t), &__zzsfxcor_init, sizeof(__zzsfxcor_init));

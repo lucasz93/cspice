@@ -8,7 +8,7 @@
 
 
 extern dafana_init_t __dafana_init;
-static inline dafana_state_t* get_dafana_state(cspice_t* state) {
+static dafana_state_t* get_dafana_state(cspice_t* state) {
 	if (!state->dafana)
 		state->dafana = __cspice_allocate_module(sizeof(
 	dafana_state_t), &__dafana_init, sizeof(__dafana_init));
@@ -2533,32 +2533,33 @@ L_dafcad:
 	doublereal *sum, char *name__, doublereal *data, integer *n, ftnlen 
 	name_len)
 {
-    return dafana_0_(0, handle, sum, name__, data, n, name_len);
+    return dafana_0_(__global_state, 0, handle, sum, name__, data, n, 
+	    name_len);
     }
 
 /* Subroutine */ int dafbna_(cspice_t* __global_state, integer *handle, 
 	doublereal *sum, char *name__, ftnlen name_len)
 {
-    return dafana_0_(1, handle, sum, name__, (doublereal *)0, (integer *)0, 
-	    name_len);
+    return dafana_0_(__global_state, 1, handle, sum, name__, (doublereal *)0, 
+	    (integer *)0, name_len);
     }
 
 /* Subroutine */ int dafada_(cspice_t* __global_state, doublereal *data, 
 	integer *n)
 {
-    return dafana_0_(2, (integer *)0, (doublereal *)0, (char *)0, data, n, (
-	    ftnint)0);
+    return dafana_0_(__global_state, 2, (integer *)0, (doublereal *)0, (char *
+	    )0, data, n, (ftnint)0);
     }
 
 /* Subroutine */ int dafena_(cspice_t* __global_state)
 {
-    return dafana_0_(3, (integer *)0, (doublereal *)0, (char *)0, (doublereal 
-	    *)0, (integer *)0, (ftnint)0);
+    return dafana_0_(__global_state, 3, (integer *)0, (doublereal *)0, (char *
+	    )0, (doublereal *)0, (integer *)0, (ftnint)0);
     }
 
 /* Subroutine */ int dafcad_(cspice_t* __global_state, integer *handle)
 {
-    return dafana_0_(4, handle, (doublereal *)0, (char *)0, (doublereal *)0, (
-	    integer *)0, (ftnint)0);
+    return dafana_0_(__global_state, 4, handle, (doublereal *)0, (char *)0, (
+	    doublereal *)0, (integer *)0, (ftnint)0);
     }
 

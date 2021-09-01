@@ -13,10 +13,10 @@ integer f_back(f2c_state_t *f2c, alist *a)
 
 	f2c->f__curunit = b = &f2c->f__units[a->aunit];	/* curunit for error messages */
 	if(a->aunit >= MXUNIT || a->aunit < 0)
-		err(a->aerr,101,"backspace")
-	if(b->useek==0) err(a->aerr,106,"backspace")
+		err(f2c,a->aerr,101,"backspace")
+	if(b->useek==0) err(f2c,a->aerr,106,"backspace")
 	if((f = b->ufd) == NULL) {
-		fk_open(1, 1, a->aunit);
+		fk_open(f2c, 1, 1, a->aunit);
 		return(0);
 		}
 	if(b->uend==1)
@@ -24,9 +24,9 @@ integer f_back(f2c_state_t *f2c, alist *a)
 		return(0);
 	}
 	if(b->uwrt) {
-		(void) t_runc(a);
-		if (f__nowreading(b))
-			err(a->aerr,errno,"backspace")
+		(void) t_runc(f2c,a);
+		if (f__nowreading(f2c,b))
+			err(f2c,a->aerr,errno,"backspace")
 		}
 	if(b->url>0)
 	{
@@ -62,7 +62,7 @@ integer f_back(f2c_state_t *f2c, alist *a)
 				}
 			z = v;
 			}
-		err(a->aerr,(EOF),"backspace")
+		err(f2c,a->aerr,(EOF),"backspace")
 		}
  break2:
 	fseek(f, z, SEEK_SET);

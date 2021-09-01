@@ -8,7 +8,7 @@
 
 
 extern et2lst_init_t __et2lst_init;
-static inline et2lst_state_t* get_et2lst_state(cspice_t* state) {
+static et2lst_state_t* get_et2lst_state(cspice_t* state) {
 	if (!state->et2lst)
 		state->et2lst = __cspice_allocate_module(sizeof(
 	et2lst_state_t), &__et2lst_init, sizeof(__et2lst_init));

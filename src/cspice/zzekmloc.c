@@ -8,7 +8,7 @@
 
 
 extern zzekmloc_init_t __zzekmloc_init;
-static inline zzekmloc_state_t* get_zzekmloc_state(cspice_t* state) {
+static zzekmloc_state_t* get_zzekmloc_state(cspice_t* state) {
 	if (!state->zzekmloc)
 		state->zzekmloc = __cspice_allocate_module(sizeof(
 	zzekmloc_state_t), &__zzekmloc_init, sizeof(__zzekmloc_init));

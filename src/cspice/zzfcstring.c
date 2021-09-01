@@ -62,7 +62,7 @@
        C2F_CreateStrArr_Sig ( Create a Fortran string array from array
                               of C strings, error signaling version   )
 
-       C2F_CreateFixStrArr ( Create a Fortran string array from C string
+       C2F_CreateFixStrArr  ( Create a Fortran string array from C string
                              array, string length fixed by caller      )
 
        C2F_StrCpy           ( Copy a C string into a Fortran string )
@@ -162,7 +162,8 @@
    #include "SpiceZmc.h"
 
 
-SpiceStatus C2F_CreateStr ( ConstSpiceChar  *cStr,
+SpiceStatus C2F_CreateStr ( void            * naif_state,
+                            ConstSpiceChar  *cStr,
                             SpiceInt        *fStrLen,
                             SpiceChar       **fStr    )
 
@@ -193,7 +194,7 @@ SpiceStatus C2F_CreateStr ( ConstSpiceChar  *cStr,
    /*
    Copy the C string into the Fortran string.
    */
-   status = C2F_StrCpy ( cStr, length, tempStr );
+   status = C2F_StrCpy ( naif_state, cStr, length, tempStr );
 
    if ( status == SPICEFAILURE )
       {
@@ -220,7 +221,8 @@ SpiceStatus C2F_CreateStr ( ConstSpiceChar  *cStr,
 
 
 
-void      C2F_CreateStr_Sig ( ConstSpiceChar  * cStr,
+void      C2F_CreateStr_Sig ( void            * naif_state,
+                              ConstSpiceChar  * cStr,
                               SpiceInt        * fStrLen,
                               SpiceChar      ** fStr     )
    /*
@@ -229,7 +231,7 @@ void      C2F_CreateStr_Sig ( ConstSpiceChar  * cStr,
 {
    SpiceStatus  status;
 
-   status = C2F_CreateStr ( cStr, fStrLen, fStr );
+   status = C2F_CreateStr ( naif_state, cStr, fStrLen, fStr );
 
    if ( status == SPICEFAILURE )
    {
@@ -246,7 +248,8 @@ void      C2F_CreateStr_Sig ( ConstSpiceChar  * cStr,
 
 
 
-SpiceStatus C2F_CreateStrArr ( SpiceInt           nStr,
+SpiceStatus C2F_CreateStrArr ( void             * naif_state,
+                               SpiceInt           nStr,
                                ConstSpiceChar  ** cStrArr,
                                SpiceInt         * fStrLen,
                                SpiceChar       ** fStrArr )
@@ -292,7 +295,7 @@ SpiceStatus C2F_CreateStrArr ( SpiceInt           nStr,
    for ( i=0; i<nStr; i++)
       {
       j = i * maxLen;
-      status = C2F_StrCpy ( *(cStrArr+i), maxLen, (tempStrArr+j) );
+      status = C2F_StrCpy ( naif_state, *(cStrArr+i), maxLen, (tempStrArr+j) );
 
       if ( status == SPICEFAILURE )
          {
@@ -319,7 +322,8 @@ SpiceStatus C2F_CreateStrArr ( SpiceInt           nStr,
 
 
 
-void C2F_CreateStrArr_Sig ( SpiceInt           nStr,
+void C2F_CreateStrArr_Sig ( void             * naif_state,
+                            SpiceInt           nStr,
                             ConstSpiceChar  ** cStrArr,
                             SpiceInt         * fStrLen,
                             SpiceChar       ** fStrArr )
@@ -340,7 +344,7 @@ void C2F_CreateStrArr_Sig ( SpiceInt           nStr,
    /*
    Create the Fortran string array using the non-signaling routine.
    */
-   status = C2F_CreateStrArr ( nStr, cStrArr, fStrLen, fStrArr );
+   status = C2F_CreateStrArr ( naif_state, nStr, cStrArr, fStrLen, fStrArr );
 
    if ( status == SPICEFAILURE )
    {
@@ -390,7 +394,8 @@ void C2F_CreateStrArr_Sig ( SpiceInt           nStr,
 */
 
 
-void C2F_MapStrArr ( ConstSpiceChar   * caller,
+void C2F_MapStrArr ( void             * naif_state,
+                     ConstSpiceChar   * caller,
                      SpiceInt           nStr,
                      SpiceInt           cStrLen,
                      const void       * cStrArr,
@@ -420,7 +425,7 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
    {
       tempLen = strlen (  ( (SpiceChar *)cStrArr ) +  i * cStrLen  );
 
-      maxLen  = maxi_c ( 2, tempLen, maxLen );
+      maxLen  = maxi_c ( naif_state, 2, tempLen, maxLen );
    }
 
    /*
@@ -464,7 +469,7 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
       j      = i * cStrLen;
       k      = i * maxLen;
       
-      status = C2F_StrCpy (  ( (SpiceChar *)cStrArr ) +  j, 
+      status = C2F_StrCpy ( naif_state,  ( (SpiceChar *)cStrArr ) +  j, 
                              maxLen, 
                              tempStrArr + k                 );
 
@@ -513,7 +518,8 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
 
 
 
-void C2F_MapFixStrArr ( ConstSpiceChar   * caller,
+void C2F_MapFixStrArr ( void             * naif_state,
+                        ConstSpiceChar   * caller,
                         SpiceInt           nStr,
                         SpiceInt           cStrLen,
                         const void       * cStrArr,
@@ -574,7 +580,7 @@ void C2F_MapFixStrArr ( ConstSpiceChar   * caller,
       j      = i * cStrLen;
       k      = i * fLen;
       
-      status = C2F_StrCpy (  ( (SpiceChar *)cStrArr ) +  j, 
+      status = C2F_StrCpy ( naif_state,  ( (SpiceChar *)cStrArr ) +  j, 
                              fLen, 
                              tempStrArr + k                 );
 
@@ -615,7 +621,8 @@ void C2F_MapFixStrArr ( ConstSpiceChar   * caller,
 
 
 
-void C2F_CreateFixStrArr ( SpiceInt           nStr,
+void C2F_CreateFixStrArr ( void             * naif_state,
+                           SpiceInt           nStr,
                            SpiceInt           cStrDim,
                            ConstSpiceChar  ** cStrArr,
                            SpiceInt         * fStrLen,
@@ -664,7 +671,7 @@ void C2F_CreateFixStrArr ( SpiceInt           nStr,
    for ( i=0;  i < nStr;  i++ )
    {
       j      = i * fLen;
-      status = C2F_StrCpy ( *(cStrArr+i), fLen, (tempStrArr+j) );
+      status = C2F_StrCpy ( naif_state, *(cStrArr+i), fLen, (tempStrArr+j) );
 
       if ( status == SPICEFAILURE )
       {
@@ -697,7 +704,8 @@ void C2F_CreateFixStrArr ( SpiceInt           nStr,
 
 
 
-SpiceStatus C2F_StrCpy ( ConstSpiceChar  *cStr,
+SpiceStatus C2F_StrCpy ( void            * naif_state,
+                         ConstSpiceChar  *cStr,
                          SpiceInt        fStrLen,
                          SpiceChar       *fStr   )
 
@@ -747,7 +755,8 @@ SpiceStatus C2F_StrCpy ( ConstSpiceChar  *cStr,
 
 
 
-void      F_Alloc ( SpiceInt         fStrLen,
+void      F_Alloc ( void           * naif_state,
+                    SpiceInt         fStrLen,
                     SpiceChar     ** fStr     )
 {
    /*
@@ -786,7 +795,8 @@ void      F_Alloc ( SpiceInt         fStrLen,
 
 
 
-SpiceStatus F2C_CreateStr (  SpiceInt           fStrLen,
+SpiceStatus F2C_CreateStr (  void             * naif_state,
+                             SpiceInt           fStrLen,
                              ConstSpiceChar   * fStr,
                              SpiceChar       ** cStr    )
 {
@@ -797,7 +807,7 @@ SpiceStatus F2C_CreateStr (  SpiceInt           fStrLen,
    /*
    Find the number of characters, excluding trailing blanks.
    */
-   nChars = F_StrLen( fStrLen, fStr );
+   nChars = F_StrLen( naif_state, fStrLen, fStr );
 
    /*
    Add one for the NULL.
@@ -820,7 +830,7 @@ SpiceStatus F2C_CreateStr (  SpiceInt           fStrLen,
    Copy the Fortran string into the C string, leaving the trailing
    blanks behind and putting on the trailing NULL character.
    */
-   status = F2C_StrCpy ( fStrLen, fStr, nChars, tempStr );
+   status = F2C_StrCpy ( naif_state, fStrLen, fStr, nChars, tempStr );
 
    if ( status == SPICEFAILURE )
       {
@@ -845,7 +855,8 @@ SpiceStatus F2C_CreateStr (  SpiceInt           fStrLen,
 
 
 
-void F2C_CreateStr_Sig ( SpiceInt           fStrLen,
+void F2C_CreateStr_Sig ( void             * naif_state,
+                         SpiceInt           fStrLen,
                          ConstSpiceChar   * fStr,
                          SpiceChar       ** cStr    )
 
@@ -855,7 +866,7 @@ void F2C_CreateStr_Sig ( SpiceInt           fStrLen,
 {
    SpiceStatus  status;
 
-   status = F2C_CreateStr ( fStrLen, fStr, cStr );
+   status = F2C_CreateStr ( naif_state, fStrLen, fStr, cStr );
 
    if ( status == SPICEFAILURE )
    {
@@ -873,7 +884,8 @@ void F2C_CreateStr_Sig ( SpiceInt           fStrLen,
 
 
 
-SpiceStatus F2C_CreateStrArr ( SpiceInt            nStr,
+SpiceStatus F2C_CreateStrArr ( void              * naif_state,
+                               SpiceInt            nStr,
                                SpiceInt            fStrLen,
                                ConstSpiceChar    * fStrArr,
                                SpiceChar       *** cStrArr )
@@ -895,7 +907,7 @@ SpiceStatus F2C_CreateStrArr ( SpiceInt            nStr,
    for (i=0; i<nStr; i++)
       {
       j = i * fStrLen;
-      length = F_StrLen( fStrLen, (fStrArr+j) );
+      length = F_StrLen( naif_state, fStrLen, (fStrArr+j) );
       nChars += length;
       } /* end for */
 
@@ -940,9 +952,9 @@ SpiceStatus F2C_CreateStrArr ( SpiceInt            nStr,
       *(tempStrList+i) = tempPtr;
 
       j   = i * fStrLen;
-      length = F_StrLen( fStrLen, (fStrArr+j) );
+      length = F_StrLen( naif_state, fStrLen, (fStrArr+j) );
 
-      status = F2C_StrCpy ( fStrLen, (fStrArr+j), nChars, tempPtr );
+      status = F2C_StrCpy ( naif_state, fStrLen, (fStrArr+j), nChars, tempPtr );
 
       if ( status == SPICEFAILURE )
          {
@@ -974,7 +986,8 @@ SpiceStatus F2C_CreateStrArr ( SpiceInt            nStr,
 
 
 
-void F2C_CreateStrArr_Sig ( SpiceInt             nStr,
+void F2C_CreateStrArr_Sig ( void               * naif_state,
+                            SpiceInt             nStr,
                             SpiceInt             fStrLen,
                             ConstSpiceChar     * fStrArr,
                             SpiceChar        *** cStrArr )
@@ -984,7 +997,7 @@ void F2C_CreateStrArr_Sig ( SpiceInt             nStr,
 {
    SpiceStatus  status;
 
-   status = F2C_CreateStrArr ( nStr, fStrLen, fStrArr, cStrArr );
+   status = F2C_CreateStrArr ( naif_state, nStr, fStrLen, fStrArr, cStrArr );
 
 
 
@@ -1005,7 +1018,8 @@ void F2C_CreateStrArr_Sig ( SpiceInt             nStr,
 
 
 
-void F2C_FreeStrArr ( SpiceChar  **cStrArr )
+void F2C_FreeStrArr ( void       * naif_state,
+                      SpiceChar  **cStrArr )
 
    /*
    Free C strings and pointers allocated via the F2C_CreateStrArr
@@ -1039,7 +1053,8 @@ void F2C_FreeStrArr ( SpiceChar  **cStrArr )
 
 
 
-SpiceStatus F2C_StrCpy ( SpiceInt            fStrLen,
+SpiceStatus F2C_StrCpy ( void              * naif_state,
+                         SpiceInt            fStrLen,
                          ConstSpiceChar    * fStr,
                          SpiceInt            cStrMax,
                          SpiceChar         * cStr    )
@@ -1050,7 +1065,7 @@ SpiceStatus F2C_StrCpy ( SpiceInt            fStrLen,
    Find the number of characters, excluding trailing blanks in the
    Fortran string.
    */
-   nChars = F_StrLen( fStrLen, fStr );
+   nChars = F_StrLen( naif_state, fStrLen, fStr );
 
    /*
    Now we check to see if there is enough room in the C string to
@@ -1085,7 +1100,8 @@ SpiceStatus F2C_StrCpy ( SpiceInt            fStrLen,
 
 
 
-void F2C_ConvertStr ( SpiceInt         CStrLen,
+void F2C_ConvertStr ( void           * naif_state,
+                      SpiceInt         CStrLen,
                       SpiceChar      * fStr    )
 {
    /*
@@ -1107,7 +1123,7 @@ void F2C_ConvertStr ( SpiceInt         CStrLen,
    /*
    Find the non-blank length of the input String.
    */
-   nChars = F_StrLen( CStrLen-1, fStr );
+   nChars = F_StrLen( naif_state, CStrLen-1, fStr );
 
    /*
    Place a null at index nChars.
@@ -1120,7 +1136,8 @@ void F2C_ConvertStr ( SpiceInt         CStrLen,
 
 
 
-SpiceInt F_StrLen ( SpiceInt       fStrLen,
+SpiceInt F_StrLen ( void          * naif_state,
+                    SpiceInt       fStrLen,
                     ConstSpiceChar *fStr    )
 {
    SpiceInt length;
@@ -1171,7 +1188,7 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
 
 /*
 
--Procedure F2C_ConvertStrArr (String to string array)
+-Procedure F2C_ConvertStrArr ( String to string array)
 
 -Abstract
 
@@ -1215,7 +1232,8 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
 
 */
 
-   void F2C_ConvertStrArr ( SpiceInt     n,
+   void F2C_ConvertStrArr ( void       * naif_state,
+                            SpiceInt     n,
                             SpiceInt     lenout,
                             SpiceChar  * cvals   )
 /*
@@ -1382,7 +1400,8 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
 
 */
 
-   void F2C_ConvertTrStrArr ( SpiceInt     n,
+   void F2C_ConvertTrStrArr ( void       * naif_state,
+                              SpiceInt     n,
                               SpiceInt     lenout,
                               SpiceChar  * cvals   )
 /*
@@ -1483,7 +1502,7 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
    Use the traditional converter to obtain a array of C-style strings,
    each having a null at index lenout-1.
    */
-   F2C_ConvertStrArr ( n, lenout, cvals );
+   F2C_ConvertStrArr ( naif_state, n, lenout, cvals );
 
 
    /*
@@ -1495,7 +1514,7 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
    {
       strPtr = cvals + i*lenout;
       
-      npos = F_StrLen ( lenout-1, strPtr );
+      npos = F_StrLen ( naif_state, lenout-1, strPtr );
       
       *( strPtr + npos ) = NULLCHAR;
    }

@@ -8,7 +8,7 @@
 
 
 extern wrenci_init_t __wrenci_init;
-static inline wrenci_state_t* get_wrenci_state(cspice_t* state) {
+static wrenci_state_t* get_wrenci_state(cspice_t* state) {
 	if (!state->wrenci)
 		state->wrenci = __cspice_allocate_module(sizeof(
 	wrenci_state_t), &__wrenci_init, sizeof(__wrenci_init));

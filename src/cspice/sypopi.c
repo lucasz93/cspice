@@ -8,7 +8,7 @@
 
 
 extern sypopi_init_t __sypopi_init;
-static inline sypopi_state_t* get_sypopi_state(cspice_t* state) {
+static sypopi_state_t* get_sypopi_state(cspice_t* state) {
 	if (!state->sypopi)
 		state->sypopi = __cspice_allocate_module(sizeof(
 	sypopi_state_t), &__sypopi_init, sizeof(__sypopi_init));

@@ -8,7 +8,7 @@
 
 
 extern zzekcnam_init_t __zzekcnam_init;
-static inline zzekcnam_state_t* get_zzekcnam_state(cspice_t* state) {
+static zzekcnam_state_t* get_zzekcnam_state(cspice_t* state) {
 	if (!state->zzekcnam)
 		state->zzekcnam = __cspice_allocate_module(sizeof(
 	zzekcnam_state_t), &__zzekcnam_init, sizeof(__zzekcnam_init));

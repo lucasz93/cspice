@@ -8,7 +8,7 @@
 
 
 typedef int ncposr_state_t;
-static inline ncposr_state_t* get_ncposr_state(cspice_t* state) {
+static ncposr_state_t* get_ncposr_state(cspice_t* state) {
 	return 0;
 }
 

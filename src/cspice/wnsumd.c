@@ -8,7 +8,7 @@
 
 
 typedef int wnsumd_state_t;
-static inline wnsumd_state_t* get_wnsumd_state(cspice_t* state) {
+static wnsumd_state_t* get_wnsumd_state(cspice_t* state) {
 	return 0;
 }
 
@@ -21,7 +21,7 @@ static inline wnsumd_state_t* get_wnsumd_state(cspice_t* state) {
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     integer card;
@@ -298,8 +298,7 @@ static inline wnsumd_state_t* get_wnsumd_state(cspice_t* state) {
 
 	*meas = sum;
 	*avg = *meas * 2. / (doublereal) card;
-	*stddev = sqrt(&__global_state->f2c, sumsqr * 2. / (doublereal) card 
-		- *avg * *avg);
+	*stddev = sqrt(sumsqr * 2. / (doublereal) card - *avg * *avg);
     }
     return 0;
 } /* wnsumd_ */

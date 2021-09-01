@@ -380,7 +380,7 @@
    /*
    Convert sclkch to a null-terminated C string. 
    */
-   F2C_ConvertStr ( lenout, sclkch );
+   F2C_ConvertStr ( naif_state, lenout, sclkch );
 
 
    chkout_c ( naif_state, "sce2s_c");

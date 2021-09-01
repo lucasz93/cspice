@@ -8,7 +8,7 @@
 
 
 typedef int inslac_state_t;
-static inline inslac_state_t* get_inslac_state(cspice_t* state) {
+static inslac_state_t* get_inslac_state(cspice_t* state) {
 	return 0;
 }
 

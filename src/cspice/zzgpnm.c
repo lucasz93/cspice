@@ -8,7 +8,7 @@
 
 
 typedef int zzgpnm_state_t;
-static inline zzgpnm_state_t* get_zzgpnm_state(cspice_t* state) {
+static zzgpnm_state_t* get_zzgpnm_state(cspice_t* state) {
 	return 0;
 }
 

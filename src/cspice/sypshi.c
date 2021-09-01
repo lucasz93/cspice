@@ -8,7 +8,7 @@
 
 
 extern sypshi_init_t __sypshi_init;
-static inline sypshi_state_t* get_sypshi_state(cspice_t* state) {
+static sypshi_state_t* get_sypshi_state(cspice_t* state) {
 	if (!state->sypshi)
 		state->sypshi = __cspice_allocate_module(sizeof(
 	sypshi_state_t), &__sypshi_init, sizeof(__sypshi_init));

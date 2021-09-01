@@ -8,7 +8,7 @@
 
 
 extern latsrf_init_t __latsrf_init;
-static inline latsrf_state_t* get_latsrf_state(cspice_t* state) {
+static latsrf_state_t* get_latsrf_state(cspice_t* state) {
 	if (!state->latsrf)
 		state->latsrf = __cspice_allocate_module(sizeof(
 	latsrf_state_t), &__latsrf_init, sizeof(__latsrf_init));

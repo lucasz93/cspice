@@ -8,7 +8,7 @@
 
 
 typedef int xpose_state_t;
-static inline xpose_state_t* get_xpose_state(cspice_t* state) {
+static xpose_state_t* get_xpose_state(cspice_t* state) {
 	return 0;
 }
 

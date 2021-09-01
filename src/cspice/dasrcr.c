@@ -8,7 +8,7 @@
 
 
 extern dasrcr_init_t __dasrcr_init;
-static inline dasrcr_state_t* get_dasrcr_state(cspice_t* state) {
+static dasrcr_state_t* get_dasrcr_state(cspice_t* state) {
 	if (!state->dasrcr)
 		state->dasrcr = __cspice_allocate_module(sizeof(
 	dasrcr_state_t), &__dasrcr_init, sizeof(__dasrcr_init));

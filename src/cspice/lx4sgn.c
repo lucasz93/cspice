@@ -8,7 +8,7 @@
 
 
 typedef int lx4sgn_state_t;
-static inline lx4sgn_state_t* get_lx4sgn_state(cspice_t* state) {
+static lx4sgn_state_t* get_lx4sgn_state(cspice_t* state) {
 	return 0;
 }
 

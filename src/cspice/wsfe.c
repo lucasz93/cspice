@@ -6,7 +6,7 @@
  int
 x_wSL(f2c_state_t *f2c)
 {
-	int n = f__putbuf('\n');
+	int n = f__putbuf(f2c,'\n');
 	f2c->f__hiwater = f2c->f__recpos = f2c->f__cursor = 0;
 	return(n == 0);
 }
@@ -17,11 +17,11 @@ xw_end(f2c_state_t *f2c)
 	int n;
 
 	if(f2c->f__nonl) {
-		f__putbuf(n = 0);
+		f__putbuf(f2c,n = 0);
 		fflush(f2c->f__cf);
 		}
 	else
-		n = f__putbuf('\n');
+		n = f__putbuf(f2c,'\n');
 	f2c->f__hiwater = f2c->f__recpos = f2c->f__cursor = 0;
 	return n;
 }
@@ -31,7 +31,7 @@ xw_rev(f2c_state_t *f2c)
 {
 	int n = 0;
 	if(f2c->f__workdone) {
-		n = f__putbuf('\n');
+		n = f__putbuf(f2c,'\n');
 		f2c->f__workdone = 0;
 		}
 	f2c->f__hiwater = f2c->f__recpos = f2c->f__cursor = 0;
@@ -44,7 +44,7 @@ integer s_wsfe(f2c,a) f2c_state_t *f2c; cilist *a;	/*start*/
 integer s_wsfe(f2c_state_t *f2c, cilist *a)	/*start*/
 #endif
 {	int n;
-	if(!f2c->f__init) f_init();
+	if(!f2c->f__init) f_init(f2c);
 	f2c->f__reading=0;
 	f2c->f__sequential=1;
 	f2c->f__formatted=1;
@@ -56,17 +56,17 @@ integer s_wsfe(f2c_state_t *f2c, cilist *a)	/*start*/
 	f2c->f__scale=0;
 	f2c->f__fmtbuf=a->cifmt;
 	f2c->f__cf=f2c->f__curunit->ufd;
-	if(pars_f(f2c->f__fmtbuf)<0) err(a->cierr,100,"startio");
+	if(pars_f(f2c,f2c->f__fmtbuf)<0) err(f2c,a->cierr,100,"startio");
 	f2c->f__putn= x_putc;
 	f2c->f__doed= w_ed;
 	f2c->f__doned= w_ned;
 	f2c->f__doend=xw_end;
 	f2c->f__dorevert=xw_rev;
 	f2c->f__donewrec=x_wSL;
-	fmt_bg();
+	fmt_bg(f2c);
 	f2c->f__cplus=0;
 	f2c->f__cblank=f2c->f__curunit->ublnk;
-	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c->f__curunit))
-		err(a->cierr,errno,"write start");
+	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c,f2c->f__curunit))
+		err(f2c,a->cierr,errno,"write start");
 	return(0);
 }

@@ -57,7 +57,8 @@
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
 
-   void limb_pl02 ( SpiceInt              handle,
+   void limb_pl02 ( void                * naif_state,
+                    SpiceInt              handle,
                     ConstSpiceDLADescr  * dladsc,
                     ConstSpiceChar      * target,
                     SpiceDouble           et,
@@ -837,9 +838,9 @@
    /*
    Map the target name to an ID code.
    */
-   bods2c_c ( target, &trgcde, &found );
+   bods2c_c ( naif_state, target, &trgcde, &found );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
@@ -858,9 +859,9 @@
    /*
    Map the observer name to an ID code.
    */
-   bods2c_c ( obsrvr, &obscde, &found );
+   bods2c_c ( naif_state, obsrvr, &obscde, &found );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
@@ -893,9 +894,9 @@
    Check the DSK descriptor of the DSK segment; make sure it's
    for the correct body.
    */
-   dskgd_c ( handle, dladsc, &dskdsc );
+   dskgd_c ( naif_state, handle, dladsc, &dskdsc );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
@@ -928,9 +929,9 @@
    /*
    Make sure fixref is centered on the target.
    */
-   namfrm_c ( fixref, &frcode );
+   namfrm_c ( naif_state, fixref, &frcode );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
@@ -946,9 +947,9 @@
       return;
    }
 
-   frinfo_c ( frcode, &frcent, &frclss, &frclid, &found );
+   frinfo_c ( naif_state, frcode, &frcent, &frclss, &frclid, &found );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
@@ -987,9 +988,9 @@
    observer in the target body-fixed frame.  Negate this vector
    to obtain the observer's position relative to the target body center.
    */
-   bodvrd_c ( target, "RADII", 3, &n, trgRadii );
+   bodvrd_c ( naif_state, target, "RADII", 3, &n, trgRadii );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
@@ -1005,19 +1006,19 @@
       return;
    }
 
-   spkpos_c ( target, et, fixref, abcorr, obsrvr, trgpos, &lt );
+   spkpos_c ( naif_state, target, et, fixref, abcorr, obsrvr, trgpos, &lt );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
-   vminus_c ( trgpos, obspos );
+   vminus_c ( naif_state, trgpos, obspos );
 
-   edlimb_c ( trgRadii[0], trgRadii[1], trgRadii[2], obspos, &limb );
+   edlimb_c ( naif_state, trgRadii[0], trgRadii[1], trgRadii[2], obspos, &limb );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
@@ -1027,7 +1028,7 @@
    Find the center and semi-axis vectors of the limb of the
    reference ellipsoid.
    */
-   el2cgv_c ( &limb, center, smajor, sminor );
+   el2cgv_c ( naif_state, &limb, center, smajor, sminor );
 
    /*
    Generate a set of points on the limb.  Note we need not worry about
@@ -1038,37 +1039,37 @@
    a plane; this plate will the limb's center. (Note that for all 
    ellipsoids, the limb center lies on the observer-target center line).
    */
-   nvp2pl_c ( obspos, center, &perpPlane );
+   nvp2pl_c ( naif_state, obspos, center, &perpPlane );
 
    /*
    Map an endpoint of a semi-major axis to the "orthogonal" plane
    via orthogonal projection.
    */
-   psv2pl_c ( center, smajor, sminor, &limbPlane );
+   psv2pl_c ( naif_state, center, smajor, sminor, &limbPlane );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
-   vadd_c  ( center, smajor,     pvec   );  
-   vprjp_c ( pvec,   &perpPlane, pvproj );
+   vadd_c  ( naif_state, center, smajor,     pvec   );  
+   vprjp_c ( naif_state, pvec,   &perpPlane, pvproj );
    
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
 
-   delta = twopi_c() / npoints;
+   delta = twopi_c(naif_state) / npoints;
 
    for ( i = 0;  i < npoints;  i++ )
    {
       theta = i * delta;
 
-      vrotv_c ( pvproj, obspos, theta, projpt );
+      vrotv_c ( naif_state, pvproj, obspos, theta, projpt );
 
       /*
       Find the point on the limb plane that maps to prjpt
@@ -1078,9 +1079,9 @@
       gives us the direction from the center toward the desired
       limb point.
       */
-      vprjpi_c ( projpt, &perpPlane, &limbPlane, invpt, &found );
+      vprjpi_c ( naif_state, projpt, &perpPlane, &limbPlane, invpt, &found );
 
-      if ( failed_c() ) 
+      if ( failed_c(naif_state) ) 
       {
          chkout_c ( naif_state, "limb_pl02" );
          return;
@@ -1096,12 +1097,13 @@
          return;
       }
 
-      vsub_c   ( invpt, center, dir );
+      vsub_c   ( naif_state, invpt, center, dir );
 
-      surfpt_c ( center,      dir,         trgRadii[0], 
+      surfpt_c ( naif_state,
+                 center,      dir,         trgRadii[0], 
                  trgRadii[1], trgRadii[2], limbpts[i],  &found );
 
-      if ( failed_c() ) 
+      if ( failed_c(naif_state) ) 
       {
          chkout_c ( naif_state, "limb_pl02" );
          return;
@@ -1122,13 +1124,14 @@
    /*
    Set the target's epoch of participation. 
    */
-   zzcorepc_ ( ( char       * ) abcorr,
+   zzcorepc_ ( naif_state,
+               ( char       * ) abcorr,
                ( doublereal * ) &et,
                ( doublereal * ) &lt,
                ( doublereal * ) trgepc,
                ( ftnlen       ) strlen(abcorr) );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       chkout_c ( naif_state, "limb_pl02" );
       return;
@@ -1167,7 +1170,8 @@
       Convert the ith limb point on the reference ellipsoid
       from rectangular to latitudinal coordinates.   
       */
-      reclat_c (  limbpts[i], 
+      reclat_c (  naif_state,
+                  limbpts[i], 
                   &radius, 
                   &( lonLatGridPtr[i][0] ),
                   &( lonLatGridPtr[i][1] )   );      
@@ -1182,7 +1186,8 @@
    SpiceDoubles" for compatibility with the prototype of llgrid_pl02.
    Only the const qualifier is new; the size is unchanged.
    */
-   llgrid_pl02 ( handle,                                  
+   llgrid_pl02 ( naif_state,
+                 handle,                                  
                  dladsc,  
                  npoints, 
                  (ConstSpiceDouble (*)[2]) lonLatGridPtr,  

@@ -8,7 +8,7 @@
 
 
 extern zzinpdt_init_t __zzinpdt_init;
-static inline zzinpdt_state_t* get_zzinpdt_state(cspice_t* state) {
+static zzinpdt_state_t* get_zzinpdt_state(cspice_t* state) {
 	if (!state->zzinpdt)
 		state->zzinpdt = __cspice_allocate_module(sizeof(
 	zzinpdt_state_t), &__zzinpdt_init, sizeof(__zzinpdt_init));
@@ -28,7 +28,7 @@ static inline zzinpdt_state_t* get_zzinpdt_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal);
+    double cos(doublereal);
 
     /* Local variables */
     doublereal dlon;
@@ -728,7 +728,7 @@ static inline zzinpdt_state_t* get_zzinpdt_state(cspice_t* state) {
 /*           latitude) is adequate for this purpose. */
 
 /* Computing MAX */
-	    d__2 = (d__1 = cos(&__global_state->f2c, pcnlat), abs(d__1));
+	    d__2 = (d__1 = cos(pcnlat), abs(d__1));
 	    dlon = lonmrg / max(d__2,1e-8);
 	    amnlon = minlon - dlon;
 	    amxlon = maxlon + dlon;

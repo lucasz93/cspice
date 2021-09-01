@@ -8,7 +8,7 @@
 
 
 extern ana_init_t __ana_init;
-static inline ana_state_t* get_ana_state(cspice_t* state) {
+static ana_state_t* get_ana_state(cspice_t* state) {
 	if (!state->ana)
 		state->ana = __cspice_allocate_module(sizeof(ana_state_t), &
 	__ana_init, sizeof(__ana_init));

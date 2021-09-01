@@ -8,7 +8,7 @@
 
 
 typedef int dlassg_state_t;
-static inline dlassg_state_t* get_dlassg_state(cspice_t* state) {
+static dlassg_state_t* get_dlassg_state(cspice_t* state) {
 	return 0;
 }
 

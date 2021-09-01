@@ -8,7 +8,7 @@
 
 
 extern spke05_init_t __spke05_init;
-static inline spke05_state_t* get_spke05_state(cspice_t* state) {
+static spke05_state_t* get_spke05_state(cspice_t* state) {
 	if (!state->spke05)
 		state->spke05 = __cspice_allocate_module(sizeof(
 	spke05_state_t), &__spke05_init, sizeof(__spke05_init));
@@ -24,7 +24,7 @@ static inline spke05_state_t* get_spke05_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
@@ -327,8 +327,8 @@ static inline spke05_state_t* get_spke05_state(cspice_t* state) {
 	denom = t2 - t1;
 	arg = numer * pi_(__global_state) / denom;
 	dargdt = pi_(__global_state) / denom;
-	w = cos(&__global_state->f2c, arg) * .5 + .5;
-	dwdt = sin(&__global_state->f2c, arg) * -.5 * dargdt;
+	w = cos(arg) * .5 + .5;
+	dwdt = sin(arg) * -.5 * dargdt;
 	d__1 = 1. - w;
 	vlcomg_(__global_state, &__state->c__6, &w, s1, &d__1, s2, state);
 	d__1 = -dwdt;

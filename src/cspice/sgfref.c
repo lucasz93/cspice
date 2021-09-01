@@ -8,7 +8,7 @@
 
 
 extern sgfref_init_t __sgfref_init;
-static inline sgfref_state_t* get_sgfref_state(cspice_t* state) {
+static sgfref_state_t* get_sgfref_state(cspice_t* state) {
 	if (!state->sgfref)
 		state->sgfref = __cspice_allocate_module(sizeof(
 	sgfref_state_t), &__sgfref_init, sizeof(__sgfref_init));

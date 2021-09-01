@@ -8,7 +8,7 @@
 
 
 typedef int vrel_state_t;
-static inline vrel_state_t* get_vrel_state(cspice_t* state) {
+static vrel_state_t* get_vrel_state(cspice_t* state) {
 	return 0;
 }
 

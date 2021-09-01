@@ -8,7 +8,7 @@
 
 
 extern zztangnt_init_t __zztangnt_init;
-static inline zztangnt_state_t* get_zztangnt_state(cspice_t* state) {
+static zztangnt_state_t* get_zztangnt_state(cspice_t* state) {
 	if (!state->zztangnt)
 		state->zztangnt = __cspice_allocate_module(sizeof(
 	zztangnt_state_t), &__zztangnt_init, sizeof(__zztangnt_init));

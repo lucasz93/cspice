@@ -8,7 +8,7 @@
 
 
 typedef int bschoi_state_t;
-static inline bschoi_state_t* get_bschoi_state(cspice_t* state) {
+static bschoi_state_t* get_bschoi_state(cspice_t* state) {
 	return 0;
 }
 

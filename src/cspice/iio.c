@@ -6,7 +6,7 @@
 z_getc(f2c_state_t *f2c)
 {
 	if(f2c->f__recpos++ < f2c->f__svic->icirlen) {
-		if(f2c->f__icptr >= f2c->f__icend) err(f2c->f__svic->iciend,(EOF),"endfile");
+		if(f2c->f__icptr >= f2c->f__icend) err(f2c, f2c->f__svic->iciend,(EOF),"endfile");
 		return(*(unsigned char *)f2c->f__icptr++);
 		}
 	return '\n';
@@ -34,7 +34,7 @@ z_rnew(f2c_state_t *f2c)
  static int
 z_endp(f2c_state_t *f2c)
 {
-	(*f2c->f__donewrec)();
+	(*f2c->f__donewrec)(f2c);
 	return 0;
 	}
 
@@ -49,9 +49,9 @@ c_si(f2c_state_t *f2c, icilist *a)
 	f2c->f__curunit = 0;
 	f2c->f__sequential=f2c->f__formatted=1;
 	f2c->f__external=0;
-	if(pars_f(f2c->f__fmtbuf)<0)
-		err(a->icierr,100,"startint");
-	fmt_bg();
+	if(pars_f(f2c,f2c->f__fmtbuf)<0)
+		err(f2c,a->icierr,100,"startint");
+	fmt_bg(f2c);
 	f2c->f__cblank=f2c->f__cplus=f2c->f__scale=0;
 	f2c->f__svic=a;
 	f2c->f__icnum=f2c->f__recpos=0;
@@ -120,23 +120,23 @@ integer s_wsfi(f2c_state_t *f2c, icilist *a)
 	return(0);
 }
 integer e_rsfi(f2c_state_t *f2c)
-{	int n = en_fio();
+{	int n = en_fio(f2c);
 	f2c->f__fmtbuf = NULL;
 	return(n);
 }
 integer e_wsfi(f2c_state_t *f2c)
 {
 	int n;
-	n = en_fio();
+	n = en_fio(f2c);
 	f2c->f__fmtbuf = NULL;
 	if(f2c->f__svic->icirnum != 1
 	 && (f2c->f__icnum >  f2c->f__svic->icirnum
 	 || (f2c->f__icnum == f2c->f__svic->icirnum && (f2c->f__recpos | f2c->f__hiwater))))
-		err(f2c->f__svic->icierr,110,"inwrite");
+		err(f2c,f2c->f__svic->icierr,110,"inwrite");
 	if (f2c->f__recpos < f2c->f__hiwater)
 		f2c->f__recpos = f2c->f__hiwater;
 	if (f2c->f__recpos >= f2c->f__svic->icirlen)
-		err(f2c->f__svic->icierr,110,"recend");
+		err(f2c,f2c->f__svic->icierr,110,"recend");
 	if (!f2c->f__recpos && f2c->f__icnum)
 		return n;
 	while(f2c->f__recpos++ < f2c->f__svic->icirlen)

@@ -8,7 +8,7 @@
 
 
 extern sigerr_init_t __sigerr_init;
-static inline sigerr_state_t* get_sigerr_state(cspice_t* state) {
+static sigerr_state_t* get_sigerr_state(cspice_t* state) {
 	if (!state->sigerr)
 		state->sigerr = __cspice_allocate_module(sizeof(
 	sigerr_state_t), &__sigerr_init, sizeof(__sigerr_init));

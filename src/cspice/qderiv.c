@@ -8,7 +8,7 @@
 
 
 typedef int qderiv_state_t;
-static inline qderiv_state_t* get_qderiv_state(cspice_t* state) {
+static qderiv_state_t* get_qderiv_state(cspice_t* state) {
 	return 0;
 }
 

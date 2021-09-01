@@ -237,8 +237,8 @@
    /* 
    Convert the output strings to C style.
    */
-   F2C_ConvertStr( lenout, pictur );
-   F2C_ConvertStr( lenerr, errmsg );
+   F2C_ConvertStr( naif_state, lenout, pictur );
+   F2C_ConvertStr( naif_state, lenerr, errmsg );
 
 
    /*

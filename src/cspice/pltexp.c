@@ -8,7 +8,7 @@
 
 
 typedef int pltexp_state_t;
-static inline pltexp_state_t* get_pltexp_state(cspice_t* state) {
+static pltexp_state_t* get_pltexp_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern zzraybox_init_t __zzraybox_init;
-static inline zzraybox_state_t* get_zzraybox_state(cspice_t* state) {
+static zzraybox_state_t* get_zzraybox_state(cspice_t* state) {
 	if (!state->zzraybox)
 		state->zzraybox = __cspice_allocate_module(sizeof(
 	zzraybox_state_t), &__zzraybox_init, sizeof(__zzraybox_init));

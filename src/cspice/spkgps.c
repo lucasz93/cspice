@@ -8,7 +8,7 @@
 
 
 extern spkgps_init_t __spkgps_init;
-static inline spkgps_state_t* get_spkgps_state(cspice_t* state) {
+static spkgps_state_t* get_spkgps_state(cspice_t* state) {
 	if (!state->spkgps)
 		state->spkgps = __cspice_allocate_module(sizeof(
 	spkgps_state_t), &__spkgps_init, sizeof(__spkgps_init));

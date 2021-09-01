@@ -192,7 +192,7 @@
    after the last non-blank character.  This operation is valid
    whether or not the CSPICE routine signaled an error.
    */
-   F2C_ConvertStr ( lenout, table );
+   F2C_ConvertStr ( naif_state, lenout, table );
 
 
    chkout_c ( naif_state, "ektnam_c" );

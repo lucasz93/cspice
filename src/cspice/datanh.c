@@ -8,7 +8,7 @@
 
 
 typedef int datanh_state_t;
-static inline datanh_state_t* get_datanh_state(cspice_t* state) {
+static datanh_state_t* get_datanh_state(cspice_t* state) {
 	return 0;
 }
 
@@ -19,7 +19,7 @@ doublereal datanh_(cspice_t* __global_state, doublereal *x)
     doublereal ret_val;
 
     /* Builtin functions */
-    double log(f2c_state_t*, doublereal);
+    double log(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -181,7 +181,7 @@ doublereal datanh_(cspice_t* __global_state, doublereal *x)
 	chkout_(__global_state, "DATANH", (ftnlen)6);
 	return ret_val;
     }
-    ret_val = log(&__global_state->f2c, (*x + 1.) / (1. - *x)) * .5;
+    ret_val = log((*x + 1.) / (1. - *x)) * .5;
     chkout_(__global_state, "DATANH", (ftnlen)6);
     return ret_val;
 } /* datanh_ */

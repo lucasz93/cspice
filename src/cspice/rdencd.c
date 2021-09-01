@@ -8,7 +8,7 @@
 
 
 extern rdencd_init_t __rdencd_init;
-static inline rdencd_state_t* get_rdencd_state(cspice_t* state) {
+static rdencd_state_t* get_rdencd_state(cspice_t* state) {
 	if (!state->rdencd)
 		state->rdencd = __cspice_allocate_module(sizeof(
 	rdencd_state_t), &__rdencd_init, sizeof(__rdencd_init));

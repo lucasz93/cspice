@@ -8,7 +8,7 @@
 
 
 typedef int bodc2n_state_t;
-static inline bodc2n_state_t* get_bodc2n_state(cspice_t* state) {
+static bodc2n_state_t* get_bodc2n_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern syputi_init_t __syputi_init;
-static inline syputi_state_t* get_syputi_state(cspice_t* state) {
+static syputi_state_t* get_syputi_state(cspice_t* state) {
 	if (!state->syputi)
 		state->syputi = __cspice_allocate_module(sizeof(
 	syputi_state_t), &__syputi_init, sizeof(__syputi_init));

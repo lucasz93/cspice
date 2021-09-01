@@ -618,7 +618,7 @@
    Create a Fortran-style array of column names. 
    */
 
-   C2F_MapStrArr ( "ekifld_c",
+   C2F_MapStrArr ( naif_state, "ekifld_c",
                    ncols, cnmlen, cnames, &fCnameLen, &fCnameArr );
    
    if ( failed_c(naif_state) )
@@ -632,7 +632,7 @@
    Produce a Fortran-style array for the declarations, as we did for 
    the column names.
    */
-   C2F_MapStrArr ( "ekifld_c",
+   C2F_MapStrArr ( naif_state, "ekifld_c",
                    ncols, declen, decls,  &fCdeclLen, &fCdeclArr );
    
    if ( failed_c(naif_state) )

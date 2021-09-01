@@ -8,7 +8,7 @@
 
 
 typedef int dacosh_state_t;
-static inline dacosh_state_t* get_dacosh_state(cspice_t* state) {
+static dacosh_state_t* get_dacosh_state(cspice_t* state) {
 	return 0;
 }
 
@@ -19,7 +19,7 @@ doublereal dacosh_(cspice_t* __global_state, doublereal *x)
     doublereal ret_val;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), log(f2c_state_t*, doublereal);
+    double sqrt(doublereal), log(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -184,8 +184,7 @@ doublereal dacosh_(cspice_t* __global_state, doublereal *x)
 /*  large values of X if the equivalent expression, 1.0D0/(X*X), were */
 /*  used. */
 
-    ret_val = log(&__global_state->f2c, *x + *x * sqrt(&__global_state->f2c, 
-	    1. - 1. / *x / *x));
+    ret_val = log(*x + *x * sqrt(1. - 1. / *x / *x));
     chkout_(__global_state, "DACOSH", (ftnlen)6);
     return ret_val;
 } /* dacosh_ */

@@ -8,7 +8,7 @@
 
 
 extern zzdasrfr_init_t __zzdasrfr_init;
-static inline zzdasrfr_state_t* get_zzdasrfr_state(cspice_t* state) {
+static zzdasrfr_state_t* get_zzdasrfr_state(cspice_t* state) {
 	if (!state->zzdasrfr)
 		state->zzdasrfr = __cspice_allocate_module(sizeof(
 	zzdasrfr_state_t), &__zzdasrfr_init, sizeof(__zzdasrfr_init));

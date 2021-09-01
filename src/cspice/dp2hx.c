@@ -8,7 +8,7 @@
 
 
 extern dp2hx_init_t __dp2hx_init;
-static inline dp2hx_state_t* get_dp2hx_state(cspice_t* state) {
+static dp2hx_state_t* get_dp2hx_state(cspice_t* state) {
 	if (!state->dp2hx)
 		state->dp2hx = __cspice_allocate_module(sizeof(dp2hx_state_t),
 	 &__dp2hx_init, sizeof(__dp2hx_init));

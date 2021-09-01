@@ -8,7 +8,7 @@
 
 
 extern gfudb_init_t __gfudb_init;
-static inline gfudb_state_t* get_gfudb_state(cspice_t* state) {
+static gfudb_state_t* get_gfudb_state(cspice_t* state) {
 	if (!state->gfudb)
 		state->gfudb = __cspice_allocate_module(sizeof(gfudb_state_t),
 	 &__gfudb_init, sizeof(__gfudb_init));

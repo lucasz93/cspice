@@ -8,7 +8,7 @@
 
 
 extern subsol_init_t __subsol_init;
-static inline subsol_state_t* get_subsol_state(cspice_t* state) {
+static subsol_state_t* get_subsol_state(cspice_t* state) {
 	if (!state->subsol)
 		state->subsol = __cspice_allocate_module(sizeof(
 	subsol_state_t), &__subsol_init, sizeof(__subsol_init));

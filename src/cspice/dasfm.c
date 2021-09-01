@@ -8,7 +8,7 @@
 
 
 extern dasfm_init_t __dasfm_init;
-static inline dasfm_state_t* get_dasfm_state(cspice_t* state) {
+static dasfm_state_t* get_dasfm_state(cspice_t* state) {
 	if (!state->dasfm)
 		state->dasfm = __cspice_allocate_module(sizeof(dasfm_state_t),
 	 &__dasfm_init, sizeof(__dasfm_init));
@@ -6089,143 +6089,155 @@ L_dasham:
 	*access, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len, 
 	ftnlen access_len)
 {
-    return dasfm_0_(0, fname, ftype, ifname, handle, unit, free, lastla, 
-	    lastrc, lastwd, nresvr, nresvc, ncomr, ncomc, fhset, access, 
-	    fname_len, ftype_len, ifname_len, access_len);
+    return dasfm_0_(__global_state, 0, fname, ftype, ifname, handle, unit, 
+	    free, lastla, lastrc, lastwd, nresvr, nresvc, ncomr, ncomc, fhset,
+	     access, fname_len, ftype_len, ifname_len, access_len);
     }
 
 /* Subroutine */ int dasopr_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return dasfm_0_(1, fname, (char *)0, (char *)0, handle, (integer *)0, (
+    return dasfm_0_(__global_state, 1, fname, (char *)0, (char *)0, handle, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char *
-	    )0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
+	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dasopw_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return dasfm_0_(2, fname, (char *)0, (char *)0, handle, (integer *)0, (
+    return dasfm_0_(__global_state, 2, fname, (char *)0, (char *)0, handle, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char *
-	    )0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
+	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dasonw_(cspice_t* __global_state, char *fname, char *
 	ftype, char *ifname, integer *ncomr, integer *handle, ftnlen 
 	fname_len, ftnlen ftype_len, ftnlen ifname_len)
 {
-    return dasfm_0_(3, fname, ftype, ifname, handle, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
-	    integer *)0, ncomr, (integer *)0, (integer *)0, (char *)0, 
-	    fname_len, ftype_len, ifname_len, (ftnint)0);
+    return dasfm_0_(__global_state, 3, fname, ftype, ifname, handle, (integer 
+	    *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, ncomr, (integer *)0, (integer *)0, (
+	    char *)0, fname_len, ftype_len, ifname_len, (ftnint)0);
     }
 
 /* Subroutine */ int dasopn_(cspice_t* __global_state, char *fname, char *
 	ifname, integer *handle, ftnlen fname_len, ftnlen ifname_len)
 {
-    return dasfm_0_(4, fname, (char *)0, ifname, handle, (integer *)0, (
+    return dasfm_0_(__global_state, 4, fname, (char *)0, ifname, handle, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char *
-	    )0, fname_len, (ftnint)0, ifname_len, (ftnint)0);
+	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, ifname_len, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dasops_(cspice_t* __global_state, integer *handle)
 {
-    return dasfm_0_(5, (char *)0, (char *)0, (char *)0, handle, (integer *)0, 
-	    (integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *
-	    )0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char 
-	    *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dasfm_0_(__global_state, 5, (char *)0, (char *)0, (char *)0, 
+	    handle, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
+	    0, (integer *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int dasllc_(cspice_t* __global_state, integer *handle)
 {
-    return dasfm_0_(6, (char *)0, (char *)0, (char *)0, handle, (integer *)0, 
-	    (integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *
-	    )0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char 
-	    *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dasfm_0_(__global_state, 6, (char *)0, (char *)0, (char *)0, 
+	    handle, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
+	    0, (integer *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int dashfs_(cspice_t* __global_state, integer *handle, 
 	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
 	integer *free, integer *lastla, integer *lastrc, integer *lastwd)
 {
-    return dasfm_0_(7, (char *)0, (char *)0, (char *)0, handle, (integer *)0, 
-	    free, lastla, lastrc, lastwd, nresvr, nresvc, ncomr, ncomc, (
-	    integer *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
-	    0);
+    return dasfm_0_(__global_state, 7, (char *)0, (char *)0, (char *)0, 
+	    handle, (integer *)0, free, lastla, lastrc, lastwd, nresvr, 
+	    nresvc, ncomr, ncomc, (integer *)0, (char *)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dasufs_(cspice_t* __global_state, integer *handle, 
 	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
 	integer *free, integer *lastla, integer *lastrc, integer *lastwd)
 {
-    return dasfm_0_(8, (char *)0, (char *)0, (char *)0, handle, (integer *)0, 
-	    free, lastla, lastrc, lastwd, nresvr, nresvc, ncomr, ncomc, (
-	    integer *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
-	    0);
+    return dasfm_0_(__global_state, 8, (char *)0, (char *)0, (char *)0, 
+	    handle, (integer *)0, free, lastla, lastrc, lastwd, nresvr, 
+	    nresvc, ncomr, ncomc, (integer *)0, (char *)0, (ftnint)0, (ftnint)
+	    0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int dashlu_(cspice_t* __global_state, integer *handle, 
 	integer *unit)
 {
-    return dasfm_0_(9, (char *)0, (char *)0, (char *)0, handle, unit, (
-	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char *
-	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dasfm_0_(__global_state, 9, (char *)0, (char *)0, (char *)0, 
+	    handle, unit, (integer *)0, (integer *)0, (integer *)0, (integer *
+	    )0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dasluh_(cspice_t* __global_state, integer *unit, integer 
 	*handle)
 {
-    return dasfm_0_(10, (char *)0, (char *)0, (char *)0, handle, unit, (
-	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char *
-	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return dasfm_0_(__global_state, 10, (char *)0, (char *)0, (char *)0, 
+	    handle, unit, (integer *)0, (integer *)0, (integer *)0, (integer *
+	    )0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dashfn_(cspice_t* __global_state, integer *handle, char *
 	fname, ftnlen fname_len)
 {
-    return dasfm_0_(11, fname, (char *)0, (char *)0, handle, (integer *)0, (
+    return dasfm_0_(__global_state, 11, fname, (char *)0, (char *)0, handle, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char *
-	    )0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
+	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dasfnh_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return dasfm_0_(12, fname, (char *)0, (char *)0, handle, (integer *)0, (
+    return dasfm_0_(__global_state, 12, fname, (char *)0, (char *)0, handle, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (char *
-	    )0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
+	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (char *)0, fname_len, (ftnint)0, (ftnint)0, (ftnint)
+	    0);
     }
 
 /* Subroutine */ int dashof_(cspice_t* __global_state, integer *fhset)
 {
-    return dasfm_0_(13, (char *)0, (char *)0, (char *)0, (integer *)0, (
+    return dasfm_0_(__global_state, 13, (char *)0, (char *)0, (char *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, fhset, 
-	    (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, fhset, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int dassih_(cspice_t* __global_state, integer *handle, char *
 	access, ftnlen access_len)
 {
-    return dasfm_0_(14, (char *)0, (char *)0, (char *)0, handle, (integer *)0,
-	     (integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer 
-	    *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, 
-	    access, (ftnint)0, (ftnint)0, (ftnint)0, access_len);
+    return dasfm_0_(__global_state, 14, (char *)0, (char *)0, (char *)0, 
+	    handle, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
+	    0, (integer *)0, access, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    access_len);
     }
 
 /* Subroutine */ int dasham_(cspice_t* __global_state, integer *handle, char *
 	access, ftnlen access_len)
 {
-    return dasfm_0_(15, (char *)0, (char *)0, (char *)0, handle, (integer *)0,
-	     (integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer 
-	    *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, 
-	    access, (ftnint)0, (ftnint)0, (ftnint)0, access_len);
+    return dasfm_0_(__global_state, 15, (char *)0, (char *)0, (char *)0, 
+	    handle, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
+	    0, (integer *)0, access, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    access_len);
     }
 

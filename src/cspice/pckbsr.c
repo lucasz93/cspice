@@ -8,7 +8,7 @@
 
 
 extern pckbsr_init_t __pckbsr_init;
-static inline pckbsr_state_t* get_pckbsr_state(cspice_t* state) {
+static pckbsr_state_t* get_pckbsr_state(cspice_t* state) {
 	if (!state->pckbsr)
 		state->pckbsr = __cspice_allocate_module(sizeof(
 	pckbsr_state_t), &__pckbsr_init, sizeof(__pckbsr_init));
@@ -3167,28 +3167,30 @@ L_pcksfs:
 	handle, integer *body, doublereal *et, doublereal *descr, char *ident,
 	 logical *found, ftnlen fname_len, ftnlen ident_len)
 {
-    return pckbsr_0_(0, fname, handle, body, et, descr, ident, found, 
-	    fname_len, ident_len);
+    return pckbsr_0_(__global_state, 0, fname, handle, body, et, descr, ident,
+	     found, fname_len, ident_len);
     }
 
 /* Subroutine */ int pcklof_(cspice_t* __global_state, char *fname, integer *
 	handle, ftnlen fname_len)
 {
-    return pckbsr_0_(1, fname, handle, (integer *)0, (doublereal *)0, (
-	    doublereal *)0, (char *)0, (logical *)0, fname_len, (ftnint)0);
+    return pckbsr_0_(__global_state, 1, fname, handle, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (char *)0, (logical *)0, 
+	    fname_len, (ftnint)0);
     }
 
 /* Subroutine */ int pckuof_(cspice_t* __global_state, integer *handle)
 {
-    return pckbsr_0_(2, (char *)0, handle, (integer *)0, (doublereal *)0, (
-	    doublereal *)0, (char *)0, (logical *)0, (ftnint)0, (ftnint)0);
+    return pckbsr_0_(__global_state, 2, (char *)0, handle, (integer *)0, (
+	    doublereal *)0, (doublereal *)0, (char *)0, (logical *)0, (ftnint)
+	    0, (ftnint)0);
     }
 
 /* Subroutine */ int pcksfs_(cspice_t* __global_state, integer *body, 
 	doublereal *et, integer *handle, doublereal *descr, char *ident, 
 	logical *found, ftnlen ident_len)
 {
-    return pckbsr_0_(3, (char *)0, handle, body, et, descr, ident, found, (
-	    ftnint)0, ident_len);
+    return pckbsr_0_(__global_state, 3, (char *)0, handle, body, et, descr, 
+	    ident, found, (ftnint)0, ident_len);
     }
 

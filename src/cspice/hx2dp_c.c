@@ -287,7 +287,7 @@
    /*
    Convert the error message from Fortran to C style.
    */
-   F2C_ConvertStr ( lenout, errmsg );
+   F2C_ConvertStr ( naif_state, lenout, errmsg );
 
    chkout_c ( naif_state, "hx2dp_c" );
    

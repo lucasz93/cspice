@@ -8,7 +8,7 @@
 
 
 extern zzeprcss_init_t __zzeprcss_init;
-static inline zzeprcss_state_t* get_zzeprcss_state(cspice_t* state) {
+static zzeprcss_state_t* get_zzeprcss_state(cspice_t* state) {
 	if (!state->zzeprcss)
 		state->zzeprcss = __cspice_allocate_module(sizeof(
 	zzeprcss_state_t), &__zzeprcss_init, sizeof(__zzeprcss_init));

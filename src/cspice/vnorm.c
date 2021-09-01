@@ -8,7 +8,7 @@
 
 
 typedef int vnorm_state_t;
-static inline vnorm_state_t* get_vnorm_state(cspice_t* state) {
+static vnorm_state_t* get_vnorm_state(cspice_t* state) {
 	return 0;
 }
 
@@ -19,7 +19,7 @@ doublereal vnorm_(cspice_t* __global_state, doublereal *v1)
     doublereal ret_val, d__1, d__2, d__3;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal v1max;
@@ -170,8 +170,7 @@ doublereal vnorm_(cspice_t* __global_state, doublereal *v1)
 	d__2 = v1[1] / v1max;
 /* Computing 2nd power */
 	d__3 = v1[2] / v1max;
-	ret_val = v1max * sqrt(&__global_state->f2c, d__1 * d__1 + d__2 * 
-		d__2 + d__3 * d__3);
+	ret_val = v1max * sqrt(d__1 * d__1 + d__2 * d__2 + d__3 * d__3);
     }
 
     return ret_val;

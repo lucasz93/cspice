@@ -8,7 +8,7 @@
 
 
 typedef int sumad_state_t;
-static inline sumad_state_t* get_sumad_state(cspice_t* state) {
+static sumad_state_t* get_sumad_state(cspice_t* state) {
 	return 0;
 }
 

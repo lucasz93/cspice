@@ -8,7 +8,7 @@
 
 
 typedef int dhfa_state_t;
-static inline dhfa_state_t* get_dhfa_state(cspice_t* state) {
+static dhfa_state_t* get_dhfa_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,7 +20,7 @@ doublereal dhfa_(cspice_t* __global_state, doublereal *state, doublereal *
     doublereal ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal base;
@@ -352,7 +352,7 @@ doublereal dhfa_(cspice_t* __global_state, doublereal *state, doublereal *
 
 /*     Now we safely take the square root of BASE. */
 
-    base = sqrt(&__global_state->f2c, base);
+    base = sqrt(base);
     ret_val = -(rngrat * *bodyr) / (base * r__);
     chkout_(__global_state, "DHFA", (ftnlen)4);
     return ret_val;

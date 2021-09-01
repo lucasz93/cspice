@@ -8,7 +8,7 @@
 
 
 extern ckw02_init_t __ckw02_init;
-static inline ckw02_state_t* get_ckw02_state(cspice_t* state) {
+static ckw02_state_t* get_ckw02_state(cspice_t* state) {
 	if (!state->ckw02)
 		state->ckw02 = __cspice_allocate_module(sizeof(ckw02_state_t),
 	 &__ckw02_init, sizeof(__ckw02_init));

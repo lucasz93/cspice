@@ -8,7 +8,7 @@
 
 
 typedef int polyds_state_t;
-static inline polyds_state_t* get_polyds_state(cspice_t* state) {
+static polyds_state_t* get_polyds_state(cspice_t* state) {
 	return 0;
 }
 

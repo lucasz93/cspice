@@ -203,7 +203,7 @@
    /*
    Convert the output string from Fortran to C style.
    */
-   F2C_ConvertStr ( lenout, frname );
+   F2C_ConvertStr ( naif_state, lenout, frname );
    
 
    /*

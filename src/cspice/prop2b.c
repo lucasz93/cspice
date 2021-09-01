@@ -8,7 +8,7 @@
 
 
 extern prop2b_init_t __prop2b_init;
-static inline prop2b_state_t* get_prop2b_state(cspice_t* state) {
+static prop2b_state_t* get_prop2b_state(cspice_t* state) {
 	if (!state->prop2b)
 		state->prop2b = __cspice_allocate_module(sizeof(
 	prop2b_state_t), &__prop2b_init, sizeof(__prop2b_init));
@@ -29,8 +29,7 @@ static inline prop2b_state_t* get_prop2b_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double sqrt(f2c_state_t*, doublereal), log(f2c_state_t*, doublereal), exp(
-	    f2c_state_t*, doublereal);
+    double sqrt(doublereal), log(doublereal), exp(doublereal);
 
     /* Local variables */
     extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
@@ -525,7 +524,7 @@ static inline prop2b_state_t* get_prop2b_state(cspice_t* state) {
 /*        Evidently we will need the constants: */
 
 	__state->f = 1. - __state->e;
-	__state->b = sqrt(&__global_state->f2c, __state->q / *gm);
+	__state->b = sqrt(__state->q / *gm);
 	__state->br0 = __state->b * __state->r0;
 	__state->b2rv = __state->b * __state->b * __state->rv;
 	__state->bq = __state->b * __state->q;
@@ -757,12 +756,11 @@ static inline prop2b_state_t* get_prop2b_state(cspice_t* state) {
 		__state->qovr0 / __state->bq, abs(d__1));
 	__state->maxc = max(d__2,d__3);
 	if (__state->f < 0.) {
-	    __state->logmxc = log(&__global_state->f2c, __state->maxc);
-	    __state->logdpm = log(&__global_state->f2c, dpmax_(__global_state)
-		     / 2.);
+	    __state->logmxc = log(__state->maxc);
+	    __state->logdpm = log(dpmax_(__global_state) / 2.);
 	    __state->fixed = __state->logdpm - __state->logmxc;
-	    __state->rootf = sqrt(&__global_state->f2c, -__state->f);
-	    __state->logf = log(&__global_state->f2c, -__state->f);
+	    __state->rootf = sqrt(-__state->f);
+	    __state->logf = log(-__state->f);
 /* Computing MIN */
 	    d__1 = __state->fixed / __state->rootf, d__2 = (__state->fixed + 
 		    __state->logf * 1.5) / __state->rootf;
@@ -808,10 +806,9 @@ static inline prop2b_state_t* get_prop2b_state(cspice_t* state) {
 
 /*           (We'll use logarithms to compute the upper bound for |X|.) */
 
-	    __state->logbnd = (log(&__global_state->f2c, 1.5) + log(&
-		    __global_state->f2c, dpmax_(__global_state)) - log(&
-		    __global_state->f2c, __state->maxc)) / 3.;
-	    __state->bound = exp(&__global_state->f2c, __state->logbnd);
+	    __state->logbnd = (log(1.5) + log(dpmax_(__global_state)) - log(
+		    __state->maxc)) / 3.;
+	    __state->bound = exp(__state->logbnd);
 	}
 
 /*        All the obvious problems have been checked, move everybody */

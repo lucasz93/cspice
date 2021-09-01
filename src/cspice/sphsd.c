@@ -8,7 +8,7 @@
 
 
 extern sphsd_init_t __sphsd_init;
-static inline sphsd_state_t* get_sphsd_state(cspice_t* state) {
+static sphsd_state_t* get_sphsd_state(cspice_t* state) {
 	if (!state->sphsd)
 		state->sphsd = __cspice_allocate_module(sizeof(sphsd_state_t),
 	 &__sphsd_init, sizeof(__sphsd_init));
@@ -24,8 +24,7 @@ doublereal sphsd_(cspice_t* __global_state, doublereal *radius, doublereal *
     doublereal ret_val;
 
     /* Builtin functions */
-    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), acos(
-	    f2c_state_t*, doublereal);
+    double sin(doublereal), cos(doublereal), acos(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -259,12 +258,10 @@ doublereal sphsd_(cspice_t* __global_state, doublereal *radius, doublereal *
 /*     round-off error doesn't take it out of the domain of arc */
 /*     cosine... */
 
-    sl1sl2 = sin(&__global_state->f2c, *lat1) * sin(&__global_state->f2c, *
-	    lat2);
-    cosang = cos(&__global_state->f2c, *long1 - *long2) * (cos(&
-	    __global_state->f2c, *lat1 - *lat2) - sl1sl2) + sl1sl2;
-    ret_val = *radius * acos(&__global_state->f2c, brcktd_(__global_state, &
-	    cosang, &__state->c_b7, &__state->c_b8));
+    sl1sl2 = sin(*lat1) * sin(*lat2);
+    cosang = cos(*long1 - *long2) * (cos(*lat1 - *lat2) - sl1sl2) + sl1sl2;
+    ret_val = *radius * acos(brcktd_(__global_state, &cosang, &__state->c_b7, 
+	    &__state->c_b8));
     return ret_val;
 } /* sphsd_ */
 

@@ -8,7 +8,7 @@
 
 
 typedef int shelli_state_t;
-static inline shelli_state_t* get_shelli_state(cspice_t* state) {
+static shelli_state_t* get_shelli_state(cspice_t* state) {
 	return 0;
 }
 

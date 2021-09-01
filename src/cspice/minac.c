@@ -8,7 +8,7 @@
 
 
 typedef int minac_state_t;
-static inline minac_state_t* get_minac_state(cspice_t* state) {
+static minac_state_t* get_minac_state(cspice_t* state) {
 	return 0;
 }
 

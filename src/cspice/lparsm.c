@@ -8,7 +8,7 @@
 
 
 typedef int lparsm_state_t;
-static inline lparsm_state_t* get_lparsm_state(cspice_t* state) {
+static lparsm_state_t* get_lparsm_state(cspice_t* state) {
 	return 0;
 }
 

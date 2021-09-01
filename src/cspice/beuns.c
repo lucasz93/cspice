@@ -8,7 +8,7 @@
 
 
 typedef int beuns_state_t;
-static inline beuns_state_t* get_beuns_state(cspice_t* state) {
+static beuns_state_t* get_beuns_state(cspice_t* state) {
 	return 0;
 }
 

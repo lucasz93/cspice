@@ -8,7 +8,7 @@
 
 
 extern dskrb2_init_t __dskrb2_init;
-static inline dskrb2_state_t* get_dskrb2_state(cspice_t* state) {
+static dskrb2_state_t* get_dskrb2_state(cspice_t* state) {
 	if (!state->dskrb2)
 		state->dskrb2 = __cspice_allocate_module(sizeof(
 	dskrb2_state_t), &__dskrb2_init, sizeof(__dskrb2_init));

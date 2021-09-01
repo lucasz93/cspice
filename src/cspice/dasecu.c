@@ -8,7 +8,7 @@
 
 
 extern dasecu_init_t __dasecu_init;
-static inline dasecu_state_t* get_dasecu_state(cspice_t* state) {
+static dasecu_state_t* get_dasecu_state(cspice_t* state) {
 	if (!state->dasecu)
 		state->dasecu = __cspice_allocate_module(sizeof(
 	dasecu_state_t), &__dasecu_init, sizeof(__dasecu_init));

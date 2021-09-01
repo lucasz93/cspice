@@ -493,7 +493,7 @@
    */
    CHKOSTR ( naif_state, CHK_STANDARD, "ekbseg_c", decls, declen );
 
-   C2F_MapStrArr ( "ekbseg_c", 
+   C2F_MapStrArr ( naif_state, "ekbseg_c", 
                    ncols, cnmlen, cnames, &fCnameLen, &fCnameArr );
    
    if ( failed_c(naif_state) )
@@ -503,7 +503,7 @@
    }
 
 
-   C2F_MapStrArr ( "ekbseg_c", 
+   C2F_MapStrArr ( naif_state, "ekbseg_c", 
                    ncols, declen, decls, &fCdeclLen, &fCdeclArr );
    
    if ( failed_c(naif_state) )

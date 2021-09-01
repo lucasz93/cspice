@@ -275,8 +275,8 @@
    whether or not the CSPICE routine signaled an error.
    */
    
-   F2C_ConvertStr ( arclen, arch );
-   F2C_ConvertStr ( typlen, type );
+   F2C_ConvertStr ( naif_state, arclen, arch );
+   F2C_ConvertStr ( naif_state, typlen, type );
                
 
    chkout_c ( naif_state, "getfat_c" );

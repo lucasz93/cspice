@@ -8,7 +8,7 @@
 
 
 extern zzgfcprx_init_t __zzgfcprx_init;
-static inline zzgfcprx_state_t* get_zzgfcprx_state(cspice_t* state) {
+static zzgfcprx_state_t* get_zzgfcprx_state(cspice_t* state) {
 	if (!state->zzgfcprx)
 		state->zzgfcprx = __cspice_allocate_module(sizeof(
 	zzgfcprx_state_t), &__zzgfcprx_init, sizeof(__zzgfcprx_init));

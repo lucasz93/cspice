@@ -311,7 +311,7 @@
    Convert the output name string to a null-terminated,
    C style string. 
    */
-   F2C_ConvertStr ( tracelen, trace );
+   F2C_ConvertStr ( naif_state, tracelen, trace );
 
 
 } /* End qcktrc_c */

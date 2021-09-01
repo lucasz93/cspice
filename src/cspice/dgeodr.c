@@ -8,7 +8,7 @@
 
 
 typedef int dgeodr_state_t;
-static inline dgeodr_state_t* get_dgeodr_state(cspice_t* state) {
+static dgeodr_state_t* get_dgeodr_state(cspice_t* state) {
 	return 0;
 }
 

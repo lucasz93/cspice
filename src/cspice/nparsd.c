@@ -8,7 +8,7 @@
 
 
 extern nparsd_init_t __nparsd_init;
-static inline nparsd_state_t* get_nparsd_state(cspice_t* state) {
+static nparsd_state_t* get_nparsd_state(cspice_t* state) {
 	if (!state->nparsd)
 		state->nparsd = __cspice_allocate_module(sizeof(
 	nparsd_state_t), &__nparsd_init, sizeof(__nparsd_init));

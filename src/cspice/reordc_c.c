@@ -216,7 +216,7 @@
    /*
    Create a Fortran-style string array.
    */
-   C2F_MapStrArr ( "reordc_c", 
+   C2F_MapStrArr ( naif_state, "reordc_c", 
                    ndim, lenvals, array, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c(naif_state) )

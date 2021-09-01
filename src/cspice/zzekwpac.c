@@ -8,7 +8,7 @@
 
 
 extern zzekwpac_init_t __zzekwpac_init;
-static inline zzekwpac_state_t* get_zzekwpac_state(cspice_t* state) {
+static zzekwpac_state_t* get_zzekwpac_state(cspice_t* state) {
 	if (!state->zzekwpac)
 		state->zzekwpac = __cspice_allocate_module(sizeof(
 	zzekwpac_state_t), &__zzekwpac_init, sizeof(__zzekwpac_init));

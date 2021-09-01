@@ -8,7 +8,7 @@
 
 
 extern dlaens_init_t __dlaens_init;
-static inline dlaens_state_t* get_dlaens_state(cspice_t* state) {
+static dlaens_state_t* get_dlaens_state(cspice_t* state) {
 	if (!state->dlaens)
 		state->dlaens = __cspice_allocate_module(sizeof(
 	dlaens_state_t), &__dlaens_init, sizeof(__dlaens_init));

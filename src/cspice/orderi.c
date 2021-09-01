@@ -8,7 +8,7 @@
 
 
 typedef int orderi_state_t;
-static inline orderi_state_t* get_orderi_state(cspice_t* state) {
+static orderi_state_t* get_orderi_state(cspice_t* state) {
 	return 0;
 }
 

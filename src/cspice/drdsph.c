@@ -8,7 +8,7 @@
 
 
 typedef int drdsph_state_t;
-static inline drdsph_state_t* get_drdsph_state(cspice_t* state) {
+static drdsph_state_t* get_drdsph_state(cspice_t* state) {
 	return 0;
 }
 
@@ -17,7 +17,7 @@ static inline drdsph_state_t* get_drdsph_state(cspice_t* state) {
 	doublereal *colat, doublereal *long__, doublereal *jacobi)
 {
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal clong;
@@ -219,10 +219,10 @@ static inline drdsph_state_t* get_drdsph_state(cspice_t* state) {
 
 /*     Local variables */
 
-    ccolat = cos(&__global_state->f2c, *colat);
-    scolat = sin(&__global_state->f2c, *colat);
-    clong = cos(&__global_state->f2c, *long__);
-    slong = sin(&__global_state->f2c, *long__);
+    ccolat = cos(*colat);
+    scolat = sin(*colat);
+    clong = cos(*long__);
+    slong = sin(*long__);
     jacobi[0] = clong * scolat;
     jacobi[1] = slong * scolat;
     jacobi[2] = ccolat;

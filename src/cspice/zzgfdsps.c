@@ -56,7 +56,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   int zzgfdsps_ ( integer  * nlead,
+   int zzgfdsps_ ( void     * naif_state,
+                   integer  * nlead,
                    char     * string,
                    char     * fmt,
                    integer  * ntrail,
@@ -202,9 +203,9 @@
    so we can work with them. We'll need to use dynamic
    memory to hold the C-style strings. 
    */
-   F2C_CreateStr_Sig ( stringLen, string, &CStringPtr );
+   F2C_CreateStr_Sig ( naif_state, stringLen, string, &CStringPtr );
    
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       /*
       The CSPICE string utilities do their own clean-up of
@@ -216,9 +217,9 @@
       return (-1);
    }
 
-   F2C_CreateStr_Sig ( fmtLen, fmt, &CFmtPtr );
+   F2C_CreateStr_Sig ( naif_state, fmtLen, fmt, &CFmtPtr );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
       /*
       Failure at this point requires that we free the previous,

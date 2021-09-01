@@ -8,7 +8,7 @@
 
 
 typedef int zzsegbox_state_t;
-static inline zzsegbox_state_t* get_zzsegbox_state(cspice_t* state) {
+static zzsegbox_state_t* get_zzsegbox_state(cspice_t* state) {
 	return 0;
 }
 

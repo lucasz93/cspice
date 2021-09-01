@@ -8,7 +8,7 @@
 
 
 extern seterr_init_t __seterr_init;
-static inline seterr_state_t* get_seterr_state(cspice_t* state) {
+static seterr_state_t* get_seterr_state(cspice_t* state) {
 	if (!state->seterr)
 		state->seterr = __cspice_allocate_module(sizeof(
 	seterr_state_t), &__seterr_init, sizeof(__seterr_init));
@@ -431,11 +431,11 @@ L_failed:
 
 logical seterr_(cspice_t* __global_state, logical *status)
 {
-    return seterr_0_(0, status);
+    return seterr_0_(__global_state, 0, status);
     }
 
 logical failed_(cspice_t* __global_state)
 {
-    return seterr_0_(1, (logical *)0);
+    return seterr_0_(__global_state, 1, (logical *)0);
     }
 

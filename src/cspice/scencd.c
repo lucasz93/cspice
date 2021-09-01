@@ -8,7 +8,7 @@
 
 
 extern scencd_init_t __scencd_init;
-static inline scencd_state_t* get_scencd_state(cspice_t* state) {
+static scencd_state_t* get_scencd_state(cspice_t* state) {
 	if (!state->scencd)
 		state->scencd = __cspice_allocate_module(sizeof(
 	scencd_state_t), &__scencd_init, sizeof(__scencd_init));

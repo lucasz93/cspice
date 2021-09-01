@@ -46,22 +46,13 @@ char f__ltab[128+1] = {	/* offset one for EOF */
 	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 };
 
-#ifdef ungetc
  static int
 #ifdef KR_headers
-un_getc(x,f__cf) int x; FILE *f__cf;
+un_getc(f2c,x,f__cf) f2c_state_t *f2c; int x; FILE *f__cf;
 #else
-un_getc(int x, FILE *f__cf)
+un_getc(f2c_state_t *f2c, int x, FILE *f__cf)
 #endif
 { return ungetc(x,f__cf); }
-#else
-#define un_getc ungetc
-#ifdef KR_headers
- extern int ungetc();
-#else
-extern int ungetc(int, FILE*);	/* for systems with a buggy stdio.h */
-#endif
-#endif
 
 t_getc(f2c_state_t *f2c)
 {	int ch;
@@ -85,8 +76,8 @@ integer e_rsle(f2c_state_t *f2c)
 }
 
 #define ERR(x) if(n=(x)) return(n)
-#define GETC(f2c,x) (x=(*f2c->l_getc)())
-#define Ungetc(f2c,x,y) (*f2c->l_ungetc)(x,y)
+#define GETC(f2c,x) (x=(*f2c->l_getc)(f2c))
+#define Ungetc(f2c,x,y) (*f2c->l_ungetc)(f2c,x,y)
 
  static int
 #ifdef KR_headers
@@ -133,7 +124,7 @@ retry:
 		}
 	if (ch == '*' && !poststar) {
 		if (sp == sp1 || exp || *s == '-') {
-			errfl(f2c->f__elist->cierr,112,"bad repetition count");
+			errfl(f2c,f2c->f__elist->cierr,112,"bad repetition count");
 			}
 		poststar = havestar = 1;
 		*sp = 0;
@@ -143,7 +134,7 @@ retry:
 	if (ch == '.') {
 #ifndef ALLOW_FLOAT_IN_INTEGER_LIST_INPUT
 		if (reqint)
-			errfl(f2c->f__elist->cierr,115,"invalid integer");
+			errfl(f2c,f2c->f__elist->cierr,115,"invalid integer");
 #endif
 		GETC(f2c, ch);
 		if (sp == sp1)
@@ -165,7 +156,7 @@ retry:
 	if (havenum && isexp(ch)) {
 #ifndef ALLOW_FLOAT_IN_INTEGER_LIST_INPUT
 		if (reqint)
-			errfl(f2c->f__elist->cierr,115,"invalid integer");
+			errfl(f2c,f2c->f__elist->cierr,115,"invalid integer");
 #endif
 		GETC(f2c, ch);
 		if (issign(ch)) {
@@ -175,7 +166,7 @@ signonly:
 			}
 		if (!isdigit(ch)) {
 bad:
-			errfl(f2c->f__elist->cierr,112,"exponent field");
+			errfl(f2c,f2c->f__elist->cierr,112,"exponent field");
 			}
 
 		e = ch - '0';
@@ -234,7 +225,7 @@ bad:
 					f2c->f__lquit = 2;
 					return 0;
 					}
-				errfl(f2c->f__elist->cierr,112,"invalid number");
+				errfl(f2c,f2c->f__elist->cierr,112,"invalid number");
 			}
 	return 0;
 	}
@@ -271,15 +262,15 @@ l_C(f2c_state_t *f2c)
 			}
 		if (rd_count(f2c, ch))
 			if(!f2c->f__cf || !feof(f2c->f__cf))
-				errfl(f2c->f__elist->cierr,112,"complex format");
+				errfl(f2c,f2c->f__elist->cierr,112,"complex format");
 			else
-				err(f2c->f__elist->cierr,(EOF),"lread");
+				err(f2c,f2c->f__elist->cierr,(EOF),"lread");
 		if(GETC(f2c, ch)!='*')
 		{
 			if(!f2c->f__cf || !feof(f2c->f__cf))
-				errfl(f2c->f__elist->cierr,112,"no star");
+				errfl(f2c,f2c->f__elist->cierr,112,"no star");
 			else
-				err(f2c->f__elist->cierr,(EOF),"lread");
+				err(f2c,f2c->f__elist->cierr,(EOF),"lread");
 		}
 		if(GETC(f2c, ch)!='(')
 		{	Ungetc(f2c,ch,f2c->f__cf);
@@ -295,21 +286,21 @@ l_C(f2c_state_t *f2c)
 	if (ch = l_R(f2c,1,0))
 		return ch;
 	if (!f2c->f__ltype)
-		errfl(f2c->f__elist->cierr,112,"no real part");
+		errfl(f2c,f2c->f__elist->cierr,112,"no real part");
 	lz = f2c->f__lx;
 	while(iswhit(GETC(f2c, ch)));
 	if(ch!=',')
 	{	(void) Ungetc(f2c,ch,f2c->f__cf);
-		errfl(f2c->f__elist->cierr,112,"no comma");
+		errfl(f2c,f2c->f__elist->cierr,112,"no comma");
 	}
 	while(iswhit(GETC(f2c, ch)));
 	(void) Ungetc(f2c, ch, f2c->f__cf);
 	if (ch = l_R(f2c,1,0))
 		return ch;
 	if (!f2c->f__ltype)
-		errfl(f2c->f__elist->cierr,112,"no imaginary part");
+		errfl(f2c,f2c->f__elist->cierr,112,"no imaginary part");
 	while(iswhit(GETC(f2c, ch)));
-	if(ch!=')') errfl(f2c->f__elist->cierr,112,"no )");
+	if(ch!=')') errfl(f2c,f2c->f__elist->cierr,112,"no )");
 	f2c->f__ly = f2c->f__lx;
 	f2c->f__lx = lz;
 #ifdef Allow_TYQUAD
@@ -332,9 +323,9 @@ l_L(f2c_state_t *f2c)
 		rd_count(f2c,ch);
 		if(GETC(f2c, ch)!='*')
 			if(!f2c->f__cf || !feof(f2c->f__cf))
-				errfl(f2c->f__elist->cierr,112,"no star");
+				errfl(f2c,f2c->f__elist->cierr,112,"no star");
 			else
-				err(f2c->f__elist->cierr,(EOF),"lread");
+				err(f2c,f2c->f__elist->cierr,(EOF),"lread");
 		GETC(f2c, ch);
 	}
 	if(ch == '.') GETC(f2c, ch);
@@ -358,7 +349,7 @@ l_L(f2c_state_t *f2c)
 			f2c->f__lquit = 2;
 			return 0;
 			}
-		errfl(f2c->f__elist->cierr,112,"logical");
+		errfl(f2c,f2c->f__elist->cierr,112,"logical");
 	}
 	f2c->f__ltype=TYLONG;
 	while(!issep(GETC(f2c, ch)) && ch!=EOF);
@@ -379,7 +370,7 @@ l_CHAR(f2c_state_t *f2c)
 	size=BUFSIZE;
 	p=f2c->f__lchar = (char *)malloc((unsigned int)size);
 	if(f2c->f__lchar == NULL)
-		errfl(f2c->f__elist->cierr,113,"no space");
+		errfl(f2c,f2c->f__elist->cierr,113,"no space");
 
 	GETC(f2c, ch);
 	if(isdigit(ch)) {
@@ -417,7 +408,7 @@ l_CHAR(f2c_state_t *f2c)
 #ifndef F8X_NML_ELIDE_QUOTES
 				if (f2c->nml_read) {
  no_quote:
-					errfl(f2c->f__elist->cierr,112,
+					errfl(f2c,f2c->f__elist->cierr,112,
 						"undelimited character string");
 					}
 #endif
@@ -429,7 +420,7 @@ l_CHAR(f2c_state_t *f2c)
 				f2c->f__lchar = (char *)realloc(f2c->f__lchar,
 					(unsigned int)(size += BUFSIZE));
 				if(f2c->f__lchar == NULL)
-					errfl(f2c->f__elist->cierr,113,rafail);
+					errfl(f2c,f2c->f__elist->cierr,113,rafail);
 				p = f2c->f__lchar + i;
 				}
 			}
@@ -470,7 +461,7 @@ l_CHAR(f2c_state_t *f2c)
 				f2c->f__lchar = (char *)realloc(f2c->f__lchar,
 					(unsigned int)(size += BUFSIZE));
 				if(f2c->f__lchar == NULL)
-					errfl(f2c->f__elist->cierr,113,rafail);
+					errfl(f2c,f2c->f__elist->cierr,113,rafail);
 				p = f2c->f__lchar + i;
 				}
 			}
@@ -485,7 +476,7 @@ l_CHAR(f2c_state_t *f2c)
 			f2c->f__lchar= (char *)realloc(f2c->f__lchar,
 					(unsigned int)(size += BUFSIZE));
 			if(f2c->f__lchar == NULL)
-				errfl(f2c->f__elist->cierr,113,rafail);
+				errfl(f2c,f2c->f__elist->cierr,113,rafail);
 			p=f2c->f__lchar+i-1;
 			*p++ = ch;
 		}
@@ -515,17 +506,17 @@ c_le(f2c_state_t *f2c, cilist *a)
 #endif
 {
 	if(!f2c->f__init)
-		f_init();
+		f_init(f2c);
 	f2c->f__fmtbuf="list io";
 	f2c->f__curunit = &f2c->f__units[a->ciunit];
 	if(a->ciunit>=MXUNIT || a->ciunit<0)
-		err(a->cierr,101,"stler");
+		err(f2c,a->cierr,101,"stler");
 	f2c->f__scale=f2c->f__recpos=0;
 	f2c->f__elist=a;
-	if(f2c->f__curunit->ufd==NULL && fk_open(SEQ,FMT,a->ciunit))
-		err(a->cierr,102,"lio");
+	if(f2c->f__curunit->ufd==NULL && fk_open(f2c,SEQ,FMT,a->ciunit))
+		err(f2c,a->cierr,102,"lio");
 	f2c->f__cf=f2c->f__curunit->ufd;
-	if(!f2c->f__curunit->ufmt) err(a->cierr,103,"lio")
+	if(!f2c->f__curunit->ufmt) err(f2c,a->cierr,103,"lio")
 	return(0);
 }
 #ifdef KR_headers
@@ -542,14 +533,14 @@ l_read(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len, ftnint type)
 	{
 		if(f2c->f__lquit) return(0);
 		if(f2c->l_eof)
-			err(f2c->f__elist->ciend, EOF, "list in")
+			err(f2c,f2c->f__elist->ciend, EOF, "list in")
 		if(f2c->f__lcount == 0) {
 			f2c->f__ltype = 0;
 			for(;;)  {
 				GETC(f2c,ch);
 				switch(ch) {
 				case EOF:
-					err(f2c->f__elist->ciend,(EOF),"list in")
+					err(f2c,f2c->f__elist->ciend,(EOF),"list in")
 				case ' ':
 				case '\t':
 				case '\n':
@@ -607,7 +598,7 @@ l_read(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len, ftnint type)
 		if(f2c->f__lquit) return(0);
 		if(f2c->f__cf && ferror(f2c->f__cf)) {
 			clearerr(f2c->f__cf);
-			errfl(f2c->f__elist->cierr,errno,"list in");
+			errfl(f2c,f2c->f__elist->cierr,errno,"list in");
 			}
 		if(f2c->f__ltype==0) goto bump;
 		switch((int)type)
@@ -670,15 +661,15 @@ integer s_rsle(f2c_state_t *f2c, cilist *a)
 	f2c->f__reading=1;
 	f2c->f__external=1;
 	f2c->f__formatted=1;
-	if(n=c_le(a)) return(n);
+	if(n=c_le(f2c,a)) return(n);
 	f2c->f__lioproc = l_read;
 	f2c->f__lquit = 0;
 	f2c->f__lcount = 0;
 	f2c->l_eof = 0;
-	if(f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit))
-		err(a->cierr,errno,"read start");
+	if(f2c->f__curunit->uwrt && f__nowreading(f2c,f2c->f__curunit))
+		err(f2c,a->cierr,errno,"read start");
 	if(f2c->f__curunit->uend)
-		err(f2c->f__elist->ciend,(EOF),"read start");
+		err(f2c,f2c->f__elist->ciend,(EOF),"read start");
 	f2c->l_getc = t_getc;
 	f2c->l_ungetc = un_getc;
 	f2c->f__doend = xrd_SL;

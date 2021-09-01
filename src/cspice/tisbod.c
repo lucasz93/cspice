@@ -8,7 +8,7 @@
 
 
 extern tisbod_init_t __tisbod_init;
-static inline tisbod_state_t* get_tisbod_state(cspice_t* state) {
+static tisbod_state_t* get_tisbod_state(cspice_t* state) {
 	if (!state->tisbod)
 		state->tisbod = __cspice_allocate_module(sizeof(
 	tisbod_state_t), &__tisbod_init, sizeof(__tisbod_init));
@@ -31,8 +31,8 @@ static inline tisbod_state_t* get_tisbod_state(cspice_t* state) {
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
     /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
     integer i_dnnt(f2c_state_t*, doublereal *);
-    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), 
-	    d_mod(f2c_state_t*, doublereal *, doublereal *);
+    double sin(doublereal), cos(doublereal), d_mod(f2c_state_t*, doublereal *,
+	     doublereal *);
 
     /* Local variables */
     extern /* Subroutine */ int zzhsiadd_(cspice_t*, integer *, integer *, 
@@ -1385,8 +1385,8 @@ static inline tisbod_state_t* get_tisbod_state(cspice_t* state) {
 		    __state->at * 100 << 1) - 201) < 31400 && 0 <= i__1 ? 
 		    i__1 : s_rnge(&__global_state->f2c, "btcoef", i__1, "tis"
 		    "bod_", (ftnlen)1198)] / __state->t * rpd_(__global_state);
-	    __state->sintmp = sin(&__global_state->f2c, __state->theta);
-	    __state->costmp = cos(&__global_state->f2c, __state->theta);
+	    __state->sintmp = sin(__state->theta);
+	    __state->costmp = cos(__state->theta);
 	    __state->sinth[(i__1 = __state->i__ - 1) < 100 && 0 <= i__1 ? 
 		    i__1 : s_rnge(&__global_state->f2c, "sinth", i__1, "tisb"
 		    "od_", (ftnlen)1203)] = __state->sintmp;

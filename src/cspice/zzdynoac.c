@@ -8,7 +8,7 @@
 
 
 extern zzdynoac_init_t __zzdynoac_init;
-static inline zzdynoac_state_t* get_zzdynoac_state(cspice_t* state) {
+static zzdynoac_state_t* get_zzdynoac_state(cspice_t* state) {
 	if (!state->zzdynoac)
 		state->zzdynoac = __cspice_allocate_module(sizeof(
 	zzdynoac_state_t), &__zzdynoac_init, sizeof(__zzdynoac_init));

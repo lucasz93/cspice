@@ -8,7 +8,7 @@
 
 
 extern zzbquad_init_t __zzbquad_init;
-static inline zzbquad_state_t* get_zzbquad_state(cspice_t* state) {
+static zzbquad_state_t* get_zzbquad_state(cspice_t* state) {
 	if (!state->zzbquad)
 		state->zzbquad = __cspice_allocate_module(sizeof(
 	zzbquad_state_t), &__zzbquad_init, sizeof(__zzbquad_init));
@@ -28,7 +28,7 @@ static inline zzbquad_state_t* get_zzbquad_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -240,8 +240,7 @@ static inline zzbquad_state_t* get_zzbquad_state(cspice_t* state) {
 	return 0;
     }
     if (__state->first) {
-	__state->big = sqrt(&__global_state->f2c, dpmax_(__global_state)) / 
-		100;
+	__state->big = sqrt(dpmax_(__global_state)) / 100;
 	__state->first = FALSE_;
     }
 
@@ -382,7 +381,7 @@ static inline zzbquad_state_t* get_zzbquad_state(cspice_t* state) {
 /*           on the relative magnitudes of A and DSCRIM. */
 
 	    denom = *a * 2;
-	    sqdisc = sqrt(&__global_state->f2c, dscrim);
+	    sqdisc = sqrt(dscrim);
 	    if (*b > 0.) {
 		num2 = -(*b) - sqdisc;
 		num1 = -(*b) + sqdisc;

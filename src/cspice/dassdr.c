@@ -8,7 +8,7 @@
 
 
 extern dassdr_init_t __dassdr_init;
-static inline dassdr_state_t* get_dassdr_state(cspice_t* state) {
+static dassdr_state_t* get_dassdr_state(cspice_t* state) {
 	if (!state->dassdr)
 		state->dassdr = __cspice_allocate_module(sizeof(
 	dassdr_state_t), &__dassdr_init, sizeof(__dassdr_init));

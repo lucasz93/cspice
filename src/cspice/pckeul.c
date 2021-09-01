@@ -8,7 +8,7 @@
 
 
 extern pckeul_init_t __pckeul_init;
-static inline pckeul_state_t* get_pckeul_state(cspice_t* state) {
+static pckeul_state_t* get_pckeul_state(cspice_t* state) {
 	if (!state->pckeul)
 		state->pckeul = __cspice_allocate_module(sizeof(
 	pckeul_state_t), &__pckeul_init, sizeof(__pckeul_init));

@@ -8,7 +8,7 @@
 
 
 typedef int isordv_state_t;
-static inline isordv_state_t* get_isordv_state(cspice_t* state) {
+static isordv_state_t* get_isordv_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern srfrec_init_t __srfrec_init;
-static inline srfrec_state_t* get_srfrec_state(cspice_t* state) {
+static srfrec_state_t* get_srfrec_state(cspice_t* state) {
 	if (!state->srfrec)
 		state->srfrec = __cspice_allocate_module(sizeof(
 	srfrec_state_t), &__srfrec_init, sizeof(__srfrec_init));

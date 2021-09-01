@@ -8,7 +8,7 @@
 
 
 extern zzektrrk_init_t __zzektrrk_init;
-static inline zzektrrk_state_t* get_zzektrrk_state(cspice_t* state) {
+static zzektrrk_state_t* get_zzektrrk_state(cspice_t* state) {
 	if (!state->zzektrrk)
 		state->zzektrrk = __cspice_allocate_module(sizeof(
 	zzektrrk_state_t), &__zzektrrk_init, sizeof(__zzektrrk_init));

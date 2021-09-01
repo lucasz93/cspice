@@ -8,7 +8,7 @@
 
 
 extern zznofcon_init_t __zznofcon_init;
-static inline zznofcon_state_t* get_zznofcon_state(cspice_t* state) {
+static zznofcon_state_t* get_zznofcon_state(cspice_t* state) {
 	if (!state->zznofcon)
 		state->zznofcon = __cspice_allocate_module(sizeof(
 	zznofcon_state_t), &__zznofcon_init, sizeof(__zznofcon_init));

@@ -8,7 +8,7 @@
 
 
 typedef int sygetd_state_t;
-static inline sygetd_state_t* get_sygetd_state(cspice_t* state) {
+static sygetd_state_t* get_sygetd_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern rotate_init_t __rotate_init;
-static inline rotate_state_t* get_rotate_state(cspice_t* state) {
+static rotate_state_t* get_rotate_state(cspice_t* state) {
 	if (!state->rotate)
 		state->rotate = __cspice_allocate_module(sizeof(
 	rotate_state_t), &__rotate_init, sizeof(__rotate_init));
@@ -27,7 +27,7 @@ static inline rotate_state_t* get_rotate_state(cspice_t* state) {
     integer i__1;
 
     /* Builtin functions */
-    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal);
+    double sin(doublereal), cos(doublereal);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
@@ -197,8 +197,8 @@ static inline rotate_state_t* get_rotate_state(cspice_t* state) {
 
 /*  Get the sine and cosine of ANGLE */
 
-    s = sin(&__global_state->f2c, *angle);
-    c__ = cos(&__global_state->f2c, *angle);
+    s = sin(*angle);
+    c__ = cos(*angle);
 
 /*  Get indices for axes. The first index is for the axis of rotation. */
 /*  The next two axes follow in right hand order (XYZ).  First get the */

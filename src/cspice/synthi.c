@@ -8,7 +8,7 @@
 
 
 typedef int synthi_state_t;
-static inline synthi_state_t* get_synthi_state(cspice_t* state) {
+static synthi_state_t* get_synthi_state(cspice_t* state) {
 	return 0;
 }
 

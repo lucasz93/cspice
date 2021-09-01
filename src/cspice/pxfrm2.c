@@ -8,7 +8,7 @@
 
 
 extern pxfrm2_init_t __pxfrm2_init;
-static inline pxfrm2_state_t* get_pxfrm2_state(cspice_t* state) {
+static pxfrm2_state_t* get_pxfrm2_state(cspice_t* state) {
 	if (!state->pxfrm2)
 		state->pxfrm2 = __cspice_allocate_module(sizeof(
 	pxfrm2_state_t), &__pxfrm2_init, sizeof(__pxfrm2_init));

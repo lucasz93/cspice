@@ -8,7 +8,7 @@
 
 
 extern tparse_init_t __tparse_init;
-static inline tparse_state_t* get_tparse_state(cspice_t* state) {
+static tparse_state_t* get_tparse_state(cspice_t* state) {
 	if (!state->tparse)
 		state->tparse = __cspice_allocate_module(sizeof(
 	tparse_state_t), &__tparse_init, sizeof(__tparse_init));

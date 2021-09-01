@@ -8,7 +8,7 @@
 
 
 typedef int zznwpool_state_t;
-static inline zznwpool_state_t* get_zznwpool_state(cspice_t* state) {
+static zznwpool_state_t* get_zznwpool_state(cspice_t* state) {
 	return 0;
 }
 

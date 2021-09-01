@@ -8,7 +8,7 @@
 
 
 typedef int samsbi_state_t;
-static inline samsbi_state_t* get_samsbi_state(cspice_t* state) {
+static samsbi_state_t* get_samsbi_state(cspice_t* state) {
 	return 0;
 }
 

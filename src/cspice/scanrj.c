@@ -8,7 +8,7 @@
 
 
 typedef int scanrj_state_t;
-static inline scanrj_state_t* get_scanrj_state(cspice_t* state) {
+static scanrj_state_t* get_scanrj_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int cylrec_state_t;
-static inline cylrec_state_t* get_cylrec_state(cspice_t* state) {
+static cylrec_state_t* get_cylrec_state(cspice_t* state) {
 	return 0;
 }
 
@@ -17,7 +17,7 @@ static inline cylrec_state_t* get_cylrec_state(cspice_t* state) {
 	doublereal *long__, doublereal *z__, doublereal *rectan)
 {
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal x;
@@ -181,8 +181,8 @@ static inline cylrec_state_t* get_cylrec_state(cspice_t* state) {
 /*     Convert to rectangular coordinates, storing the results in */
 /*     temporary variables. */
 
-    x = *r__ * cos(&__global_state->f2c, *long__);
-    y = *r__ * sin(&__global_state->f2c, *long__);
+    x = *r__ * cos(*long__);
+    y = *r__ * sin(*long__);
 
 /*     Move the results to the output variables. */
 

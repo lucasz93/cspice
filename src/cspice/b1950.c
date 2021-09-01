@@ -8,7 +8,7 @@
 
 
 typedef int b1950_state_t;
-static inline b1950_state_t* get_b1950_state(cspice_t* state) {
+static b1950_state_t* get_b1950_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern spkuds_init_t __spkuds_init;
-static inline spkuds_state_t* get_spkuds_state(cspice_t* state) {
+static spkuds_state_t* get_spkuds_state(cspice_t* state) {
 	if (!state->spkuds)
 		state->spkuds = __cspice_allocate_module(sizeof(
 	spkuds_state_t), &__spkuds_init, sizeof(__spkuds_init));

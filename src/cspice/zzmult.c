@@ -8,7 +8,7 @@
 
 
 extern zzmult_init_t __zzmult_init;
-static inline zzmult_state_t* get_zzmult_state(cspice_t* state) {
+static zzmult_state_t* get_zzmult_state(cspice_t* state) {
 	if (!state->zzmult)
 		state->zzmult = __cspice_allocate_module(sizeof(
 	zzmult_state_t), &__zzmult_init, sizeof(__zzmult_init));

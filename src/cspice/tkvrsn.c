@@ -8,7 +8,7 @@
 
 
 typedef int tkvrsn_state_t;
-static inline tkvrsn_state_t* get_tkvrsn_state(cspice_t* state) {
+static tkvrsn_state_t* get_tkvrsn_state(cspice_t* state) {
 	return 0;
 }
 

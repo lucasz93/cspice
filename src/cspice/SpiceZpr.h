@@ -2729,7 +2729,8 @@ Include Files:
                                 SpiceDouble       * emissn     );
 
 
-   void              illum_pl02 ( SpiceInt               handle,
+   void              illum_pl02 ( void                 * naif_state,
+                                  SpiceInt               handle,
                                   ConstSpiceDLADescr   * dladsc,
                                   ConstSpiceChar       * target,
                                   SpiceDouble            et,
@@ -2741,7 +2742,8 @@ Include Files:
                                   SpiceDouble          * emissn      );
 
 
-   void              illum_plid_pl02 ( SpiceInt               handle,
+   void              illum_plid_pl02 ( void                 * naif_state,
+                                       SpiceInt               handle,
                                        ConstSpiceDLADescr   * dladsc,
                                        ConstSpiceChar       * target,
                                        SpiceDouble            et,
@@ -3017,7 +3019,8 @@ Include Files:
                                 SpiceDouble       * dp );
 
 
-   void              limb_pl02 ( SpiceInt              handle,
+   void              limb_pl02 ( void                * naif_state,
+                                 SpiceInt              handle,
                                  ConstSpiceDLADescr  * dladsc,
                                  ConstSpiceChar      * target,
                                  SpiceDouble           et,
@@ -4625,7 +4628,8 @@ Include Files:
                                 SpiceDouble         spoint [3],
                                 SpiceDouble       * alt         );
 
-   void              subpt_pl02( SpiceInt               handle,
+   void              subpt_pl02( void                 * naif_state,
+                                 SpiceInt               handle,
                                  ConstSpiceDLADescr   * dladsc,
                                  ConstSpiceChar       * method,
                                  ConstSpiceChar       * target,
@@ -4658,7 +4662,8 @@ Include Files:
                                 SpiceDouble         spoint[3] );
 
 
-   void              subsol_pl02 ( SpiceInt               handle,
+   void              subsol_pl02 ( void                 * naif_state,
+                                   SpiceInt               handle,
                                    ConstSpiceDLADescr   * dladsc,
                                    ConstSpiceChar       * method,
                                    ConstSpiceChar       * target,

@@ -8,7 +8,7 @@
 
 
 extern ev2lin_init_t __ev2lin_init;
-static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
+static ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	if (!state->ev2lin)
 		state->ev2lin = __cspice_allocate_module(sizeof(
 	ev2lin_state_t), &__ev2lin_init, sizeof(__ev2lin_init));
@@ -29,10 +29,9 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
-	    f2c_state_t*, doublereal), pow_dd(f2c_state_t*, doublereal *, 
-	    doublereal *), d_mod(f2c_state_t*, doublereal *, doublereal *), 
-	    atan2(f2c_state_t*, doublereal, doublereal);
+    double cos(doublereal), sin(doublereal), sqrt(doublereal), pow_dd(
+	    f2c_state_t*, doublereal *, doublereal *), d_mod(f2c_state_t*, 
+	    doublereal *, doublereal *), atan2(doublereal, doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -639,8 +638,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 /*        Compute all of the intermediate items needed. */
 /*        First, the inclination dependent constants. */
 
-	__state->cosio = cos(&__global_state->f2c, __state->xincl);
-	__state->sinio = sin(&__global_state->f2c, __state->xincl);
+	__state->cosio = cos(__state->xincl);
+	__state->sinio = sin(__state->xincl);
 	__state->theta2 = __state->cosio * __state->cosio;
 	__state->theta4 = __state->theta2 * __state->theta2;
 	__state->x3thm1 = __state->theta2 * 3. - 1.;
@@ -650,8 +649,7 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 
 /*        Eccentricity dependent constants */
 
-	__state->betao = sqrt(&__global_state->f2c, 1. - __state->eo * 
-		__state->eo);
+	__state->betao = sqrt(1. - __state->eo * __state->eo);
 	__state->betao2 = 1. - __state->eo * __state->eo;
 	__state->betao3 = __state->betao * __state->betao2;
 	__state->betao4 = __state->betao2 * __state->betao2;
@@ -716,10 +714,10 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 		+ __state->eo * (__state->etasq * 2. + .5) - __state->ck2 * 
 		__state->tsi / (__state->aodp * __state->psisq) * 2. * (
 		__state->x3thm1 * -3. * (1. - __state->eeta * 2. + 
-		__state->etasq * (1.5 - __state->eeta * .5)) + cos(&
-		__global_state->f2c, __state->omegao * 2.) * .75 * 
-		__state->x1mth2 * (__state->etasq * 2. - __state->eeta * (
-		__state->etasq + 1.))));
+		__state->etasq * (1.5 - __state->eeta * .5)) + cos(
+		__state->omegao * 2.) * .75 * __state->x1mth2 * (
+		__state->etasq * 2. - __state->eeta * (__state->etasq + 1.))))
+		;
 	__state->c5 = __state->coef1 * 2. * __state->aodp * __state->betao2 * 
 		((__state->etasq + __state->eeta) * 2.75 + 1. + __state->eeta 
 		* __state->etasq);
@@ -739,8 +737,7 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	__state->xnodot = __state->xhdot1 + __state->cosio * (__state->temp2 *
 		 .5 * (4. - __state->theta2 * 19.) + __state->temp3 * 2. * (
 		3. - __state->theta2 * 7.));
-	__state->omgcof = __state->bstar * __state->c3 * cos(&
-		__global_state->f2c, __state->omegao);
+	__state->omgcof = __state->bstar * __state->c3 * cos(__state->omegao);
 	__state->xmcof = -__state->bstar * .66666666666666663 * __state->coef 
 		* __state->ae / __state->eeta;
 	__state->xnodcf = __state->betao2 * 3.5 * __state->xhdot1 * 
@@ -750,9 +747,9 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	__state->xlcof = __state->aycof * .5 * (__state->cosio * 5. + 3.) / (
 		__state->cosio + 1.);
 /* Computing 3rd power */
-	d__1 = __state->eta * cos(&__global_state->f2c, __state->xmo) + 1.;
+	d__1 = __state->eta * cos(__state->xmo) + 1.;
 	__state->delmo = d__1 * (d__1 * d__1);
-	__state->sinmo = sin(&__global_state->f2c, __state->xmo);
+	__state->sinmo = sin(__state->xmo);
 
 /*        For perigee less than 220 kilometers, the ISIMP flag is set */
 /*        and the equations are truncated to linear variation in SQRT */
@@ -906,7 +903,7 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	__state->tfour = __state->tcube * __state->tsince;
 	__state->delomg = __state->omgcof * __state->tsince;
 /* Computing 3rd power */
-	d__1 = __state->eta * cos(&__global_state->f2c, __state->xmdf) + 1.;
+	d__1 = __state->eta * cos(__state->xmdf) + 1.;
 	__state->delm = __state->xmcof * (d__1 * (d__1 * d__1) - 
 		__state->delmo);
 	__state->temp = __state->delomg + __state->delm;
@@ -914,8 +911,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	__state->omega = __state->omgadf - __state->temp;
 	__state->tempa = __state->tempa - __state->d2 * __state->tsq - 
 		__state->d3 * __state->tcube - __state->d4 * __state->tfour;
-	__state->tempe += __state->bstar * __state->c5 * (sin(&
-		__global_state->f2c, __state->xmp) - __state->sinmo);
+	__state->tempe += __state->bstar * __state->c5 * (sin(__state->xmp) - 
+		__state->sinmo);
 	__state->templ = __state->templ + __state->tcube * __state->t3cof + 
 		__state->tfour * (__state->t4cof + __state->tsince * 
 		__state->t5cof);
@@ -940,9 +937,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 
     __state->temp = 1. / (__state->a * (1. - __state->e * __state->e));
     __state->aynl = __state->temp * __state->aycof;
-    __state->ayn = __state->e * sin(&__global_state->f2c, __state->omega) + 
-	    __state->aynl;
-    __state->axn = __state->e * cos(&__global_state->f2c, __state->omega);
+    __state->ayn = __state->e * sin(__state->omega) + __state->aynl;
+    __state->axn = __state->e * cos(__state->omega);
     __state->xll = __state->temp * __state->xlcof * __state->axn;
     __state->xlt = __state->xl + __state->xll;
 
@@ -1155,8 +1151,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 /*     of x, we can use Newton's method to acheive faster */
 /*     convergence. */
 
-    __state->m = sqrt(&__global_state->f2c, __state->axn * __state->axn + 
-	    __state->ayn * __state->ayn);
+    __state->m = sqrt(__state->axn * __state->axn + __state->ayn * 
+	    __state->ayn);
     __state->mov1m = (d__1 = __state->m / (1. - __state->m), abs(d__1));
     d__1 = __state->xlt - __state->xnode;
     __state->fmod2p = d_mod(&__global_state->f2c, &d__1, &__state->pix2);
@@ -1179,9 +1175,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	    chkout_(__global_state, "EV2LIN", (ftnlen)6);
 	    return 0;
 	}
-	__state->epwnxt = __state->capu - __state->axn * sin(&
-		__global_state->f2c, __state->epw) + __state->ayn * cos(&
-		__global_state->f2c, __state->epw);
+	__state->epwnxt = __state->capu - __state->axn * sin(__state->epw) + 
+		__state->ayn * cos(__state->epw);
 	__state->est = __state->mov1m * (d__1 = __state->epwnxt - 
 		__state->epw, abs(d__1));
 	__state->epw = __state->epwnxt;
@@ -1200,8 +1195,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 /*        with). */
 
 	for (__state->i__ = 1; __state->i__ <= 5; ++__state->i__) {
-	    __state->sinepw = sin(&__global_state->f2c, __state->epw);
-	    __state->cosepw = cos(&__global_state->f2c, __state->epw);
+	    __state->sinepw = sin(__state->epw);
+	    __state->cosepw = cos(__state->epw);
 	    __state->f = __state->epw - __state->capu - __state->axn * 
 		    __state->sinepw + __state->ayn * __state->cosepw;
 	    __state->fprime = 1. - __state->axn * __state->cosepw - 
@@ -1232,8 +1227,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 /*     close to zero that it can't alter EPW by adding it to */
 /*     or subtracting it from EPW. */
 
-    __state->sinepw = sin(&__global_state->f2c, __state->epw);
-    __state->cosepw = cos(&__global_state->f2c, __state->epw);
+    __state->sinepw = sin(__state->epw);
+    __state->cosepw = cos(__state->epw);
     __state->f = __state->epw - __state->capu - __state->axn * 
 	    __state->sinepw + __state->ayn * __state->cosepw;
 /* Computing MAX */
@@ -1249,9 +1244,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	__state->epw = __state->lower;
 	while(__state->f > 0. && __state->lower != __state->upper) {
 	    __state->epw -= __state->epsiln;
-	    __state->f = __state->epw - __state->capu - __state->axn * sin(&
-		    __global_state->f2c, __state->epw) + __state->ayn * cos(&
-		    __global_state->f2c, __state->epw);
+	    __state->f = __state->epw - __state->capu - __state->axn * sin(
+		    __state->epw) + __state->ayn * cos(__state->epw);
 	    __state->epsiln *= 2.;
 	}
 	__state->lower = __state->epw;
@@ -1266,9 +1260,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	__state->epw = __state->upper;
 	while(__state->f < 0. && __state->lower != __state->upper) {
 	    __state->epw += __state->epsiln;
-	    __state->f = __state->epw - __state->capu - __state->axn * sin(&
-		    __global_state->f2c, __state->epw) + __state->ayn * cos(&
-		    __global_state->f2c, __state->epw);
+	    __state->f = __state->epw - __state->capu - __state->axn * sin(
+		    __state->epw) + __state->ayn * cos(__state->epw);
 	    __state->epsiln *= 2.;
 	}
 	__state->upper = __state->epw;
@@ -1301,9 +1294,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 		__state->lower = __state->upper;
 	    }
 	} else {
-	    __state->f = __state->epw - __state->capu - __state->axn * sin(&
-		    __global_state->f2c, __state->epw) + __state->ayn * cos(&
-		    __global_state->f2c, __state->epw);
+	    __state->f = __state->epw - __state->capu - __state->axn * sin(
+		    __state->epw) + __state->ayn * cos(__state->epw);
 	    if (__state->f > 0.) {
 		__state->upper = __state->epw;
 		__state->fu = __state->f;
@@ -1319,8 +1311,8 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 
 /*     Short period preliminary quantities */
 
-    __state->sinepw = sin(&__global_state->f2c, __state->epw);
-    __state->cosepw = cos(&__global_state->f2c, __state->epw);
+    __state->sinepw = sin(__state->epw);
+    __state->cosepw = cos(__state->epw);
     __state->temp3 = __state->axn * __state->sinepw;
     __state->temp4 = __state->ayn * __state->cosepw;
     __state->temp5 = __state->axn * __state->cosepw;
@@ -1332,12 +1324,11 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
     __state->pl = __state->a * __state->temp;
     __state->r__ = __state->a * (1. - __state->ecose);
     __state->temp1 = 1. / __state->r__;
-    __state->rdot = __state->ke * __state->temp1 * sqrt(&__global_state->f2c, 
-	    __state->a) * __state->esine;
-    __state->rfdot = __state->ke * __state->temp1 * sqrt(&__global_state->f2c,
-	     __state->pl);
+    __state->rdot = __state->ke * __state->temp1 * sqrt(__state->a) * 
+	    __state->esine;
+    __state->rfdot = __state->ke * __state->temp1 * sqrt(__state->pl);
     __state->temp2 = __state->a * __state->temp1;
-    __state->betal = sqrt(&__global_state->f2c, __state->temp);
+    __state->betal = sqrt(__state->temp);
     __state->temp3 = 1. / (__state->betal + 1.);
     __state->cosu = __state->temp2 * (__state->cosepw - __state->axn + 
 	    __state->ayn * __state->esine * __state->temp3);
@@ -1347,8 +1338,7 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 /*     Compute the angle from the x-axis of the point ( COSU, SINU ) */
 
     if (__state->sinu != 0. || __state->cosu != 0.) {
-	__state->u = atan2(&__global_state->f2c, __state->sinu, __state->cosu)
-		;
+	__state->u = atan2(__state->sinu, __state->cosu);
 	if (__state->u < 0.) {
 	    __state->u += __state->pix2;
 	}
@@ -1379,12 +1369,12 @@ static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 
 /*     Orientation vectors */
 
-    __state->sinuk = sin(&__global_state->f2c, __state->uk);
-    __state->cosuk = cos(&__global_state->f2c, __state->uk);
-    __state->sinik = sin(&__global_state->f2c, __state->xinck);
-    __state->cosik = cos(&__global_state->f2c, __state->xinck);
-    __state->sinnok = sin(&__global_state->f2c, __state->xnodek);
-    __state->cosnok = cos(&__global_state->f2c, __state->xnodek);
+    __state->sinuk = sin(__state->uk);
+    __state->cosuk = cos(__state->uk);
+    __state->sinik = sin(__state->xinck);
+    __state->cosik = cos(__state->xinck);
+    __state->sinnok = sin(__state->xnodek);
+    __state->cosnok = cos(__state->xnodek);
     __state->xmx = -__state->sinnok * __state->cosik;
     __state->xmy = __state->cosnok * __state->cosik;
     __state->ux = __state->xmx * __state->sinuk + __state->cosnok * 

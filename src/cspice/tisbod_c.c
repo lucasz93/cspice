@@ -488,7 +488,8 @@
    /*
    Call the f2c'd Fortran routine.
    */
-   tisbod_ (  ( char       * )  ref, 
+   tisbod_ (  naif_state,
+              ( char       * )  ref, 
               ( integer    * )  &body, 
               ( doublereal * )  &et, 
               ( doublereal * )  tsipm,

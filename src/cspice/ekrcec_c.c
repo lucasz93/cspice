@@ -277,7 +277,7 @@
    /*
    Convert the output array from Fortran to C style. 
    */
-   F2C_ConvertStrArr ( *nvals, lenout, (char *) cvals );
+   F2C_ConvertStrArr ( naif_state, *nvals, lenout, (char *) cvals );
 
 
    /*

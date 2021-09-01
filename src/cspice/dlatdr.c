@@ -8,7 +8,7 @@
 
 
 typedef int dlatdr_state_t;
-static inline dlatdr_state_t* get_dlatdr_state(cspice_t* state) {
+static dlatdr_state_t* get_dlatdr_state(cspice_t* state) {
 	return 0;
 }
 

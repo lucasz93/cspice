@@ -8,7 +8,7 @@
 
 
 extern zzekac07_init_t __zzekac07_init;
-static inline zzekac07_state_t* get_zzekac07_state(cspice_t* state) {
+static zzekac07_state_t* get_zzekac07_state(cspice_t* state) {
 	if (!state->zzekac07)
 		state->zzekac07 = __cspice_allocate_module(sizeof(
 	zzekac07_state_t), &__zzekac07_init, sizeof(__zzekac07_init));

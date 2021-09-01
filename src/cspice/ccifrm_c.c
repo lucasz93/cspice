@@ -311,7 +311,7 @@
    The string returned, output, is a Fortranish type string.
    Convert the string to C style. 
    */
-   F2C_ConvertStr ( lenout, frname );
+   F2C_ConvertStr ( naif_state, lenout, frname );
 
    /*
    Return the FOUND flag as a SpiceBoolean value.

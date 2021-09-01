@@ -8,7 +8,7 @@
 
 
 typedef int chbint_state_t;
-static inline chbint_state_t* get_chbint_state(cspice_t* state) {
+static chbint_state_t* get_chbint_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int suffix_state_t;
-static inline suffix_state_t* get_suffix_state(cspice_t* state) {
+static suffix_state_t* get_suffix_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern dafarr_init_t __dafarr_init;
-static inline dafarr_state_t* get_dafarr_state(cspice_t* state) {
+static dafarr_state_t* get_dafarr_state(cspice_t* state) {
 	if (!state->dafarr)
 		state->dafarr = __cspice_allocate_module(sizeof(
 	dafarr_state_t), &__dafarr_init, sizeof(__dafarr_init));

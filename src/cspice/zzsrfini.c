@@ -8,7 +8,7 @@
 
 
 extern zzsrfini_init_t __zzsrfini_init;
-static inline zzsrfini_state_t* get_zzsrfini_state(cspice_t* state) {
+static zzsrfini_state_t* get_zzsrfini_state(cspice_t* state) {
 	if (!state->zzsrfini)
 		state->zzsrfini = __cspice_allocate_module(sizeof(
 	zzsrfini_state_t), &__zzsrfini_init, sizeof(__zzsrfini_init));

@@ -8,7 +8,7 @@
 
 
 typedef int sphlat_state_t;
-static inline sphlat_state_t* get_sphlat_state(cspice_t* state) {
+static sphlat_state_t* get_sphlat_state(cspice_t* state) {
 	return 0;
 }
 

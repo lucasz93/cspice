@@ -8,7 +8,7 @@
 
 
 typedef int srfcss_state_t;
-static inline srfcss_state_t* get_srfcss_state(cspice_t* state) {
+static srfcss_state_t* get_srfcss_state(cspice_t* state) {
 	return 0;
 }
 

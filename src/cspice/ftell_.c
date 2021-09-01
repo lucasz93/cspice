@@ -10,7 +10,7 @@ unit_chk(f2c_state_t *f2c, integer Unit, char *who)
 #endif
 {
 	if (Unit >= MXUNIT || Unit < 0)
-		f__fatal(101, who);
+		f__fatal(f2c, 101, who);
 	return f2c->f__units[Unit].ufd;
 	}
 

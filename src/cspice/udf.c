@@ -8,7 +8,7 @@
 
 
 typedef int udf_state_t;
-static inline udf_state_t* get_udf_state(cspice_t* state) {
+static udf_state_t* get_udf_state(cspice_t* state) {
 	return 0;
 }
 

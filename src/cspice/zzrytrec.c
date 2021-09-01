@@ -8,7 +8,7 @@
 
 
 extern zzrytrec_init_t __zzrytrec_init;
-static inline zzrytrec_state_t* get_zzrytrec_state(cspice_t* state) {
+static zzrytrec_state_t* get_zzrytrec_state(cspice_t* state) {
 	if (!state->zzrytrec)
 		state->zzrytrec = __cspice_allocate_module(sizeof(
 	zzrytrec_state_t), &__zzrytrec_init, sizeof(__zzrytrec_init));

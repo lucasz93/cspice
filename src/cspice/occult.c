@@ -8,7 +8,7 @@
 
 
 extern occult_init_t __occult_init;
-static inline occult_state_t* get_occult_state(cspice_t* state) {
+static occult_state_t* get_occult_state(cspice_t* state) {
 	if (!state->occult)
 		state->occult = __cspice_allocate_module(sizeof(
 	occult_state_t), &__occult_init, sizeof(__occult_init));

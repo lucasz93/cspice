@@ -8,7 +8,7 @@
 
 
 extern fndlun_init_t __fndlun_init;
-static inline fndlun_state_t* get_fndlun_state(cspice_t* state) {
+static fndlun_state_t* get_fndlun_state(cspice_t* state) {
 	if (!state->fndlun)
 		state->fndlun = __cspice_allocate_module(sizeof(
 	fndlun_state_t), &__fndlun_init, sizeof(__fndlun_init));
@@ -1063,16 +1063,16 @@ L_frelun:
 
 /* Subroutine */ int fndlun_(cspice_t* __global_state, integer *unit)
 {
-    return fndlun_0_(0, unit);
+    return fndlun_0_(__global_state, 0, unit);
     }
 
 /* Subroutine */ int reslun_(cspice_t* __global_state, integer *unit)
 {
-    return fndlun_0_(1, unit);
+    return fndlun_0_(__global_state, 1, unit);
     }
 
 /* Subroutine */ int frelun_(cspice_t* __global_state, integer *unit)
 {
-    return fndlun_0_(2, unit);
+    return fndlun_0_(__global_state, 2, unit);
     }
 

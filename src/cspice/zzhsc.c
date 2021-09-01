@@ -8,7 +8,7 @@
 
 
 typedef int zzhsc_state_t;
-static inline zzhsc_state_t* get_zzhsc_state(cspice_t* state) {
+static zzhsc_state_t* get_zzhsc_state(cspice_t* state) {
 	return 0;
 }
 
@@ -1359,45 +1359,47 @@ L_zzhscinf:
 	itemat, logical *new__, integer *avail, ftnlen items_len, ftnlen 
 	item_len)
 {
-    return zzhsc_0_(0, hashsz, hedlst, collst, items, item, itemat, new__, 
-	    avail, items_len, item_len);
+    return zzhsc_0_(__global_state, 0, hashsz, hedlst, collst, items, item, 
+	    itemat, new__, avail, items_len, item_len);
     }
 
 /* Subroutine */ int zzhscini_(cspice_t* __global_state, integer *hashsz, 
 	integer *hedlst, integer *collst)
 {
-    return zzhsc_0_(1, hashsz, hedlst, collst, (char *)0, (char *)0, (integer 
-	    *)0, (logical *)0, (integer *)0, (ftnint)0, (ftnint)0);
+    return zzhsc_0_(__global_state, 1, hashsz, hedlst, collst, (char *)0, (
+	    char *)0, (integer *)0, (logical *)0, (integer *)0, (ftnint)0, (
+	    ftnint)0);
     }
 
 /* Subroutine */ int zzhscadd_(cspice_t* __global_state, integer *hedlst, 
 	integer *collst, char *items, char *item, integer *itemat, logical *
 	new__, ftnlen items_len, ftnlen item_len)
 {
-    return zzhsc_0_(2, (integer *)0, hedlst, collst, items, item, itemat, 
-	    new__, (integer *)0, items_len, item_len);
+    return zzhsc_0_(__global_state, 2, (integer *)0, hedlst, collst, items, 
+	    item, itemat, new__, (integer *)0, items_len, item_len);
     }
 
 /* Subroutine */ int zzhscchk_(cspice_t* __global_state, integer *hedlst, 
 	integer *collst, char *items, char *item, integer *itemat, ftnlen 
 	items_len, ftnlen item_len)
 {
-    return zzhsc_0_(3, (integer *)0, hedlst, collst, items, item, itemat, (
-	    logical *)0, (integer *)0, items_len, item_len);
+    return zzhsc_0_(__global_state, 3, (integer *)0, hedlst, collst, items, 
+	    item, itemat, (logical *)0, (integer *)0, items_len, item_len);
     }
 
 /* Subroutine */ int zzhscavl_(cspice_t* __global_state, integer *collst, 
 	integer *avail)
 {
-    return zzhsc_0_(4, (integer *)0, (integer *)0, collst, (char *)0, (char *)
-	    0, (integer *)0, (logical *)0, avail, (ftnint)0, (ftnint)0);
+    return zzhsc_0_(__global_state, 4, (integer *)0, (integer *)0, collst, (
+	    char *)0, (char *)0, (integer *)0, (logical *)0, avail, (ftnint)0,
+	     (ftnint)0);
     }
 
 /* Subroutine */ int zzhscinf_(cspice_t* __global_state, integer *hedlst, 
 	integer *collst, char *items, char *item, integer *avail, ftnlen 
 	items_len, ftnlen item_len)
 {
-    return zzhsc_0_(5, (integer *)0, hedlst, collst, items, item, (integer *)
-	    0, (logical *)0, avail, items_len, item_len);
+    return zzhsc_0_(__global_state, 5, (integer *)0, hedlst, collst, items, 
+	    item, (integer *)0, (logical *)0, avail, items_len, item_len);
     }
 

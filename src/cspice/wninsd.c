@@ -8,7 +8,7 @@
 
 
 extern wninsd_init_t __wninsd_init;
-static inline wninsd_state_t* get_wninsd_state(cspice_t* state) {
+static wninsd_state_t* get_wninsd_state(cspice_t* state) {
 	if (!state->wninsd)
 		state->wninsd = __cspice_allocate_module(sizeof(
 	wninsd_state_t), &__wninsd_init, sizeof(__wninsd_init));

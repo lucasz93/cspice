@@ -8,7 +8,7 @@
 
 
 extern lnkila_init_t __lnkila_init;
-static inline lnkila_state_t* get_lnkila_state(cspice_t* state) {
+static lnkila_state_t* get_lnkila_state(cspice_t* state) {
 	if (!state->lnkila)
 		state->lnkila = __cspice_allocate_module(sizeof(
 	lnkila_state_t), &__lnkila_init, sizeof(__lnkila_init));

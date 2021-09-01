@@ -8,7 +8,7 @@
 
 
 typedef int locati_state_t;
-static inline locati_state_t* get_locati_state(cspice_t* state) {
+static locati_state_t* get_locati_state(cspice_t* state) {
 	return 0;
 }
 

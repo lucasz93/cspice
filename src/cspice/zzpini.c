@@ -8,7 +8,7 @@
 
 
 typedef int zzpini_state_t;
-static inline zzpini_state_t* get_zzpini_state(cspice_t* state) {
+static zzpini_state_t* get_zzpini_state(cspice_t* state) {
 	return 0;
 }
 

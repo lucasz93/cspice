@@ -8,7 +8,7 @@
 
 
 extern syputd_init_t __syputd_init;
-static inline syputd_state_t* get_syputd_state(cspice_t* state) {
+static syputd_state_t* get_syputd_state(cspice_t* state) {
 	if (!state->syputd)
 		state->syputd = __cspice_allocate_module(sizeof(
 	syputd_state_t), &__syputd_init, sizeof(__syputd_init));

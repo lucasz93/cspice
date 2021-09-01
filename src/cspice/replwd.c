@@ -8,7 +8,7 @@
 
 
 typedef int replwd_state_t;
-static inline replwd_state_t* get_replwd_state(cspice_t* state) {
+static replwd_state_t* get_replwd_state(cspice_t* state) {
 	return 0;
 }
 

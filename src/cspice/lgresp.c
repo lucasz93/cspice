@@ -8,7 +8,7 @@
 
 
 typedef int lgresp_state_t;
-static inline lgresp_state_t* get_lgresp_state(cspice_t* state) {
+static lgresp_state_t* get_lgresp_state(cspice_t* state) {
 	return 0;
 }
 

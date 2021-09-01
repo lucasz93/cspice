@@ -8,7 +8,7 @@
 
 
 typedef int ucrss_state_t;
-static inline ucrss_state_t* get_ucrss_state(cspice_t* state) {
+static ucrss_state_t* get_ucrss_state(cspice_t* state) {
 	return 0;
 }
 

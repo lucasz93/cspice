@@ -8,7 +8,7 @@
 
 
 extern m2q_init_t __m2q_init;
-static inline m2q_state_t* get_m2q_state(cspice_t* state) {
+static m2q_state_t* get_m2q_state(cspice_t* state) {
 	if (!state->m2q)
 		state->m2q = __cspice_allocate_module(sizeof(m2q_state_t), &
 	__m2q_init, sizeof(__m2q_init));
@@ -21,7 +21,7 @@ static inline m2q_state_t* get_m2q_state(cspice_t* state) {
 	doublereal *q)
 {
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal c__;
@@ -599,25 +599,25 @@ static inline m2q_state_t* get_m2q_state(cspice_t* state) {
 /*     you get four. Thus at least one of the 4 terms is greater than 1. */
 
     if (1. <= cc4) {
-	c__ = sqrt(&__global_state->f2c, cc4 * .25);
+	c__ = sqrt(cc4 * .25);
 	factor = 1. / (c__ * 4.);
 	s[0] = (r__[5] - r__[7]) * factor;
 	s[1] = (r__[6] - r__[2]) * factor;
 	s[2] = (r__[1] - r__[3]) * factor;
     } else if (1. <= s114) {
-	s[0] = sqrt(&__global_state->f2c, s114 * .25);
+	s[0] = sqrt(s114 * .25);
 	factor = 1. / (s[0] * 4.);
 	c__ = (r__[5] - r__[7]) * factor;
 	s[1] = (r__[3] + r__[1]) * factor;
 	s[2] = (r__[6] + r__[2]) * factor;
     } else if (1. <= s224) {
-	s[1] = sqrt(&__global_state->f2c, s224 * .25);
+	s[1] = sqrt(s224 * .25);
 	factor = 1. / (s[1] * 4.);
 	c__ = (r__[6] - r__[2]) * factor;
 	s[0] = (r__[3] + r__[1]) * factor;
 	s[2] = (r__[7] + r__[5]) * factor;
     } else {
-	s[2] = sqrt(&__global_state->f2c, s334 * .25);
+	s[2] = sqrt(s334 * .25);
 	factor = 1. / (s[2] * 4.);
 	c__ = (r__[1] - r__[3]) * factor;
 	s[0] = (r__[6] + r__[2]) * factor;
@@ -629,7 +629,7 @@ static inline m2q_state_t* get_m2q_state(cspice_t* state) {
 
     l2 = c__ * c__ + s[0] * s[0] + s[1] * s[1] + s[2] * s[2];
     if (l2 != 1.) {
-	polish = 1. / sqrt(&__global_state->f2c, l2);
+	polish = 1. / sqrt(l2);
 	c__ *= polish;
 	s[0] *= polish;
 	s[1] *= polish;

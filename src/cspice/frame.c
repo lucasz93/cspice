@@ -8,7 +8,7 @@
 
 
 typedef int frame_state_t;
-static inline frame_state_t* get_frame_state(cspice_t* state) {
+static frame_state_t* get_frame_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,7 +20,7 @@ static inline frame_state_t* get_frame_state(cspice_t* state) {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
@@ -256,17 +256,17 @@ static inline frame_state_t* get_frame_state(cspice_t* state) {
 /*     of X, the non-zero components of Y and the length of Y. */
 
     if (a <= b && a <= c__) {
-	f = sqrt(&__global_state->f2c, b + c__);
+	f = sqrt(b + c__);
 	s1 = 1;
 	s2 = 2;
 	s3 = 3;
     } else if (b <= a && b <= c__) {
-	f = sqrt(&__global_state->f2c, a + c__);
+	f = sqrt(a + c__);
 	s1 = 2;
 	s2 = 3;
 	s3 = 1;
     } else {
-	f = sqrt(&__global_state->f2c, a + b);
+	f = sqrt(a + b);
 	s1 = 3;
 	s2 = 1;
 	s3 = 2;

@@ -8,7 +8,7 @@
 
 
 extern timdef_init_t __timdef_init;
-static inline timdef_state_t* get_timdef_state(cspice_t* state) {
+static timdef_state_t* get_timdef_state(cspice_t* state) {
 	if (!state->timdef)
 		state->timdef = __cspice_allocate_module(sizeof(
 	timdef_state_t), &__timdef_init, sizeof(__timdef_init));

@@ -8,7 +8,7 @@
 
 
 typedef int zzdscm_state_t;
-static inline zzdscm_state_t* get_zzdscm_state(cspice_t* state) {
+static zzdscm_state_t* get_zzdscm_state(cspice_t* state) {
 	return 0;
 }
 
@@ -42,9 +42,9 @@ static inline zzdscm_state_t* get_zzdscm_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), sqrt(
-	    f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
-	    doublereal *), atan2(f2c_state_t*, doublereal, doublereal);
+    double sin(doublereal), cos(doublereal), sqrt(doublereal), d_mod(
+	    f2c_state_t*, doublereal *, doublereal *), atan2(doublereal, 
+	    doublereal);
 
     /* Local variables */
     doublereal ctem;
@@ -428,15 +428,15 @@ static inline zzdscm_state_t* get_zzdscm_state(cspice_t* state) {
 
     *xn = *np;
     *eccm = *eccp;
-    *snodm = sin(&__global_state->f2c, *nodep);
-    *cnodm = cos(&__global_state->f2c, *nodep);
-    *sinomm = sin(&__global_state->f2c, *argpp);
-    *cosomm = cos(&__global_state->f2c, *argpp);
-    *sinim = sin(&__global_state->f2c, *inclp);
-    *cosim = cos(&__global_state->f2c, *inclp);
+    *snodm = sin(*nodep);
+    *cnodm = cos(*nodep);
+    *sinomm = sin(*argpp);
+    *cosomm = cos(*argpp);
+    *sinim = sin(*inclp);
+    *cosim = cos(*inclp);
     *emsq = *eccm * *eccm;
     betasq = 1. - *emsq;
-    *rtemsq = sqrt(&__global_state->f2c, betasq);
+    *rtemsq = sqrt(betasq);
 
 /*     INITIALIZE LUNAR SOLAR TERMS */
 
@@ -452,19 +452,19 @@ static inline zzdscm_state_t* get_zzdscm_state(cspice_t* state) {
     d__1 = 4.523602 - *day * 9.2422029e-4;
     d__2 = twopi_(__global_state);
     xnodce = d_mod(&__global_state->f2c, &d__1, &d__2);
-    stem = sin(&__global_state->f2c, xnodce);
-    ctem = cos(&__global_state->f2c, xnodce);
+    stem = sin(xnodce);
+    ctem = cos(xnodce);
     zcosil = .91375164 - ctem * .03568096;
-    zsinil = sqrt(&__global_state->f2c, 1. - zcosil * zcosil);
+    zsinil = sqrt(1. - zcosil * zcosil);
     zsinhl = stem * .089683511 / zsinil;
-    zcoshl = sqrt(&__global_state->f2c, 1. - zsinhl * zsinhl);
+    zcoshl = sqrt(1. - zsinhl * zsinhl);
     *gam = *day * .001944368 + 5.8351514;
     zx = stem * .39785416 / zsinil;
     zy = zcoshl * ctem + zsinhl * .91744867 * stem;
-    zx = atan2(&__global_state->f2c, zx, zy);
+    zx = atan2(zx, zy);
     zx = *gam + zx - xnodce;
-    zcosgl = cos(&__global_state->f2c, zx);
-    zsingl = sin(&__global_state->f2c, zx);
+    zcosgl = cos(zx);
+    zsingl = sin(zx);
 
 /*     DO SOLAR TERMS */
 

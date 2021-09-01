@@ -8,7 +8,7 @@
 
 
 typedef int latcyl_state_t;
-static inline latcyl_state_t* get_latcyl_state(cspice_t* state) {
+static latcyl_state_t* get_latcyl_state(cspice_t* state) {
 	return 0;
 }
 
@@ -18,7 +18,7 @@ static inline latcyl_state_t* get_latcyl_state(cspice_t* state) {
 	longc, doublereal *z__)
 {
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal rh;
@@ -175,8 +175,8 @@ static inline latcyl_state_t* get_latcyl_state(cspice_t* state) {
 
 /*     Convert to cylindrical, storing in temporary variables */
 
-    rh = *radius * cos(&__global_state->f2c, *lat);
-    zz = *radius * sin(&__global_state->f2c, *lat);
+    rh = *radius * cos(*lat);
+    zz = *radius * sin(*lat);
 
 /*     Move the results to output variables. */
 

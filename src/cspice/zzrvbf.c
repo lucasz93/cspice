@@ -8,7 +8,7 @@
 
 
 extern zzrvbf_init_t __zzrvbf_init;
-static inline zzrvbf_state_t* get_zzrvbf_state(cspice_t* state) {
+static zzrvbf_state_t* get_zzrvbf_state(cspice_t* state) {
 	if (!state->zzrvbf)
 		state->zzrvbf = __cspice_allocate_module(sizeof(
 	zzrvbf_state_t), &__zzrvbf_init, sizeof(__zzrvbf_init));

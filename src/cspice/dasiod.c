@@ -8,7 +8,7 @@
 
 
 extern dasiod_init_t __dasiod_init;
-static inline dasiod_state_t* get_dasiod_state(cspice_t* state) {
+static dasiod_state_t* get_dasiod_state(cspice_t* state) {
 	if (!state->dasiod)
 		state->dasiod = __cspice_allocate_module(sizeof(
 	dasiod_state_t), &__dasiod_init, sizeof(__dasiod_init));

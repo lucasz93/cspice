@@ -8,7 +8,7 @@
 
 
 extern edlimb_init_t __edlimb_init;
-static inline edlimb_state_t* get_edlimb_state(cspice_t* state) {
+static edlimb_state_t* get_edlimb_state(cspice_t* state) {
 	if (!state->edlimb)
 		state->edlimb = __cspice_allocate_module(sizeof(
 	edlimb_state_t), &__edlimb_init, sizeof(__edlimb_init));

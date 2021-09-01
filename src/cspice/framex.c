@@ -8,7 +8,7 @@
 
 
 extern framex_init_t __framex_init;
-static inline framex_state_t* get_framex_state(cspice_t* state) {
+static framex_state_t* get_framex_state(cspice_t* state) {
 	if (!state->framex)
 		state->framex = __cspice_allocate_module(sizeof(
 	framex_state_t), &__framex_init, sizeof(__framex_init));
@@ -3334,51 +3334,53 @@ L_ccifrm:
 	frname, integer *frcode, integer *cent, integer *class__, integer *
 	clssid, logical *found, ftnlen cname_len, ftnlen frname_len)
 {
-    return framex_0_(0, cname, frname, frcode, cent, class__, clssid, found, 
-	    cname_len, frname_len);
+    return framex_0_(__global_state, 0, cname, frname, frcode, cent, class__, 
+	    clssid, found, cname_len, frname_len);
     }
 
 /* Subroutine */ int namfrm_(cspice_t* __global_state, char *frname, integer *
 	frcode, ftnlen frname_len)
 {
-    return framex_0_(1, (char *)0, frname, frcode, (integer *)0, (integer *)0,
-	     (integer *)0, (logical *)0, (ftnint)0, frname_len);
+    return framex_0_(__global_state, 1, (char *)0, frname, frcode, (integer *)
+	    0, (integer *)0, (integer *)0, (logical *)0, (ftnint)0, 
+	    frname_len);
     }
 
 /* Subroutine */ int frmnam_(cspice_t* __global_state, integer *frcode, char *
 	frname, ftnlen frname_len)
 {
-    return framex_0_(2, (char *)0, frname, frcode, (integer *)0, (integer *)0,
-	     (integer *)0, (logical *)0, (ftnint)0, frname_len);
+    return framex_0_(__global_state, 2, (char *)0, frname, frcode, (integer *)
+	    0, (integer *)0, (integer *)0, (logical *)0, (ftnint)0, 
+	    frname_len);
     }
 
 /* Subroutine */ int frinfo_(cspice_t* __global_state, integer *frcode, 
 	integer *cent, integer *class__, integer *clssid, logical *found)
 {
-    return framex_0_(3, (char *)0, (char *)0, frcode, cent, class__, clssid, 
-	    found, (ftnint)0, (ftnint)0);
+    return framex_0_(__global_state, 3, (char *)0, (char *)0, frcode, cent, 
+	    class__, clssid, found, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int cidfrm_(cspice_t* __global_state, integer *cent, integer 
 	*frcode, char *frname, logical *found, ftnlen frname_len)
 {
-    return framex_0_(4, (char *)0, frname, frcode, cent, (integer *)0, (
-	    integer *)0, found, (ftnint)0, frname_len);
+    return framex_0_(__global_state, 4, (char *)0, frname, frcode, cent, (
+	    integer *)0, (integer *)0, found, (ftnint)0, frname_len);
     }
 
 /* Subroutine */ int cnmfrm_(cspice_t* __global_state, char *cname, integer *
 	frcode, char *frname, logical *found, ftnlen cname_len, ftnlen 
 	frname_len)
 {
-    return framex_0_(5, cname, frname, frcode, (integer *)0, (integer *)0, (
-	    integer *)0, found, cname_len, frname_len);
+    return framex_0_(__global_state, 5, cname, frname, frcode, (integer *)0, (
+	    integer *)0, (integer *)0, found, cname_len, frname_len);
     }
 
 /* Subroutine */ int ccifrm_(cspice_t* __global_state, integer *class__, 
 	integer *clssid, integer *frcode, char *frname, integer *cent, 
 	logical *found, ftnlen frname_len)
 {
-    return framex_0_(6, (char *)0, frname, frcode, cent, class__, clssid, 
-	    found, (ftnint)0, frname_len);
+    return framex_0_(__global_state, 6, (char *)0, frname, frcode, cent, 
+	    class__, clssid, found, (ftnint)0, frname_len);
     }
 

@@ -8,7 +8,7 @@
 
 
 extern zzcxbrut_init_t __zzcxbrut_init;
-static inline zzcxbrut_state_t* get_zzcxbrut_state(cspice_t* state) {
+static zzcxbrut_state_t* get_zzcxbrut_state(cspice_t* state) {
 	if (!state->zzcxbrut)
 		state->zzcxbrut = __cspice_allocate_module(sizeof(
 	zzcxbrut_state_t), &__zzcxbrut_init, sizeof(__zzcxbrut_init));
@@ -25,7 +25,7 @@ static inline zzcxbrut_state_t* get_zzcxbrut_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal);
+    double cos(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
@@ -267,7 +267,7 @@ static inline zzcxbrut_state_t* get_zzcxbrut_state(cspice_t* state) {
 	vequ_(__global_state, axis, locaxi);
     }
     vhatip_(__global_state, locaxi);
-    cosang = cos(&__global_state->f2c, locang);
+    cosang = cos(locang);
 
 /*     Calculate the offsets of the endpoints from the apex, */
 /*     and get unit-length versions of these. */

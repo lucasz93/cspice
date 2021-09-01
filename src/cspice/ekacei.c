@@ -8,7 +8,7 @@
 
 
 typedef int ekacei_state_t;
-static inline ekacei_state_t* get_ekacei_state(cspice_t* state) {
+static ekacei_state_t* get_ekacei_state(cspice_t* state) {
 	return 0;
 }
 

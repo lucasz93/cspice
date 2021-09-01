@@ -43,6 +43,7 @@
 */
 
    #include <math.h>
+   #include "__cspice_state.h"
    #include "SpiceUsr.h"
 
    SpiceDouble halfpi_c ( void *naif_state ) 
@@ -147,18 +148,15 @@
    /*
    Local Variables
    */
+   cspice_user_state_t * user = &((cspice_t *)naif_state)->user;
 
-   /* MECHSOFT: Not critical state. Safe to keep thread local. */
-   static _Thread_local SpiceDouble  value = 0.;
-
-
-   if ( value == 0.)
+   if ( user->halfpi_c.value == 0.)
       {
-      value = 0.5 * acos( -1. );
+      user->halfpi_c.value = 0.5 * acos( -1. );
       }
 
 
-   return value;
+   return user->halfpi_c.value;
 
 
 } /* End halfpi_c */

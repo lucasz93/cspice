@@ -8,7 +8,7 @@
 
 
 extern zzddhnfc_init_t __zzddhnfc_init;
-static inline zzddhnfc_state_t* get_zzddhnfc_state(cspice_t* state) {
+static zzddhnfc_state_t* get_zzddhnfc_state(cspice_t* state) {
 	if (!state->zzddhnfc)
 		state->zzddhnfc = __cspice_allocate_module(sizeof(
 	zzddhnfc_state_t), &__zzddhnfc_init, sizeof(__zzddhnfc_init));

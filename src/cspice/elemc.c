@@ -8,7 +8,7 @@
 
 
 typedef int elemc_state_t;
-static inline elemc_state_t* get_elemc_state(cspice_t* state) {
+static elemc_state_t* get_elemc_state(cspice_t* state) {
 	return 0;
 }
 

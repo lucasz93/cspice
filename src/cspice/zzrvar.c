@@ -8,7 +8,7 @@
 
 
 extern zzrvar_init_t __zzrvar_init;
-static inline zzrvar_state_t* get_zzrvar_state(cspice_t* state) {
+static zzrvar_state_t* get_zzrvar_state(cspice_t* state) {
 	if (!state->zzrvar)
 		state->zzrvar = __cspice_allocate_module(sizeof(
 	zzrvar_state_t), &__zzrvar_init, sizeof(__zzrvar_init));

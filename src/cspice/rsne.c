@@ -16,36 +16,15 @@
 
  extern ftnlen f__typesize[];
 
- extern t_getc(Void);
+ extern t_getc(f2c_state_t *);
 
+ static int
 #ifdef KR_headers
- extern char *malloc(), *memset();
-
-#ifdef ungetc
- static int
-un_getc(x,f__cf) int x; FILE *f__cf;
+un_getc(f2c,x,f__cf) f2c_state_t *f2c; int x; FILE *f__cf;
+#else
+un_getc(f2c_state_t *f2c, int x, FILE *f__cf)
+#endif
 { return ungetc(x,f__cf); }
-#else
-#define un_getc ungetc
- extern int ungetc();
-#endif
-
-#else
-#undef abs
-#undef min
-#undef max
-#include "stdlib.h"
-#include "string.h"
-
-#ifdef ungetc
- static int
-un_getc(int x, FILE *f__cf)
-{ return ungetc(x,f__cf); }
-#else
-#define un_getc ungetc
-extern int ungetc(int, FILE*);	/* for systems with a buggy stdio.h */
-#endif
-#endif
 
  static Vardesc *
 #ifdef KR_headers
@@ -128,7 +107,7 @@ nl_init(f2c_state_t *f2c) {
 	register int c;
 
 	if(!f2c->f__init)
-		f_init();
+		f_init(f2c);
 	for(s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; c = *s++; )
 		f2c->Alpha[c]
 		= f2c->Alphanum[c]
@@ -139,8 +118,8 @@ nl_init(f2c_state_t *f2c) {
 		f2c->Alphanum[c] = c;
 	}
 
-#define GETC(f2c,x) (x=(*f2c->l_getc)())
-#define Ungetc(f2c,x,y) (*f2c->l_ungetc)(x,y)
+#define GETC(f2c,x) (x=(*f2c->l_getc)(f2c))
+#define Ungetc(f2c,x,y) (*f2c->l_ungetc)(f2c,x,y)
 
  static int
 #ifdef KR_headers
@@ -156,13 +135,13 @@ getname(f2c_state_t *f2c, register char *s, int slen)
 	if (!(*s++ = f2c->Alpha[ch & 0xff])) {
 		if (ch != EOF)
 			ch = 115;
-		errfl(f2c->f__elist->cierr, ch, "namelist read");
+		errfl(f2c,f2c->f__elist->cierr, ch, "namelist read");
 		}
 	while(*s = f2c->Alphanum[GETC(f2c, ch) & 0xff])
 		if (s < se)
 			s++;
 	if (ch == EOF)
-		err(f2c->f__elist->cierr, EOF, "namelist read");
+		err(f2c,f2c->f__elist->cierr, EOF, "namelist read");
 	if (ch > ' ')
 		Ungetc(f2c, ch, f2c->f__cf);
 	return *s = 0;
@@ -255,7 +234,7 @@ print_ne(f2c_state_t *f2c, cilist *a)
 	cilist t;
 	t = *a;
 	t.ciunit = 6;
-	s_wsne(&t);
+	s_wsne(f2c,&t);
 	fflush(f2c->f__cf);
 	f2c->f__external = intext;
 	f2c->f__reading = 1;
@@ -297,7 +276,7 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 	for(;;) switch(GETC(f2c, ch)) {
 		case EOF:
  eof:
-			err(a->ciend,(EOF),where0);
+			err(f2c,a->ciend,(EOF),where0);
 		case '&':
 		case '$':
 			goto have_amp;
@@ -332,14 +311,14 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 		fflush(stderr);
 		for(;;) switch(GETC(f2c, ch)) {
 			case EOF:
-				err(a->ciend, EOF, where0);
+				err(f2c,a->ciend, EOF, where0);
 			case '/':
 			case '&':
 			case '$':
 				if (f2c->f__external)
-					e_rsle();
+					e_rsle(f2c);
 				else
-					z_rnew();
+					z_rnew(f2c);
 				goto top;
 			case '"':
 			case '\'':
@@ -347,7 +326,7 @@ x_rsne(f2c_state_t *f2c, cilist *a)
  more_quoted:
 				while(GETC(f2c, ch) != quote)
 					if (ch == EOF)
-						err(a->ciend, EOF, where0);
+						err(f2c,a->ciend, EOF, where0);
 				if (GETC(f2c, ch) == quote)
 					goto more_quoted;
 				Ungetc(f2c,ch,f2c->f__cf);
@@ -358,13 +337,13 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 #endif
 	ht = mk_hashtab(f2c, nl);
 	if (!ht)
-		errfl(f2c->f__elist->cierr, 113, where0);
+		errfl(f2c,f2c->f__elist->cierr, 113, where0);
 	for(;;) {
 		for(;;) switch(GETC(f2c,ch)) {
 			case EOF:
 				if (got1)
 					return 0;
-				err(a->ciend, EOF, where0);
+				err(f2c,a->ciend, EOF, where0);
 			case '/':
 			case '$':
 			case '&':
@@ -380,7 +359,7 @@ x_rsne(f2c_state_t *f2c, cilist *a)
  havename:
 		v = hash(f2c, ht,buf);
 		if (!v)
-			errfl(a->cierr, 119, where);
+			errfl(f2c,a->cierr, 119, where);
 		while(GETC(f2c,ch) <= ' ' && ch >= 0);
 		vaddr = v->addr;
 		type = v->type;
@@ -396,12 +375,12 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 			dn = dimens;
 			if (!(dims = v->dims)) {
 				if (type != TYCHAR)
-					errfl(a->cierr, 122, where);
+					errfl(f2c,a->cierr, 122, where);
 				if (k = getdimen(f2c, &ch, dn, (ftnlen)size,
 						(ftnlen)size, &b))
-					errfl(a->cierr, k, where);
+					errfl(f2c,a->cierr, k, where);
 				if (ch != ')')
-					errfl(a->cierr, 115, where);
+					errfl(f2c,a->cierr, 115, where);
 				b1 = dn->extent;
 				if (--b < 0 || b + b1 > size)
 					return 124;
@@ -415,30 +394,30 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 			ivae = iva + size*nomax;
 			f2c->colonseen = 0;
 			if (k = getdimen(f2c, &ch, dn, size, nomax, &b))
-				errfl(a->cierr, k, where);
+				errfl(f2c,a->cierr, k, where);
 			no = dn->extent;
 			b0 = dims[2];
 			dims1 = dims += 3;
 			ex = 1;
 			for(n = 1; n++ < nd; dims++) {
 				if (ch != ',')
-					errfl(a->cierr, 115, where);
+					errfl(f2c,a->cierr, 115, where);
 				dn1 = dn + 1;
 				span /= *dims;
 				if (k = getdimen(f2c, &ch, dn1, dn->delta**dims,
 						span, &b1))
-					errfl(a->cierr, k, where);
+					errfl(f2c,a->cierr, k, where);
 				ex *= *dims;
 				b += b1*ex;
 				no *= dn1->extent;
 				dn = dn1;
 				}
 			if (ch != ')')
-				errfl(a->cierr, 115, where);
+				errfl(f2c,a->cierr, 115, where);
 			readall = 1 - f2c->colonseen;
 			b -= b0;
 			if (b < 0 || b >= nomax)
-				errfl(a->cierr, 125, where);
+				errfl(f2c,a->cierr, 125, where);
 			iva += size * b;
 			dims = dims1;
 			while(GETC(f2c,ch) <= ' ' && ch >= 0);
@@ -446,9 +425,9 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 			dn0 = dimens;
 			if (type == TYCHAR && ch == '(' /*)*/) {
 				if (k = getdimen(f2c, &ch, &substr, size, size, &b))
-					errfl(a->cierr, k, where);
+					errfl(f2c,a->cierr, k, where);
 				if (ch != ')')
-					errfl(a->cierr, 115, where);
+					errfl(f2c,a->cierr, 115, where);
 				b1 = substr.extent;
 				if (--b < 0 || b + b1 > size)
 					return 124;
@@ -488,7 +467,7 @@ x_rsne(f2c_state_t *f2c, cilist *a)
  scalar:
 			no = no1 = 1;
 		if (ch != '=')
-			errfl(a->cierr, 115, where);
+			errfl(f2c,a->cierr, 115, where);
 		got1 = f2c->nml_read = 1;
 		f2c->f__lcount = 0;
 	 readloop:
@@ -500,7 +479,7 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 			else if (iva + no1*size > ivae)
 				no1 = (ivae - iva)/size;
 			f2c->f__lquit = 0;
-			if (k = l_read(&no1, vaddr + iva, size, type))
+			if (k = l_read(f2c,&no1, vaddr + iva, size, type))
 				return k;
 			if (f2c->f__lquit == 1)
 				return 0;
@@ -511,7 +490,7 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 					if (no1 > f2c->f__lcount)
 						no1 = f2c->f__lcount;
 					iva += no1 * dn0->delta;
-					if (k = l_read(&no1, vaddr + iva,
+					if (k = l_read(f2c,&no1, vaddr + iva,
 							size, type))
 						return k;
 					}
@@ -540,7 +519,7 @@ x_rsne(f2c_state_t *f2c, cilist *a)
 					GETC(f2c, ch);
 				Ungetc(f2c,ch,f2c->f__cf);
 				if (!f2c->Alpha[ch & 0xff] && ch >= 0)
-					errfl(a->cierr, 125, where);
+					errfl(f2c,a->cierr, 125, where);
 				break;
 				}
 			Ungetc(f2c,ch,f2c->f__cf);
@@ -571,10 +550,10 @@ s_rsne(f2c_state_t *f2c, cilist *a)
 
 	f2c->f__external=1;
 	f2c->l_eof = 0;
-	if(n = c_le(a))
+	if(n = c_le(f2c,a))
 		return n;
-	if(f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit))
-		err(a->cierr,errno,where0);
+	if(f2c->f__curunit->uwrt && f__nowreading(f2c,f2c->f__curunit))
+		err(f2c,a->cierr,errno,where0);
 	f2c->l_getc = t_getc;
 	f2c->l_ungetc = un_getc;
 	f2c->f__doend = xrd_SL;
@@ -582,5 +561,5 @@ s_rsne(f2c_state_t *f2c, cilist *a)
 	f2c->nml_read = 0;
 	if (n)
 		return n;
-	return e_rsle();
+	return e_rsle(f2c);
 	}

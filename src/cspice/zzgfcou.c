@@ -8,7 +8,7 @@
 
 
 extern zzgfcou_init_t __zzgfcou_init;
-static inline zzgfcou_state_t* get_zzgfcou_state(cspice_t* state) {
+static zzgfcou_state_t* get_zzgfcou_state(cspice_t* state) {
 	if (!state->zzgfcou)
 		state->zzgfcou = __cspice_allocate_module(sizeof(
 	zzgfcou_state_t), &__zzgfcou_init, sizeof(__zzgfcou_init));
@@ -35,7 +35,7 @@ static inline zzgfcou_state_t* get_zzgfcou_state(cspice_t* state) {
     integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
 	    f2c_state_t*, char *, integer, char *, integer);
     /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int zzgfcost_(cspice_t*, char *, char *, integer *
@@ -2291,7 +2291,7 @@ L_zzgfcocg:
 	chkout_(__global_state, "ZZGFCOCG", (ftnlen)8);
 	return 0;
     }
-    *crdval = cos(&__global_state->f2c, value);
+    *crdval = cos(value);
     chkout_(__global_state, "ZZGFCOCG", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFCOSG ( GF, get sine of coordinate ) */
@@ -2433,7 +2433,7 @@ L_zzgfcosg:
 	chkout_(__global_state, "ZZGFCOSG", (ftnlen)8);
 	return 0;
     }
-    *crdval = sin(&__global_state->f2c, value);
+    *crdval = sin(value);
     chkout_(__global_state, "ZZGFCOSG", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFCOCD ( GF, is cosine of coordinate decreasing? ) */
@@ -2680,10 +2680,9 @@ L_zzgfcocd:
 
 /*     The derivative of the coordinate is negative if the "sign" is -1. */
 
-    *decres = -sin(&__global_state->f2c, value) * cdsign[(i__1 = 
-	    __state->svcidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
-	    __global_state->f2c, "cdsign", i__1, "zzgfcou_", (ftnlen)2433)] < 
-	    0.;
+    *decres = -sin(value) * cdsign[(i__1 = __state->svcidx - 1) < 3 && 0 <= 
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "cdsign", i__1, "zzgf"
+	    "cou_", (ftnlen)2433)] < 0.;
     chkout_(__global_state, "ZZGFCOCD", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFCOSD ( GF, is sine of coordinate decreasing? ) */
@@ -2927,10 +2926,9 @@ L_zzgfcosd:
 
 /*     The derivative of the coordinate is negative if the "sign" is -1. */
 
-    *decres = cos(&__global_state->f2c, value) * cdsign[(i__1 = 
-	    __state->svcidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
-	    __global_state->f2c, "cdsign", i__1, "zzgfcou_", (ftnlen)2705)] < 
-	    0.;
+    *decres = cos(value) * cdsign[(i__1 = __state->svcidx - 1) < 3 && 0 <= 
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "cdsign", i__1, "zzgf"
+	    "cou_", (ftnlen)2705)] < 0.;
     chkout_(__global_state, "ZZGFCOSD", (ftnlen)8);
     return 0;
 } /* zzgfcou_ */
@@ -2943,10 +2941,10 @@ L_zzgfcosd:
 	ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, 
 	ftnlen crdsys_len, ftnlen crdnam_len)
 {
-    return zzgfcou_0_(0, vecdef, method, target, et, ref, abcorr, obsrvr, 
-	    dref, dvec, crdsys, crdnam, decres, crdval, crdfnd, udfunc, 
-	    vecdef_len, method_len, target_len, ref_len, abcorr_len, 
-	    obsrvr_len, dref_len, crdsys_len, crdnam_len);
+    return zzgfcou_0_(__global_state, 0, vecdef, method, target, et, ref, 
+	    abcorr, obsrvr, dref, dvec, crdsys, crdnam, decres, crdval, 
+	    crdfnd, udfunc, vecdef_len, method_len, target_len, ref_len, 
+	    abcorr_len, obsrvr_len, dref_len, crdsys_len, crdnam_len);
     }
 
 /* Subroutine */ int zzgfcoin_(cspice_t* __global_state, char *vecdef, char *
@@ -2956,80 +2954,80 @@ L_zzgfcosd:
 	abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, 
 	ftnlen crdnam_len)
 {
-    return zzgfcou_0_(1, vecdef, method, target, (doublereal *)0, ref, abcorr,
-	     obsrvr, dref, dvec, crdsys, crdnam, (logical *)0, (doublereal *)
-	    0, (logical *)0, (U_fp)0, vecdef_len, method_len, target_len, 
-	    ref_len, abcorr_len, obsrvr_len, dref_len, crdsys_len, crdnam_len)
-	    ;
+    return zzgfcou_0_(__global_state, 1, vecdef, method, target, (doublereal *
+	    )0, ref, abcorr, obsrvr, dref, dvec, crdsys, crdnam, (logical *)0,
+	     (doublereal *)0, (logical *)0, (U_fp)0, vecdef_len, method_len, 
+	    target_len, ref_len, abcorr_len, obsrvr_len, dref_len, crdsys_len,
+	     crdnam_len);
     }
 
 /* Subroutine */ int zzgfcog_(cspice_t* __global_state, doublereal *et, 
 	doublereal *crdval)
 {
-    return zzgfcou_0_(2, (char *)0, (char *)0, (char *)0, et, (char *)0, (
-	    char *)0, (char *)0, (char *)0, (doublereal *)0, (char *)0, (char 
-	    *)0, (logical *)0, crdval, (logical *)0, (U_fp)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfcou_0_(__global_state, 2, (char *)0, (char *)0, (char *)0, et, 
+	    (char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
+	    char *)0, (char *)0, (logical *)0, crdval, (logical *)0, (U_fp)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfcodc_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *decres)
 {
-    return zzgfcou_0_(3, (char *)0, (char *)0, (char *)0, et, (char *)0, (
-	    char *)0, (char *)0, (char *)0, (doublereal *)0, (char *)0, (char 
-	    *)0, decres, (doublereal *)0, (logical *)0, udfunc, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfcou_0_(__global_state, 3, (char *)0, (char *)0, (char *)0, et, 
+	    (char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
+	    char *)0, (char *)0, decres, (doublereal *)0, (logical *)0, 
+	    udfunc, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfcoex_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *crdfnd)
 {
-    return zzgfcou_0_(4, (char *)0, (char *)0, (char *)0, et, (char *)0, (
-	    char *)0, (char *)0, (char *)0, (doublereal *)0, (char *)0, (char 
-	    *)0, (logical *)0, (doublereal *)0, crdfnd, udfunc, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfcou_0_(__global_state, 4, (char *)0, (char *)0, (char *)0, et, 
+	    (char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
+	    char *)0, (char *)0, (logical *)0, (doublereal *)0, crdfnd, 
+	    udfunc, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfcocg_(cspice_t* __global_state, doublereal *et, 
 	doublereal *crdval)
 {
-    return zzgfcou_0_(5, (char *)0, (char *)0, (char *)0, et, (char *)0, (
-	    char *)0, (char *)0, (char *)0, (doublereal *)0, (char *)0, (char 
-	    *)0, (logical *)0, crdval, (logical *)0, (U_fp)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfcou_0_(__global_state, 5, (char *)0, (char *)0, (char *)0, et, 
+	    (char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
+	    char *)0, (char *)0, (logical *)0, crdval, (logical *)0, (U_fp)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfcosg_(cspice_t* __global_state, doublereal *et, 
 	doublereal *crdval)
 {
-    return zzgfcou_0_(6, (char *)0, (char *)0, (char *)0, et, (char *)0, (
-	    char *)0, (char *)0, (char *)0, (doublereal *)0, (char *)0, (char 
-	    *)0, (logical *)0, crdval, (logical *)0, (U_fp)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfcou_0_(__global_state, 6, (char *)0, (char *)0, (char *)0, et, 
+	    (char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
+	    char *)0, (char *)0, (logical *)0, crdval, (logical *)0, (U_fp)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, 
+	    (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfcocd_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *decres)
 {
-    return zzgfcou_0_(7, (char *)0, (char *)0, (char *)0, et, (char *)0, (
-	    char *)0, (char *)0, (char *)0, (doublereal *)0, (char *)0, (char 
-	    *)0, decres, (doublereal *)0, (logical *)0, udfunc, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfcou_0_(__global_state, 7, (char *)0, (char *)0, (char *)0, et, 
+	    (char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
+	    char *)0, (char *)0, decres, (doublereal *)0, (logical *)0, 
+	    udfunc, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfcosd_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *decres)
 {
-    return zzgfcou_0_(8, (char *)0, (char *)0, (char *)0, et, (char *)0, (
-	    char *)0, (char *)0, (char *)0, (doublereal *)0, (char *)0, (char 
-	    *)0, decres, (doublereal *)0, (logical *)0, udfunc, (ftnint)0, (
-	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0, (ftnint)0);
+    return zzgfcou_0_(__global_state, 8, (char *)0, (char *)0, (char *)0, et, 
+	    (char *)0, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
+	    char *)0, (char *)0, decres, (doublereal *)0, (logical *)0, 
+	    udfunc, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 

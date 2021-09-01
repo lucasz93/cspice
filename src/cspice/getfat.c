@@ -8,7 +8,7 @@
 
 
 extern getfat_init_t __getfat_init;
-static inline getfat_state_t* get_getfat_state(cspice_t* state) {
+static getfat_state_t* get_getfat_state(cspice_t* state) {
 	if (!state->getfat)
 		state->getfat = __cspice_allocate_module(sizeof(
 	getfat_state_t), &__getfat_init, sizeof(__getfat_init));

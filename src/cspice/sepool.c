@@ -8,7 +8,7 @@
 
 
 extern sepool_init_t __sepool_init;
-static inline sepool_state_t* get_sepool_state(cspice_t* state) {
+static sepool_state_t* get_sepool_state(cspice_t* state) {
 	if (!state->sepool)
 		state->sepool = __cspice_allocate_module(sizeof(
 	sepool_state_t), &__sepool_init, sizeof(__sepool_init));

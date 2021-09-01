@@ -8,7 +8,7 @@
 
 
 typedef int cleari_state_t;
-static inline cleari_state_t* get_cleari_state(cspice_t* state) {
+static cleari_state_t* get_cleari_state(cspice_t* state) {
 	return 0;
 }
 

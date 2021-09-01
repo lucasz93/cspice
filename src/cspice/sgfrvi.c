@@ -8,7 +8,7 @@
 
 
 extern sgfrvi_init_t __sgfrvi_init;
-static inline sgfrvi_state_t* get_sgfrvi_state(cspice_t* state) {
+static sgfrvi_state_t* get_sgfrvi_state(cspice_t* state) {
 	if (!state->sgfrvi)
 		state->sgfrvi = __cspice_allocate_module(sizeof(
 	sgfrvi_state_t), &__sgfrvi_init, sizeof(__sgfrvi_init));

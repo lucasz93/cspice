@@ -8,7 +8,7 @@
 
 
 typedef int ekaclc_state_t;
-static inline ekaclc_state_t* get_ekaclc_state(cspice_t* state) {
+static ekaclc_state_t* get_ekaclc_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern dafac_init_t __dafac_init;
-static inline dafac_state_t* get_dafac_state(cspice_t* state) {
+static dafac_state_t* get_dafac_state(cspice_t* state) {
 	if (!state->dafac)
 		state->dafac = __cspice_allocate_module(sizeof(dafac_state_t),
 	 &__dafac_init, sizeof(__dafac_init));

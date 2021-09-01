@@ -8,7 +8,7 @@
 
 
 extern rdenci_init_t __rdenci_init;
-static inline rdenci_state_t* get_rdenci_state(cspice_t* state) {
+static rdenci_state_t* get_rdenci_state(cspice_t* state) {
 	if (!state->rdenci)
 		state->rdenci = __cspice_allocate_module(sizeof(
 	rdenci_state_t), &__rdenci_init, sizeof(__rdenci_init));

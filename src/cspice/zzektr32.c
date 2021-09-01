@@ -8,7 +8,7 @@
 
 
 extern zzektr32_init_t __zzektr32_init;
-static inline zzektr32_state_t* get_zzektr32_state(cspice_t* state) {
+static zzektr32_state_t* get_zzektr32_state(cspice_t* state) {
 	if (!state->zzektr32)
 		state->zzektr32 = __cspice_allocate_module(sizeof(
 	zzektr32_state_t), &__zzektr32_init, sizeof(__zzektr32_init));

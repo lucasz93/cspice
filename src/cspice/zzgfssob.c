@@ -8,7 +8,7 @@
 
 
 extern zzgfssob_init_t __zzgfssob_init;
-static inline zzgfssob_state_t* get_zzgfssob_state(cspice_t* state) {
+static zzgfssob_state_t* get_zzgfssob_state(cspice_t* state) {
 	if (!state->zzgfssob)
 		state->zzgfssob = __cspice_allocate_module(sizeof(
 	zzgfssob_state_t), &__zzgfssob_init, sizeof(__zzgfssob_init));

@@ -447,7 +447,7 @@
    /*
    Convert the output string from C style to Fortran style. 
    */
-   F2C_ConvertStr ( lenout, string );
+   F2C_ConvertStr ( naif_state, lenout, string );
    
    
    /*

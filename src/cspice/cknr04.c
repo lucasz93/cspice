@@ -8,7 +8,7 @@
 
 
 extern cknr04_init_t __cknr04_init;
-static inline cknr04_state_t* get_cknr04_state(cspice_t* state) {
+static cknr04_state_t* get_cknr04_state(cspice_t* state) {
 	if (!state->cknr04)
 		state->cknr04 = __cspice_allocate_module(sizeof(
 	cknr04_state_t), &__cknr04_init, sizeof(__cknr04_init));

@@ -8,7 +8,7 @@
 
 
 typedef int zzinilnk_state_t;
-static inline zzinilnk_state_t* get_zzinilnk_state(cspice_t* state) {
+static zzinilnk_state_t* get_zzinilnk_state(cspice_t* state) {
 	return 0;
 }
 

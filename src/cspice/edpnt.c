@@ -8,7 +8,7 @@
 
 
 typedef int edpnt_state_t;
-static inline edpnt_state_t* get_edpnt_state(cspice_t* state) {
+static edpnt_state_t* get_edpnt_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,7 +20,7 @@ static inline edpnt_state_t* get_edpnt_state(cspice_t* state) {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
@@ -281,7 +281,7 @@ static inline edpnt_state_t* get_edpnt_state(cspice_t* state) {
 
 /*     Scale the point to one for which the level surface parameter is 1. */
 
-    sq = sqrt(&__global_state->f2c, level);
+    sq = sqrt(level);
     ep[0] = p[0] / sq;
     ep[1] = p[1] / sq;
     ep[2] = p[2] / sq;

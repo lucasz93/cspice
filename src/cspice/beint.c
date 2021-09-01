@@ -8,7 +8,7 @@
 
 
 typedef int beint_state_t;
-static inline beint_state_t* get_beint_state(cspice_t* state) {
+static beint_state_t* get_beint_state(cspice_t* state) {
 	return 0;
 }
 

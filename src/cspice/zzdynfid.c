@@ -8,7 +8,7 @@
 
 
 extern zzdynfid_init_t __zzdynfid_init;
-static inline zzdynfid_state_t* get_zzdynfid_state(cspice_t* state) {
+static zzdynfid_state_t* get_zzdynfid_state(cspice_t* state) {
 	if (!state->zzdynfid)
 		state->zzdynfid = __cspice_allocate_module(sizeof(
 	zzdynfid_state_t), &__zzdynfid_init, sizeof(__zzdynfid_init));

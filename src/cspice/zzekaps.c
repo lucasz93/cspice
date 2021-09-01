@@ -8,7 +8,7 @@
 
 
 extern zzekaps_init_t __zzekaps_init;
-static inline zzekaps_state_t* get_zzekaps_state(cspice_t* state) {
+static zzekaps_state_t* get_zzekaps_state(cspice_t* state) {
 	if (!state->zzekaps)
 		state->zzekaps = __cspice_allocate_module(sizeof(
 	zzekaps_state_t), &__zzekaps_init, sizeof(__zzekaps_init));

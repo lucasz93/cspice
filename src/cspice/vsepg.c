@@ -8,7 +8,7 @@
 
 
 typedef int vsepg_state_t;
-static inline vsepg_state_t* get_vsepg_state(cspice_t* state) {
+static vsepg_state_t* get_vsepg_state(cspice_t* state) {
 	return 0;
 }
 
@@ -21,7 +21,7 @@ doublereal vsepg_(cspice_t* __global_state, doublereal *v1, doublereal *v2,
     doublereal ret_val, d__1;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), asin(f2c_state_t*, doublereal);
+    double sqrt(doublereal), asin(doublereal);
 
     /* Local variables */
     doublereal dmag1;
@@ -262,8 +262,8 @@ doublereal vsepg_(cspice_t* __global_state, doublereal *v1, doublereal *v2,
 	    d__1 = v1[i__ - 1] * r1 - v2[i__ - 1] * r2;
 	    magdif += d__1 * d__1;
 	}
-	magdif = sqrt(&__global_state->f2c, magdif);
-	ret_val = asin(&__global_state->f2c, magdif * .5) * 2.;
+	magdif = sqrt(magdif);
+	ret_val = asin(magdif * .5) * 2.;
     } else if (vdotg_(__global_state, v1, v2, ndim) < 0.) {
 	r1 = 1. / dmag1;
 	r2 = 1. / dmag2;
@@ -274,9 +274,8 @@ doublereal vsepg_(cspice_t* __global_state, doublereal *v1, doublereal *v2,
 	    d__1 = v1[i__ - 1] * r1 + v2[i__ - 1] * r2;
 	    magdif += d__1 * d__1;
 	}
-	magdif = sqrt(&__global_state->f2c, magdif);
-	ret_val = pi_(__global_state) - asin(&__global_state->f2c, magdif * 
-		.5) * 2.;
+	magdif = sqrt(magdif);
+	ret_val = pi_(__global_state) - asin(magdif * .5) * 2.;
     } else {
 	ret_val = pi_(__global_state) / 2.;
     }

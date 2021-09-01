@@ -8,7 +8,7 @@
 
 
 typedef int vprojg_state_t;
-static inline vprojg_state_t* get_vprojg_state(cspice_t* state) {
+static vprojg_state_t* get_vprojg_state(cspice_t* state) {
 	return 0;
 }
 

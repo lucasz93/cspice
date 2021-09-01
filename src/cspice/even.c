@@ -8,7 +8,7 @@
 
 
 typedef int even_state_t;
-static inline even_state_t* get_even_state(cspice_t* state) {
+static even_state_t* get_even_state(cspice_t* state) {
 	return 0;
 }
 

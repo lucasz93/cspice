@@ -8,7 +8,7 @@
 
 
 typedef int npsgpt_state_t;
-static inline npsgpt_state_t* get_npsgpt_state(cspice_t* state) {
+static npsgpt_state_t* get_npsgpt_state(cspice_t* state) {
 	return 0;
 }
 

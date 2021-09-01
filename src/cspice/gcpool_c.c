@@ -349,7 +349,7 @@
       lenout * n long.  We need to reform cvals into an array
       of n strings each lenout long.
       */
-      F2C_ConvertTrStrArr ( *n, lenout, (char *)cvals );
+      F2C_ConvertTrStrArr ( naif_state, *n, lenout, (char *)cvals );
    }
  
  

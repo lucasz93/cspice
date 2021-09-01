@@ -8,7 +8,7 @@
 
 
 extern zzekpage_init_t __zzekpage_init;
-static inline zzekpage_state_t* get_zzekpage_state(cspice_t* state) {
+static zzekpage_state_t* get_zzekpage_state(cspice_t* state) {
 	if (!state->zzekpage)
 		state->zzekpage = __cspice_allocate_module(sizeof(
 	zzekpage_state_t), &__zzekpage_init, sizeof(__zzekpage_init));
@@ -2749,110 +2749,110 @@ L_zzekpgst:
 	 doublereal *paged, integer *pagei, integer *base, integer *value, 
 	ftnlen stat_len, ftnlen pagec_len)
 {
-    return zzekpage_0_(0, handle, type__, addrss, stat, p, pagec, paged, 
-	    pagei, base, value, stat_len, pagec_len);
+    return zzekpage_0_(__global_state, 0, handle, type__, addrss, stat, p, 
+	    pagec, paged, pagei, base, value, stat_len, pagec_len);
     }
 
 /* Subroutine */ int zzekpgin_(cspice_t* __global_state, integer *handle)
 {
-    return zzekpage_0_(1, handle, (integer *)0, (integer *)0, (char *)0, (
-	    integer *)0, (char *)0, (doublereal *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (ftnint)0, (ftnint)0);
+    return zzekpage_0_(__global_state, 1, handle, (integer *)0, (integer *)0, 
+	    (char *)0, (integer *)0, (char *)0, (doublereal *)0, (integer *)0,
+	     (integer *)0, (integer *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgan_(cspice_t* __global_state, integer *handle, 
 	integer *type__, integer *p, integer *base)
 {
-    return zzekpage_0_(2, handle, type__, (integer *)0, (char *)0, p, (char *)
-	    0, (doublereal *)0, (integer *)0, base, (integer *)0, (ftnint)0, (
-	    ftnint)0);
+    return zzekpage_0_(__global_state, 2, handle, type__, (integer *)0, (char 
+	    *)0, p, (char *)0, (doublereal *)0, (integer *)0, base, (integer *
+	    )0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgal_(cspice_t* __global_state, integer *handle, 
 	integer *type__, integer *p, integer *base)
 {
-    return zzekpage_0_(3, handle, type__, (integer *)0, (char *)0, p, (char *)
-	    0, (doublereal *)0, (integer *)0, base, (integer *)0, (ftnint)0, (
-	    ftnint)0);
+    return zzekpage_0_(__global_state, 3, handle, type__, (integer *)0, (char 
+	    *)0, p, (char *)0, (doublereal *)0, (integer *)0, base, (integer *
+	    )0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgfr_(cspice_t* __global_state, integer *handle, 
 	integer *type__, integer *p)
 {
-    return zzekpage_0_(4, handle, type__, (integer *)0, (char *)0, p, (char *)
-	    0, (doublereal *)0, (integer *)0, (integer *)0, (integer *)0, (
-	    ftnint)0, (ftnint)0);
+    return zzekpage_0_(__global_state, 4, handle, type__, (integer *)0, (char 
+	    *)0, p, (char *)0, (doublereal *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgrc_(cspice_t* __global_state, integer *handle, 
 	integer *p, char *pagec, ftnlen pagec_len)
 {
-    return zzekpage_0_(5, handle, (integer *)0, (integer *)0, (char *)0, p, 
-	    pagec, (doublereal *)0, (integer *)0, (integer *)0, (integer *)0, 
-	    (ftnint)0, pagec_len);
+    return zzekpage_0_(__global_state, 5, handle, (integer *)0, (integer *)0, 
+	    (char *)0, p, pagec, (doublereal *)0, (integer *)0, (integer *)0, 
+	    (integer *)0, (ftnint)0, pagec_len);
     }
 
 /* Subroutine */ int zzekpgrd_(cspice_t* __global_state, integer *handle, 
 	integer *p, doublereal *paged)
 {
-    return zzekpage_0_(6, handle, (integer *)0, (integer *)0, (char *)0, p, (
-	    char *)0, paged, (integer *)0, (integer *)0, (integer *)0, (
-	    ftnint)0, (ftnint)0);
+    return zzekpage_0_(__global_state, 6, handle, (integer *)0, (integer *)0, 
+	    (char *)0, p, (char *)0, paged, (integer *)0, (integer *)0, (
+	    integer *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgri_(cspice_t* __global_state, integer *handle, 
 	integer *p, integer *pagei)
 {
-    return zzekpage_0_(7, handle, (integer *)0, (integer *)0, (char *)0, p, (
-	    char *)0, (doublereal *)0, pagei, (integer *)0, (integer *)0, (
-	    ftnint)0, (ftnint)0);
+    return zzekpage_0_(__global_state, 7, handle, (integer *)0, (integer *)0, 
+	    (char *)0, p, (char *)0, (doublereal *)0, pagei, (integer *)0, (
+	    integer *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgwc_(cspice_t* __global_state, integer *handle, 
 	integer *p, char *pagec, ftnlen pagec_len)
 {
-    return zzekpage_0_(8, handle, (integer *)0, (integer *)0, (char *)0, p, 
-	    pagec, (doublereal *)0, (integer *)0, (integer *)0, (integer *)0, 
-	    (ftnint)0, pagec_len);
+    return zzekpage_0_(__global_state, 8, handle, (integer *)0, (integer *)0, 
+	    (char *)0, p, pagec, (doublereal *)0, (integer *)0, (integer *)0, 
+	    (integer *)0, (ftnint)0, pagec_len);
     }
 
 /* Subroutine */ int zzekpgwd_(cspice_t* __global_state, integer *handle, 
 	integer *p, doublereal *paged)
 {
-    return zzekpage_0_(9, handle, (integer *)0, (integer *)0, (char *)0, p, (
-	    char *)0, paged, (integer *)0, (integer *)0, (integer *)0, (
-	    ftnint)0, (ftnint)0);
+    return zzekpage_0_(__global_state, 9, handle, (integer *)0, (integer *)0, 
+	    (char *)0, p, (char *)0, paged, (integer *)0, (integer *)0, (
+	    integer *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgwi_(cspice_t* __global_state, integer *handle, 
 	integer *p, integer *pagei)
 {
-    return zzekpage_0_(10, handle, (integer *)0, (integer *)0, (char *)0, p, (
-	    char *)0, (doublereal *)0, pagei, (integer *)0, (integer *)0, (
-	    ftnint)0, (ftnint)0);
+    return zzekpage_0_(__global_state, 10, handle, (integer *)0, (integer *)0,
+	     (char *)0, p, (char *)0, (doublereal *)0, pagei, (integer *)0, (
+	    integer *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgbs_(cspice_t* __global_state, integer *type__, 
 	integer *p, integer *base)
 {
-    return zzekpage_0_(11, (integer *)0, type__, (integer *)0, (char *)0, p, (
-	    char *)0, (doublereal *)0, (integer *)0, base, (integer *)0, (
-	    ftnint)0, (ftnint)0);
+    return zzekpage_0_(__global_state, 11, (integer *)0, type__, (integer *)0,
+	     (char *)0, p, (char *)0, (doublereal *)0, (integer *)0, base, (
+	    integer *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgpg_(cspice_t* __global_state, integer *type__, 
 	integer *addrss, integer *p, integer *base)
 {
-    return zzekpage_0_(12, (integer *)0, type__, addrss, (char *)0, p, (char *
-	    )0, (doublereal *)0, (integer *)0, base, (integer *)0, (ftnint)0, 
-	    (ftnint)0);
+    return zzekpage_0_(__global_state, 12, (integer *)0, type__, addrss, (
+	    char *)0, p, (char *)0, (doublereal *)0, (integer *)0, base, (
+	    integer *)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzekpgst_(cspice_t* __global_state, integer *handle, 
 	char *stat, integer *value, ftnlen stat_len)
 {
-    return zzekpage_0_(13, handle, (integer *)0, (integer *)0, stat, (integer 
-	    *)0, (char *)0, (doublereal *)0, (integer *)0, (integer *)0, 
-	    value, stat_len, (ftnint)0);
+    return zzekpage_0_(__global_state, 13, handle, (integer *)0, (integer *)0,
+	     stat, (integer *)0, (char *)0, (doublereal *)0, (integer *)0, (
+	    integer *)0, value, stat_len, (ftnint)0);
     }
 

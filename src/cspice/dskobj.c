@@ -8,7 +8,7 @@
 
 
 extern dskobj_init_t __dskobj_init;
-static inline dskobj_state_t* get_dskobj_state(cspice_t* state) {
+static dskobj_state_t* get_dskobj_state(cspice_t* state) {
 	if (!state->dskobj)
 		state->dskobj = __cspice_allocate_module(sizeof(
 	dskobj_state_t), &__dskobj_init, sizeof(__dskobj_init));

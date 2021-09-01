@@ -8,7 +8,7 @@
 
 
 extern timout_init_t __timout_init;
-static inline timout_state_t* get_timout_state(cspice_t* state) {
+static timout_state_t* get_timout_state(cspice_t* state) {
 	if (!state->timout)
 		state->timout = __cspice_allocate_module(sizeof(
 	timout_state_t), &__timout_init, sizeof(__timout_init));

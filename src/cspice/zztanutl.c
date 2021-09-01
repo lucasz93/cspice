@@ -7,7 +7,7 @@
 #include "__cspice_state.h"
 
 
-static inline zztanutl_state_t* get_zztanutl_state(cspice_t* state) {
+static zztanutl_state_t* get_zztanutl_state(cspice_t* state) {
 	if (!state->zztanutl)
 		state->zztanutl = __cspice_allocate_module(sizeof(
 	zztanutl_state_t), 0, 0);
@@ -934,8 +934,8 @@ L_zztansta:
 	doublereal *axis, doublereal *angle, logical *ocultd, doublereal *
 	point)
 {
-    return zztanutl_0_(0, curve, srcrad, shape, trgcde, nsurf, srflst, fixfid,
-	     et, plnvec, axis, angle, ocultd, point);
+    return zztanutl_0_(__global_state, 0, curve, srcrad, shape, trgcde, nsurf,
+	     srflst, fixfid, et, plnvec, axis, angle, ocultd, point);
     }
 
 /* Subroutine */ int zztanini_(cspice_t* __global_state, integer *curve, 
@@ -943,17 +943,17 @@ L_zztansta:
 	integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, 
 	doublereal *axis)
 {
-    return zztanutl_0_(1, curve, srcrad, shape, trgcde, nsurf, srflst, fixfid,
-	     et, plnvec, axis, (doublereal *)0, (logical *)0, (doublereal *)0)
-	    ;
+    return zztanutl_0_(__global_state, 1, curve, srcrad, shape, trgcde, nsurf,
+	     srflst, fixfid, et, plnvec, axis, (doublereal *)0, (logical *)0, 
+	    (doublereal *)0);
     }
 
 /* Subroutine */ int zztansta_(cspice_t* __global_state, doublereal *angle, 
 	logical *ocultd, doublereal *point)
 {
-    return zztanutl_0_(2, (integer *)0, (doublereal *)0, (integer *)0, (
-	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (
-	    doublereal *)0, (doublereal *)0, (doublereal *)0, angle, ocultd, 
-	    point);
+    return zztanutl_0_(__global_state, 2, (integer *)0, (doublereal *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
+	    0, (doublereal *)0, (doublereal *)0, (doublereal *)0, angle, 
+	    ocultd, point);
     }
 

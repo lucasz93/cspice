@@ -8,7 +8,7 @@
 
 
 extern zzgfrru_init_t __zzgfrru_init;
-static inline zzgfrru_state_t* get_zzgfrru_state(cspice_t* state) {
+static zzgfrru_state_t* get_zzgfrru_state(cspice_t* state) {
 	if (!state->zzgfrru)
 		state->zzgfrru = __cspice_allocate_module(sizeof(
 	zzgfrru_state_t), &__zzgfrru_init, sizeof(__zzgfrru_init));
@@ -1140,43 +1140,45 @@ L_zzgfrrx:
 	integer *xobs, doublereal *xdt, ftnlen target_len, ftnlen abcorr_len, 
 	ftnlen obsrvr_len, ftnlen xabcor_len)
 {
-    return zzgfrru_0_(0, target, abcorr, obsrvr, dt, udfunc, et, decres, rvl, 
-	    xtarg, xabcor, xobs, xdt, target_len, abcorr_len, obsrvr_len, 
-	    xabcor_len);
+    return zzgfrru_0_(__global_state, 0, target, abcorr, obsrvr, dt, udfunc, 
+	    et, decres, rvl, xtarg, xabcor, xobs, xdt, target_len, abcorr_len,
+	     obsrvr_len, xabcor_len);
     }
 
 /* Subroutine */ int zzgfrrin_(cspice_t* __global_state, char *target, char *
 	abcorr, char *obsrvr, doublereal *dt, ftnlen target_len, ftnlen 
 	abcorr_len, ftnlen obsrvr_len)
 {
-    return zzgfrru_0_(1, target, abcorr, obsrvr, dt, (U_fp)0, (doublereal *)0,
-	     (logical *)0, (doublereal *)0, (integer *)0, (char *)0, (integer 
-	    *)0, (doublereal *)0, target_len, abcorr_len, obsrvr_len, (ftnint)
-	    0);
+    return zzgfrru_0_(__global_state, 1, target, abcorr, obsrvr, dt, (U_fp)0, 
+	    (doublereal *)0, (logical *)0, (doublereal *)0, (integer *)0, (
+	    char *)0, (integer *)0, (doublereal *)0, target_len, abcorr_len, 
+	    obsrvr_len, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfrrdc_(cspice_t* __global_state, U_fp udfunc, 
 	doublereal *et, logical *decres)
 {
-    return zzgfrru_0_(2, (char *)0, (char *)0, (char *)0, (doublereal *)0, 
-	    udfunc, et, decres, (doublereal *)0, (integer *)0, (char *)0, (
-	    integer *)0, (doublereal *)0, (ftnint)0, (ftnint)0, (ftnint)0, (
-	    ftnint)0);
+    return zzgfrru_0_(__global_state, 2, (char *)0, (char *)0, (char *)0, (
+	    doublereal *)0, udfunc, et, decres, (doublereal *)0, (integer *)0,
+	     (char *)0, (integer *)0, (doublereal *)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfrrgq_(cspice_t* __global_state, doublereal *et, 
 	doublereal *rvl)
 {
-    return zzgfrru_0_(3, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
-	    U_fp)0, et, (logical *)0, rvl, (integer *)0, (char *)0, (integer *
-	    )0, (doublereal *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return zzgfrru_0_(__global_state, 3, (char *)0, (char *)0, (char *)0, (
+	    doublereal *)0, (U_fp)0, et, (logical *)0, rvl, (integer *)0, (
+	    char *)0, (integer *)0, (doublereal *)0, (ftnint)0, (ftnint)0, (
+	    ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int zzgfrrx_(cspice_t* __global_state, integer *xtarg, char *
 	xabcor, integer *xobs, doublereal *xdt, ftnlen xabcor_len)
 {
-    return zzgfrru_0_(4, (char *)0, (char *)0, (char *)0, (doublereal *)0, (
-	    U_fp)0, (doublereal *)0, (logical *)0, (doublereal *)0, xtarg, 
-	    xabcor, xobs, xdt, (ftnint)0, (ftnint)0, (ftnint)0, xabcor_len);
+    return zzgfrru_0_(__global_state, 4, (char *)0, (char *)0, (char *)0, (
+	    doublereal *)0, (U_fp)0, (doublereal *)0, (logical *)0, (
+	    doublereal *)0, xtarg, xabcor, xobs, xdt, (ftnint)0, (ftnint)0, (
+	    ftnint)0, xabcor_len);
     }
 

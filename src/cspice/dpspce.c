@@ -8,7 +8,7 @@
 
 
 extern dpspce_init_t __dpspce_init;
-static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
+static dpspce_state_t* get_dpspce_state(cspice_t* state) {
 	if (!state->dpspce)
 		state->dpspce = __cspice_allocate_module(sizeof(
 	dpspce_state_t), &__dpspce_init, sizeof(__dpspce_init));
@@ -29,10 +29,9 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double pow_dd(f2c_state_t*, doublereal *, doublereal *), cos(f2c_state_t*,
-	     doublereal), sqrt(f2c_state_t*, doublereal), sin(f2c_state_t*, 
-	    doublereal), d_mod(f2c_state_t*, doublereal *, doublereal *), 
-	    atan2(f2c_state_t*, doublereal, doublereal);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *), cos(doublereal), 
+	    sqrt(doublereal), sin(doublereal), d_mod(f2c_state_t*, doublereal 
+	    *, doublereal *), atan2(doublereal, doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int zzdpinit_(cspice_t*, doublereal *, doublereal 
@@ -505,7 +504,7 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 
 	d__1 = __state->xke / __state->xno;
 	__state->a1 = pow_dd(&__global_state->f2c, &d__1, &__state->c_b19);
-	__state->cosio = cos(&__global_state->f2c, __state->xincl);
+	__state->cosio = cos(__state->xincl);
 /* Computing 2nd power */
 	d__1 = __state->cosio;
 	__state->theta2 = d__1 * d__1;
@@ -513,7 +512,7 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 /* Computing 2nd power */
 	d__1 = __state->eo;
 	__state->betao2 = 1. - d__1 * d__1;
-	__state->betao = sqrt(&__global_state->f2c, __state->betao2);
+	__state->betao = sqrt(__state->betao2);
 /* Computing 2nd power */
 	d__1 = __state->a1;
 	__state->del1 = __state->ck2 * 1.5 * __state->x3thm1 / (d__1 * d__1 * 
@@ -570,7 +569,7 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 		__state->x3thm1 * (__state->etasq * 3. * (__state->etasq + 8.)
 		 + 8.));
 	__state->c1 = __state->bstar * __state->c2;
-	__state->sinio = sin(&__global_state->f2c, __state->xincl);
+	__state->sinio = sin(__state->xincl);
 /* Computing 3rd power */
 	d__1 = __state->ae;
 	__state->a3ovk2 = -__state->xj3 / __state->ck2 * (d__1 * (d__1 * d__1)
@@ -583,8 +582,7 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 		__state->x3thm1 * -3. * (1. - __state->eeta * 2. + 
 		__state->etasq * (1.5 - __state->eeta * .5)) + 
 		__state->x1mth2 * .75 * (__state->etasq * 2. - __state->eeta *
-		 (__state->etasq + 1.)) * cos(&__global_state->f2c, 
-		__state->omegao * 2.)));
+		 (__state->etasq + 1.)) * cos(__state->omegao * 2.)));
 	__state->temp1 = __state->ck2 * 3. * __state->pinvsq * __state->xnodp;
 	__state->temp2 = __state->temp1 * __state->ck2 * __state->pinvsq;
 	__state->temp3 = __state->ck4 * 1.25 * __state->pinvsq * 
@@ -652,15 +650,14 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 
 /*      Long period periodics */
 
-    __state->axn = __state->e * cos(&__global_state->f2c, __state->omgadf);
+    __state->axn = __state->e * cos(__state->omgadf);
 /* Computing 2nd power */
     d__1 = __state->e;
     __state->temp = 1. / (__state->a * (1. - d__1 * d__1));
     __state->xll = __state->temp * __state->xlcof * __state->axn;
     __state->aynl = __state->temp * __state->aycof;
     __state->xlt = __state->xl + __state->xll;
-    __state->ayn = __state->e * sin(&__global_state->f2c, __state->omgadf) + 
-	    __state->aynl;
+    __state->ayn = __state->e * sin(__state->omgadf) + __state->aynl;
 
 /*     Solve Kepler's equation */
 
@@ -690,8 +687,8 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
     __state->cont = TRUE_;
     while(__state->cont) {
 	__state->temp2 = __state->epw;
-	__state->sinepw = sin(&__global_state->f2c, __state->temp2);
-	__state->cosepw = cos(&__global_state->f2c, __state->temp2);
+	__state->sinepw = sin(__state->temp2);
+	__state->cosepw = cos(__state->temp2);
 	__state->temp3 = __state->axn * __state->sinepw;
 	__state->temp4 = __state->ayn * __state->cosepw;
 	__state->temp5 = __state->axn * __state->cosepw;
@@ -716,12 +713,11 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
     __state->pl = __state->a * __state->temp;
     __state->rk = __state->a * (1. - __state->ecose);
     __state->temp1 = 1. / __state->rk;
-    __state->rdot = __state->xke * sqrt(&__global_state->f2c, __state->a) * 
-	    __state->esine * __state->temp1;
-    __state->rfdot = __state->xke * sqrt(&__global_state->f2c, __state->pl) * 
+    __state->rdot = __state->xke * sqrt(__state->a) * __state->esine * 
 	    __state->temp1;
+    __state->rfdot = __state->xke * sqrt(__state->pl) * __state->temp1;
     __state->temp2 = __state->a * __state->temp1;
-    __state->betal = sqrt(&__global_state->f2c, __state->temp);
+    __state->betal = sqrt(__state->temp);
     __state->temp3 = 1. / (__state->betal + 1.);
     __state->cosu = __state->temp2 * (__state->cosepw - __state->axn + 
 	    __state->ayn * __state->esine * __state->temp3);
@@ -731,8 +727,7 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 /*     Compute the angle from the x-axis of the point ( COSU, SINU ) */
 
     if (__state->sinu != 0. || __state->cosu != 0.) {
-	__state->uang = atan2(&__global_state->f2c, __state->sinu, 
-		__state->cosu);
+	__state->uang = atan2(__state->sinu, __state->cosu);
 	if (__state->uang < 0.) {
 	    __state->uang += __state->pix2;
 	}
@@ -770,8 +765,8 @@ static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 /*     M = (-sin(xnodek)cos(xinck), cos(xnodek)cos(xinck), sin(xinck) ) */
 /*     N = (           cos(xnodek), sin(xnodek)          , 0          ) */
 
-    __state->sinuk = sin(&__global_state->f2c, __state->uk);
-    __state->cosuk = cos(&__global_state->f2c, __state->uk);
+    __state->sinuk = sin(__state->uk);
+    __state->cosuk = cos(__state->uk);
 
 /*     Use LATREC to generate M and N.  M is a latitude to rectangle */
 /*     conversion of a unit vector where PI/2 + XNODEK is the longitude */

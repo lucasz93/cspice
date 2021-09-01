@@ -8,7 +8,7 @@
 
 
 extern chgirf_init_t __chgirf_init;
-static inline chgirf_state_t* get_chgirf_state(cspice_t* state) {
+static chgirf_state_t* get_chgirf_state(cspice_t* state) {
 	if (!state->chgirf)
 		state->chgirf = __cspice_allocate_module(sizeof(
 	chgirf_state_t), &__chgirf_init, sizeof(__chgirf_init));
@@ -1586,33 +1586,34 @@ L_irfdef:
 	*refb, doublereal *rotab, char *name__, integer *index, ftnlen 
 	name_len)
 {
-    return chgirf_0_(0, refa, refb, rotab, name__, index, name_len);
+    return chgirf_0_(__global_state, 0, refa, refb, rotab, name__, index, 
+	    name_len);
     }
 
 /* Subroutine */ int irfrot_(cspice_t* __global_state, integer *refa, integer 
 	*refb, doublereal *rotab)
 {
-    return chgirf_0_(1, refa, refb, rotab, (char *)0, (integer *)0, (ftnint)0)
-	    ;
+    return chgirf_0_(__global_state, 1, refa, refb, rotab, (char *)0, (
+	    integer *)0, (ftnint)0);
     }
 
 /* Subroutine */ int irfnum_(cspice_t* __global_state, char *name__, integer *
 	index, ftnlen name_len)
 {
-    return chgirf_0_(2, (integer *)0, (integer *)0, (doublereal *)0, name__, 
-	    index, name_len);
+    return chgirf_0_(__global_state, 2, (integer *)0, (integer *)0, (
+	    doublereal *)0, name__, index, name_len);
     }
 
 /* Subroutine */ int irfnam_(cspice_t* __global_state, integer *index, char *
 	name__, ftnlen name_len)
 {
-    return chgirf_0_(3, (integer *)0, (integer *)0, (doublereal *)0, name__, 
-	    index, name_len);
+    return chgirf_0_(__global_state, 3, (integer *)0, (integer *)0, (
+	    doublereal *)0, name__, index, name_len);
     }
 
 /* Subroutine */ int irfdef_(cspice_t* __global_state, integer *index)
 {
-    return chgirf_0_(4, (integer *)0, (integer *)0, (doublereal *)0, (char *)
-	    0, index, (ftnint)0);
+    return chgirf_0_(__global_state, 4, (integer *)0, (integer *)0, (
+	    doublereal *)0, (char *)0, index, (ftnint)0);
     }
 

@@ -8,7 +8,7 @@
 
 
 typedef int zzinil_state_t;
-static inline zzinil_state_t* get_zzinil_state(cspice_t* state) {
+static zzinil_state_t* get_zzinil_state(cspice_t* state) {
 	return 0;
 }
 
@@ -24,10 +24,9 @@ static inline zzinil_state_t* get_zzinil_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), 
-	    pow_dd(f2c_state_t*, doublereal *, doublereal *), sin(f2c_state_t*
-	    , doublereal), d_int(f2c_state_t*, doublereal *), d_mod(
-	    f2c_state_t*, doublereal *, doublereal *);
+    double sqrt(doublereal), cos(doublereal), pow_dd(f2c_state_t*, doublereal 
+	    *, doublereal *), sin(doublereal), d_int(f2c_state_t*, doublereal 
+	    *), d_mod(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal adel;
@@ -408,8 +407,8 @@ static inline zzinil_state_t* get_zzinil_state(cspice_t* state) {
 
     *eccsq = *ecco * *ecco;
     *omeosq = 1. - *eccsq;
-    *rteosq = sqrt(&__global_state->f2c, *omeosq);
-    *cosio = cos(&__global_state->f2c, *inclo);
+    *rteosq = sqrt(*omeosq);
+    *cosio = cos(*inclo);
     *cosio2 = *cosio * *cosio;
 
 /*     Un-KOZAI the mean motion */
@@ -424,7 +423,7 @@ static inline zzinil_state_t* get_zzinil_state(cspice_t* state) {
     *no /= del + 1.;
     d__1 = xke / *no;
     *ao = pow_dd(&__global_state->f2c, &d__1, &x2o3);
-    *sinio = sin(&__global_state->f2c, *inclo);
+    *sinio = sin(*inclo);
     po = *ao * *omeosq;
     *con42 = 1. - *cosio2 * 5.;
     *con41 = -(*con42) - *cosio2 - *cosio2;

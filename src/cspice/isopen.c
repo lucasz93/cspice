@@ -8,7 +8,7 @@
 
 
 typedef int isopen_state_t;
-static inline isopen_state_t* get_isopen_state(cspice_t* state) {
+static isopen_state_t* get_isopen_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int replch_state_t;
-static inline replch_state_t* get_replch_state(cspice_t* state) {
+static replch_state_t* get_replch_state(cspice_t* state) {
 	return 0;
 }
 

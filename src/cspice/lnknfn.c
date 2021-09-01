@@ -8,7 +8,7 @@
 
 
 typedef int lnknfn_state_t;
-static inline lnknfn_state_t* get_lnknfn_state(cspice_t* state) {
+static lnknfn_state_t* get_lnknfn_state(cspice_t* state) {
 	return 0;
 }
 

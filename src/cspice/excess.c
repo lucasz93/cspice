@@ -8,7 +8,7 @@
 
 
 extern excess_init_t __excess_init;
-static inline excess_state_t* get_excess_state(cspice_t* state) {
+static excess_state_t* get_excess_state(cspice_t* state) {
 	if (!state->excess)
 		state->excess = __cspice_allocate_module(sizeof(
 	excess_state_t), &__excess_init, sizeof(__excess_init));

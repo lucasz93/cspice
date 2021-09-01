@@ -8,7 +8,7 @@
 
 
 extern daswfr_init_t __daswfr_init;
-static inline daswfr_state_t* get_daswfr_state(cspice_t* state) {
+static daswfr_state_t* get_daswfr_state(cspice_t* state) {
 	if (!state->daswfr)
 		state->daswfr = __cspice_allocate_module(sizeof(
 	daswfr_state_t), &__daswfr_init, sizeof(__daswfr_init));

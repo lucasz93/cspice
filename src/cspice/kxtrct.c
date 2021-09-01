@@ -8,7 +8,7 @@
 
 
 typedef int kxtrct_state_t;
-static inline kxtrct_state_t* get_kxtrct_state(cspice_t* state) {
+static kxtrct_state_t* get_kxtrct_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int enchar_state_t;
-static inline enchar_state_t* get_enchar_state(cspice_t* state) {
+static enchar_state_t* get_enchar_state(cspice_t* state) {
 	return 0;
 }
 
@@ -402,12 +402,12 @@ L_dechar:
 /* Subroutine */ int enchar_(cspice_t* __global_state, integer *number, char *
 	string, ftnlen string_len)
 {
-    return enchar_0_(0, number, string, string_len);
+    return enchar_0_(__global_state, 0, number, string, string_len);
     }
 
 /* Subroutine */ int dechar_(cspice_t* __global_state, char *string, integer *
 	number, ftnlen string_len)
 {
-    return enchar_0_(1, number, string, string_len);
+    return enchar_0_(__global_state, 1, number, string, string_len);
     }
 

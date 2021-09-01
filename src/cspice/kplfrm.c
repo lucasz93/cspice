@@ -8,7 +8,7 @@
 
 
 extern kplfrm_init_t __kplfrm_init;
-static inline kplfrm_state_t* get_kplfrm_state(cspice_t* state) {
+static kplfrm_state_t* get_kplfrm_state(cspice_t* state) {
 	if (!state->kplfrm)
 		state->kplfrm = __cspice_allocate_module(sizeof(
 	kplfrm_state_t), &__kplfrm_init, sizeof(__kplfrm_init));

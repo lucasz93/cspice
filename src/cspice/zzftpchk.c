@@ -8,7 +8,7 @@
 
 
 extern zzftpchk_init_t __zzftpchk_init;
-static inline zzftpchk_state_t* get_zzftpchk_state(cspice_t* state) {
+static zzftpchk_state_t* get_zzftpchk_state(cspice_t* state) {
 	if (!state->zzftpchk)
 		state->zzftpchk = __cspice_allocate_module(sizeof(
 	zzftpchk_state_t), &__zzftpchk_init, sizeof(__zzftpchk_init));

@@ -45,7 +45,7 @@
    #include <float.h>
    #include "SpiceUsr.h"
 
-   SpiceDouble dpmax_ () 
+   SpiceDouble dpmax_ (void *naif_state) 
 
 /*
 

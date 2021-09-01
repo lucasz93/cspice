@@ -56,7 +56,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h" 
 
-   void illum_pl02 ( SpiceInt               handle,
+   void illum_pl02 ( void                 * naif_state,
+                     SpiceInt               handle,
                      ConstSpiceDLADescr   * dladsc,
                      ConstSpiceChar       * target,
                      SpiceDouble            et,
@@ -1048,7 +1049,7 @@
    /*
    Prototypes 
    */
-   int dskgd_(integer *handle, integer *dladsc, doublereal *dskdsc);
+   int dskgd_(void *naif_state, integer *handle, integer *dladsc, doublereal *dskdsc);
 
 
    /*
@@ -1122,12 +1123,13 @@
    Check the aberration correction string:  reject transmission
    corrections. 
    */
-   ljust_ ( ( char * ) abcorr,
+   ljust_ ( naif_state,
+            ( char * ) abcorr,
             ( char * ) loccor,
             ( ftnlen ) strlen(abcorr),
             ( ftnlen ) CORLEN-1         );
 
-   if (  matchi_c( loccor, "X*", '*', '?' )  )
+   if (  matchi_c( naif_state, loccor, "X*", '*', '?' )  )
    {
       setmsg_c ( naif_state, "Input aberration correction specification # "
                  "calls for transmission-style corrections."    );
@@ -1140,9 +1142,9 @@
    /*
    Obtain integer codes for the target and observer. 
    */ 
-   bods2c_c ( target, &trgcde, &found );
+   bods2c_c ( naif_state, target, &trgcde, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
@@ -1160,9 +1162,9 @@
       return;
    }
 
-   bods2c_c ( obsrvr, &obscde, &found );
+   bods2c_c ( naif_state, obsrvr, &obscde, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
@@ -1197,9 +1199,9 @@
    Get the name of the default body-fixed reference frame associated with
    the target body.
    */
-   cidfrm_c ( trgcde, FRNMLN, &frcode, frname, &found );
+   cidfrm_c ( naif_state, trgcde, FRNMLN, &frcode, frname, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
@@ -1242,11 +1244,12 @@
    /*
    Call the f2c'd "get DSK descriptor" routine.
    */
-   dskgd_ ( ( integer    * ) &handle,
+   dskgd_ ( naif_state,
+            ( integer    * ) &handle,
             ( integer    * ) fDLADescr,
             ( doublereal * ) fDSKDescr  );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
@@ -1286,9 +1289,9 @@
    Get the maximum radius value associated with the target body.  
    We'll use this later to compute a numerically safe ray vertex.
    */
-   maxrad = zzdsksgr_ ( fDSKDescr );
+   maxrad = zzdsksgr_ ( naif_state, fDSKDescr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
@@ -1311,7 +1314,7 @@
 
    We reject the case where `spoint' is the zero vector.
    */
-   if ( vzero_c(spoint) )
+   if ( vzero_c(naif_state, spoint) )
    {
       setmsg_c ( naif_state, "Input surface point must lie on or near the "
                  "target body's surface but is actually the "
@@ -1324,24 +1327,24 @@
    /*
    Our ray direction points in the opposite direction as `spoint'.
    */   
-   vminus_c ( spoint, raydir );
-   vhat_c   ( raydir, raydir );
+   vminus_c ( naif_state, spoint, raydir );
+   vhat_c   ( naif_state, raydir, raydir );
 
    /*
    To avoid numerical problems, we pick a vertex that is guaranteed
    to be a reasonable distance away from the target's surface.
    */ 
-   scale = maxd_c ( 2,  1.0,  2.0*maxrad );
+   scale = maxd_c ( naif_state, 2,  1.0,  2.0*maxrad );
 
-   vscl_c ( -scale, raydir, vertex );
+   vscl_c ( naif_state, -scale, raydir, vertex );
    
    /*
    Find the surface intercept defined by the vertex, ray direction,
    and surface plate model.
    */
-   dskx02_c ( handle, dladsc, vertex, raydir, &plid, xpt, &found );
+   dskx02_c ( naif_state, handle, dladsc, vertex, raydir, &plid, xpt, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
@@ -1365,20 +1368,20 @@
    */ 
    room = 1;
    
-   dskp02_ ( &handle, fDLADescr, &plid, &room, &n, plate );
+   dskp02_ ( naif_state, &handle, fDLADescr, &plid, &room, &n, plate );
 
    for ( i = 0;  i < 3;  i++ )
    {
-      dskv02_ ( &handle, fDLADescr, plate+i, &room, &n, plverts[i] );
+      dskv02_ ( naif_state, &handle, fDLADescr, plate+i, &room, &n, plverts[i] );
    }
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
    }
 
-   pltnrm_c ( plverts[0], plverts[1], plverts[2], normal );
+   pltnrm_c ( naif_state, plverts[0], plverts[1], plverts[2], normal );
  
 
 
@@ -1389,17 +1392,18 @@
    the target-observer vector. Let `ettarg' the epoch associated with
    the target.
    */
-   spkezp_c ( trgcde, et, frname, abcorr, obscde, trgpos, &lttarg );
+   spkezp_c ( naif_state, trgcde, et, frname, abcorr, obscde, trgpos, &lttarg );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
    }
 
-   vminus_c ( trgpos, obsvec );
+   vminus_c ( naif_state, trgpos, obsvec );
 
-   zzcorepc_ ( ( char        * ) abcorr,
+   zzcorepc_ ( naif_state,
+               ( char        * ) abcorr,
                ( doublereal  * ) &et, 
                ( doublereal  * ) &lttarg, 
                ( doublereal  * ) &ettarg, 
@@ -1409,9 +1413,9 @@
    Now find the apparent position of the Sun as seen from the
    target center at `ettarg'. 
    */
-   spkpos_c ( "Sun", ettarg, frname, abcorr, target, sunpos, &ltsun );
+   spkpos_c ( naif_state, "Sun", ettarg, frname, abcorr, target, sunpos, &ltsun );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "illum_pl02" );
       return;
@@ -1423,17 +1427,17 @@
    surface point of interest; we want the vectors to point from
    the surface point to the observer and Sun respectively.
    */
-   vsub_c ( obsvec, spoint, offobs );
-   vsub_c ( sunpos, spoint, offsun );
+   vsub_c ( naif_state, obsvec, spoint, offobs );
+   vsub_c ( naif_state, sunpos, spoint, offsun );
  
    /*
    Find the illumination angles.  vsep_c will give us angular
    separation in radians.
    */
 
-   *phase   =  vsep_c ( offsun, offobs );
-   *solar   =  vsep_c ( normal, offsun );
-   *emissn  =  vsep_c ( normal, offobs );
+   *phase   =  vsep_c ( naif_state, offsun, offobs );
+   *solar   =  vsep_c ( naif_state, normal, offsun );
+   *emissn  =  vsep_c ( naif_state, normal, offobs );
 
 
    chkout_c ( naif_state, "illum_pl02" );

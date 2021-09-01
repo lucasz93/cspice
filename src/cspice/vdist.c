@@ -8,7 +8,7 @@
 
 
 typedef int vdist_state_t;
-static inline vdist_state_t* get_vdist_state(cspice_t* state) {
+static vdist_state_t* get_vdist_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern dasac_init_t __dasac_init;
-static inline dasac_state_t* get_dasac_state(cspice_t* state) {
+static dasac_state_t* get_dasac_state(cspice_t* state) {
 	if (!state->dasac)
 		state->dasac = __cspice_allocate_module(sizeof(dasac_state_t),
 	 &__dasac_init, sizeof(__dasac_init));

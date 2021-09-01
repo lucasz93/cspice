@@ -8,7 +8,7 @@
 
 
 extern spkaps_init_t __spkaps_init;
-static inline spkaps_state_t* get_spkaps_state(cspice_t* state) {
+static spkaps_state_t* get_spkaps_state(cspice_t* state) {
 	if (!state->spkaps)
 		state->spkaps = __cspice_allocate_module(sizeof(
 	spkaps_state_t), &__spkaps_init, sizeof(__spkaps_init));

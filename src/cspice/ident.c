@@ -8,7 +8,7 @@
 
 
 typedef int ident_state_t;
-static inline ident_state_t* get_ident_state(cspice_t* state) {
+static ident_state_t* get_ident_state(cspice_t* state) {
 	return 0;
 }
 

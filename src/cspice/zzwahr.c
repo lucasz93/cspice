@@ -8,7 +8,7 @@
 
 
 extern zzwahr_init_t __zzwahr_init;
-static inline zzwahr_state_t* get_zzwahr_state(cspice_t* state) {
+static zzwahr_state_t* get_zzwahr_state(cspice_t* state) {
 	if (!state->zzwahr)
 		state->zzwahr = __cspice_allocate_module(sizeof(
 	zzwahr_state_t), &__zzwahr_init, sizeof(__zzwahr_init));
@@ -28,8 +28,8 @@ static inline zzwahr_state_t* get_zzwahr_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double d_mod(f2c_state_t*, doublereal *, doublereal *), cos(f2c_state_t*, 
-	    doublereal), sin(f2c_state_t*, doublereal);
+    double d_mod(f2c_state_t*, doublereal *, doublereal *), cos(doublereal), 
+	    sin(doublereal);
 
     /* Local variables */
     extern doublereal twopi_(cspice_t*);
@@ -452,8 +452,8 @@ static inline zzwahr_state_t* get_zzwahr_state(cspice_t* state) {
 		    954 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
 		    "matrix", i__1, "zzwahr_", (ftnlen)609)] * __state->t;
 	}
-	__state->cosang = cos(&__global_state->f2c, __state->arg);
-	__state->sinang = sin(&__global_state->f2c, __state->arg);
+	__state->cosang = cos(__state->arg);
+	__state->sinang = sin(__state->arg);
 	dvnut[0] += __state->cl * __state->sinang / __state->factr;
 	dvnut[1] += __state->ce * __state->cosang / __state->factr;
 	dvnut[2] += __state->cl * __state->cosang * __state->argrt / 

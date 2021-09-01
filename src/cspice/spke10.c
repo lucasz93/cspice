@@ -8,7 +8,7 @@
 
 
 extern spke10_init_t __spke10_init;
-static inline spke10_state_t* get_spke10_state(cspice_t* state) {
+static spke10_state_t* get_spke10_state(cspice_t* state) {
 	if (!state->spke10)
 		state->spke10 = __cspice_allocate_module(sizeof(
 	spke10_state_t), &__spke10_init, sizeof(__spke10_init));
@@ -27,7 +27,7 @@ static inline spke10_state_t* get_spke10_state(cspice_t* state) {
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
@@ -542,9 +542,8 @@ static inline spke10_state_t* get_spke10_state(cspice_t* state) {
 	__state->denom = __state->t2 - __state->t1;
 	__state->arg = __state->numer * __state->mypi / __state->denom;
 	__state->dargdt = __state->mypi / __state->denom;
-	__state->w = cos(&__global_state->f2c, __state->arg) * .5 + .5;
-	__state->dwdt = sin(&__global_state->f2c, __state->arg) * -.5 * 
-		__state->dargdt;
+	__state->w = cos(__state->arg) * .5 + .5;
+	__state->dwdt = sin(__state->arg) * -.5 * __state->dargdt;
 
 /*        Now compute the weighted average of the two states. */
 

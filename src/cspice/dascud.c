@@ -8,7 +8,7 @@
 
 
 extern dascud_init_t __dascud_init;
-static inline dascud_state_t* get_dascud_state(cspice_t* state) {
+static dascud_state_t* get_dascud_state(cspice_t* state) {
 	if (!state->dascud)
 		state->dascud = __cspice_allocate_module(sizeof(
 	dascud_state_t), &__dascud_init, sizeof(__dascud_init));

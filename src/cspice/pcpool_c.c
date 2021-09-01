@@ -299,7 +299,7 @@
    /*
    Create a Fortran-style string array.
    */
-   C2F_MapStrArr ( "pcpool_c", 
+   C2F_MapStrArr ( naif_state, "pcpool_c", 
                    n, lenvals, cvals, &fCvalsLen, &fCvalsArr );
 
    if ( failed_c(naif_state) )

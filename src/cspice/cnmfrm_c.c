@@ -217,7 +217,7 @@
    /*
    Convert the output string to C-style.
    */
-   F2C_ConvertStr ( lenout, frname );
+   F2C_ConvertStr ( naif_state, lenout, frname );
 
 
    chkout_c ( naif_state, "cnmfrm_c" );

@@ -8,7 +8,7 @@
 
 
 extern ckfxfm_init_t __ckfxfm_init;
-static inline ckfxfm_state_t* get_ckfxfm_state(cspice_t* state) {
+static ckfxfm_state_t* get_ckfxfm_state(cspice_t* state) {
 	if (!state->ckfxfm)
 		state->ckfxfm = __cspice_allocate_module(sizeof(
 	ckfxfm_state_t), &__ckfxfm_init, sizeof(__ckfxfm_init));

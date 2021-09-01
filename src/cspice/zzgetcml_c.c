@@ -45,9 +45,9 @@
    #include <stdlib.h>
    #include <stdio.h>
 
+   #include "__cspice_state.h"
    #include "SpiceUsr.h"
    #include "SpiceZpl.h"
-   #include "__cspice_state.h"
 
    #ifdef CSPICE_MACPPC
    

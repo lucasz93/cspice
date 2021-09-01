@@ -8,7 +8,7 @@
 
 
 extern lnkhl_init_t __lnkhl_init;
-static inline lnkhl_state_t* get_lnkhl_state(cspice_t* state) {
+static lnkhl_state_t* get_lnkhl_state(cspice_t* state) {
 	if (!state->lnkhl)
 		state->lnkhl = __cspice_allocate_module(sizeof(lnkhl_state_t),
 	 &__lnkhl_init, sizeof(__lnkhl_init));

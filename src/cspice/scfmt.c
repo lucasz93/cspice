@@ -8,7 +8,7 @@
 
 
 typedef int scfmt_state_t;
-static inline scfmt_state_t* get_scfmt_state(cspice_t* state) {
+static scfmt_state_t* get_scfmt_state(cspice_t* state) {
 	return 0;
 }
 

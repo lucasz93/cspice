@@ -8,7 +8,7 @@
 
 
 typedef int zzpdpltc_state_t;
-static inline zzpdpltc_state_t* get_zzpdpltc_state(cspice_t* state) {
+static zzpdpltc_state_t* get_zzpdpltc_state(cspice_t* state) {
 	return 0;
 }
 
@@ -20,7 +20,7 @@ logical zzpdpltc_(cspice_t* __global_state, doublereal *re, doublereal *f,
     logical ret_val;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal);
+    double sqrt(doublereal);
 
     /* Local variables */
     doublereal xxpt;
@@ -355,7 +355,7 @@ logical zzpdpltc_(cspice_t* __global_state, doublereal *re, doublereal *f,
 /*           on the correct side of the X-Y plane. */
 
 	    r2 = p[0] * p[0] + p[1] * p[1];
-	    r__ = sqrt(&__global_state->f2c, (max(r2,0.)));
+	    r__ = sqrt((max(r2,0.)));
 	    ret_val = r__ >= xxpt;
 	}
     }

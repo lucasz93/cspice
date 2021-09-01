@@ -58,7 +58,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void subpt_pl02 ( SpiceInt               handle,
+   void subpt_pl02 ( void                 * naif_state,
+                     SpiceInt               handle,
                      ConstSpiceDLADescr   * dladsc,
                      ConstSpiceChar       * method,
                      ConstSpiceChar       * target,
@@ -954,12 +955,13 @@
    Check the aberration correction string:  reject transmission
    corrections. 
    */
-   ljust_ ( ( char * ) abcorr,
+   ljust_ ( naif_state,
+            ( char * ) abcorr,
             ( char * ) loccor,
             ( ftnlen ) strlen(abcorr),
             ( ftnlen ) CORLEN-1         );
 
-   if (  matchi_c( loccor, "X*", '*', '?' )  )
+   if (  matchi_c( naif_state, loccor, "X*", '*', '?' )  )
    {
       setmsg_c ( naif_state, "Input aberration correction specification # "
                  "calls for transmission-style corrections."    );
@@ -972,9 +974,9 @@
    /*
    Obtain integer codes for the target and observer. 
    */ 
-   bods2c_c ( target, &trgcde, &found );
+   bods2c_c ( naif_state, target, &trgcde, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subpt_pl02" );
       return;
@@ -992,9 +994,9 @@
       return;
    }
 
-   bods2c_c ( obsrvr, &obscde, &found );
+   bods2c_c ( naif_state, obsrvr, &obscde, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subpt_pl02" );
       return;
@@ -1029,9 +1031,9 @@
    Get the name of the default body-fixed reference frame associated with
    the target body.
    */
-   cidfrm_c ( trgcde, FRNMLN, &frcode, frname, &found );
+   cidfrm_c ( naif_state, trgcde, FRNMLN, &frcode, frname, &found );
  
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subpt_pl02" );
       return;
@@ -1073,11 +1075,12 @@
    /*
    Call the f2c'd "get DSK descriptor" routine.
    */
-   dskgd_ ( ( integer    * ) &handle,
+   dskgd_ ( naif_state,
+            ( integer    * ) &handle,
             ( integer    * ) fDLADescr,
             ( doublereal * ) fDSKDescr  );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subpt_pl02" );
       return;
@@ -1117,9 +1120,9 @@
    Get the maximum radius value associated with the target body.  
    We'll use this later to compute a numerically safe ray vertex.
    */
-   maxrad = zzdsksgr_ ( fDSKDescr );
+   maxrad = zzdsksgr_ ( naif_state, fDSKDescr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subpt_pl02" );
       return;
@@ -1130,9 +1133,9 @@
    seen from the observer.  Use the aberration-corrected target
    body-fixed reference frame. 
    */
-   spkezp_c ( trgcde, et, frname, abcorr, obscde, trgpos, &lt );
+   spkezp_c ( naif_state, trgcde, et, frname, abcorr, obscde, trgpos, &lt );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subpt_pl02" );
       return;
@@ -1142,32 +1145,32 @@
    Determine the ray's vertex and direction vector. The way we define
    this vector depends on our computation method.
    */
-   if (  eqstr_c( method, "intercept" )  )
+   if (  eqstr_c( naif_state, method, "intercept" )  )
    {
       /*
       The ray points from the observer towards the target's center.
       */
-      vhat_c ( trgpos, raydir );
+      vhat_c ( naif_state, trgpos, raydir );
 
       /*
       To avoid numerical problems, we pick a vertex that is guaranteed
       to be a reasonable distance away from the target's surface.
       */ 
-      scale = maxd_c ( 2,  1.0,  2.0*maxrad );
+      scale = maxd_c ( naif_state, 2,  1.0,  2.0*maxrad );
 
-      vscl_c ( -scale, raydir, vertex );
+      vscl_c ( naif_state, -scale, raydir, vertex );
    }
 
-   else if (  eqstr_c( method, "ellipsoid near point" )  )
+   else if (  eqstr_c( naif_state, method, "ellipsoid near point" )  )
    {
       /*
       The ray we wish to use points towards the closest point to the
       observer on the reference ellipsoid.  We can get this point from
       the CSPICE sub-point routine for ellipsoids.
       */ 
-      subpt_c ( NEARPT, target, et, abcorr, obsrvr, npt, &nptalt );
+      subpt_c ( naif_state, NEARPT, target, et, abcorr, obsrvr, npt, &nptalt );
 
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
          chkout_c ( naif_state, "subpt_pl02" );
          return;
@@ -1176,9 +1179,9 @@
       /*
       Fetch the radii of the reference ellipsoid. 
       */
-      bodvrd_c ( target, "RADII", 3, &n, radii );
+      bodvrd_c ( naif_state, target, "RADII", 3, &n, radii );
 
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
          chkout_c ( naif_state, "subpt_pl02" );
          return;
@@ -1188,7 +1191,7 @@
       Check for failure here because unavailability of ellipsoid 
       radii is a possibility. 
       */
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
          chkout_c ( naif_state, "subpt_pl02" );
          return;
@@ -1202,22 +1205,22 @@
       `npt'.  Compute the scale, look up the outward normal, and
       compute the vertex itself.
       */ 
-      scale = maxd_c ( 2,  1.0,  2.0*maxrad );
+      scale = maxd_c ( naif_state, 2,  1.0,  2.0*maxrad );
       
-      surfnm_c ( radii[0], radii[1], radii[2], npt, normal );
+      surfnm_c ( naif_state, radii[0], radii[1], radii[2], npt, normal );
 
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
          chkout_c ( naif_state, "subpt_pl02" );   
          return;
       }
 
-      vlcom_c  ( scale, normal, 1.0, npt, vertex );
+      vlcom_c  ( naif_state, scale, normal, 1.0, npt, vertex );
 
       /*
       The ray direction is just the negative of the outward normal. 
       */
-      vminus_c ( normal, raydir );
+      vminus_c ( naif_state, normal, raydir );
     
    }
    else
@@ -1235,9 +1238,9 @@
    Find the surface intercept defined by the vertex, ray direction,
    and surface plate model.
    */
-   dskx02_c ( handle, dladsc, vertex, raydir, plateID, spoint, &found );
+   dskx02_c ( naif_state, handle, dladsc, vertex, raydir, plateID, spoint, &found );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       chkout_c ( naif_state, "subpt_pl02" );
       return;
@@ -1267,12 +1270,12 @@
    `offset' has positive inner product with raydir, then the 
    observer is considered to be "above" the sub-point. 
    */ 
-   vminus_c ( trgpos, obspos );
-   vsub_c   ( spoint, obspos, offset );
+   vminus_c ( naif_state, trgpos, obspos );
+   vsub_c   ( naif_state, spoint, obspos, offset );
 
-   mag = vnorm_c ( offset );
+   mag = vnorm_c ( naif_state, offset );
 
-   if ( vdot_c( offset, raydir ) >= 0.0 )
+   if ( vdot_c( naif_state, offset, raydir ) >= 0.0 )
    {
       *alt =  mag;
    }

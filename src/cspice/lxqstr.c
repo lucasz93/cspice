@@ -8,7 +8,7 @@
 
 
 typedef int lxqstr_state_t;
-static inline lxqstr_state_t* get_lxqstr_state(cspice_t* state) {
+static lxqstr_state_t* get_lxqstr_state(cspice_t* state) {
 	return 0;
 }
 

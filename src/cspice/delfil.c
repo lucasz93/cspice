@@ -8,7 +8,7 @@
 
 
 typedef int delfil_state_t;
-static inline delfil_state_t* get_delfil_state(cspice_t* state) {
+static delfil_state_t* get_delfil_state(cspice_t* state) {
 	return 0;
 }
 

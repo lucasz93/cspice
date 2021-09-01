@@ -8,7 +8,7 @@
 
 
 typedef int psv2pl_state_t;
-static inline psv2pl_state_t* get_psv2pl_state(cspice_t* state) {
+static psv2pl_state_t* get_psv2pl_state(cspice_t* state) {
 	return 0;
 }
 

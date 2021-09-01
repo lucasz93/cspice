@@ -8,20 +8,20 @@ c_due(f2c, a) f2c_state_t *f2c; cilist *a;
 c_due(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	if(!f2c->f__init) f_init();
+	if(!f2c->f__init) f_init(f2c);
 	f2c->f__sequential=f2c->f__formatted=f2c->f__recpos=0;
 	f2c->f__external=1;
 	f2c->f__curunit = &f2c->f__units[a->ciunit];
 	if(a->ciunit>=MXUNIT || a->ciunit<0)
-		err(a->cierr,101,"startio");
+		err(f2c,a->cierr,101,"startio");
 	f2c->f__elist=a;
-	if(f2c->f__curunit->ufd==NULL && fk_open(DIR,UNF,a->ciunit) ) err(a->cierr,104,"due");
+	if(f2c->f__curunit->ufd==NULL && fk_open(f2c,DIR,UNF,a->ciunit) ) err(f2c,a->cierr,104,"due");
 	f2c->f__cf=f2c->f__curunit->ufd;
-	if(f2c->f__curunit->ufmt) err(a->cierr,102,"cdue")
-	if(!f2c->f__curunit->useek) err(a->cierr,104,"cdue")
-	if(f2c->f__curunit->ufd==NULL) err(a->cierr,114,"cdue")
+	if(f2c->f__curunit->ufmt) err(f2c,a->cierr,102,"cdue")
+	if(!f2c->f__curunit->useek) err(f2c,a->cierr,104,"cdue")
+	if(f2c->f__curunit->ufd==NULL) err(f2c,a->cierr,114,"cdue")
 	if(a->cirec <= 0)
-		err(a->cierr,130,"due")
+		err(f2c,a->cierr,130,"due")
 	fseek(f2c->f__cf,(long)(a->cirec-1)*f2c->f__curunit->url,SEEK_SET);
 	f2c->f__curunit->uend = 0;
 	return(0);
@@ -35,8 +35,8 @@ integer s_rdue(f2c_state_t *f2c, cilist *a)
 	int n;
 	f2c->f__reading=1;
 	if(n=c_due(f2c, a)) return(n);
-	if(f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit))
-		err(a->cierr,errno,"read start");
+	if(f2c->f__curunit->uwrt && f__nowreading(f2c,f2c->f__curunit))
+		err(f2c,a->cierr,errno,"read start");
 	return(0);
 }
 #ifdef KR_headers
@@ -48,8 +48,8 @@ integer s_wdue(f2c_state_t *f2c, cilist *a)
 	int n;
 	f2c->f__reading=0;
 	if(n=c_due(f2c, a)) return(n);
-	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c->f__curunit))
-		err(a->cierr,errno,"write start");
+	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c,f2c->f__curunit))
+		err(f2c,a->cierr,errno,"write start");
 	return(0);
 }
 integer e_rdue(f2c_state_t *f2c)
@@ -58,14 +58,14 @@ integer e_rdue(f2c_state_t *f2c)
 		return(0);
 	fseek(f2c->f__cf,(long)(f2c->f__curunit->url-f2c->f__recpos),SEEK_CUR);
 	if(ftell(f2c->f__cf)%f2c->f__curunit->url)
-		err(f2c->f__elist->cierr,200,"syserr");
+		err(f2c,f2c->f__elist->cierr,200,"syserr");
 	return(0);
 }
 integer e_wdue(f2c_state_t *f2c)
 {
 #ifdef ALWAYS_FLUSH
 	if (fflush(f2c->f__cf))
-		err(f2c->f__elist->cierr,errno,"write end");
+		err(f2c,f2c->f__elist->cierr,errno,"write end");
 #endif
 	return(e_rdue(f2c));
 }

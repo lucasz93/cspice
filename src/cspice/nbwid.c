@@ -8,7 +8,7 @@
 
 
 typedef int nbwid_state_t;
-static inline nbwid_state_t* get_nbwid_state(cspice_t* state) {
+static nbwid_state_t* get_nbwid_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int syfeti_state_t;
-static inline syfeti_state_t* get_syfeti_state(cspice_t* state) {
+static syfeti_state_t* get_syfeti_state(cspice_t* state) {
 	return 0;
 }
 

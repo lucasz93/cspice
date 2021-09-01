@@ -8,7 +8,7 @@
 
 
 extern dskp02_init_t __dskp02_init;
-static inline dskp02_state_t* get_dskp02_state(cspice_t* state) {
+static dskp02_state_t* get_dskp02_state(cspice_t* state) {
 	if (!state->dskp02)
 		state->dskp02 = __cspice_allocate_module(sizeof(
 	dskp02_state_t), &__dskp02_init, sizeof(__dskp02_init));

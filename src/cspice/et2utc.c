@@ -8,7 +8,7 @@
 
 
 extern et2utc_init_t __et2utc_init;
-static inline et2utc_state_t* get_et2utc_state(cspice_t* state) {
+static et2utc_state_t* get_et2utc_state(cspice_t* state) {
 	if (!state->et2utc)
 		state->et2utc = __cspice_allocate_module(sizeof(
 	et2utc_state_t), &__et2utc_init, sizeof(__et2utc_init));

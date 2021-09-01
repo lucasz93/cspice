@@ -8,7 +8,7 @@
 
 
 extern wrline_init_t __wrline_init;
-static inline wrline_state_t* get_wrline_state(cspice_t* state) {
+static wrline_state_t* get_wrline_state(cspice_t* state) {
 	if (!state->wrline)
 		state->wrline = __cspice_allocate_module(sizeof(
 	wrline_state_t), &__wrline_init, sizeof(__wrline_init));
@@ -1004,12 +1004,13 @@ L_clline:
 /* Subroutine */ int wrline_(cspice_t* __global_state, char *device, char *
 	line, ftnlen device_len, ftnlen line_len)
 {
-    return wrline_0_(0, device, line, device_len, line_len);
+    return wrline_0_(__global_state, 0, device, line, device_len, line_len);
     }
 
 /* Subroutine */ int clline_(cspice_t* __global_state, char *device, ftnlen 
 	device_len)
 {
-    return wrline_0_(1, device, (char *)0, device_len, (ftnint)0);
+    return wrline_0_(__global_state, 1, device, (char *)0, device_len, (
+	    ftnint)0);
     }
 

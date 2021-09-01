@@ -8,7 +8,7 @@
 
 
 extern zzdynfrm_init_t __zzdynfrm_init;
-static inline zzdynfrm_state_t* get_zzdynfrm_state(cspice_t* state) {
+static zzdynfrm_state_t* get_zzdynfrm_state(cspice_t* state) {
 	if (!state->zzdynfrm)
 		state->zzdynfrm = __cspice_allocate_module(sizeof(
 	zzdynfrm_state_t), &__zzdynfrm_init, sizeof(__zzdynfrm_init));
@@ -34,7 +34,7 @@ static inline zzdynfrm_state_t* get_zzdynfrm_state(cspice_t* state) {
 	    integer *, ftnlen);
     integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
     /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
-    double sin(f2c_state_t*, doublereal);
+    double sin(doublereal);
 
     /* Local variables */
     doublereal xf2000[36]	/* was [6][6] */;
@@ -2633,8 +2633,7 @@ static inline zzdynfrm_state_t* get_zzdynfrm_state(cspice_t* state) {
 /*           sine of the separation to the sine of the separation limit. */
 
 	    sep = vsep_(__global_state, s2, &s2[6]);
-	    if (sin(&__global_state->f2c, sep) < sin(&__global_state->f2c, 
-		    minsep)) {
+	    if (sin(sep) < sin(minsep)) {
 		etcal_(__global_state, &t0, timstr, (ftnlen)50);
 		setmsg_(__global_state, "Angular separation of vectors defin"
 			"ing two-vector parameterized dynamic frame # is # (r"

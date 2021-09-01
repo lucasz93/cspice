@@ -8,7 +8,7 @@
 
 
 extern npelpt_init_t __npelpt_init;
-static inline npelpt_state_t* get_npelpt_state(cspice_t* state) {
+static npelpt_state_t* get_npelpt_state(cspice_t* state) {
 	if (!state->npelpt)
 		state->npelpt = __cspice_allocate_module(sizeof(
 	npelpt_state_t), &__npelpt_init, sizeof(__npelpt_init));

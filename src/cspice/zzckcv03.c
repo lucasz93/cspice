@@ -8,7 +8,7 @@
 
 
 typedef int zzckcv03_state_t;
-static inline zzckcv03_state_t* get_zzckcv03_state(cspice_t* state) {
+static zzckcv03_state_t* get_zzckcv03_state(cspice_t* state) {
 	return 0;
 }
 

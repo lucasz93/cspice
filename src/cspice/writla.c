@@ -8,7 +8,7 @@
 
 
 typedef int writla_state_t;
-static inline writla_state_t* get_writla_state(cspice_t* state) {
+static writla_state_t* get_writla_state(cspice_t* state) {
 	return 0;
 }
 

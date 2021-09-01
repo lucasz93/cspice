@@ -8,7 +8,7 @@
 
 
 extern zzsinutl_init_t __zzsinutl_init;
-static inline zzsinutl_state_t* get_zzsinutl_state(cspice_t* state) {
+static zzsinutl_state_t* get_zzsinutl_state(cspice_t* state) {
 	if (!state->zzsinutl)
 		state->zzsinutl = __cspice_allocate_module(sizeof(
 	zzsinutl_state_t), &__zzsinutl_init, sizeof(__zzsinutl_init));
@@ -1352,58 +1352,59 @@ L_zzraynp:
 	found, doublereal *minrad, doublereal *maxrad, doublereal *pnear, 
 	doublereal *dist)
 {
-    return zzsinutl_0_(0, trgcde, nsurf, srflst, et, fixfid, vertex, raydir, 
-	    spoint, found, minrad, maxrad, pnear, dist);
+    return zzsinutl_0_(__global_state, 0, trgcde, nsurf, srflst, et, fixfid, 
+	    vertex, raydir, spoint, found, minrad, maxrad, pnear, dist);
     }
 
 /* Subroutine */ int zzsuelin_(cspice_t* __global_state, integer *trgcde)
 {
-    return zzsinutl_0_(1, trgcde, (integer *)0, (integer *)0, (doublereal *)0,
-	     (integer *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0, 
-	    (logical *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0, (
-	    doublereal *)0);
+    return zzsinutl_0_(__global_state, 1, trgcde, (integer *)0, (integer *)0, 
+	    (doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
+	    doublereal *)0, (logical *)0, (doublereal *)0, (doublereal *)0, (
+	    doublereal *)0, (doublereal *)0);
     }
 
 /* Subroutine */ int zzsudski_(cspice_t* __global_state, integer *trgcde, 
 	integer *nsurf, integer *srflst, integer *fixfid)
 {
-    return zzsinutl_0_(2, trgcde, nsurf, srflst, (doublereal *)0, fixfid, (
-	    doublereal *)0, (doublereal *)0, (doublereal *)0, (logical *)0, (
-	    doublereal *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0)
-	    ;
+    return zzsinutl_0_(__global_state, 2, trgcde, nsurf, srflst, (doublereal *
+	    )0, fixfid, (doublereal *)0, (doublereal *)0, (doublereal *)0, (
+	    logical *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0, (
+	    doublereal *)0);
     }
 
 /* Subroutine */ int zzraysfx_(cspice_t* __global_state, doublereal *vertex, 
 	doublereal *raydir, doublereal *et, doublereal *spoint, logical *
 	found)
 {
-    return zzsinutl_0_(3, (integer *)0, (integer *)0, (integer *)0, et, (
-	    integer *)0, vertex, raydir, spoint, found, (doublereal *)0, (
-	    doublereal *)0, (doublereal *)0, (doublereal *)0);
+    return zzsinutl_0_(__global_state, 3, (integer *)0, (integer *)0, (
+	    integer *)0, et, (integer *)0, vertex, raydir, spoint, found, (
+	    doublereal *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0)
+	    ;
     }
 
 /* Subroutine */ int zzmaxrad_(cspice_t* __global_state, doublereal *maxrad)
 {
-    return zzsinutl_0_(4, (integer *)0, (integer *)0, (integer *)0, (
-	    doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
-	    doublereal *)0, (logical *)0, (doublereal *)0, maxrad, (
-	    doublereal *)0, (doublereal *)0);
+    return zzsinutl_0_(__global_state, 4, (integer *)0, (integer *)0, (
+	    integer *)0, (doublereal *)0, (integer *)0, (doublereal *)0, (
+	    doublereal *)0, (doublereal *)0, (logical *)0, (doublereal *)0, 
+	    maxrad, (doublereal *)0, (doublereal *)0);
     }
 
 /* Subroutine */ int zzminrad_(cspice_t* __global_state, doublereal *minrad)
 {
-    return zzsinutl_0_(5, (integer *)0, (integer *)0, (integer *)0, (
-	    doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
-	    doublereal *)0, (logical *)0, minrad, (doublereal *)0, (
-	    doublereal *)0, (doublereal *)0);
+    return zzsinutl_0_(__global_state, 5, (integer *)0, (integer *)0, (
+	    integer *)0, (doublereal *)0, (integer *)0, (doublereal *)0, (
+	    doublereal *)0, (doublereal *)0, (logical *)0, minrad, (
+	    doublereal *)0, (doublereal *)0, (doublereal *)0);
     }
 
 /* Subroutine */ int zzraynp_(cspice_t* __global_state, doublereal *vertex, 
 	doublereal *raydir, doublereal *et, doublereal *pnear, doublereal *
 	dist)
 {
-    return zzsinutl_0_(6, (integer *)0, (integer *)0, (integer *)0, et, (
-	    integer *)0, vertex, raydir, (doublereal *)0, (logical *)0, (
-	    doublereal *)0, (doublereal *)0, pnear, dist);
+    return zzsinutl_0_(__global_state, 6, (integer *)0, (integer *)0, (
+	    integer *)0, et, (integer *)0, vertex, raydir, (doublereal *)0, (
+	    logical *)0, (doublereal *)0, (doublereal *)0, pnear, dist);
     }
 

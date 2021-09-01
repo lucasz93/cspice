@@ -8,7 +8,7 @@
 
 
 extern zzgffvu_init_t __zzgffvu_init;
-static inline zzgffvu_state_t* get_zzgffvu_state(cspice_t* state) {
+static zzgffvu_state_t* get_zzgffvu_state(cspice_t* state) {
 	if (!state->zzgffvu)
 		state->zzgffvu = __cspice_allocate_module(sizeof(
 	zzgffvu_state_t), &__zzgffvu_init, sizeof(__zzgffvu_init));
@@ -34,8 +34,7 @@ static inline zzgffvu_state_t* get_zzgffvu_state(cspice_t* state) {
     /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
     integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
 	    f2c_state_t*, char *, integer, char *, integer);
-    double pow_dd(f2c_state_t*, doublereal *, doublereal *), sqrt(f2c_state_t*
-	    , doublereal);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *), sqrt(doublereal);
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
@@ -1744,8 +1743,8 @@ L_zzgffvin:
 /*        in the direction from SVFVCT toward SEMIPT(*,1) will have this */
 /*        length. */
 
-	fovrad[2] = __state->svxmag[0] * sqrt(&__global_state->f2c, pow_dd(&
-		__global_state->f2c, __state->svxmag, &__state->c_b130) + 1.);
+	fovrad[2] = __state->svxmag[0] * sqrt(pow_dd(&__global_state->f2c, 
+		__state->svxmag, &__state->c_b130) + 1.);
 	fovrad[0] = fovrad[2];
 
 /*        Compute the corresponding columns of the FOV semi-axis matrix. */
@@ -2412,9 +2411,9 @@ L_zzgffvst:
 	ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen 
 	abcorr_len, ftnlen obsrvr_len)
 {
-    return zzgffvu_0_(0, inst, tshape, raydir, target, tframe, abcorr, obsrvr,
-	     time, vistat, inst_len, tshape_len, target_len, tframe_len, 
-	    abcorr_len, obsrvr_len);
+    return zzgffvu_0_(__global_state, 0, inst, tshape, raydir, target, tframe,
+	     abcorr, obsrvr, time, vistat, inst_len, tshape_len, target_len, 
+	    tframe_len, abcorr_len, obsrvr_len);
     }
 
 /* Subroutine */ int zzgffvin_(cspice_t* __global_state, char *inst, char *
@@ -2422,16 +2421,16 @@ L_zzgffvst:
 	char *obsrvr, ftnlen inst_len, ftnlen tshape_len, ftnlen target_len, 
 	ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
-    return zzgffvu_0_(1, inst, tshape, raydir, target, tframe, abcorr, obsrvr,
-	     (doublereal *)0, (logical *)0, inst_len, tshape_len, target_len, 
-	    tframe_len, abcorr_len, obsrvr_len);
+    return zzgffvu_0_(__global_state, 1, inst, tshape, raydir, target, tframe,
+	     abcorr, obsrvr, (doublereal *)0, (logical *)0, inst_len, 
+	    tshape_len, target_len, tframe_len, abcorr_len, obsrvr_len);
     }
 
 /* Subroutine */ int zzgffvst_(cspice_t* __global_state, doublereal *time, 
 	logical *vistat)
 {
-    return zzgffvu_0_(2, (char *)0, (char *)0, (doublereal *)0, (char *)0, (
-	    char *)0, (char *)0, (char *)0, time, vistat, (ftnint)0, (ftnint)
-	    0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return zzgffvu_0_(__global_state, 2, (char *)0, (char *)0, (doublereal *)
+	    0, (char *)0, (char *)0, (char *)0, (char *)0, time, vistat, (
+	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 

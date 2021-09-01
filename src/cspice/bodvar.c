@@ -8,7 +8,7 @@
 
 
 extern bodvar_init_t __bodvar_init;
-static inline bodvar_state_t* get_bodvar_state(cspice_t* state) {
+static bodvar_state_t* get_bodvar_state(cspice_t* state) {
 	if (!state->bodvar)
 		state->bodvar = __cspice_allocate_module(sizeof(
 	bodvar_state_t), &__bodvar_init, sizeof(__bodvar_init));

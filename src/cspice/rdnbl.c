@@ -8,7 +8,7 @@
 
 
 typedef int rdnbl_state_t;
-static inline rdnbl_state_t* get_rdnbl_state(cspice_t* state) {
+static rdnbl_state_t* get_rdnbl_state(cspice_t* state) {
 	return 0;
 }
 

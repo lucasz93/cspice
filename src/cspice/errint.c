@@ -8,7 +8,7 @@
 
 
 extern errint_init_t __errint_init;
-static inline errint_state_t* get_errint_state(cspice_t* state) {
+static errint_state_t* get_errint_state(cspice_t* state) {
 	if (!state->errint)
 		state->errint = __cspice_allocate_module(sizeof(
 	errint_state_t), &__errint_init, sizeof(__errint_init));

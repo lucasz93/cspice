@@ -364,7 +364,7 @@
    The string returned, utcstr, is a Fortranish type string.
    Convert the string to C type.
    */
-   F2C_ConvertStr ( lenout, utcstr );
+   F2C_ConvertStr ( naif_state, lenout, utcstr );
 
    chkout_c ( naif_state, "et2utc_c" );
 

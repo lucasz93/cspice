@@ -8,7 +8,7 @@
 
 
 typedef int lstled_state_t;
-static inline lstled_state_t* get_lstled_state(cspice_t* state) {
+static lstled_state_t* get_lstled_state(cspice_t* state) {
 	return 0;
 }
 

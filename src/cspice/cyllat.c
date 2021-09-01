@@ -8,7 +8,7 @@
 
 
 typedef int cyllat_state_t;
-static inline cyllat_state_t* get_cyllat_state(cspice_t* state) {
+static cyllat_state_t* get_cyllat_state(cspice_t* state) {
 	return 0;
 }
 
@@ -21,8 +21,7 @@ static inline cyllat_state_t* get_cyllat_state(cspice_t* state) {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
-	    doublereal);
+    double sqrt(doublereal), atan2(doublereal, doublereal);
 
     /* Local variables */
     doublereal x;
@@ -205,14 +204,14 @@ static inline cyllat_state_t* get_cyllat_state(cspice_t* state) {
     if (big > 0.) {
 	x = *r__ / big;
 	y = *z__ / big;
-	rho = big * sqrt(&__global_state->f2c, x * x + y * y);
+	rho = big * sqrt(x * x + y * y);
     } else {
 	rho = 0.;
     }
     if (rho == 0.) {
 	lattud = 0.;
     } else {
-	lattud = atan2(&__global_state->f2c, *z__, *r__);
+	lattud = atan2(*z__, *r__);
     }
 
 /*     Move results to output variables */

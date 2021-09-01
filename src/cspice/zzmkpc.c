@@ -8,7 +8,7 @@
 
 
 typedef int zzmkpc_state_t;
-static inline zzmkpc_state_t* get_zzmkpc_state(cspice_t* state) {
+static zzmkpc_state_t* get_zzmkpc_state(cspice_t* state) {
 	return 0;
 }
 

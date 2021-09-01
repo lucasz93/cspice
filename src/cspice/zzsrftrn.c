@@ -8,7 +8,7 @@
 
 
 extern zzsrftrn_init_t __zzsrftrn_init;
-static inline zzsrftrn_state_t* get_zzsrftrn_state(cspice_t* state) {
+static zzsrftrn_state_t* get_zzsrftrn_state(cspice_t* state) {
 	if (!state->zzsrftrn)
 		state->zzsrftrn = __cspice_allocate_module(sizeof(
 	zzsrftrn_state_t), &__zzsrftrn_init, sizeof(__zzsrftrn_init));
@@ -1492,28 +1492,28 @@ L_zzsrftrk:
 	char *srfnam, integer *surfid, integer *usrctr, logical *found, 
 	logical *update, ftnlen srfnam_len)
 {
-    return zzsrftrn_0_(0, bodyid, srfnam, surfid, usrctr, found, update, 
-	    srfnam_len);
+    return zzsrftrn_0_(__global_state, 0, bodyid, srfnam, surfid, usrctr, 
+	    found, update, srfnam_len);
     }
 
 /* Subroutine */ int zzsrfn2c_(cspice_t* __global_state, char *srfnam, 
 	integer *bodyid, integer *surfid, logical *found, ftnlen srfnam_len)
 {
-    return zzsrftrn_0_(1, bodyid, srfnam, surfid, (integer *)0, found, (
-	    logical *)0, srfnam_len);
+    return zzsrftrn_0_(__global_state, 1, bodyid, srfnam, surfid, (integer *)
+	    0, found, (logical *)0, srfnam_len);
     }
 
 /* Subroutine */ int zzsrfc2n_(cspice_t* __global_state, integer *surfid, 
 	integer *bodyid, char *srfnam, logical *found, ftnlen srfnam_len)
 {
-    return zzsrftrn_0_(2, bodyid, srfnam, surfid, (integer *)0, found, (
-	    logical *)0, srfnam_len);
+    return zzsrftrn_0_(__global_state, 2, bodyid, srfnam, surfid, (integer *)
+	    0, found, (logical *)0, srfnam_len);
     }
 
 /* Subroutine */ int zzsrftrk_(cspice_t* __global_state, integer *usrctr, 
 	logical *update)
 {
-    return zzsrftrn_0_(3, (integer *)0, (char *)0, (integer *)0, usrctr, (
-	    logical *)0, update, (ftnint)0);
+    return zzsrftrn_0_(__global_state, 3, (integer *)0, (char *)0, (integer *)
+	    0, usrctr, (logical *)0, update, (ftnint)0);
     }
 

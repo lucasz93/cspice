@@ -8,7 +8,7 @@
 
 
 extern reset_init_t __reset_init;
-static inline reset_state_t* get_reset_state(cspice_t* state) {
+static reset_state_t* get_reset_state(cspice_t* state) {
 	if (!state->reset)
 		state->reset = __cspice_allocate_module(sizeof(reset_state_t),
 	 &__reset_init, sizeof(__reset_init));

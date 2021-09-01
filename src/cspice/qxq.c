@@ -8,7 +8,7 @@
 
 
 extern qxq_init_t __qxq_init;
-static inline qxq_state_t* get_qxq_state(cspice_t* state) {
+static qxq_state_t* get_qxq_state(cspice_t* state) {
 	if (!state->qxq)
 		state->qxq = __cspice_allocate_module(sizeof(qxq_state_t), &
 	__qxq_init, sizeof(__qxq_init));

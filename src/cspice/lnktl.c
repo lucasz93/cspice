@@ -8,7 +8,7 @@
 
 
 extern lnktl_init_t __lnktl_init;
-static inline lnktl_state_t* get_lnktl_state(cspice_t* state) {
+static lnktl_state_t* get_lnktl_state(cspice_t* state) {
 	if (!state->lnktl)
 		state->lnktl = __cspice_allocate_module(sizeof(lnktl_state_t),
 	 &__lnktl_init, sizeof(__lnktl_init));

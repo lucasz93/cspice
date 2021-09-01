@@ -8,7 +8,7 @@
 
 
 extern dafrwd_init_t __dafrwd_init;
-static inline dafrwd_state_t* get_dafrwd_state(cspice_t* state) {
+static dafrwd_state_t* get_dafrwd_state(cspice_t* state) {
 	if (!state->dafrwd)
 		state->dafrwd = __cspice_allocate_module(sizeof(
 	dafrwd_state_t), &__dafrwd_init, sizeof(__dafrwd_init));
@@ -1726,45 +1726,47 @@ L_dafnrr:
 	integer *recno, integer *begin, integer *end, doublereal *drec, 
 	doublereal *data, logical *found, integer *reads, integer *reqs)
 {
-    return dafrwd_0_(0, handle, recno, begin, end, drec, data, found, reads, 
-	    reqs);
+    return dafrwd_0_(__global_state, 0, handle, recno, begin, end, drec, data,
+	     found, reads, reqs);
     }
 
 /* Subroutine */ int dafgdr_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *begin, integer *end, doublereal *data, 
 	logical *found)
 {
-    return dafrwd_0_(1, handle, recno, begin, end, (doublereal *)0, data, 
-	    found, (integer *)0, (integer *)0);
+    return dafrwd_0_(__global_state, 1, handle, recno, begin, end, (
+	    doublereal *)0, data, found, (integer *)0, (integer *)0);
     }
 
 /* Subroutine */ int dafgsr_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *begin, integer *end, doublereal *data, 
 	logical *found)
 {
-    return dafrwd_0_(2, handle, recno, begin, end, (doublereal *)0, data, 
-	    found, (integer *)0, (integer *)0);
+    return dafrwd_0_(__global_state, 2, handle, recno, begin, end, (
+	    doublereal *)0, data, found, (integer *)0, (integer *)0);
     }
 
 /* Subroutine */ int dafrdr_(cspice_t* __global_state, integer *handle, 
 	integer *recno, integer *begin, integer *end, doublereal *data, 
 	logical *found)
 {
-    return dafrwd_0_(3, handle, recno, begin, end, (doublereal *)0, data, 
-	    found, (integer *)0, (integer *)0);
+    return dafrwd_0_(__global_state, 3, handle, recno, begin, end, (
+	    doublereal *)0, data, found, (integer *)0, (integer *)0);
     }
 
 /* Subroutine */ int dafwdr_(cspice_t* __global_state, integer *handle, 
 	integer *recno, doublereal *drec)
 {
-    return dafrwd_0_(4, handle, recno, (integer *)0, (integer *)0, drec, (
-	    doublereal *)0, (logical *)0, (integer *)0, (integer *)0);
+    return dafrwd_0_(__global_state, 4, handle, recno, (integer *)0, (integer 
+	    *)0, drec, (doublereal *)0, (logical *)0, (integer *)0, (integer *
+	    )0);
     }
 
 /* Subroutine */ int dafnrr_(cspice_t* __global_state, integer *reads, 
 	integer *reqs)
 {
-    return dafrwd_0_(5, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (doublereal *)0, (doublereal *)0, (logical *)0, reads, reqs);
+    return dafrwd_0_(__global_state, 5, (integer *)0, (integer *)0, (integer *
+	    )0, (integer *)0, (doublereal *)0, (doublereal *)0, (logical *)0, 
+	    reads, reqs);
     }
 

@@ -8,7 +8,7 @@
 
 
 extern trcpkg_init_t __trcpkg_init;
-static inline trcpkg_state_t* get_trcpkg_state(cspice_t* state) {
+static trcpkg_state_t* get_trcpkg_state(cspice_t* state) {
 	if (!state->trcpkg)
 		state->trcpkg = __cspice_allocate_module(sizeof(
 	trcpkg_state_t), &__trcpkg_init, sizeof(__trcpkg_init));
@@ -2676,59 +2676,59 @@ L_trcoff:
 	integer *index, char *module, char *trace, char *name__, ftnlen 
 	module_len, ftnlen trace_len, ftnlen name_len)
 {
-    return trcpkg_0_(0, depth, index, module, trace, name__, module_len, 
-	    trace_len, name_len);
+    return trcpkg_0_(__global_state, 0, depth, index, module, trace, name__, 
+	    module_len, trace_len, name_len);
     }
 
 /* Subroutine */ int chkin_(cspice_t* __global_state, char *module, ftnlen 
 	module_len)
 {
-    return trcpkg_0_(1, (integer *)0, (integer *)0, module, (char *)0, (char *
-	    )0, module_len, (ftnint)0, (ftnint)0);
+    return trcpkg_0_(__global_state, 1, (integer *)0, (integer *)0, module, (
+	    char *)0, (char *)0, module_len, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int chkout_(cspice_t* __global_state, char *module, ftnlen 
 	module_len)
 {
-    return trcpkg_0_(2, (integer *)0, (integer *)0, module, (char *)0, (char *
-	    )0, module_len, (ftnint)0, (ftnint)0);
+    return trcpkg_0_(__global_state, 2, (integer *)0, (integer *)0, module, (
+	    char *)0, (char *)0, module_len, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int trcdep_(cspice_t* __global_state, integer *depth)
 {
-    return trcpkg_0_(3, depth, (integer *)0, (char *)0, (char *)0, (char *)0, 
-	    (ftnint)0, (ftnint)0, (ftnint)0);
+    return trcpkg_0_(__global_state, 3, depth, (integer *)0, (char *)0, (char 
+	    *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int trcmxd_(cspice_t* __global_state, integer *depth)
 {
-    return trcpkg_0_(4, depth, (integer *)0, (char *)0, (char *)0, (char *)0, 
-	    (ftnint)0, (ftnint)0, (ftnint)0);
+    return trcpkg_0_(__global_state, 4, depth, (integer *)0, (char *)0, (char 
+	    *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int trcnam_(cspice_t* __global_state, integer *index, char *
 	name__, ftnlen name_len)
 {
-    return trcpkg_0_(5, (integer *)0, index, (char *)0, (char *)0, name__, (
-	    ftnint)0, (ftnint)0, name_len);
+    return trcpkg_0_(__global_state, 5, (integer *)0, index, (char *)0, (char 
+	    *)0, name__, (ftnint)0, (ftnint)0, name_len);
     }
 
 /* Subroutine */ int qcktrc_(cspice_t* __global_state, char *trace, ftnlen 
 	trace_len)
 {
-    return trcpkg_0_(6, (integer *)0, (integer *)0, (char *)0, trace, (char *)
-	    0, (ftnint)0, trace_len, (ftnint)0);
+    return trcpkg_0_(__global_state, 6, (integer *)0, (integer *)0, (char *)0,
+	     trace, (char *)0, (ftnint)0, trace_len, (ftnint)0);
     }
 
 /* Subroutine */ int freeze_(cspice_t* __global_state)
 {
-    return trcpkg_0_(7, (integer *)0, (integer *)0, (char *)0, (char *)0, (
-	    char *)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return trcpkg_0_(__global_state, 7, (integer *)0, (integer *)0, (char *)0,
+	     (char *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
 /* Subroutine */ int trcoff_(cspice_t* __global_state)
 {
-    return trcpkg_0_(8, (integer *)0, (integer *)0, (char *)0, (char *)0, (
-	    char *)0, (ftnint)0, (ftnint)0, (ftnint)0);
+    return trcpkg_0_(__global_state, 8, (integer *)0, (integer *)0, (char *)0,
+	     (char *)0, (char *)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 

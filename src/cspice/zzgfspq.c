@@ -8,7 +8,7 @@
 
 
 extern zzgfspq_init_t __zzgfspq_init;
-static inline zzgfspq_state_t* get_zzgfspq_state(cspice_t* state) {
+static zzgfspq_state_t* get_zzgfspq_state(cspice_t* state) {
 	if (!state->zzgfspq)
 		state->zzgfspq = __cspice_allocate_module(sizeof(
 	zzgfspq_state_t), &__zzgfspq_init, sizeof(__zzgfspq_init));

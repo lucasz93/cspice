@@ -8,7 +8,7 @@
 
 
 extern ckfrot_init_t __ckfrot_init;
-static inline ckfrot_state_t* get_ckfrot_state(cspice_t* state) {
+static ckfrot_state_t* get_ckfrot_state(cspice_t* state) {
 	if (!state->ckfrot)
 		state->ckfrot = __cspice_allocate_module(sizeof(
 	ckfrot_state_t), &__ckfrot_init, sizeof(__ckfrot_init));

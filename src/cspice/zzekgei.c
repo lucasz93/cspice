@@ -8,7 +8,7 @@
 
 
 extern zzekgei_init_t __zzekgei_init;
-static inline zzekgei_state_t* get_zzekgei_state(cspice_t* state) {
+static zzekgei_state_t* get_zzekgei_state(cspice_t* state) {
 	if (!state->zzekgei)
 		state->zzekgei = __cspice_allocate_module(sizeof(
 	zzekgei_state_t), &__zzekgei_init, sizeof(__zzekgei_init));

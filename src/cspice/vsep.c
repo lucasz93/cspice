@@ -8,7 +8,7 @@
 
 
 typedef int vsep_state_t;
-static inline vsep_state_t* get_vsep_state(cspice_t* state) {
+static vsep_state_t* get_vsep_state(cspice_t* state) {
 	return 0;
 }
 
@@ -19,7 +19,7 @@ doublereal vsep_(cspice_t* __global_state, doublereal *v1, doublereal *v2)
     doublereal ret_val;
 
     /* Builtin functions */
-    double asin(f2c_state_t*, doublereal);
+    double asin(doublereal);
 
     /* Local variables */
     extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
@@ -241,14 +241,13 @@ doublereal vsep_(cspice_t* __global_state, doublereal *v1, doublereal *v2)
 	vtemp[0] = u1[0] - u2[0];
 	vtemp[1] = u1[1] - u2[1];
 	vtemp[2] = u1[2] - u2[2];
-	ret_val = asin(&__global_state->f2c, vnorm_(__global_state, vtemp) * 
-		.5) * 2.;
+	ret_val = asin(vnorm_(__global_state, vtemp) * .5) * 2.;
     } else if (vdot_(__global_state, u1, u2) < 0.) {
 	vtemp[0] = u1[0] + u2[0];
 	vtemp[1] = u1[1] + u2[1];
 	vtemp[2] = u1[2] + u2[2];
-	ret_val = pi_(__global_state) - asin(&__global_state->f2c, vnorm_(
-		__global_state, vtemp) * .5) * 2.;
+	ret_val = pi_(__global_state) - asin(vnorm_(__global_state, vtemp) * 
+		.5) * 2.;
     } else {
 	ret_val = pi_(__global_state) / 2.;
     }

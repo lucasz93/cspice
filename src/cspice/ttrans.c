@@ -8,7 +8,7 @@
 
 
 extern ttrans_init_t __ttrans_init;
-static inline ttrans_state_t* get_ttrans_state(cspice_t* state) {
+static ttrans_state_t* get_ttrans_state(cspice_t* state) {
 	if (!state->ttrans)
 		state->ttrans = __cspice_allocate_module(sizeof(
 	ttrans_state_t), &__ttrans_init, sizeof(__ttrans_init));

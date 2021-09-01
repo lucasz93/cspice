@@ -8,7 +8,7 @@
 
 
 extern scdecd_init_t __scdecd_init;
-static inline scdecd_state_t* get_scdecd_state(cspice_t* state) {
+static scdecd_state_t* get_scdecd_state(cspice_t* state) {
 	if (!state->scdecd)
 		state->scdecd = __cspice_allocate_module(sizeof(
 	scdecd_state_t), &__scdecd_init, sizeof(__scdecd_init));

@@ -8,7 +8,7 @@
 
 
 extern xdda_init_t __xdda_init;
-static inline xdda_state_t* get_xdda_state(cspice_t* state) {
+static xdda_state_t* get_xdda_state(cspice_t* state) {
 	if (!state->xdda)
 		state->xdda = __cspice_allocate_module(sizeof(xdda_state_t), &
 	__xdda_init, sizeof(__xdda_init));

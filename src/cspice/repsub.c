@@ -8,7 +8,7 @@
 
 
 extern repsub_init_t __repsub_init;
-static inline repsub_state_t* get_repsub_state(cspice_t* state) {
+static repsub_state_t* get_repsub_state(cspice_t* state) {
 	if (!state->repsub)
 		state->repsub = __cspice_allocate_module(sizeof(
 	repsub_state_t), &__repsub_init, sizeof(__repsub_init));

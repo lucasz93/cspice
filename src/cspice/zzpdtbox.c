@@ -8,7 +8,7 @@
 
 
 extern zzpdtbox_init_t __zzpdtbox_init;
-static inline zzpdtbox_state_t* get_zzpdtbox_state(cspice_t* state) {
+static zzpdtbox_state_t* get_zzpdtbox_state(cspice_t* state) {
 	if (!state->zzpdtbox)
 		state->zzpdtbox = __cspice_allocate_module(sizeof(
 	zzpdtbox_state_t), &__zzpdtbox_init, sizeof(__zzpdtbox_init));
@@ -25,7 +25,7 @@ static inline zzpdtbox_state_t* get_zzpdtbox_state(cspice_t* state) {
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal diag[3];
@@ -726,9 +726,9 @@ static inline zzpdtbox_state_t* get_zzpdtbox_state(cspice_t* state) {
 /*     where "radius" is defined as the distance from the Z axis. */
 
     if (hdlon <= halfpi_(__global_state)) {
-	*lr = outrad - inrad * cos(&__global_state->f2c, hdlon);
+	*lr = outrad - inrad * cos(hdlon);
     } else {
-	*lr = (1. - cos(&__global_state->f2c, hdlon)) * outrad;
+	*lr = (1. - cos(hdlon)) * outrad;
     }
 
 /*     The tangential length of bounding box depends on the longitude */
@@ -738,7 +738,7 @@ static inline zzpdtbox_state_t* get_zzpdtbox_state(cspice_t* state) {
     if (hdlon > halfpi_(__global_state)) {
 	*lt = outrad * 2.;
     } else {
-	*lt = outrad * 2. * sin(&__global_state->f2c, hdlon);
+	*lt = outrad * 2. * sin(hdlon);
     }
 
 /*     The height bounds are derived from the lowest and highest points */

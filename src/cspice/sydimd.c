@@ -8,7 +8,7 @@
 
 
 typedef int sydimd_state_t;
-static inline sydimd_state_t* get_sydimd_state(cspice_t* state) {
+static sydimd_state_t* get_sydimd_state(cspice_t* state) {
 	return 0;
 }
 

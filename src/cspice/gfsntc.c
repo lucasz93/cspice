@@ -8,7 +8,7 @@
 
 
 extern gfsntc_init_t __gfsntc_init;
-static inline gfsntc_state_t* get_gfsntc_state(cspice_t* state) {
+static gfsntc_state_t* get_gfsntc_state(cspice_t* state) {
 	if (!state->gfsntc)
 		state->gfsntc = __cspice_allocate_module(sizeof(
 	gfsntc_state_t), &__gfsntc_init, sizeof(__gfsntc_init));

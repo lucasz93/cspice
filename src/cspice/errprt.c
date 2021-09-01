@@ -8,7 +8,7 @@
 
 
 extern errprt_init_t __errprt_init;
-static inline errprt_state_t* get_errprt_state(cspice_t* state) {
+static errprt_state_t* get_errprt_state(cspice_t* state) {
 	if (!state->errprt)
 		state->errprt = __cspice_allocate_module(sizeof(
 	errprt_state_t), &__errprt_init, sizeof(__errprt_init));

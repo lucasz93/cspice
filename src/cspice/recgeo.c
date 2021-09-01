@@ -8,7 +8,7 @@
 
 
 typedef int recgeo_state_t;
-static inline recgeo_state_t* get_recgeo_state(cspice_t* state) {
+static recgeo_state_t* get_recgeo_state(cspice_t* state) {
 	return 0;
 }
 
@@ -18,7 +18,7 @@ static inline recgeo_state_t* get_recgeo_state(cspice_t* state) {
 	doublereal *alt)
 {
     /* Builtin functions */
-    double atan2(f2c_state_t*, doublereal, doublereal);
+    double atan2(doublereal, doublereal);
 
     /* Local variables */
     doublereal base[3];
@@ -351,7 +351,7 @@ static inline recgeo_state_t* get_recgeo_state(cspice_t* state) {
     if (rectan[0] == 0. && rectan[1] == 0.) {
 	*long__ = 0.;
     } else {
-	*long__ = atan2(&__global_state->f2c, rectan[1], rectan[0]);
+	*long__ = atan2(rectan[1], rectan[0]);
     }
     chkout_(__global_state, "RECGEO", (ftnlen)6);
     return 0;

@@ -8,7 +8,7 @@
 
 
 extern zzekjoin_init_t __zzekjoin_init;
-static inline zzekjoin_state_t* get_zzekjoin_state(cspice_t* state) {
+static zzekjoin_state_t* get_zzekjoin_state(cspice_t* state) {
 	if (!state->zzekjoin)
 		state->zzekjoin = __cspice_allocate_module(sizeof(
 	zzekjoin_state_t), &__zzekjoin_init, sizeof(__zzekjoin_init));

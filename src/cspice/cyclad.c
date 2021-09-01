@@ -8,7 +8,7 @@
 
 
 typedef int cyclad_state_t;
-static inline cyclad_state_t* get_cyclad_state(cspice_t* state) {
+static cyclad_state_t* get_cyclad_state(cspice_t* state) {
 	return 0;
 }
 

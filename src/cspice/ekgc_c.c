@@ -422,7 +422,7 @@
    last non-blank character.  This operation is valid whether or not the
    SPICELIB routine signaled an error.
    */
-   F2C_ConvertStr ( lenout, cdata );
+   F2C_ConvertStr ( naif_state, lenout, cdata );
 
 
    /*

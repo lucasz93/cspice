@@ -8,7 +8,7 @@
 
 
 extern scpars_init_t __scpars_init;
-static inline scpars_state_t* get_scpars_state(cspice_t* state) {
+static scpars_state_t* get_scpars_state(cspice_t* state) {
 	if (!state->scpars)
 		state->scpars = __cspice_allocate_module(sizeof(
 	scpars_state_t), &__scpars_init, sizeof(__scpars_init));

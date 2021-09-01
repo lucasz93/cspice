@@ -8,7 +8,7 @@
 
 
 extern gfrr_init_t __gfrr_init;
-static inline gfrr_state_t* get_gfrr_state(cspice_t* state) {
+static gfrr_state_t* get_gfrr_state(cspice_t* state) {
 	if (!state->gfrr)
 		state->gfrr = __cspice_allocate_module(sizeof(gfrr_state_t), &
 	__gfrr_init, sizeof(__gfrr_init));

@@ -8,7 +8,7 @@
 
 
 extern refchg_init_t __refchg_init;
-static inline refchg_state_t* get_refchg_state(cspice_t* state) {
+static refchg_state_t* get_refchg_state(cspice_t* state) {
 	if (!state->refchg)
 		state->refchg = __cspice_allocate_module(sizeof(
 	refchg_state_t), &__refchg_init, sizeof(__refchg_init));

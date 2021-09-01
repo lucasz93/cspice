@@ -8,7 +8,7 @@
 
 
 typedef int sumai_state_t;
-static inline sumai_state_t* get_sumai_state(cspice_t* state) {
+static sumai_state_t* get_sumai_state(cspice_t* state) {
 	return 0;
 }
 

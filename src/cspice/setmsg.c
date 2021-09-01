@@ -8,7 +8,7 @@
 
 
 typedef int setmsg_state_t;
-static inline setmsg_state_t* get_setmsg_state(cspice_t* state) {
+static setmsg_state_t* get_setmsg_state(cspice_t* state) {
 	return 0;
 }
 

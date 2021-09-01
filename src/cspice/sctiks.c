@@ -8,7 +8,7 @@
 
 
 typedef int sctiks_state_t;
-static inline sctiks_state_t* get_sctiks_state(cspice_t* state) {
+static sctiks_state_t* get_sctiks_state(cspice_t* state) {
 	return 0;
 }
 

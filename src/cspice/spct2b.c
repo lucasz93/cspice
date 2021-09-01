@@ -8,7 +8,7 @@
 
 
 extern spct2b_init_t __spct2b_init;
-static inline spct2b_state_t* get_spct2b_state(cspice_t* state) {
+static spct2b_state_t* get_spct2b_state(cspice_t* state) {
 	if (!state->spct2b)
 		state->spct2b = __cspice_allocate_module(sizeof(
 	spct2b_state_t), &__spct2b_init, sizeof(__spct2b_init));

@@ -8,7 +8,7 @@
 
 
 extern spcopn_init_t __spcopn_init;
-static inline spcopn_state_t* get_spcopn_state(cspice_t* state) {
+static spcopn_state_t* get_spcopn_state(cspice_t* state) {
 	if (!state->spcopn)
 		state->spcopn = __cspice_allocate_module(sizeof(
 	spcopn_state_t), &__spcopn_init, sizeof(__spcopn_init));

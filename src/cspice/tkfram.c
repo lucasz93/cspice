@@ -8,7 +8,7 @@
 
 
 extern tkfram_init_t __tkfram_init;
-static inline tkfram_state_t* get_tkfram_state(cspice_t* state) {
+static tkfram_state_t* get_tkfram_state(cspice_t* state) {
 	if (!state->tkfram)
 		state->tkfram = __cspice_allocate_module(sizeof(
 	tkfram_state_t), &__tkfram_init, sizeof(__tkfram_init));

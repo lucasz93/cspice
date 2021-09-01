@@ -8,7 +8,7 @@
 
 
 typedef int sytrni_state_t;
-static inline sytrni_state_t* get_sytrni_state(cspice_t* state) {
+static sytrni_state_t* get_sytrni_state(cspice_t* state) {
 	return 0;
 }
 

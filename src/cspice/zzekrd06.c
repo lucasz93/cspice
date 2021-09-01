@@ -8,7 +8,7 @@
 
 
 extern zzekrd06_init_t __zzekrd06_init;
-static inline zzekrd06_state_t* get_zzekrd06_state(cspice_t* state) {
+static zzekrd06_state_t* get_zzekrd06_state(cspice_t* state) {
 	if (!state->zzekrd06)
 		state->zzekrd06 = __cspice_allocate_module(sizeof(
 	zzekrd06_state_t), &__zzekrd06_init, sizeof(__zzekrd06_init));

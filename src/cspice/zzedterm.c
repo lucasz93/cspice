@@ -8,7 +8,7 @@
 
 
 extern zzedterm_init_t __zzedterm_init;
-static inline zzedterm_state_t* get_zzedterm_state(cspice_t* state) {
+static zzedterm_state_t* get_zzedterm_state(cspice_t* state) {
 	if (!state->zzedterm)
 		state->zzedterm = __cspice_allocate_module(sizeof(
 	zzedterm_state_t), &__zzedterm_init, sizeof(__zzedterm_init));
@@ -28,7 +28,7 @@ static inline zzedterm_state_t* get_zzedterm_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
-    double asin(f2c_state_t*, doublereal);
+    double asin(doublereal);
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
     double d_sign(f2c_state_t*, doublereal *, doublereal *);
 
@@ -462,8 +462,8 @@ static inline zzedterm_state_t* get_zzedterm_state(cspice_t* state) {
 /*        OUTANG corresponds to the target's outer bounding sphere; */
 /*        INANG to the inner bounding sphere. */
 
-	outang = asin(&__global_state->f2c, (*srcrad - maxrad) / d__);
-	inang = asin(&__global_state->f2c, (*srcrad - minrad) / d__);
+	outang = asin((*srcrad - maxrad) / d__);
+	inang = asin((*srcrad - minrad) / d__);
     } else {
 
 /*        Compute the angular offsets from the axis of rays tangent to */
@@ -474,8 +474,8 @@ static inline zzedterm_state_t* get_zzedterm_state(cspice_t* state) {
 /*        OUTANG corresponds to the target's outer bounding sphere; */
 /*        INANG to the inner bounding sphere. */
 
-	outang = asin(&__global_state->f2c, (*srcrad + maxrad) / d__);
-	inang = asin(&__global_state->f2c, (*srcrad + minrad) / d__);
+	outang = asin((*srcrad + maxrad) / d__);
+	inang = asin((*srcrad + minrad) / d__);
     }
 
 /*     Compute the angular delta we'll use for generating */

@@ -275,7 +275,7 @@
    /*
    Convert the output string from Fortran-style to C-style.
    */
-   F2C_ConvertStr( lenout, msg );
+   F2C_ConvertStr( naif_state, lenout, msg );
    
 
    chkout_c ( naif_state, "getmsg_c" );

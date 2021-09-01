@@ -8,7 +8,7 @@
 
 
 extern zzptpl02_init_t __zzptpl02_init;
-static inline zzptpl02_state_t* get_zzptpl02_state(cspice_t* state) {
+static zzptpl02_state_t* get_zzptpl02_state(cspice_t* state) {
 	if (!state->zzptpl02)
 		state->zzptpl02 = __cspice_allocate_module(sizeof(
 	zzptpl02_state_t), &__zzptpl02_init, sizeof(__zzptpl02_init));

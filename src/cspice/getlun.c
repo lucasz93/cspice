@@ -8,7 +8,7 @@
 
 
 typedef int getlun_state_t;
-static inline getlun_state_t* get_getlun_state(cspice_t* state) {
+static getlun_state_t* get_getlun_state(cspice_t* state) {
 	return 0;
 }
 

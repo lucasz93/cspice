@@ -8,7 +8,7 @@
 
 
 extern zzfrmch1_init_t __zzfrmch1_init;
-static inline zzfrmch1_state_t* get_zzfrmch1_state(cspice_t* state) {
+static zzfrmch1_state_t* get_zzfrmch1_state(cspice_t* state) {
 	if (!state->zzfrmch1)
 		state->zzfrmch1 = __cspice_allocate_module(sizeof(
 	zzfrmch1_state_t), &__zzfrmch1_init, sizeof(__zzfrmch1_init));

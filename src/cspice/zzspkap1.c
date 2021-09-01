@@ -8,7 +8,7 @@
 
 
 extern zzspkap1_init_t __zzspkap1_init;
-static inline zzspkap1_state_t* get_zzspkap1_state(cspice_t* state) {
+static zzspkap1_state_t* get_zzspkap1_state(cspice_t* state) {
 	if (!state->zzspkap1)
 		state->zzspkap1 = __cspice_allocate_module(sizeof(
 	zzspkap1_state_t), &__zzspkap1_init, sizeof(__zzspkap1_init));

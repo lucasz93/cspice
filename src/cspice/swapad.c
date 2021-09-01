@@ -8,7 +8,7 @@
 
 
 typedef int swapad_state_t;
-static inline swapad_state_t* get_swapad_state(cspice_t* state) {
+static swapad_state_t* get_swapad_state(cspice_t* state) {
 	return 0;
 }
 

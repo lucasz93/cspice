@@ -8,7 +8,7 @@
 
 
 extern zzekvmch_init_t __zzekvmch_init;
-static inline zzekvmch_state_t* get_zzekvmch_state(cspice_t* state) {
+static zzekvmch_state_t* get_zzekvmch_state(cspice_t* state) {
 	if (!state->zzekvmch)
 		state->zzekvmch = __cspice_allocate_module(sizeof(
 	zzekvmch_state_t), &__zzekvmch_init, sizeof(__zzekvmch_init));

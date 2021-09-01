@@ -8,7 +8,7 @@
 
 
 extern str2et_init_t __str2et_init;
-static inline str2et_state_t* get_str2et_state(cspice_t* state) {
+static str2et_state_t* get_str2et_state(cspice_t* state) {
 	if (!state->str2et)
 		state->str2et = __cspice_allocate_module(sizeof(
 	str2et_state_t), &__str2et_init, sizeof(__str2et_init));

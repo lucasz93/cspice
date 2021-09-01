@@ -8,7 +8,7 @@
 
 
 typedef int wnreld_state_t;
-static inline wnreld_state_t* get_wnreld_state(cspice_t* state) {
+static wnreld_state_t* get_wnreld_state(cspice_t* state) {
 	return 0;
 }
 

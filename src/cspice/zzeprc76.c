@@ -8,7 +8,7 @@
 
 
 extern zzeprc76_init_t __zzeprc76_init;
-static inline zzeprc76_state_t* get_zzeprc76_state(cspice_t* state) {
+static zzeprc76_state_t* get_zzeprc76_state(cspice_t* state) {
 	if (!state->zzeprc76)
 		state->zzeprc76 = __cspice_allocate_module(sizeof(
 	zzeprc76_state_t), &__zzeprc76_init, sizeof(__zzeprc76_init));

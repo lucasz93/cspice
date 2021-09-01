@@ -8,7 +8,7 @@
 
 
 typedef int remsub_state_t;
-static inline remsub_state_t* get_remsub_state(cspice_t* state) {
+static remsub_state_t* get_remsub_state(cspice_t* state) {
 	return 0;
 }
 

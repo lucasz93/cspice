@@ -48,8 +48,8 @@
 */
 
    #include <signal.h>
-   #include "SpiceUsr.h"
    #include "__cspice_state.h"
+   #include "SpiceUsr.h"
 
 
    void zzgfsavh_c ( void         * naif_state,

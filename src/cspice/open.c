@@ -124,7 +124,7 @@ char *f__w_mode[4] = {"wb", "w", "r+b", "r+"};
       f2c->f__buflen <<= 1;
    len = (unsigned int)f2c->f__buflen;
    if (len != f2c->f__buflen || !(nbuf = (char*)malloc(len)))
-      f__fatal(113, "malloc failure");
+      f__fatal(f2c,113, "malloc failure");
    s = nbuf;
    t = f2c->f__buf;
    te = t + c;
@@ -206,7 +206,7 @@ static void
          f__bufadj(f2c, (int)a->ofnmlen, 0);
       g_char(a->ofnm, a->ofnmlen, f2c->f__curunit->ufnm = f2c->f__buf);
       }
-   f__fatal(m, s);
+   f__fatal(f2c,m, s);
    }
 
 
@@ -232,9 +232,9 @@ static void
    int n;
 #endif
    if(a->ounit>=MXUNIT || a->ounit<0)
-      err(a->oerr,101,"open")
+      err(f2c,a->oerr,101,"open")
    if (!f2c->f__init)
-      f_init();
+      f_init(f2c);
    f2c->f__curunit = b = &f2c->f__units[a->ounit];
    if(b->ufd) 
       {
@@ -395,7 +395,7 @@ static void
          b->urw = 2;
          }
       else
-         err(a->oerr, errno, "open");
+         err(f2c,a->oerr, errno, "open");
       }
    b->useek = f__canseek(b->ufd = tf);
 

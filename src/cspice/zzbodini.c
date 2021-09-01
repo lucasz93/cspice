@@ -8,7 +8,7 @@
 
 
 typedef int zzbodini_state_t;
-static inline zzbodini_state_t* get_zzbodini_state(cspice_t* state) {
+static zzbodini_state_t* get_zzbodini_state(cspice_t* state) {
 	return 0;
 }
 

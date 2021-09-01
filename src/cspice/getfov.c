@@ -8,7 +8,7 @@
 
 
 extern getfov_init_t __getfov_init;
-static inline getfov_state_t* get_getfov_state(cspice_t* state) {
+static getfov_state_t* get_getfov_state(cspice_t* state) {
 	if (!state->getfov)
 		state->getfov = __cspice_allocate_module(sizeof(
 	getfov_state_t), &__getfov_init, sizeof(__getfov_init));
@@ -30,7 +30,7 @@ static inline getfov_state_t* get_getfov_state(cspice_t* state) {
     /* Builtin functions */
     /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
     integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal);
 
     /* Local variables */
     doublereal bmag;
@@ -1387,8 +1387,8 @@ static inline getfov_state_t* get_getfov_state(cspice_t* state) {
 /*           Signal an error if both are not positive numbers. */
 /*           Use MINCOS as a tolerance. */
 
-	    cosran = cos(&__global_state->f2c, refang);
-	    coscan = cos(&__global_state->f2c, crsang);
+	    cosran = cos(refang);
+	    coscan = cos(crsang);
 	    if (cosran < 1e-15 || coscan < 1e-15) {
 		setmsg_(__global_state, "The angular extents specified in th"
 			"e FOV definition for instrument # result in degenera"
@@ -1403,8 +1403,8 @@ static inline getfov_state_t* get_getfov_state(cspice_t* state) {
 
 /*           Compute the NORMAL vectors to complete step (4). */
 
-	    sinran = sin(&__global_state->f2c, refang);
-	    sincan = sin(&__global_state->f2c, crsang);
+	    sinran = sin(refang);
+	    sincan = sin(crsang);
 	    d__1 = -cosran;
 	    vlcom_(__global_state, &d__1, b1, &sinran, b, normal);
 	    d__1 = -coscan;

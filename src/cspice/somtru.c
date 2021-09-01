@@ -8,7 +8,7 @@
 
 
 typedef int somtru_state_t;
-static inline somtru_state_t* get_somtru_state(cspice_t* state) {
+static somtru_state_t* get_somtru_state(cspice_t* state) {
 	return 0;
 }
 

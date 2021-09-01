@@ -8,7 +8,7 @@
 
 
 extern georec_init_t __georec_init;
-static inline georec_state_t* get_georec_state(cspice_t* state) {
+static georec_state_t* get_georec_state(cspice_t* state) {
 	if (!state->georec)
 		state->georec = __cspice_allocate_module(sizeof(
 	georec_state_t), &__georec_init, sizeof(__georec_init));
@@ -25,8 +25,7 @@ static inline georec_state_t* get_georec_state(cspice_t* state) {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
-	    f2c_state_t*, doublereal);
+    double cos(doublereal), sin(doublereal), sqrt(doublereal);
 
     /* Local variables */
     doublereal base[3];
@@ -339,17 +338,17 @@ static inline georec_state_t* get_georec_state(cspice_t* state) {
 /*     coordinates of a point with altitude 0 but the same geodetic */
 /*     latitude and longitude as the input point. */
 
-    cphi = cos(&__global_state->f2c, *lat);
-    sphi = sin(&__global_state->f2c, *lat);
-    clmbda = cos(&__global_state->f2c, *long__);
-    slmbda = sin(&__global_state->f2c, *long__);
+    cphi = cos(*lat);
+    sphi = sin(*lat);
+    clmbda = cos(*long__);
+    slmbda = sin(*long__);
 /* Computing MAX */
     d__3 = (d__1 = *re * cphi, abs(d__1)), d__4 = (d__2 = rp * sphi, abs(d__2)
 	    );
     big = max(d__3,d__4);
     x = *re * cphi / big;
     y = rp * sphi / big;
-    scale = 1. / (big * sqrt(&__global_state->f2c, x * x + y * y));
+    scale = 1. / (big * sqrt(x * x + y * y));
 
 /*     Compute the rectangular coordinates of the point with zero */
 /*     altitude. */

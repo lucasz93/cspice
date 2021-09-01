@@ -8,7 +8,7 @@
 
 
 typedef int opsgni_state_t;
-static inline opsgni_state_t* get_opsgni_state(cspice_t* state) {
+static opsgni_state_t* get_opsgni_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern zzphsh_init_t __zzphsh_init;
-static inline zzphsh_state_t* get_zzphsh_state(cspice_t* state) {
+static zzphsh_state_t* get_zzphsh_state(cspice_t* state) {
 	if (!state->zzphsh)
 		state->zzphsh = __cspice_allocate_module(sizeof(
 	zzphsh_state_t), &__zzphsh_init, sizeof(__zzphsh_init));
@@ -1398,22 +1398,24 @@ L_zzhash2:
 integer zzphsh_(cspice_t* __global_state, char *word, integer *m, integer *m2,
 	 ftnlen word_len)
 {
-    return zzphsh_0_(0, word, m, m2, word_len);
+    return zzphsh_0_(__global_state, 0, word, m, m2, word_len);
     }
 
 integer zzshsh_(cspice_t* __global_state, integer *m)
 {
-    return zzphsh_0_(1, (char *)0, m, (integer *)0, (ftnint)0);
+    return zzphsh_0_(__global_state, 1, (char *)0, m, (integer *)0, (ftnint)0)
+	    ;
     }
 
 integer zzhash_(cspice_t* __global_state, char *word, ftnlen word_len)
 {
-    return zzphsh_0_(2, word, (integer *)0, (integer *)0, word_len);
+    return zzphsh_0_(__global_state, 2, word, (integer *)0, (integer *)0, 
+	    word_len);
     }
 
 integer zzhash2_(cspice_t* __global_state, char *word, integer *m2, ftnlen 
 	word_len)
 {
-    return zzphsh_0_(3, word, (integer *)0, m2, word_len);
+    return zzphsh_0_(__global_state, 3, word, (integer *)0, m2, word_len);
     }
 

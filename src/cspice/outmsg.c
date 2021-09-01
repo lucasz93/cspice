@@ -8,7 +8,7 @@
 
 
 extern outmsg_init_t __outmsg_init;
-static inline outmsg_state_t* get_outmsg_state(cspice_t* state) {
+static outmsg_state_t* get_outmsg_state(cspice_t* state) {
 	if (!state->outmsg)
 		state->outmsg = __cspice_allocate_module(sizeof(
 	outmsg_state_t), &__outmsg_init, sizeof(__outmsg_init));

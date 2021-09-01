@@ -1,6 +1,6 @@
 #ifndef __F2C_FMT_H__
 #define __F2C_FMT_H__
-
+struct f2c_state_s;
 struct syl
 {	int op;
 	int p1;
@@ -64,20 +64,20 @@ extern int w_ed(),w_ned();
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern void fmt_bg(void);
-extern int pars_f(char*);
-extern int rd_ed(struct syl*, char*, ftnlen),rd_ned(struct syl*);
-extern int w_ed(f2c_state_t *, struct syl*, char*, ftnlen),w_ned(f2c_state_t *, struct syl*);
-extern int wrt_E(ufloat*, int, int, int, ftnlen);
-extern int wrt_F(ufloat*, int, int, ftnlen);
-extern int wrt_L(f2c_state_t *, Uint*, int, ftnlen);
+extern void fmt_bg(struct f2c_state_s*);
+extern int pars_f(struct f2c_state_s*,char*);
+extern int rd_ed(struct f2c_state_s *,struct syl*, char*, ftnlen),rd_ned(struct f2c_state_s *, struct syl*);
+extern int w_ed(struct f2c_state_s *, struct syl*, char*, ftnlen),w_ned(struct f2c_state_s *, struct syl*);
+extern int wrt_E(struct f2c_state_s *, ufloat*, int, int, int, ftnlen);
+extern int wrt_F(struct f2c_state_s *, ufloat*, int, int, ftnlen);
+extern int wrt_L(struct f2c_state_s *, Uint*, int, ftnlen);
 #ifdef __cplusplus
 	}
 #endif
 #endif
-#define GET(f2c, x) if((x=(*f2c->f__getn)())<0) return(x)
+#define GET(f2c, x) if((x=(*f2c->f__getn)(f2c))<0) return(x)
 #define VAL(x) (x!='\n'?x:' ')
-#define PUT(f2c, x) (*f2c->f__putn)(x)
+#define PUT(f2c, x) (*f2c->f__putn)(f2c,x)
 
 #undef TYQUAD
 #ifndef Allow_TYQUAD
@@ -90,7 +90,7 @@ extern int wrt_L(f2c_state_t *, Uint*, int, ftnlen);
 #ifdef KR_headers
 extern char *f__icvt();
 #else
-extern char *f__icvt(longint, int*, int*, int);
+extern char *f__icvt(struct f2c_state_s*,longint, int*, int*, int);
 #endif
 
 #endif /* __F2C_FMT_H__ */

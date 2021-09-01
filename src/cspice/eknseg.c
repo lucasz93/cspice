@@ -8,7 +8,7 @@
 
 
 extern eknseg_init_t __eknseg_init;
-static inline eknseg_state_t* get_eknseg_state(cspice_t* state) {
+static eknseg_state_t* get_eknseg_state(cspice_t* state) {
 	if (!state->eknseg)
 		state->eknseg = __cspice_allocate_module(sizeof(
 	eknseg_state_t), &__eknseg_init, sizeof(__eknseg_init));

@@ -8,7 +8,7 @@
 
 
 extern ckr02_init_t __ckr02_init;
-static inline ckr02_state_t* get_ckr02_state(cspice_t* state) {
+static ckr02_state_t* get_ckr02_state(cspice_t* state) {
 	if (!state->ckr02)
 		state->ckr02 = __cspice_allocate_module(sizeof(ckr02_state_t),
 	 &__ckr02_init, sizeof(__ckr02_init));

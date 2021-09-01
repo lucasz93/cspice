@@ -8,7 +8,7 @@
 
 
 typedef int fetchc_state_t;
-static inline fetchc_state_t* get_fetchc_state(cspice_t* state) {
+static fetchc_state_t* get_fetchc_state(cspice_t* state) {
 	return 0;
 }
 

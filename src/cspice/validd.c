@@ -8,7 +8,7 @@
 
 
 typedef int validd_state_t;
-static inline validd_state_t* get_validd_state(cspice_t* state) {
+static validd_state_t* get_validd_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 typedef int ckcls_state_t;
-static inline ckcls_state_t* get_ckcls_state(cspice_t* state) {
+static ckcls_state_t* get_ckcls_state(cspice_t* state) {
 	return 0;
 }
 

@@ -8,7 +8,7 @@
 
 
 extern saelgv_init_t __saelgv_init;
-static inline saelgv_state_t* get_saelgv_state(cspice_t* state) {
+static saelgv_state_t* get_saelgv_state(cspice_t* state) {
 	if (!state->saelgv)
 		state->saelgv = __cspice_allocate_module(sizeof(
 	saelgv_state_t), &__saelgv_init, sizeof(__saelgv_init));

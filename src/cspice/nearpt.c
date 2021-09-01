@@ -8,7 +8,7 @@
 
 
 extern nearpt_init_t __nearpt_init;
-static inline nearpt_state_t* get_nearpt_state(cspice_t* state) {
+static nearpt_state_t* get_nearpt_state(cspice_t* state) {
 	if (!state->nearpt)
 		state->nearpt = __cspice_allocate_module(sizeof(
 	nearpt_state_t), &__nearpt_init, sizeof(__nearpt_init));
@@ -30,8 +30,7 @@ static inline nearpt_state_t* get_nearpt_state(cspice_t* state) {
 
     /* Builtin functions */
     integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
-    double sqrt(f2c_state_t*, doublereal), pow_dd(f2c_state_t*, doublereal *, 
-	    doublereal *);
+    double sqrt(doublereal), pow_dd(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
@@ -802,7 +801,7 @@ static inline nearpt_state_t* get_nearpt_state(cspice_t* state) {
 /*     The scaled axis lengths must be small enough so they can */
 /*     be squared. */
 
-    toobig = sqrt(&__global_state->f2c, dpmax_(__global_state) / 100.);
+    toobig = sqrt(dpmax_(__global_state) / 100.);
 
 /*     Note the first axis has length 1.D0, so we don't check it. */
 
@@ -834,12 +833,11 @@ static inline nearpt_state_t* get_nearpt_state(cspice_t* state) {
 /*     the square roots of the factors to TOOBIG. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	prodct = sqrt(&__global_state->f2c, axis[(i__1 = i__ - 1) < 3 && 0 <= 
-		i__1 ? i__1 : s_rnge(&__global_state->f2c, "axis", i__1, 
-		"nearpt_", (ftnlen)844)]) * sqrt(&__global_state->f2c, (d__1 =
-		 point[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
-		__global_state->f2c, "point", i__2, "nearpt_", (ftnlen)844)], 
-		abs(d__1)));
+	prodct = sqrt(axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "axis", i__1, "nearpt_", (ftnlen)844)]) *
+		 sqrt((d__1 = point[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 :
+		 s_rnge(&__global_state->f2c, "point", i__2, "nearpt_", (
+		ftnlen)844)], abs(d__1)));
 	if (prodct > toobig) {
 	    setmsg_(__global_state, "Product of length of scaled axis #* and"
 		    " size of corresponding scaled component of POSITN is > *"
@@ -1604,8 +1602,7 @@ static inline nearpt_state_t* get_nearpt_state(cspice_t* state) {
 
 /*                      ...and compute the x component of the point. */
 
-			    epoint[0] = axis[0] * sqrt(&__global_state->f2c, (
-				    max(0.,temp)));
+			    epoint[0] = axis[0] * sqrt((max(0.,temp)));
 			    extra = TRUE_;
 			}
 		    }
@@ -1654,8 +1651,7 @@ static inline nearpt_state_t* get_nearpt_state(cspice_t* state) {
 
 /*                      ...and compute the x component of the point. */
 
-			    epoint[0] = axis[0] * sqrt(&__global_state->f2c, 
-				    temp);
+			    epoint[0] = axis[0] * sqrt(temp);
 			    extra = TRUE_;
 			}
 		    }

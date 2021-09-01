@@ -8,7 +8,7 @@
 
 
 extern dpfmt_init_t __dpfmt_init;
-static inline dpfmt_state_t* get_dpfmt_state(cspice_t* state) {
+static dpfmt_state_t* get_dpfmt_state(cspice_t* state) {
 	if (!state->dpfmt)
 		state->dpfmt = __cspice_allocate_module(sizeof(dpfmt_state_t),
 	 &__dpfmt_init, sizeof(__dpfmt_init));

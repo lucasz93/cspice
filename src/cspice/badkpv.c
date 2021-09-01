@@ -8,7 +8,7 @@
 
 
 typedef int badkpv_state_t;
-static inline badkpv_state_t* get_badkpv_state(cspice_t* state) {
+static badkpv_state_t* get_badkpv_state(cspice_t* state) {
 	return 0;
 }
 

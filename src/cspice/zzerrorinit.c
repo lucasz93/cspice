@@ -41,11 +41,11 @@
 
 */
 
+#include "__cspice_state.h"
 #include "SpiceUsr.h"
 #include "zzerror.h"
-#include "__cspice_state.h"
 
-void zzerrorinit(void)
+void zzerrorinit(void *naif_state)
 
 /*
 
@@ -132,7 +132,7 @@ void zzerrorinit(void)
 */
    {
     
-   cspice_user_state_t* user = &__cspice_get_state()->user;
+   cspice_user_state_t * user = &((cspice_t *)naif_state)->user;
 
    /*
    Prevent repeated executions of code with the 'first' flag.
@@ -145,8 +145,8 @@ void zzerrorinit(void)
       error output device to NULL.
       */
 
-      erract_c("SET", (SpiceInt) sizeof("RETURN"), "RETURN");
-      errdev_c("SET", (SpiceInt) sizeof("NULL")  , "NULL"  );
+      erract_c(naif_state, "SET", (SpiceInt) sizeof("RETURN"), "RETURN");
+      errdev_c(naif_state, "SET", (SpiceInt) sizeof("NULL")  , "NULL"  );
 
       user->zzerrorinit.first = SPICEFALSE;
 

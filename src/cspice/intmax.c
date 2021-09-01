@@ -45,7 +45,7 @@
    #include <limits.h>
    #include "SpiceUsr.h"
 
-   SpiceInt intmax_ () 
+   SpiceInt intmax_ (void *naif_state) 
 
 /*
 

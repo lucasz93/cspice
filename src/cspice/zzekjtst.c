@@ -8,7 +8,7 @@
 
 
 extern zzekjtst_init_t __zzekjtst_init;
-static inline zzekjtst_state_t* get_zzekjtst_state(cspice_t* state) {
+static zzekjtst_state_t* get_zzekjtst_state(cspice_t* state) {
 	if (!state->zzekjtst)
 		state->zzekjtst = __cspice_allocate_module(sizeof(
 	zzekjtst_state_t), &__zzekjtst_init, sizeof(__zzekjtst_init));
@@ -2363,9 +2363,10 @@ L_zzekjnxt:
 	integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, 
 	integer *dtdscs, logical *found, integer *rowvec)
 {
-    return zzekjtst_0_(0, segvec, jbase1, nt1, rb1, nr1, jbase2, nt2, rb2, 
-	    nr2, njcnst, active, cpidx1, clidx1, elts1, ops, cpidx2, clidx2, 
-	    elts2, sthan, stsdsc, stdtpt, dtpool, dtdscs, found, rowvec);
+    return zzekjtst_0_(__global_state, 0, segvec, jbase1, nt1, rb1, nr1, 
+	    jbase2, nt2, rb2, nr2, njcnst, active, cpidx1, clidx1, elts1, ops,
+	     cpidx2, clidx2, elts2, sthan, stsdsc, stdtpt, dtpool, dtdscs, 
+	    found, rowvec);
     }
 
 /* Subroutine */ int zzekjprp_(cspice_t* __global_state, integer *segvec, 
@@ -2376,20 +2377,20 @@ L_zzekjnxt:
 	integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, 
 	integer *dtdscs)
 {
-    return zzekjtst_0_(1, segvec, jbase1, nt1, rb1, nr1, jbase2, nt2, rb2, 
-	    nr2, njcnst, active, cpidx1, clidx1, elts1, ops, cpidx2, clidx2, 
-	    elts2, sthan, stsdsc, stdtpt, dtpool, dtdscs, (logical *)0, (
-	    integer *)0);
+    return zzekjtst_0_(__global_state, 1, segvec, jbase1, nt1, rb1, nr1, 
+	    jbase2, nt2, rb2, nr2, njcnst, active, cpidx1, clidx1, elts1, ops,
+	     cpidx2, clidx2, elts2, sthan, stsdsc, stdtpt, dtpool, dtdscs, (
+	    logical *)0, (integer *)0);
     }
 
 /* Subroutine */ int zzekjnxt_(cspice_t* __global_state, logical *found, 
 	integer *rowvec)
 {
-    return zzekjtst_0_(2, (integer *)0, (integer *)0, (integer *)0, (integer *
-	    )0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
-	    integer *)0, (integer *)0, (logical *)0, (integer *)0, (integer *)
-	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+    return zzekjtst_0_(__global_state, 2, (integer *)0, (integer *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
-	    0, (integer *)0, found, rowvec);
+	    0, (integer *)0, (integer *)0, (integer *)0, (logical *)0, (
+	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
+	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
+	    integer *)0, (integer *)0, (integer *)0, found, rowvec);
     }
 

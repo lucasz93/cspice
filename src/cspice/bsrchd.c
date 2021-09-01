@@ -8,7 +8,7 @@
 
 
 typedef int bsrchd_state_t;
-static inline bsrchd_state_t* get_bsrchd_state(cspice_t* state) {
+static bsrchd_state_t* get_bsrchd_state(cspice_t* state) {
 	return 0;
 }
 

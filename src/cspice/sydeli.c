@@ -8,7 +8,7 @@
 
 
 extern sydeli_init_t __sydeli_init;
-static inline sydeli_state_t* get_sydeli_state(cspice_t* state) {
+static sydeli_state_t* get_sydeli_state(cspice_t* state) {
 	if (!state->sydeli)
 		state->sydeli = __cspice_allocate_module(sizeof(
 	sydeli_state_t), &__sydeli_init, sizeof(__sydeli_init));

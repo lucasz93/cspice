@@ -8,7 +8,7 @@
 
 
 extern gfsubc_init_t __gfsubc_init;
-static inline gfsubc_state_t* get_gfsubc_state(cspice_t* state) {
+static gfsubc_state_t* get_gfsubc_state(cspice_t* state) {
 	if (!state->gfsubc)
 		state->gfsubc = __cspice_allocate_module(sizeof(
 	gfsubc_state_t), &__gfsubc_init, sizeof(__gfsubc_init));

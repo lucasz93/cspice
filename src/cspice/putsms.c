@@ -8,7 +8,7 @@
 
 
 extern putsms_init_t __putsms_init;
-static inline putsms_state_t* get_putsms_state(cspice_t* state) {
+static putsms_state_t* get_putsms_state(cspice_t* state) {
 	if (!state->putsms)
 		state->putsms = __cspice_allocate_module(sizeof(
 	putsms_state_t), &__putsms_init, sizeof(__putsms_init));
@@ -366,12 +366,12 @@ L_getsms:
 /* Subroutine */ int putsms_(cspice_t* __global_state, char *msg, ftnlen 
 	msg_len)
 {
-    return putsms_0_(0, msg, msg_len);
+    return putsms_0_(__global_state, 0, msg, msg_len);
     }
 
 /* Subroutine */ int getsms_(cspice_t* __global_state, char *msg, ftnlen 
 	msg_len)
 {
-    return putsms_0_(1, msg, msg_len);
+    return putsms_0_(__global_state, 1, msg, msg_len);
     }
 

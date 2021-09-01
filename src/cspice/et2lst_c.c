@@ -381,8 +381,8 @@
    /*
    Convert the output strings from Fortran to C style. 
    */
-   F2C_ConvertStr ( timlen,  time );
-   F2C_ConvertStr ( ampmlen, ampm );
+   F2C_ConvertStr ( naif_state, timlen,  time );
+   F2C_ConvertStr ( naif_state, ampmlen, ampm );
 
 
    chkout_c ( naif_state, "et2lst_c" );
