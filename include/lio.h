@@ -52,23 +52,19 @@ typedef union
 	real	flreal;
 	doublereal	fldouble;
 } flex;
-extern int f__scale;
 #ifdef KR_headers
-extern int (*f__lioproc)(), (*l_getc)(), (*l_ungetc)();
 extern int l_read(), l_write();
 #else
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern int (*f__lioproc)(ftnint*, char*, ftnlen, ftnint);
-extern int l_write(ftnint*, char*, ftnlen, ftnint);
-extern void x_wsne(cilist*);
-extern int c_le(cilist*), (*l_getc)(void), (*l_ungetc)(int,FILE*);
-extern int l_read(ftnint*,char*,ftnlen,ftnint);
-extern integer e_rsle(void), e_wsle(void), s_wsne(cilist*);
-extern int z_rnew(void);
+extern int l_write(struct f2c_state_s *,ftnint*, char*, ftnlen, ftnint);
+extern void x_wsne(struct f2c_state_s *,cilist*);
+extern int c_le(struct f2c_state_s *, cilist*);
+extern int l_read(struct f2c_state_s *, ftnint*,char*,ftnlen,ftnint);
+extern integer e_rsle(struct f2c_state_s *), e_wsle(struct f2c_state_s *), s_wsne(struct f2c_state_s *,cilist*);
+extern int z_rnew(struct f2c_state_s *);
 #ifdef __cplusplus
 	}
 #endif
 #endif
-extern ftnint L_len;

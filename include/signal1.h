@@ -106,6 +106,10 @@
 typedef Sigret_t (*sig_pf)(Sigarg_t);
 #endif
 
+typedef void (*sig_user_pf)(void *, int);
+
+extern sig_pf signal_user(int err, sig_user_pf fn, void *usr);
+
 #define signal1(a,b) signal(a,(sig_pf)b)
 
 #ifdef __cplusplus

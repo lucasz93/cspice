@@ -197,7 +197,7 @@
        the fifth segment of an EK file designated by HANDLE.  Set 
        the new value to 999.. 
  
-          #include <SpiceUsr.h>
+          #include "NaifContext.h"
               .
               .
               .
@@ -207,7 +207,7 @@
    2)  Same as (1), but this time add a null value.  The argument 
        999. is ignored because the null flag is set to SPICETRUE 
  
-          #include <SpiceUsr.h>
+          #include "NaifContext.h"
               .
               .
               .
@@ -218,7 +218,7 @@
        the fifth segment of an EK file designated by HANDLE.  Set 
        the new value using an array DBUFF of 10 d.p. values. 
  
-          #include <SpiceUsr.h>
+          #include "NaifContext.h"
               .
               .
               .

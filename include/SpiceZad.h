@@ -121,40 +121,46 @@ Literature_References
    Prototypes for GF adapters:
    */
 
-   logical  zzadbail_c ( void );
+   logical  zzadbail_c ( void         * naif_state );
 
 
-   int      zzadstep_c ( doublereal   * et,
+   int      zzadstep_c ( void         * naif_state,
+                         doublereal   * et,
                          doublereal   * step );
 
 
-   int      zzadrefn_c ( doublereal   * t1,
+   int      zzadrefn_c ( void         * naif_state,
+                         doublereal   * t1,
                          doublereal   * t2,
                          logical      * s1,
                          logical      * s2,
                          doublereal   * t    );
 
 
-   int      zzadrepf_c ( void );
+   int      zzadrepf_c ( void         * naif_state );
 
 
-   int      zzadrepi_c ( doublereal   * cnfine,
+   int      zzadrepi_c ( void         * naif_state,
+                         doublereal   * cnfine,
                          char         * srcpre,
                          char         * srcsuf,
                          ftnlen         srcprelen,
                          ftnlen         srcsuflen );
 
 
-   int      zzadrepu_c ( doublereal   * ivbeg,
+   int      zzadrepu_c ( void         * naif_state,
+                         doublereal   * ivbeg,
                          doublereal   * ivend,
                          doublereal   * et      );
 
 
-   int      zzadfunc_c ( doublereal   * et,
+   int      zzadfunc_c ( void         * naif_state,
+                         doublereal   * et,
                          doublereal   * value );
 
 
-   int      zzadqdec_c (  U_fp          udfunc,
+   int      zzadqdec_c ( void         * naif_state,
+                          U_fp          udfunc,
                           doublereal  * et,
                           logical     * xbool );
 
@@ -195,10 +201,12 @@ Literature_References
 
    Prototypes for adapter setup interface: 
    */
-   void    zzadsave_c ( SpicePassedInFunc    functionID,
+   void    zzadsave_c ( void               * naif_state,
+                        SpicePassedInFunc    functionID,
                         void               * functionPtr );
 
-   void *  zzadget_c  ( SpicePassedInFunc    functionID  );
+   void *  zzadget_c  ( void               * naif_state,
+                        SpicePassedInFunc    functionID  );
  
  
 #endif

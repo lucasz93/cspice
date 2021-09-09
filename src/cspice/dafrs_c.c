@@ -110,7 +110,7 @@
       of an SPK file.
 
 
-      #include <SpiceUsr.h>
+      #include "NaifContext.h"
  
       int main ( int argc,  char **argv )
       {

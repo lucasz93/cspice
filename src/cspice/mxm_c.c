@@ -46,8 +46,7 @@
    #undef    mxm_c
    
 
-   void mxm_c ( void             * naif_state,
-                ConstSpiceDouble   m1  [3][3],
+   void mxm_c ( ConstSpiceDouble   m1  [3][3],
                 ConstSpiceDouble   m2  [3][3],
                 SpiceDouble        mout[3][3] )
 

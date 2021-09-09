@@ -107,89 +107,108 @@
 namespace Jpl_NAIF_CSpice {
 #endif
 
-   SpiceStatus C2F_CreateStr          ( ConstSpiceChar *,
+   SpiceStatus C2F_CreateStr          ( void            * naif_state,
+                                        ConstSpiceChar *,
                                         SpiceInt *,
                                         SpiceChar **      );
 
-   void        C2F_CreateStr_Sig      ( ConstSpiceChar *,
+   void        C2F_CreateStr_Sig      ( void            * naif_state,
+                                        ConstSpiceChar *,
                                         SpiceInt *,
                                         SpiceChar **      );
 
-   void        C2F_CreateFixStrArr    ( SpiceInt           nStr,
+   void        C2F_CreateFixStrArr    ( void            * naif_state,
+                                        SpiceInt           nStr,
                                         SpiceInt           cStrDim,
                                         ConstSpiceChar  ** cStrArr,
                                         SpiceInt         * fStrLen,
                                         SpiceChar       ** fStrArr  );
                                         
-   SpiceStatus C2F_CreateStrArr       ( SpiceInt,
+   SpiceStatus C2F_CreateStrArr       ( void            * naif_state,
+                                        SpiceInt,
                                         ConstSpiceChar **,
                                         SpiceInt *,
                                         SpiceChar **      );
 
-   void        C2F_CreateStrArr_Sig   ( SpiceInt           nStr,
+   void        C2F_CreateStrArr_Sig   ( void            * naif_state,
+                                        SpiceInt           nStr,
                                         ConstSpiceChar  ** cStrArr,
                                         SpiceInt         * fStrLen,
                                         SpiceChar       ** fStrArr );
                                         
-   void        C2F_MapFixStrArr       ( ConstSpiceChar  *  caller,
+   void        C2F_MapFixStrArr       ( void            * naif_state,
+                                        ConstSpiceChar  *  caller,
                                         SpiceInt           nStr,
                                         SpiceInt           cStrLen,
                                         const void       * cStrArr,
                                         SpiceInt         * fStrLen,
                                         SpiceChar       ** fStrArr  );
 
-   void        C2F_MapStrArr          ( ConstSpiceChar  *  caller,
+   void        C2F_MapStrArr          ( void            * naif_state,
+                                        ConstSpiceChar  *  caller,
                                         SpiceInt           nStr,
                                         SpiceInt           cStrLen,
                                         const void       * cStrArr,
                                         SpiceInt         * fStrLen,
                                         SpiceChar       ** fStrArr  );
 
-   SpiceStatus C2F_StrCpy             ( ConstSpiceChar *,
+   SpiceStatus C2F_StrCpy             ( void            * naif_state,
+                                        ConstSpiceChar *,
                                         SpiceInt,
                                         SpiceChar *       );
 
-   void        F_Alloc                ( SpiceInt,
+   void        F_Alloc                ( void            * naif_state,
+                                        SpiceInt,
                                         SpiceChar**       );
 
-   void        F2C_ConvertStr         ( SpiceInt,
+   void        F2C_ConvertStr         ( void            * naif_state,
+                                        SpiceInt,
                                         SpiceChar *       );
 
-   void        F2C_ConvertStrArr      ( SpiceInt      n,
+   void        F2C_ConvertStrArr      ( void            * naif_state,
+                                        SpiceInt      n,
                                         SpiceInt      lenout,
                                         SpiceChar   * cvals  );
 
-   void        F2C_ConvertTrStrArr    ( SpiceInt      n,
+   void        F2C_ConvertTrStrArr    ( void            * naif_state,
+                                        SpiceInt      n,
                                         SpiceInt      lenout,
                                         SpiceChar   * cvals  );
 
-   SpiceStatus F2C_CreateStr          ( SpiceInt,
+   SpiceStatus F2C_CreateStr          ( void            * naif_state,
+                                        SpiceInt,
                                         ConstSpiceChar *,
                                         SpiceChar **      );
 
-   void        F2C_CreateStr_Sig      ( SpiceInt,
+   void        F2C_CreateStr_Sig      ( void            * naif_state,
+                                        SpiceInt,
                                         ConstSpiceChar *,
                                         SpiceChar **      );
 
-   SpiceStatus F2C_CreateStrArr       ( SpiceInt,
+   SpiceStatus F2C_CreateStrArr       ( void            * naif_state,
+                                        SpiceInt,
                                         SpiceInt,
                                         ConstSpiceChar *,
                                         SpiceChar ***     );
 
-   void        F2C_CreateStrArr_Sig   ( SpiceInt,
+   void        F2C_CreateStrArr_Sig   ( void            * naif_state,
+                                        SpiceInt,
                                         SpiceInt,
                                         ConstSpiceChar *,
                                         SpiceChar ***     );
 
-   void        F2C_FreeStrArr         ( SpiceChar  **cStrArr );
+   void        F2C_FreeStrArr         ( void            * naif_state,
+                                        SpiceChar  **cStrArr );
 
 
-   SpiceStatus F2C_StrCpy             ( SpiceInt,
+   SpiceStatus F2C_StrCpy             ( void            * naif_state,
+                                        SpiceInt,
                                         ConstSpiceChar *,
                                         SpiceInt,
                                         SpiceChar *       );
 
-   SpiceInt    F_StrLen               ( SpiceInt,
+   SpiceInt    F_StrLen               ( void            * naif_state,
+                                        SpiceInt,
                                         ConstSpiceChar *  );
 
 #ifdef __cplusplus

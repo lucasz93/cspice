@@ -151,7 +151,7 @@
    is that f2c.h defines macros that conflict with stdlib.h on some
    systems.  It's simpler to just replicate the few typedefs we need.
 */
-
+#ifndef F2C_INCLUDE
 #if (    defined( CSPICE_ALPHA_DIGITAL_UNIX    )      \
       || defined( CSPICE_PC_CYGWIN_64BIT_GCC )        \
       || defined( CSPICE_PC_LINUX_64BIT_GCC    )      \
@@ -174,13 +174,13 @@
    Type S_fp is used for subroutines.
    Type U_fp is used for functions of unknown type.
    */
-   typedef VOID       (*H_fp)();
-   typedef doublereal (*D_fp)();
-   typedef doublereal (*E_fp)();
-   typedef int        (*S_fp)();
-   typedef int        (*U_fp)();
-   typedef integer    (*I_fp)();
-   typedef logical    (*L_fp)();
+   typedef VOID       (*H_fp)(void *state, ...);
+   typedef doublereal (*D_fp)(void *state, ...);
+   typedef doublereal (*E_fp)(void *state, ...);
+   typedef int        (*S_fp)(void *state, ...);
+   typedef int        (*U_fp)(void *state, ...);
+   typedef integer    (*I_fp)(void *state, ...);
+   typedef logical    (*L_fp)(void *state, ...);
 
 #else
 
@@ -197,16 +197,16 @@
    Type S_fp is used for subroutines.
    Type U_fp is used for functions of unknown type.
    */
-   typedef VOID       (*H_fp)();
-   typedef doublereal (*D_fp)();
-   typedef doublereal (*E_fp)();
-   typedef int        (*S_fp)();
-   typedef int        (*U_fp)();
-   typedef integer    (*I_fp)();
-   typedef logical    (*L_fp)();
+   typedef VOID       (*H_fp)(void *state, ...);
+   typedef doublereal (*D_fp)(void *state, ...);
+   typedef doublereal (*E_fp)(void *state, ...);
+   typedef int        (*S_fp)(void *state, ...);
+   typedef int        (*U_fp)(void *state, ...);
+   typedef integer    (*I_fp)(void *state, ...);
+   typedef logical    (*L_fp)(void *state, ...);
 
 #endif
-
+#endif /* !F2C_INCLUDE */
 
 #ifdef __cplusplus
    extern "C" { 
@@ -228,18 +228,18 @@
 -Prototypes
 */
 
-extern logical accept_(logical *ok);
-extern logical allowd_(void);
+extern logical accept_(void *cspice_state, logical *ok);
+extern logical allowd_(void *cspice_state);
  
-extern logical alltru_(logical *logcls, integer *n);
+extern logical alltru_(void *cspice_state, logical *logcls, integer *n);
  
-extern H_f ana_(char *ret_val, ftnlen ret_val_len, char *word, char *case__, ftnlen word_len, ftnlen case_len);
+extern H_f ana_(void *cspice_state, char *ret_val, ftnlen ret_val_len, char *word, char *case__, ftnlen word_len, ftnlen case_len);
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: replch_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
  
-extern int appndc_(char *item, char *cell, ftnlen item_len, ftnlen cell_len);
+extern int appndc_(void *cspice_state, char *item, char *cell, ftnlen item_len, ftnlen cell_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -250,7 +250,7 @@ extern int appndc_(char *item, char *cell, ftnlen item_len, ftnlen cell_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int appndd_(doublereal *item, doublereal *cell);
+extern int appndd_(void *cspice_state, doublereal *item, doublereal *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -261,7 +261,7 @@ extern int appndd_(doublereal *item, doublereal *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int appndi_(integer *item, integer *cell);
+extern int appndi_(void *cspice_state, integer *item, integer *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -272,21 +272,21 @@ extern int appndi_(integer *item, integer *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical approx_(doublereal *x, doublereal *y, doublereal *tol);
+extern logical approx_(void *cspice_state, doublereal *x, doublereal *y, doublereal *tol);
  
-extern int astrip_(char *instr, char *asciib, char *asciie, char *outstr, ftnlen instr_len, ftnlen asciib_len, ftnlen asciie_len, ftnlen outstr_len);
+extern int astrip_(void *cspice_state, char *instr, char *asciib, char *asciie, char *outstr, ftnlen instr_len, ftnlen asciib_len, ftnlen asciie_len, ftnlen outstr_len);
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern int axisar_(doublereal *axis, doublereal *angle, doublereal *r__);
+extern int axisar_(void *cspice_state, doublereal *axis, doublereal *angle, doublereal *r__);
 /*:ref: ident_ 14 1 7 */
 /*:ref: vrotv_ 14 4 7 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern doublereal b1900_(void);
+extern doublereal b1900_(void *cspice_state);
  
-extern doublereal b1950_(void);
+extern doublereal b1950_(void *cspice_state);
  
-extern logical badkpv_(char *caller, char *name__, char *comp, integer *size, integer *divby, char *type__, ftnlen caller_len, ftnlen name_len, ftnlen comp_len, ftnlen type_len);
+extern logical badkpv_(void *cspice_state, char *caller, char *name__, char *comp, integer *size, integer *divby, char *type__, ftnlen caller_len, ftnlen name_len, ftnlen comp_len, ftnlen type_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
@@ -297,24 +297,24 @@ extern logical badkpv_(char *caller, char *name__, char *comp, integer *size, in
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: eqchr_ 12 4 13 13 124 124 */
  
-extern logical bedec_(char *string, ftnlen string_len);
+extern logical bedec_(void *cspice_state, char *string, ftnlen string_len);
 /*:ref: pos_ 4 5 13 13 4 124 124 */
 /*:ref: beint_ 12 2 13 124 */
 /*:ref: beuns_ 12 2 13 124 */
  
-extern logical beint_(char *string, ftnlen string_len);
+extern logical beint_(void *cspice_state, char *string, ftnlen string_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: beuns_ 12 2 13 124 */
  
-extern logical benum_(char *string, ftnlen string_len);
+extern logical benum_(void *cspice_state, char *string, ftnlen string_len);
 /*:ref: cpos_ 4 5 13 13 4 124 124 */
 /*:ref: bedec_ 12 2 13 124 */
 /*:ref: beint_ 12 2 13 124 */
  
-extern logical beuns_(char *string, ftnlen string_len);
+extern logical beuns_(void *cspice_state, char *string, ftnlen string_len);
 /*:ref: frstnb_ 4 2 13 124 */
  
-extern int bltfrm_(integer *frmcls, integer *idset);
+extern int bltfrm_(void *cspice_state, integer *frmcls, integer *idset);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: scardi_ 14 2 4 4 */
@@ -327,26 +327,26 @@ extern int bltfrm_(integer *frmcls, integer *idset);
 /*:ref: sizei_ 4 1 4 */
 /*:ref: orderi_ 14 3 4 4 4 */
  
-extern int bodc2n_(integer *code, char *name__, logical *found, ftnlen name_len);
+extern int bodc2n_(void *cspice_state, integer *code, char *name__, logical *found, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzbodc2n_ 14 4 4 13 12 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int bodc2s_(integer *code, char *name__, ftnlen name_len);
+extern int bodc2s_(void *cspice_state, integer *code, char *name__, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzbodc2n_ 14 4 4 13 12 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
  
-extern int boddef_(char *name__, integer *code, ftnlen name_len);
+extern int boddef_(void *cspice_state, char *name__, integer *code, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzboddef_ 14 3 13 4 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int bodeul_(integer *body, doublereal *et, doublereal *ra, doublereal *dec, doublereal *w, doublereal *lambda);
+extern int bodeul_(void *cspice_state, integer *body, doublereal *et, doublereal *ra, doublereal *dec, doublereal *w, doublereal *lambda);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
@@ -373,7 +373,7 @@ extern int bodeul_(integer *body, doublereal *et, doublereal *ra, doublereal *de
 /*:ref: mxm_ 14 3 7 7 7 */
 /*:ref: m2eul_ 14 7 7 4 4 4 7 7 7 */
  
-extern logical bodfnd_(integer *body, char *item, ftnlen item_len);
+extern logical bodfnd_(void *cspice_state, integer *body, char *item, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -381,20 +381,20 @@ extern logical bodfnd_(integer *body, char *item, ftnlen item_len);
 /*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int bodmat_(integer *body, doublereal *et, doublereal *tipm);
+extern int bodmat_(void *cspice_state, integer *body, doublereal *et, doublereal *tipm);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: tisbod_ 14 5 13 4 7 7 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int bodn2c_(char *name__, integer *code, logical *found, ftnlen name_len);
+extern int bodn2c_(void *cspice_state, char *name__, integer *code, logical *found, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzbodn2c_ 14 4 13 4 12 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int bods2c_(char *name__, integer *code, logical *found, ftnlen name_len);
+extern int bods2c_(void *cspice_state, char *name__, integer *code, logical *found, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzbodn2c_ 14 4 13 4 12 124 */
@@ -402,7 +402,7 @@ extern int bods2c_(char *name__, integer *code, logical *found, ftnlen name_len)
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int bodvar_(integer *body, char *item, integer *dim, doublereal *values, ftnlen item_len);
+extern int bodvar_(void *cspice_state, integer *body, char *item, integer *dim, doublereal *values, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -413,7 +413,7 @@ extern int bodvar_(integer *body, char *item, integer *dim, doublereal *values, 
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int bodvcd_(integer *bodyid, char *item, integer *maxn, integer *dim, doublereal *values, ftnlen item_len);
+extern int bodvcd_(void *cspice_state, integer *bodyid, char *item, integer *maxn, integer *dim, doublereal *values, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -426,7 +426,7 @@ extern int bodvcd_(integer *bodyid, char *item, integer *maxn, integer *dim, dou
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
  
-extern int bodvrd_(char *bodynm, char *item, integer *maxn, integer *dim, doublereal *values, ftnlen bodynm_len, ftnlen item_len);
+extern int bodvrd_(void *cspice_state, char *bodynm, char *item, integer *maxn, integer *dim, doublereal *values, ftnlen bodynm_len, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -441,21 +441,21 @@ extern int bodvrd_(char *bodynm, char *item, integer *maxn, integer *dim, double
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
  
-extern doublereal brcktd_(doublereal *number, doublereal *end1, doublereal *end2);
+extern doublereal brcktd_(void *cspice_state, doublereal *number, doublereal *end1, doublereal *end2);
  
-extern integer brckti_(integer *number, integer *end1, integer *end2);
+extern integer brckti_(void *cspice_state, integer *number, integer *end1, integer *end2);
  
-extern integer bschoc_(char *value, integer *ndim, char *array, integer *order, ftnlen value_len, ftnlen array_len);
+extern integer bschoc_(void *cspice_state, char *value, integer *ndim, char *array, integer *order, ftnlen value_len, ftnlen array_len);
  
-extern integer bschoi_(integer *value, integer *ndim, integer *array, integer *order);
+extern integer bschoi_(void *cspice_state, integer *value, integer *ndim, integer *array, integer *order);
  
-extern integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
+extern integer bsrchc_(void *cspice_state, char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
  
-extern integer bsrchd_(doublereal *value, integer *ndim, doublereal *array);
+extern integer bsrchd_(void *cspice_state, doublereal *value, integer *ndim, doublereal *array);
  
-extern integer bsrchi_(integer *value, integer *ndim, integer *array);
+extern integer bsrchi_(void *cspice_state, integer *value, integer *ndim, integer *array);
  
-extern integer cardc_(char *cell, ftnlen cell_len);
+extern integer cardc_(void *cspice_state, char *cell, ftnlen cell_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dechar_ 14 3 13 4 124 */
@@ -464,7 +464,7 @@ extern integer cardc_(char *cell, ftnlen cell_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer cardd_(doublereal *cell);
+extern integer cardd_(void *cspice_state, doublereal *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -472,7 +472,7 @@ extern integer cardd_(doublereal *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer cardi_(integer *cell);
+extern integer cardi_(void *cspice_state, integer *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -480,18 +480,18 @@ extern integer cardi_(integer *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int cgv2el_(doublereal *center, doublereal *vec1, doublereal *vec2, doublereal *ellips);
+extern int cgv2el_(void *cspice_state, doublereal *center, doublereal *vec1, doublereal *vec2, doublereal *ellips);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: saelgv_ 14 4 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer chbase_(void);
+extern integer chbase_(void *cspice_state);
  
-extern int chbder_(doublereal *cp, integer *degp, doublereal *x2s, doublereal *x, integer *nderiv, doublereal *partdp, doublereal *dpdxs);
+extern int chbder_(void *cspice_state, doublereal *cp, integer *degp, doublereal *x2s, doublereal *x, integer *nderiv, doublereal *partdp, doublereal *dpdxs);
  
-extern int chbigr_(integer *degp, doublereal *cp, doublereal *x2s, doublereal *x, doublereal *p, doublereal *itgrlp);
+extern int chbigr_(void *cspice_state, integer *degp, doublereal *cp, doublereal *x2s, doublereal *x, doublereal *p, doublereal *itgrlp);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -500,11 +500,11 @@ extern int chbigr_(integer *degp, doublereal *cp, doublereal *x2s, doublereal *x
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
  
-extern int chbint_(doublereal *cp, integer *degp, doublereal *x2s, doublereal *x, doublereal *p, doublereal *dpdx);
+extern int chbint_(void *cspice_state, doublereal *cp, integer *degp, doublereal *x2s, doublereal *x, doublereal *p, doublereal *dpdx);
  
-extern int chbval_(doublereal *cp, integer *degp, doublereal *x2s, doublereal *x, doublereal *p);
+extern int chbval_(void *cspice_state, doublereal *cp, integer *degp, doublereal *x2s, doublereal *x, doublereal *p);
  
-extern int chckid_(char *class__, integer *maxlen, char *id, ftnlen class_len, ftnlen id_len);
+extern int chckid_(void *cspice_state, char *class__, integer *maxlen, char *id, ftnlen class_len, ftnlen id_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frstnp_ 4 2 13 124 */
@@ -515,11 +515,11 @@ extern int chckid_(char *class__, integer *maxlen, char *id, ftnlen class_len, f
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern int chgirf_(integer *refa, integer *refb, doublereal *rotab, char *name__, integer *index, ftnlen name_len);
-extern int irfrot_(integer *refa, integer *refb, doublereal *rotab);
-extern int irfnum_(char *name__, integer *index, ftnlen name_len);
-extern int irfnam_(integer *index, char *name__, ftnlen name_len);
-extern int irfdef_(integer *index);
+extern int chgirf_(void *cspice_state, integer *refa, integer *refb, doublereal *rotab, char *name__, integer *index, ftnlen name_len);
+extern int irfrot_(void *cspice_state, integer *refa, integer *refb, doublereal *rotab);
+extern int irfnum_(void *cspice_state, char *name__, integer *index, ftnlen name_len);
+extern int irfnam_(void *cspice_state, integer *index, char *name__, ftnlen name_len);
+extern int irfdef_(void *cspice_state, integer *index);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -540,12 +540,12 @@ extern int irfdef_(integer *index);
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: esrchc_ 4 5 13 4 13 124 124 */
  
-extern int ckbsr_(char *fname, integer *handle, integer *inst, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *descr, char *segid, logical *found, ftnlen fname_len, ftnlen segid_len);
-extern int cklpf_(char *fname, integer *handle, ftnlen fname_len);
-extern int ckupf_(integer *handle);
-extern int ckbss_(integer *inst, doublereal *sclkdp, doublereal *tol, logical *needav);
-extern int cksns_(integer *handle, doublereal *descr, char *segid, logical *found, ftnlen segid_len);
-extern int ckhave_(logical *found);
+extern int ckbsr_(void *cspice_state, char *fname, integer *handle, integer *inst, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *descr, char *segid, logical *found, ftnlen fname_len, ftnlen segid_len);
+extern int cklpf_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int ckupf_(void *cspice_state, integer *handle);
+extern int ckbss_(void *cspice_state, integer *inst, doublereal *sclkdp, doublereal *tol, logical *needav);
+extern int cksns_(void *cspice_state, integer *handle, doublereal *descr, char *segid, logical *found, ftnlen segid_len);
+extern int ckhave_(void *cspice_state, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -579,7 +579,7 @@ extern int ckhave_(logical *found);
 /*:ref: lnkilb_ 14 3 4 4 4 */
 /*:ref: lnkila_ 14 3 4 4 4 */
  
-extern int ckcls_(integer *handle);
+extern int ckcls_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafbfs_ 14 1 4 */
@@ -591,7 +591,7 @@ extern int ckcls_(integer *handle);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int ckcov_(char *ck, integer *idcode, logical *needav, char *level, doublereal *tol, char *timsys, doublereal *cover, ftnlen ck_len, ftnlen level_len, ftnlen timsys_len);
+extern int ckcov_(void *cspice_state, char *ck, integer *idcode, logical *needav, char *level, doublereal *tol, char *timsys, doublereal *cover, ftnlen ck_len, ftnlen level_len, ftnlen timsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -619,13 +619,13 @@ extern int ckcov_(char *ck, integer *idcode, logical *needav, char *level, doubl
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int cke01_(logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
+extern int cke01_(void *cspice_state, logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: q2m_ 14 2 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int cke02_(logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
+extern int cke02_(void *cspice_state, logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vequg_ 14 3 7 4 7 */
@@ -636,7 +636,7 @@ extern int cke02_(logical *needav, doublereal *record, doublereal *cmat, doubler
 /*:ref: mxmt_ 14 3 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int cke03_(logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
+extern int cke03_(void *cspice_state, logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: moved_ 14 3 7 4 7 */
@@ -650,12 +650,12 @@ extern int cke03_(logical *needav, doublereal *record, doublereal *cmat, doubler
 /*:ref: mxmt_ 14 3 7 7 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int cke04_(logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
+extern int cke04_(void *cspice_state, logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
 /*:ref: chbval_ 14 5 7 4 7 7 7 */
 /*:ref: vhatg_ 14 3 7 4 7 */
 /*:ref: q2m_ 14 2 7 7 */
  
-extern int cke05_(logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
+extern int cke05_(void *cspice_state, logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -680,13 +680,13 @@ extern int cke05_(logical *needav, doublereal *record, doublereal *cmat, doubler
 /*:ref: hrmint_ 14 7 4 7 7 7 7 7 7 */
 /*:ref: q2m_ 14 2 7 7 */
  
-extern int cke06_(logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
+extern int cke06_(void *cspice_state, logical *needav, doublereal *record, doublereal *cmat, doublereal *av, doublereal *clkout);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cke05_ 14 5 12 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int ckfrot_(integer *inst, doublereal *et, doublereal *rotate, integer *ref, logical *found);
+extern int ckfrot_(void *cspice_state, integer *inst, doublereal *et, doublereal *rotate, integer *ref, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ckhave_ 14 1 12 */
@@ -701,7 +701,7 @@ extern int ckfrot_(integer *inst, doublereal *et, doublereal *rotate, integer *r
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: xpose_ 14 2 7 7 */
  
-extern int ckfxfm_(integer *inst, doublereal *et, doublereal *xform, integer *ref, logical *found);
+extern int ckfxfm_(void *cspice_state, integer *inst, doublereal *et, doublereal *xform, integer *ref, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ckmeta_ 14 4 4 13 4 124 */
@@ -717,7 +717,7 @@ extern int ckfxfm_(integer *inst, doublereal *et, doublereal *xform, integer *re
 /*:ref: rav2xf_ 14 3 7 7 7 */
 /*:ref: invstm_ 14 2 7 7 */
  
-extern int ckgp_(integer *inst, doublereal *sclkdp, doublereal *tol, char *ref, doublereal *cmat, doublereal *clkout, logical *found, ftnlen ref_len);
+extern int ckgp_(void *cspice_state, integer *inst, doublereal *sclkdp, doublereal *tol, char *ref, doublereal *cmat, doublereal *clkout, logical *found, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -735,7 +735,7 @@ extern int ckgp_(integer *inst, doublereal *sclkdp, doublereal *tol, char *ref, 
 /*:ref: mxm_ 14 3 7 7 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int ckgpav_(integer *inst, doublereal *sclkdp, doublereal *tol, char *ref, doublereal *cmat, doublereal *av, doublereal *clkout, logical *found, ftnlen ref_len);
+extern int ckgpav_(void *cspice_state, integer *inst, doublereal *sclkdp, doublereal *tol, char *ref, doublereal *cmat, doublereal *av, doublereal *clkout, logical *found, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -756,7 +756,7 @@ extern int ckgpav_(integer *inst, doublereal *sclkdp, doublereal *tol, char *ref
 /*:ref: mtxv_ 14 3 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int ckgr01_(integer *handle, doublereal *descr, integer *recno, doublereal *record);
+extern int ckgr01_(void *cspice_state, integer *handle, doublereal *descr, integer *recno, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -766,7 +766,7 @@ extern int ckgr01_(integer *handle, doublereal *descr, integer *recno, doublerea
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int ckgr02_(integer *handle, doublereal *descr, integer *recno, doublereal *record);
+extern int ckgr02_(void *cspice_state, integer *handle, doublereal *descr, integer *recno, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -778,7 +778,7 @@ extern int ckgr02_(integer *handle, doublereal *descr, integer *recno, doublerea
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int ckgr03_(integer *handle, doublereal *descr, integer *recno, doublereal *record);
+extern int ckgr03_(void *cspice_state, integer *handle, doublereal *descr, integer *recno, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -788,7 +788,7 @@ extern int ckgr03_(integer *handle, doublereal *descr, integer *recno, doublerea
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int ckgr04_(integer *handle, doublereal *descr, integer *recno, doublereal *record);
+extern int ckgr04_(void *cspice_state, integer *handle, doublereal *descr, integer *recno, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -800,7 +800,7 @@ extern int ckgr04_(integer *handle, doublereal *descr, integer *recno, doublerea
 /*:ref: sgfpkt_ 14 6 4 7 4 4 7 4 */
 /*:ref: zzck4d2i_ 14 4 7 4 7 4 */
  
-extern int ckgr05_(integer *handle, doublereal *descr, integer *recno, doublereal *record);
+extern int ckgr05_(void *cspice_state, integer *handle, doublereal *descr, integer *recno, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -810,7 +810,7 @@ extern int ckgr05_(integer *handle, doublereal *descr, integer *recno, doublerea
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int ckgr06_(integer *handle, doublereal *descr, integer *msno, integer *recno, doublereal *record);
+extern int ckgr06_(void *cspice_state, integer *handle, doublereal *descr, integer *msno, integer *recno, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -821,7 +821,7 @@ extern int ckgr06_(integer *handle, doublereal *descr, integer *msno, integer *r
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: failed_ 12 0 */
  
-extern int ckmeta_(integer *ckid, char *meta, integer *idcode, ftnlen meta_len);
+extern int ckmeta_(void *cspice_state, integer *ckid, char *meta, integer *idcode, ftnlen meta_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -843,7 +843,7 @@ extern int ckmeta_(integer *ckid, char *meta, integer *idcode, ftnlen meta_len);
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int ckmp06_(integer *handle, doublereal *descr, integer *msno, doublereal *rate, integer *subtyp, integer *winsiz, integer *nrec, doublereal *ivlbds, doublereal *lstepc);
+extern int ckmp06_(void *cspice_state, integer *handle, doublereal *descr, integer *msno, doublereal *rate, integer *subtyp, integer *winsiz, integer *nrec, doublereal *ivlbds, doublereal *lstepc);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -854,7 +854,7 @@ extern int ckmp06_(integer *handle, doublereal *descr, integer *msno, doublereal
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: failed_ 12 0 */
  
-extern int cknm06_(integer *handle, doublereal *descr, integer *nmini);
+extern int cknm06_(void *cspice_state, integer *handle, doublereal *descr, integer *nmini);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -865,7 +865,7 @@ extern int cknm06_(integer *handle, doublereal *descr, integer *nmini);
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: failed_ 12 0 */
  
-extern int cknr01_(integer *handle, doublereal *descr, integer *nrec);
+extern int cknr01_(void *cspice_state, integer *handle, doublereal *descr, integer *nrec);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -875,7 +875,7 @@ extern int cknr01_(integer *handle, doublereal *descr, integer *nrec);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int cknr02_(integer *handle, doublereal *descr, integer *nrec);
+extern int cknr02_(void *cspice_state, integer *handle, doublereal *descr, integer *nrec);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -884,7 +884,7 @@ extern int cknr02_(integer *handle, doublereal *descr, integer *nrec);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int cknr03_(integer *handle, doublereal *descr, integer *nrec);
+extern int cknr03_(void *cspice_state, integer *handle, doublereal *descr, integer *nrec);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -894,7 +894,7 @@ extern int cknr03_(integer *handle, doublereal *descr, integer *nrec);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int cknr04_(integer *handle, doublereal *descr, integer *nrec);
+extern int cknr04_(void *cspice_state, integer *handle, doublereal *descr, integer *nrec);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -904,7 +904,7 @@ extern int cknr04_(integer *handle, doublereal *descr, integer *nrec);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: sgmeta_ 14 4 4 7 4 4 */
  
-extern int cknr05_(integer *handle, doublereal *descr, integer *nrec);
+extern int cknr05_(void *cspice_state, integer *handle, doublereal *descr, integer *nrec);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -914,7 +914,7 @@ extern int cknr05_(integer *handle, doublereal *descr, integer *nrec);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int ckobj_(char *ck, integer *ids, ftnlen ck_len);
+extern int ckobj_(void *cspice_state, char *ck, integer *ids, ftnlen ck_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
@@ -931,14 +931,14 @@ extern int ckobj_(char *ck, integer *ids, ftnlen ck_len);
 /*:ref: insrti_ 14 2 4 4 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int ckopn_(char *name__, char *ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen ifname_len);
+extern int ckopn_(void *cspice_state, char *name__, char *ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafonw_ 14 10 13 13 4 4 13 4 4 124 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int ckpfs_(integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *cmat, doublereal *av, doublereal *clkout, logical *found);
+extern int ckpfs_(void *cspice_state, integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *cmat, doublereal *av, doublereal *clkout, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -960,7 +960,7 @@ extern int ckpfs_(integer *handle, doublereal *descr, doublereal *sclkdp, double
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int ckr01_(integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
+extern int ckr01_(void *cspice_state, integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -972,7 +972,7 @@ extern int ckr01_(integer *handle, doublereal *descr, doublereal *sclkdp, double
 /*:ref: lstled_ 4 3 7 4 7 */
 /*:ref: lstcld_ 4 3 7 4 7 */
  
-extern int ckr02_(integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, doublereal *record, logical *found);
+extern int ckr02_(void *cspice_state, integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, doublereal *record, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -984,7 +984,7 @@ extern int ckr02_(integer *handle, doublereal *descr, doublereal *sclkdp, double
 /*:ref: lstled_ 4 3 7 4 7 */
 /*:ref: vequg_ 14 3 7 4 7 */
  
-extern int ckr03_(integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
+extern int ckr03_(void *cspice_state, integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -999,7 +999,7 @@ extern int ckr03_(integer *handle, doublereal *descr, doublereal *sclkdp, double
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: dpmax_ 7 0 */
  
-extern int ckr04_(integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
+extern int ckr04_(void *cspice_state, integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -1013,7 +1013,7 @@ extern int ckr04_(integer *handle, doublereal *descr, doublereal *sclkdp, double
 /*:ref: sgfpkt_ 14 6 4 7 4 4 7 4 */
 /*:ref: zzck4d2i_ 14 4 7 4 7 4 */
  
-extern int ckr05_(integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
+extern int ckr05_(void *cspice_state, integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -1031,7 +1031,7 @@ extern int ckr05_(integer *handle, doublereal *descr, doublereal *sclkdp, double
 /*:ref: dpmax_ 7 0 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int ckr06_(integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
+extern int ckr06_(void *cspice_state, integer *handle, doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *needav, doublereal *record, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1048,7 +1048,7 @@ extern int ckr06_(integer *handle, doublereal *descr, doublereal *sclkdp, double
 /*:ref: lstltd_ 4 3 7 4 7 */
 /*:ref: odd_ 12 1 4 */
  
-extern int ckw01_(integer *handle, doublereal *begtim, doublereal *endtim, integer *inst, char *ref, logical *avflag, char *segid, integer *nrec, doublereal *sclkdp, doublereal *quats, doublereal *avvs, ftnlen ref_len, ftnlen segid_len);
+extern int ckw01_(void *cspice_state, integer *handle, doublereal *begtim, doublereal *endtim, integer *inst, char *ref, logical *avflag, char *segid, integer *nrec, doublereal *sclkdp, doublereal *quats, doublereal *avvs, ftnlen ref_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1066,7 +1066,7 @@ extern int ckw01_(integer *handle, doublereal *begtim, doublereal *endtim, integ
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int ckw02_(integer *handle, doublereal *begtim, doublereal *endtim, integer *inst, char *ref, char *segid, integer *nrec, doublereal *start, doublereal *stop, doublereal *quats, doublereal *avvs, doublereal *rates, ftnlen ref_len, ftnlen segid_len);
+extern int ckw02_(void *cspice_state, integer *handle, doublereal *begtim, doublereal *endtim, integer *inst, char *ref, char *segid, integer *nrec, doublereal *start, doublereal *stop, doublereal *quats, doublereal *avvs, doublereal *rates, ftnlen ref_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1084,7 +1084,7 @@ extern int ckw02_(integer *handle, doublereal *begtim, doublereal *endtim, integ
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int ckw03_(integer *handle, doublereal *begtim, doublereal *endtim, integer *inst, char *ref, logical *avflag, char *segid, integer *nrec, doublereal *sclkdp, doublereal *quats, doublereal *avvs, integer *nints, doublereal *starts, ftnlen ref_len, ftnlen segid_len);
+extern int ckw03_(void *cspice_state, integer *handle, doublereal *begtim, doublereal *endtim, integer *inst, char *ref, logical *avflag, char *segid, integer *nrec, doublereal *sclkdp, doublereal *quats, doublereal *avvs, integer *nints, doublereal *starts, ftnlen ref_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1102,7 +1102,7 @@ extern int ckw03_(integer *handle, doublereal *begtim, doublereal *endtim, integ
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int ckw04a_(integer *handle, integer *npkts, integer *pktsiz, doublereal *pktdat, doublereal *sclkdp);
+extern int ckw04a_(void *cspice_state, integer *handle, integer *npkts, integer *pktsiz, doublereal *pktdat, doublereal *sclkdp);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1113,7 +1113,7 @@ extern int ckw04a_(integer *handle, integer *npkts, integer *pktsiz, doublereal 
 /*:ref: zzck4i2d_ 14 4 4 4 7 7 */
 /*:ref: sgwvpk_ 14 6 4 4 4 7 4 7 */
  
-extern int ckw04b_(integer *handle, doublereal *begtim, integer *inst, char *ref, logical *avflag, char *segid, ftnlen ref_len, ftnlen segid_len);
+extern int ckw04b_(void *cspice_state, integer *handle, doublereal *begtim, integer *inst, char *ref, logical *avflag, char *segid, ftnlen ref_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -1125,7 +1125,7 @@ extern int ckw04b_(integer *handle, doublereal *begtim, integer *inst, char *ref
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: sgbwvs_ 14 7 4 7 13 4 7 4 124 */
  
-extern int ckw04e_(integer *handle, doublereal *endtim);
+extern int ckw04e_(void *cspice_state, integer *handle, doublereal *endtim);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sgwes_ 14 1 4 */
@@ -1140,7 +1140,7 @@ extern int ckw04e_(integer *handle, doublereal *endtim);
 /*:ref: dafps_ 14 5 4 4 7 4 7 */
 /*:ref: dafrs_ 14 1 7 */
  
-extern int ckw05_(integer *handle, integer *subtyp, integer *degree, doublereal *begtim, doublereal *endtim, integer *inst, char *ref, logical *avflag, char *segid, integer *n, doublereal *sclkdp, doublereal *packts, doublereal *rate, integer *nints, doublereal *starts, ftnlen ref_len, ftnlen segid_len);
+extern int ckw05_(void *cspice_state, integer *handle, integer *subtyp, integer *degree, doublereal *begtim, doublereal *endtim, integer *inst, char *ref, logical *avflag, char *segid, integer *n, doublereal *sclkdp, doublereal *packts, doublereal *rate, integer *nints, doublereal *starts, ftnlen ref_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1161,7 +1161,7 @@ extern int ckw05_(integer *handle, integer *subtyp, integer *degree, doublereal 
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int ckw06_(integer *handle, integer *inst, char *ref, logical *avflag, doublereal *first, doublereal *last, char *segid, integer *nmini, integer *npkts, integer *subtps, integer *degres, doublereal *packts, doublereal *rates, doublereal *sclkdp, doublereal *ivlbds, logical *sellst, ftnlen ref_len, ftnlen segid_len);
+extern int ckw06_(void *cspice_state, integer *handle, integer *inst, char *ref, logical *avflag, doublereal *first, doublereal *last, char *segid, integer *nmini, integer *npkts, integer *subtps, integer *degres, doublereal *packts, doublereal *rates, doublereal *sclkdp, doublereal *ivlbds, logical *sellst, ftnlen ref_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1184,17 +1184,17 @@ extern int ckw06_(integer *handle, integer *inst, char *ref, logical *avflag, do
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int clearc_(integer *ndim, char *array, ftnlen array_len);
+extern int clearc_(void *cspice_state, integer *ndim, char *array, ftnlen array_len);
  
-extern int cleard_(integer *ndim, doublereal *array);
+extern int cleard_(void *cspice_state, integer *ndim, doublereal *array);
  
-extern int cleari_(integer *ndim, integer *array);
+extern int cleari_(void *cspice_state, integer *ndim, integer *array);
  
-extern doublereal clight_(void);
+extern doublereal clight_(void *cspice_state);
  
-extern int cmprss_(char *delim, integer *n, char *input, char *output, ftnlen delim_len, ftnlen input_len, ftnlen output_len);
+extern int cmprss_(void *cspice_state, char *delim, integer *n, char *input, char *output, ftnlen delim_len, ftnlen input_len, ftnlen output_len);
  
-extern int conics_(doublereal *elts, doublereal *et, doublereal *state);
+extern int conics_(void *cspice_state, doublereal *elts, doublereal *et, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1205,7 +1205,7 @@ extern int conics_(doublereal *elts, doublereal *et, doublereal *state);
 /*:ref: twopi_ 7 0 */
 /*:ref: prop2b_ 14 4 7 7 7 7 */
  
-extern int convrt_(doublereal *x, char *in, char *out, doublereal *y, ftnlen in_len, ftnlen out_len);
+extern int convrt_(void *cspice_state, doublereal *x, char *in, char *out, doublereal *y, ftnlen in_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dpr_ 7 0 */
@@ -1215,7 +1215,7 @@ extern int convrt_(doublereal *x, char *in, char *out, doublereal *y, ftnlen in_
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int copyc_(char *cell, char *copy, ftnlen cell_len, ftnlen copy_len);
+extern int copyc_(void *cspice_state, char *cell, char *copy, ftnlen cell_len, ftnlen copy_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -1228,7 +1228,7 @@ extern int copyc_(char *cell, char *copy, ftnlen cell_len, ftnlen copy_len);
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int copyd_(doublereal *cell, doublereal *copy);
+extern int copyd_(void *cspice_state, doublereal *cell, doublereal *copy);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -1238,7 +1238,7 @@ extern int copyd_(doublereal *cell, doublereal *copy);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int copyi_(integer *cell, integer *copy);
+extern int copyi_(void *cspice_state, integer *cell, integer *copy);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -1248,7 +1248,7 @@ extern int copyi_(integer *cell, integer *copy);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer countc_(integer *unit, integer *bline, integer *eline, char *line, ftnlen line_len);
+extern integer countc_(void *cspice_state, integer *unit, integer *bline, integer *eline, char *line, ftnlen line_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1259,11 +1259,11 @@ extern integer countc_(integer *unit, integer *bline, integer *eline, char *line
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: astrip_ 14 8 13 13 13 13 124 124 124 124 */
  
-extern integer cpos_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen chars_len);
+extern integer cpos_(void *cspice_state, char *str, char *chars, integer *start, ftnlen str_len, ftnlen chars_len);
  
-extern integer cposr_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen chars_len);
+extern integer cposr_(void *cspice_state, char *str, char *chars, integer *start, ftnlen str_len, ftnlen chars_len);
  
-extern int cyacip_(integer *nelt, char *dir, integer *ncycle, char *array, ftnlen dir_len, ftnlen array_len);
+extern int cyacip_(void *cspice_state, integer *nelt, char *dir, integer *ncycle, char *array, ftnlen dir_len, ftnlen array_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -1273,7 +1273,7 @@ extern int cyacip_(integer *nelt, char *dir, integer *ncycle, char *array, ftnle
 /*:ref: nbwid_ 4 3 13 4 124 */
 /*:ref: gcd_ 4 2 4 4 */
  
-extern int cyadip_(integer *nelt, char *dir, integer *ncycle, doublereal *array, ftnlen dir_len);
+extern int cyadip_(void *cspice_state, integer *nelt, char *dir, integer *ncycle, doublereal *array, ftnlen dir_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -1282,7 +1282,7 @@ extern int cyadip_(integer *nelt, char *dir, integer *ncycle, doublereal *array,
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: gcd_ 4 2 4 4 */
  
-extern int cyaiip_(integer *nelt, char *dir, integer *ncycle, integer *array, ftnlen dir_len);
+extern int cyaiip_(void *cspice_state, integer *nelt, char *dir, integer *ncycle, integer *array, ftnlen dir_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -1291,7 +1291,7 @@ extern int cyaiip_(integer *nelt, char *dir, integer *ncycle, integer *array, ft
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: gcd_ 4 2 4 4 */
  
-extern int cyclac_(char *array, integer *nelt, char *dir, integer *ncycle, char *out, ftnlen array_len, ftnlen dir_len, ftnlen out_len);
+extern int cyclac_(void *cspice_state, char *array, integer *nelt, char *dir, integer *ncycle, char *out, ftnlen array_len, ftnlen dir_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -1302,7 +1302,7 @@ extern int cyclac_(char *array, integer *nelt, char *dir, integer *ncycle, char 
 /*:ref: nbwid_ 4 3 13 4 124 */
 /*:ref: gcd_ 4 2 4 4 */
  
-extern int cyclad_(doublereal *array, integer *nelt, char *dir, integer *ncycle, doublereal *out, ftnlen dir_len);
+extern int cyclad_(void *cspice_state, doublereal *array, integer *nelt, char *dir, integer *ncycle, doublereal *out, ftnlen dir_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -1312,7 +1312,7 @@ extern int cyclad_(doublereal *array, integer *nelt, char *dir, integer *ncycle,
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: gcd_ 4 2 4 4 */
  
-extern int cyclai_(integer *array, integer *nelt, char *dir, integer *ncycle, integer *out, ftnlen dir_len);
+extern int cyclai_(void *cspice_state, integer *array, integer *nelt, char *dir, integer *ncycle, integer *out, ftnlen dir_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -1322,7 +1322,7 @@ extern int cyclai_(integer *array, integer *nelt, char *dir, integer *ncycle, in
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: gcd_ 4 2 4 4 */
  
-extern int cyclec_(char *instr, char *dir, integer *ncycle, char *outstr, ftnlen instr_len, ftnlen dir_len, ftnlen outstr_len);
+extern int cyclec_(void *cspice_state, char *instr, char *dir, integer *ncycle, char *outstr, ftnlen instr_len, ftnlen dir_len, ftnlen outstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1331,27 +1331,27 @@ extern int cyclec_(char *instr, char *dir, integer *ncycle, char *outstr, ftnlen
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: gcd_ 4 2 4 4 */
  
-extern int cyllat_(doublereal *r__, doublereal *longc, doublereal *z__, doublereal *radius, doublereal *long__, doublereal *lat);
+extern int cyllat_(void *cspice_state, doublereal *r__, doublereal *longc, doublereal *z__, doublereal *radius, doublereal *long__, doublereal *lat);
  
-extern int cylrec_(doublereal *r__, doublereal *long__, doublereal *z__, doublereal *rectan);
+extern int cylrec_(void *cspice_state, doublereal *r__, doublereal *long__, doublereal *z__, doublereal *rectan);
  
-extern int cylsph_(doublereal *r__, doublereal *longc, doublereal *z__, doublereal *radius, doublereal *colat, doublereal *long__);
+extern int cylsph_(void *cspice_state, doublereal *r__, doublereal *longc, doublereal *z__, doublereal *radius, doublereal *colat, doublereal *long__);
  
-extern doublereal dacosh_(doublereal *x);
+extern doublereal dacosh_(void *cspice_state, doublereal *x);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern doublereal dacosn_(doublereal *arg, doublereal *tol);
+extern doublereal dacosn_(void *cspice_state, doublereal *arg, doublereal *tol);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dafa2b_(char *ascii, char *binary, integer *resv, ftnlen ascii_len, ftnlen binary_len);
+extern int dafa2b_(void *cspice_state, char *ascii, char *binary, integer *resv, ftnlen ascii_len, ftnlen binary_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: txtopr_ 14 3 13 4 124 */
@@ -1359,7 +1359,7 @@ extern int dafa2b_(char *ascii, char *binary, integer *resv, ftnlen ascii_len, f
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: daft2b_ 14 4 4 13 4 124 */
  
-extern int dafac_(integer *handle, integer *n, char *buffer, ftnlen buffer_len);
+extern int dafac_(void *cspice_state, integer *handle, integer *n, char *buffer, ftnlen buffer_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -1376,19 +1376,19 @@ extern int dafac_(integer *handle, integer *n, char *buffer, ftnlen buffer_len);
 /*:ref: ncpos_ 4 5 13 13 4 124 124 */
 /*:ref: dafarr_ 14 2 4 4 */
  
-extern int dafah_(char *fname, char *ftype, integer *nd, integer *ni, char *ifname, integer *resv, integer *handle, integer *unit, integer *fhset, char *access, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len);
-extern int dafopr_(char *fname, integer *handle, ftnlen fname_len);
-extern int dafopw_(char *fname, integer *handle, ftnlen fname_len);
-extern int dafonw_(char *fname, char *ftype, integer *nd, integer *ni, char *ifname, integer *resv, integer *handle, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len);
-extern int dafopn_(char *fname, integer *nd, integer *ni, char *ifname, integer *resv, integer *handle, ftnlen fname_len, ftnlen ifname_len);
-extern int dafcls_(integer *handle);
-extern int dafhsf_(integer *handle, integer *nd, integer *ni);
-extern int dafhlu_(integer *handle, integer *unit);
-extern int dafluh_(integer *unit, integer *handle);
-extern int dafhfn_(integer *handle, char *fname, ftnlen fname_len);
-extern int daffnh_(char *fname, integer *handle, ftnlen fname_len);
-extern int dafhof_(integer *fhset);
-extern int dafsih_(integer *handle, char *access, ftnlen access_len);
+extern int dafah_(void *cspice_state, char *fname, char *ftype, integer *nd, integer *ni, char *ifname, integer *resv, integer *handle, integer *unit, integer *fhset, char *access, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len);
+extern int dafopr_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int dafopw_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int dafonw_(void *cspice_state, char *fname, char *ftype, integer *nd, integer *ni, char *ifname, integer *resv, integer *handle, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len);
+extern int dafopn_(void *cspice_state, char *fname, integer *nd, integer *ni, char *ifname, integer *resv, integer *handle, ftnlen fname_len, ftnlen ifname_len);
+extern int dafcls_(void *cspice_state, integer *handle);
+extern int dafhsf_(void *cspice_state, integer *handle, integer *nd, integer *ni);
+extern int dafhlu_(void *cspice_state, integer *handle, integer *unit);
+extern int dafluh_(void *cspice_state, integer *unit, integer *handle);
+extern int dafhfn_(void *cspice_state, integer *handle, char *fname, ftnlen fname_len);
+extern int daffnh_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int dafhof_(void *cspice_state, integer *fhset);
+extern int dafsih_(void *cspice_state, integer *handle, char *access, ftnlen access_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -1420,11 +1420,11 @@ extern int dafsih_(integer *handle, char *access, ftnlen access_len);
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: elemi_ 12 2 4 4 */
  
-extern int dafana_(integer *handle, doublereal *sum, char *name__, doublereal *data, integer *n, ftnlen name_len);
-extern int dafbna_(integer *handle, doublereal *sum, char *name__, ftnlen name_len);
-extern int dafada_(doublereal *data, integer *n);
-extern int dafena_(void);
-extern int dafcad_(integer *handle);
+extern int dafana_(void *cspice_state, integer *handle, doublereal *sum, char *name__, doublereal *data, integer *n, ftnlen name_len);
+extern int dafbna_(void *cspice_state, integer *handle, doublereal *sum, char *name__, ftnlen name_len);
+extern int dafada_(void *cspice_state, doublereal *data, integer *n);
+extern int dafena_(void *cspice_state);
+extern int dafcad_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -1454,7 +1454,7 @@ extern int dafcad_(integer *handle);
 /*:ref: dafrwa_ 14 3 4 4 4 */
 /*:ref: dafwfr_ 14 8 4 4 4 13 4 4 4 124 */
  
-extern int dafarr_(integer *handle, integer *resv);
+extern int dafarr_(void *cspice_state, integer *handle, integer *resv);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -1474,7 +1474,7 @@ extern int dafarr_(integer *handle, integer *resv);
 /*:ref: dafps_ 14 5 4 4 7 4 7 */
 /*:ref: dafws_ 14 1 7 */
  
-extern int dafb2a_(char *binary, char *ascii, ftnlen binary_len, ftnlen ascii_len);
+extern int dafb2a_(void *cspice_state, char *binary, char *ascii, ftnlen binary_len, ftnlen ascii_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: txtopn_ 14 3 13 4 124 */
@@ -1482,7 +1482,7 @@ extern int dafb2a_(char *binary, char *ascii, ftnlen binary_len, ftnlen ascii_le
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafb2t_ 14 3 13 4 124 */
  
-extern int dafb2t_(char *binary, integer *text, ftnlen binary_len);
+extern int dafb2t_(void *cspice_state, char *binary, integer *text, ftnlen binary_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafopr_ 14 3 13 4 124 */
@@ -1503,7 +1503,7 @@ extern int dafb2t_(char *binary, integer *text, ftnlen binary_len);
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int dafbt_(char *binfil, integer *xfrlun, ftnlen binfil_len);
+extern int dafbt_(void *cspice_state, char *binfil, integer *xfrlun, ftnlen binfil_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafopr_ 14 3 13 4 124 */
@@ -1527,7 +1527,7 @@ extern int dafbt_(char *binfil, integer *xfrlun, ftnlen binfil_len);
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int dafdc_(integer *handle);
+extern int dafdc_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -1536,7 +1536,7 @@ extern int dafdc_(integer *handle);
 /*:ref: dafrfr_ 14 8 4 4 4 13 4 4 4 124 */
 /*:ref: dafrrr_ 14 2 4 4 */
  
-extern int dafec_(integer *handle, integer *bufsiz, integer *n, char *buffer, logical *done, ftnlen buffer_len);
+extern int dafec_(void *cspice_state, integer *handle, integer *bufsiz, integer *n, char *buffer, logical *done, ftnlen buffer_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -1552,18 +1552,18 @@ extern int dafec_(integer *handle, integer *bufsiz, integer *n, char *buffer, lo
 /*:ref: cpos_ 4 5 13 13 4 124 124 */
 /*:ref: ncpos_ 4 5 13 13 4 124 124 */
  
-extern int daffa_(integer *handle, doublereal *sum, char *name__, logical *found, ftnlen name_len);
-extern int dafbfs_(integer *handle);
-extern int daffna_(logical *found);
-extern int dafbbs_(integer *handle);
-extern int daffpa_(logical *found);
-extern int dafgs_(doublereal *sum);
-extern int dafgn_(char *name__, ftnlen name_len);
-extern int dafgh_(integer *handle);
-extern int dafrs_(doublereal *sum);
-extern int dafrn_(char *name__, ftnlen name_len);
-extern int dafws_(doublereal *sum);
-extern int dafcs_(integer *handle);
+extern int daffa_(void *cspice_state, integer *handle, doublereal *sum, char *name__, logical *found, ftnlen name_len);
+extern int dafbfs_(void *cspice_state, integer *handle);
+extern int daffna_(void *cspice_state, logical *found);
+extern int dafbbs_(void *cspice_state, integer *handle);
+extern int daffpa_(void *cspice_state, logical *found);
+extern int dafgs_(void *cspice_state, doublereal *sum);
+extern int dafgn_(void *cspice_state, char *name__, ftnlen name_len);
+extern int dafgh_(void *cspice_state, integer *handle);
+extern int dafrs_(void *cspice_state, doublereal *sum);
+extern int dafrn_(void *cspice_state, char *name__, ftnlen name_len);
+extern int dafws_(void *cspice_state, doublereal *sum);
+extern int dafcs_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -1588,7 +1588,7 @@ extern int dafcs_(integer *handle);
 /*:ref: dafwdr_ 14 3 4 4 7 */
 /*:ref: dafwcr_ 14 4 4 4 13 124 */
  
-extern int dafgda_(integer *handle, integer *begin, integer *end, doublereal *data);
+extern int dafgda_(void *cspice_state, integer *handle, integer *begin, integer *end, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1599,12 +1599,12 @@ extern int dafgda_(integer *handle, integer *begin, integer *end, doublereal *da
 /*:ref: dafgdr_ 14 6 4 4 4 4 7 12 */
 /*:ref: cleard_ 14 2 4 7 */
  
-extern int dafps_(integer *nd, integer *ni, doublereal *dc, integer *ic, doublereal *sum);
-extern int dafus_(doublereal *sum, integer *nd, integer *ni, doublereal *dc, integer *ic);
+extern int dafps_(void *cspice_state, integer *nd, integer *ni, doublereal *dc, integer *ic, doublereal *sum);
+extern int dafus_(void *cspice_state, doublereal *sum, integer *nd, integer *ni, doublereal *dc, integer *ic);
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: movei_ 14 3 4 4 4 */
  
-extern int dafra_(integer *handle, integer *iorder, integer *n);
+extern int dafra_(void *cspice_state, integer *handle, integer *iorder, integer *n);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -1620,7 +1620,7 @@ extern int dafra_(integer *handle, integer *iorder, integer *n);
 /*:ref: dafws_ 14 1 7 */
 /*:ref: dafrn_ 14 2 13 124 */
  
-extern int dafrcr_(integer *handle, integer *recno, char *crec, ftnlen crec_len);
+extern int dafrcr_(void *cspice_state, integer *handle, integer *recno, char *crec, ftnlen crec_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -1631,7 +1631,7 @@ extern int dafrcr_(integer *handle, integer *recno, char *crec, ftnlen crec_len)
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: zzddhhlu_ 14 5 4 13 12 4 124 */
  
-extern int dafrda_(integer *handle, integer *begin, integer *end, doublereal *data);
+extern int dafrda_(void *cspice_state, integer *handle, integer *begin, integer *end, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: zzddhisn_ 14 3 4 12 12 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -1644,7 +1644,7 @@ extern int dafrda_(integer *handle, integer *begin, integer *end, doublereal *da
 /*:ref: dafrdr_ 14 6 4 4 4 4 7 12 */
 /*:ref: cleard_ 14 2 4 7 */
  
-extern int dafrfr_(integer *handle, integer *nd, integer *ni, char *ifname, integer *fward, integer *bward, integer *free, ftnlen ifname_len);
+extern int dafrfr_(void *cspice_state, integer *handle, integer *nd, integer *ni, char *ifname, integer *fward, integer *bward, integer *free, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -1655,7 +1655,7 @@ extern int dafrfr_(integer *handle, integer *nd, integer *ni, char *ifname, inte
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int dafrrr_(integer *handle, integer *resv);
+extern int dafrrr_(void *cspice_state, integer *handle, integer *resv);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -1675,8 +1675,8 @@ extern int dafrrr_(integer *handle, integer *resv);
 /*:ref: dafps_ 14 5 4 4 7 4 7 */
 /*:ref: dafws_ 14 1 7 */
  
-extern int dafrwa_(integer *recno, integer *wordno, integer *addr__);
-extern int dafarw_(integer *addr__, integer *recno, integer *wordno);
+extern int dafrwa_(void *cspice_state, integer *recno, integer *wordno, integer *addr__);
+extern int dafarw_(void *cspice_state, integer *addr__, integer *recno, integer *wordno);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1684,12 +1684,12 @@ extern int dafarw_(integer *addr__, integer *recno, integer *wordno);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dafrwd_(integer *handle, integer *recno, integer *begin, integer *end, doublereal *drec, doublereal *data, logical *found, integer *reads, integer *reqs);
-extern int dafgdr_(integer *handle, integer *recno, integer *begin, integer *end, doublereal *data, logical *found);
-extern int dafgsr_(integer *handle, integer *recno, integer *begin, integer *end, doublereal *data, logical *found);
-extern int dafrdr_(integer *handle, integer *recno, integer *begin, integer *end, doublereal *data, logical *found);
-extern int dafwdr_(integer *handle, integer *recno, doublereal *drec);
-extern int dafnrr_(integer *reads, integer *reqs);
+extern int dafrwd_(void *cspice_state, integer *handle, integer *recno, integer *begin, integer *end, doublereal *drec, doublereal *data, logical *found, integer *reads, integer *reqs);
+extern int dafgdr_(void *cspice_state, integer *handle, integer *recno, integer *begin, integer *end, doublereal *data, logical *found);
+extern int dafgsr_(void *cspice_state, integer *handle, integer *recno, integer *begin, integer *end, doublereal *data, logical *found);
+extern int dafrdr_(void *cspice_state, integer *handle, integer *recno, integer *begin, integer *end, doublereal *data, logical *found);
+extern int dafwdr_(void *cspice_state, integer *handle, integer *recno, doublereal *drec);
+extern int dafnrr_(void *cspice_state, integer *reads, integer *reqs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -1707,7 +1707,7 @@ extern int dafnrr_(integer *reads, integer *reqs);
 /*:ref: zzddhhlu_ 14 5 4 13 12 4 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int daft2b_(integer *text, char *binary, integer *resv, ftnlen binary_len);
+extern int daft2b_(void *cspice_state, integer *text, char *binary, integer *resv, ftnlen binary_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1725,7 +1725,7 @@ extern int daft2b_(integer *text, char *binary, integer *resv, ftnlen binary_len
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: dafena_ 14 0 */
  
-extern int daftb_(integer *xfrlun, char *binfil, ftnlen binfil_len);
+extern int daftb_(void *cspice_state, integer *xfrlun, char *binfil, ftnlen binfil_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1748,7 +1748,7 @@ extern int daftb_(integer *xfrlun, char *binfil, ftnlen binfil_len);
 /*:ref: dafena_ 14 0 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int dafwcr_(integer *handle, integer *recno, char *crec, ftnlen crec_len);
+extern int dafwcr_(void *cspice_state, integer *handle, integer *recno, char *crec, ftnlen crec_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhhlu_ 14 5 4 13 12 4 124 */
@@ -1758,7 +1758,7 @@ extern int dafwcr_(integer *handle, integer *recno, char *crec, ftnlen crec_len)
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dafwda_(integer *handle, integer *begin, integer *end, doublereal *data);
+extern int dafwda_(void *cspice_state, integer *handle, integer *begin, integer *end, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1771,7 +1771,7 @@ extern int dafwda_(integer *handle, integer *begin, integer *end, doublereal *da
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: dafwdr_ 14 3 4 4 7 */
  
-extern int dafwfr_(integer *handle, integer *nd, integer *ni, char *ifname, integer *fward, integer *bward, integer *free, ftnlen ifname_len);
+extern int dafwfr_(void *cspice_state, integer *handle, integer *nd, integer *ni, char *ifname, integer *fward, integer *bward, integer *free, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -1783,7 +1783,7 @@ extern int dafwfr_(integer *handle, integer *nd, integer *ni, char *ifname, inte
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int dasa2l_(integer *handle, integer *type__, integer *addrss, integer *clbase, integer *clsize, integer *recno, integer *wordno);
+extern int dasa2l_(void *cspice_state, integer *handle, integer *type__, integer *addrss, integer *clbase, integer *clsize, integer *recno, integer *wordno);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -1796,7 +1796,7 @@ extern int dasa2l_(integer *handle, integer *type__, integer *addrss, integer *c
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
 /*:ref: dasrri_ 14 5 4 4 4 4 4 */
  
-extern int dasac_(integer *handle, integer *n, char *buffer, ftnlen buffer_len);
+extern int dasac_(void *cspice_state, integer *handle, integer *n, char *buffer, ftnlen buffer_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -1813,7 +1813,7 @@ extern int dasac_(integer *handle, integer *n, char *buffer, ftnlen buffer_len);
 /*:ref: dasioc_ 14 6 13 4 4 13 124 124 */
 /*:ref: daswfr_ 14 9 4 13 13 4 4 4 4 124 124 */
  
-extern int dasacr_(integer *handle, integer *n);
+extern int dasacr_(void *cspice_state, integer *handle, integer *n);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -1832,7 +1832,7 @@ extern int dasacr_(integer *handle, integer *n);
 /*:ref: dasiod_ 14 5 13 4 4 7 124 */
 /*:ref: dasufs_ 14 9 4 4 4 4 4 4 4 4 4 */
  
-extern int dasacu_(integer *comlun, char *begmrk, char *endmrk, logical *insbln, integer *handle, ftnlen begmrk_len, ftnlen endmrk_len);
+extern int dasacu_(void *cspice_state, integer *comlun, char *begmrk, char *endmrk, logical *insbln, integer *handle, ftnlen begmrk_len, ftnlen endmrk_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -1852,7 +1852,7 @@ extern int dasacu_(integer *comlun, char *begmrk, char *endmrk, logical *insbln,
 /*:ref: writla_ 14 4 4 13 4 124 */
 /*:ref: dasac_ 14 4 4 4 13 124 */
  
-extern int dasadc_(integer *handle, integer *n, integer *bpos, integer *epos, char *data, ftnlen data_len);
+extern int dasadc_(void *cspice_state, integer *handle, integer *n, integer *bpos, integer *epos, char *data, ftnlen data_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1866,7 +1866,7 @@ extern int dasadc_(integer *handle, integer *n, integer *bpos, integer *epos, ch
 /*:ref: dasurc_ 14 6 4 4 4 4 13 124 */
 /*:ref: dascud_ 14 3 4 4 4 */
  
-extern int dasadd_(integer *handle, integer *n, doublereal *data);
+extern int dasadd_(void *cspice_state, integer *handle, integer *n, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
@@ -1878,7 +1878,7 @@ extern int dasadd_(integer *handle, integer *n, doublereal *data);
 /*:ref: dascud_ 14 3 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dasadi_(integer *handle, integer *n, integer *data);
+extern int dasadi_(void *cspice_state, integer *handle, integer *n, integer *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
@@ -1890,7 +1890,7 @@ extern int dasadi_(integer *handle, integer *n, integer *data);
 /*:ref: dascud_ 14 3 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dasbt_(char *binfil, integer *xfrlun, ftnlen binfil_len);
+extern int dasbt_(void *cspice_state, char *binfil, integer *xfrlun, ftnlen binfil_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasopr_ 14 3 13 4 124 */
@@ -1914,7 +1914,7 @@ extern int dasbt_(char *binfil, integer *xfrlun, ftnlen binfil_len);
 /*:ref: wrencd_ 14 3 4 4 7 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int dascls_(integer *handle);
+extern int dascls_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ssizei_ 14 2 4 4 */
@@ -1931,7 +1931,7 @@ extern int dascls_(integer *handle);
 /*:ref: dassdr_ 14 1 4 */
 /*:ref: dasllc_ 14 1 4 */
  
-extern int dascud_(integer *handle, integer *type__, integer *nwords);
+extern int dascud_(void *cspice_state, integer *handle, integer *type__, integer *nwords);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
@@ -1946,7 +1946,7 @@ extern int dascud_(integer *handle, integer *type__, integer *nwords);
 /*:ref: cleari_ 14 2 4 4 */
 /*:ref: daswri_ 14 3 4 4 4 */
  
-extern int dasdc_(integer *handle);
+extern int dasdc_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -1956,7 +1956,7 @@ extern int dasdc_(integer *handle);
 /*:ref: dasrcr_ 14 2 4 4 */
 /*:ref: daswfr_ 14 9 4 13 13 4 4 4 4 124 124 */
  
-extern int dasec_(integer *handle, integer *bufsiz, integer *n, char *buffer, logical *done, ftnlen buffer_len);
+extern int dasec_(void *cspice_state, integer *handle, integer *bufsiz, integer *n, char *buffer, logical *done, ftnlen buffer_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -1971,7 +1971,7 @@ extern int dasec_(integer *handle, integer *bufsiz, integer *n, char *buffer, lo
 /*:ref: dasioc_ 14 6 13 4 4 13 124 124 */
 /*:ref: errfnm_ 14 3 13 4 124 */
  
-extern int dasecu_(integer *handle, integer *comlun, logical *comnts);
+extern int dasecu_(void *cspice_state, integer *handle, integer *comlun, logical *comnts);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -1980,22 +1980,22 @@ extern int dasecu_(integer *handle, integer *comlun, logical *comnts);
 /*:ref: dasec_ 14 6 4 4 4 13 12 124 */
 /*:ref: writla_ 14 4 4 13 4 124 */
  
-extern int dasfm_(char *fname, char *ftype, char *ifname, integer *handle, integer *unit, integer *free, integer *lastla, integer *lastrc, integer *lastwd, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, integer *fhset, char *access, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len);
-extern int dasopr_(char *fname, integer *handle, ftnlen fname_len);
-extern int dasopw_(char *fname, integer *handle, ftnlen fname_len);
-extern int dasonw_(char *fname, char *ftype, char *ifname, integer *ncomr, integer *handle, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len);
-extern int dasopn_(char *fname, char *ifname, integer *handle, ftnlen fname_len, ftnlen ifname_len);
-extern int dasops_(integer *handle);
-extern int dasllc_(integer *handle);
-extern int dashfs_(integer *handle, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, integer *free, integer *lastla, integer *lastrc, integer *lastwd);
-extern int dasufs_(integer *handle, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, integer *free, integer *lastla, integer *lastrc, integer *lastwd);
-extern int dashlu_(integer *handle, integer *unit);
-extern int dasluh_(integer *unit, integer *handle);
-extern int dashfn_(integer *handle, char *fname, ftnlen fname_len);
-extern int dasfnh_(char *fname, integer *handle, ftnlen fname_len);
-extern int dashof_(integer *fhset);
-extern int dassih_(integer *handle, char *access, ftnlen access_len);
-extern int dasham_(integer *handle, char *access, ftnlen access_len);
+extern int dasfm_(void *cspice_state, char *fname, char *ftype, char *ifname, integer *handle, integer *unit, integer *free, integer *lastla, integer *lastrc, integer *lastwd, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, integer *fhset, char *access, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len);
+extern int dasopr_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int dasopw_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int dasonw_(void *cspice_state, char *fname, char *ftype, char *ifname, integer *ncomr, integer *handle, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len);
+extern int dasopn_(void *cspice_state, char *fname, char *ifname, integer *handle, ftnlen fname_len, ftnlen ifname_len);
+extern int dasops_(void *cspice_state, integer *handle);
+extern int dasllc_(void *cspice_state, integer *handle);
+extern int dashfs_(void *cspice_state, integer *handle, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, integer *free, integer *lastla, integer *lastrc, integer *lastwd);
+extern int dasufs_(void *cspice_state, integer *handle, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, integer *free, integer *lastla, integer *lastrc, integer *lastwd);
+extern int dashlu_(void *cspice_state, integer *handle, integer *unit);
+extern int dasluh_(void *cspice_state, integer *unit, integer *handle);
+extern int dashfn_(void *cspice_state, integer *handle, char *fname, ftnlen fname_len);
+extern int dasfnh_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int dashof_(void *cspice_state, integer *fhset);
+extern int dassih_(void *cspice_state, integer *handle, char *access, ftnlen access_len);
+extern int dasham_(void *cspice_state, integer *handle, char *access, ftnlen access_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -2033,14 +2033,14 @@ extern int dasham_(integer *handle, char *access, ftnlen access_len);
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: elemi_ 12 2 4 4 */
  
-extern doublereal dasine_(doublereal *arg, doublereal *tol);
+extern doublereal dasine_(void *cspice_state, doublereal *arg, doublereal *tol);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dasioc_(char *action, integer *unit, integer *recno, char *record, ftnlen action_len, ftnlen record_len);
+extern int dasioc_(void *cspice_state, char *action, integer *unit, integer *recno, char *record, ftnlen action_len, ftnlen record_len);
 /*:ref: return_ 12 0 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -2051,7 +2051,7 @@ extern int dasioc_(char *action, integer *unit, integer *recno, char *record, ft
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int dasiod_(char *action, integer *unit, integer *recno, doublereal *record, ftnlen action_len);
+extern int dasiod_(void *cspice_state, char *action, integer *unit, integer *recno, doublereal *record, ftnlen action_len);
 /*:ref: return_ 12 0 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -2062,7 +2062,7 @@ extern int dasiod_(char *action, integer *unit, integer *recno, doublereal *reco
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int dasioi_(char *action, integer *unit, integer *recno, integer *record, ftnlen action_len);
+extern int dasioi_(void *cspice_state, char *action, integer *unit, integer *recno, integer *record, ftnlen action_len);
 /*:ref: return_ 12 0 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -2073,13 +2073,13 @@ extern int dasioi_(char *action, integer *unit, integer *recno, integer *record,
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int daslla_(integer *handle, integer *lastc, integer *lastd, integer *lasti);
+extern int daslla_(void *cspice_state, integer *handle, integer *lastc, integer *lastd, integer *lasti);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dasrcr_(integer *handle, integer *n);
+extern int dasrcr_(void *cspice_state, integer *handle, integer *n);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -2098,7 +2098,7 @@ extern int dasrcr_(integer *handle, integer *n);
 /*:ref: dasiod_ 14 5 13 4 4 7 124 */
 /*:ref: dasufs_ 14 9 4 4 4 4 4 4 4 4 4 */
  
-extern int dasrdc_(integer *handle, integer *first, integer *last, integer *bpos, integer *epos, char *data, ftnlen data_len);
+extern int dasrdc_(void *cspice_state, integer *handle, integer *first, integer *last, integer *bpos, integer *epos, char *data, ftnlen data_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -2108,34 +2108,34 @@ extern int dasrdc_(integer *handle, integer *first, integer *last, integer *bpos
 /*:ref: failed_ 12 0 */
 /*:ref: dasrrc_ 14 6 4 4 4 4 13 124 */
  
-extern int dasrdd_(integer *handle, integer *first, integer *last, doublereal *data);
+extern int dasrdd_(void *cspice_state, integer *handle, integer *first, integer *last, doublereal *data);
 /*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: dasrrd_ 14 5 4 4 4 4 7 */
 /*:ref: failed_ 12 0 */
  
-extern int dasrdi_(integer *handle, integer *first, integer *last, integer *data);
+extern int dasrdi_(void *cspice_state, integer *handle, integer *first, integer *last, integer *data);
 /*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: dasrri_ 14 5 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
  
-extern int dasrfr_(integer *handle, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len);
+extern int dasrfr_(void *cspice_state, integer *handle, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzdasrfr_ 14 9 4 13 13 4 4 4 4 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dasrwr_(integer *handle, integer *recno, char *recc, doublereal *recd, integer *reci, integer *first, integer *last, doublereal *datad, integer *datai, char *datac, ftnlen recc_len, ftnlen datac_len);
-extern int dasrrd_(integer *handle, integer *recno, integer *first, integer *last, doublereal *datad);
-extern int dasrri_(integer *handle, integer *recno, integer *first, integer *last, integer *datai);
-extern int dasrrc_(integer *handle, integer *recno, integer *first, integer *last, char *datac, ftnlen datac_len);
-extern int daswrd_(integer *handle, integer *recno, doublereal *recd);
-extern int daswri_(integer *handle, integer *recno, integer *reci);
-extern int daswrc_(integer *handle, integer *recno, char *recc, ftnlen recc_len);
-extern int dasurd_(integer *handle, integer *recno, integer *first, integer *last, doublereal *datad);
-extern int dasuri_(integer *handle, integer *recno, integer *first, integer *last, integer *datai);
-extern int dasurc_(integer *handle, integer *recno, integer *first, integer *last, char *datac, ftnlen datac_len);
-extern int daswbr_(integer *handle);
+extern int dasrwr_(void *cspice_state, integer *handle, integer *recno, char *recc, doublereal *recd, integer *reci, integer *first, integer *last, doublereal *datad, integer *datai, char *datac, ftnlen recc_len, ftnlen datac_len);
+extern int dasrrd_(void *cspice_state, integer *handle, integer *recno, integer *first, integer *last, doublereal *datad);
+extern int dasrri_(void *cspice_state, integer *handle, integer *recno, integer *first, integer *last, integer *datai);
+extern int dasrrc_(void *cspice_state, integer *handle, integer *recno, integer *first, integer *last, char *datac, ftnlen datac_len);
+extern int daswrd_(void *cspice_state, integer *handle, integer *recno, doublereal *recd);
+extern int daswri_(void *cspice_state, integer *handle, integer *recno, integer *reci);
+extern int daswrc_(void *cspice_state, integer *handle, integer *recno, char *recc, ftnlen recc_len);
+extern int dasurd_(void *cspice_state, integer *handle, integer *recno, integer *first, integer *last, doublereal *datad);
+extern int dasuri_(void *cspice_state, integer *handle, integer *recno, integer *first, integer *last, integer *datai);
+extern int dasurc_(void *cspice_state, integer *handle, integer *recno, integer *first, integer *last, char *datac, ftnlen datac_len);
+extern int daswbr_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -2160,7 +2160,7 @@ extern int daswbr_(integer *handle);
 /*:ref: dassih_ 14 3 4 13 124 */
 /*:ref: lnkfsl_ 14 3 4 4 4 */
  
-extern int dassdr_(integer *handle);
+extern int dassdr_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -2183,7 +2183,7 @@ extern int dassdr_(integer *handle);
 /*:ref: dasufs_ 14 9 4 4 4 4 4 4 4 4 4 */
 /*:ref: dasllc_ 14 1 4 */
  
-extern int dastb_(integer *xfrlun, char *binfil, ftnlen binfil_len);
+extern int dastb_(void *cspice_state, integer *xfrlun, char *binfil, ftnlen binfil_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2209,7 +2209,7 @@ extern int dastb_(integer *xfrlun, char *binfil, ftnlen binfil_len);
 /*:ref: dasadd_ 14 3 4 4 7 */
 /*:ref: dasadi_ 14 3 4 4 4 */
  
-extern int dasudc_(integer *handle, integer *first, integer *last, integer *bpos, integer *epos, char *data, ftnlen data_len);
+extern int dasudc_(void *cspice_state, integer *handle, integer *first, integer *last, integer *bpos, integer *epos, char *data, ftnlen data_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: daslla_ 14 4 4 4 4 4 */
@@ -2221,7 +2221,7 @@ extern int dasudc_(integer *handle, integer *first, integer *last, integer *bpos
 /*:ref: failed_ 12 0 */
 /*:ref: dasurc_ 14 6 4 4 4 4 13 124 */
  
-extern int dasudd_(integer *handle, integer *first, integer *last, doublereal *data);
+extern int dasudd_(void *cspice_state, integer *handle, integer *first, integer *last, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: daslla_ 14 4 4 4 4 4 */
@@ -2233,7 +2233,7 @@ extern int dasudd_(integer *handle, integer *first, integer *last, doublereal *d
 /*:ref: failed_ 12 0 */
 /*:ref: dasurd_ 14 5 4 4 4 4 7 */
  
-extern int dasudi_(integer *handle, integer *first, integer *last, integer *data);
+extern int dasudi_(void *cspice_state, integer *handle, integer *first, integer *last, integer *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: daslla_ 14 4 4 4 4 4 */
@@ -2245,7 +2245,7 @@ extern int dasudi_(integer *handle, integer *first, integer *last, integer *data
 /*:ref: failed_ 12 0 */
 /*:ref: dasuri_ 14 5 4 4 4 4 4 */
  
-extern int daswfr_(integer *handle, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len);
+extern int daswfr_(void *cspice_state, integer *handle, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -2259,16 +2259,16 @@ extern int daswfr_(integer *handle, char *idword, char *ifname, integer *nresvr,
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
 /*:ref: dasufs_ 14 9 4 4 4 4 4 4 4 4 4 */
  
-extern doublereal datanh_(doublereal *x);
+extern doublereal datanh_(void *cspice_state, doublereal *x);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern doublereal dcbrt_(doublereal *x);
+extern doublereal dcbrt_(void *cspice_state, doublereal *x);
  
-extern int dcyldr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *jacobi);
+extern int dcyldr_(void *cspice_state, doublereal *x, doublereal *y, doublereal *z__, doublereal *jacobi);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2279,7 +2279,7 @@ extern int dcyldr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *ja
 /*:ref: drdcyl_ 14 4 7 7 7 7 */
 /*:ref: invort_ 14 2 7 7 */
  
-extern int delfil_(char *filnam, ftnlen filnam_len);
+extern int delfil_(void *cspice_state, char *filnam, ftnlen filnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2289,7 +2289,7 @@ extern int delfil_(char *filnam, ftnlen filnam_len);
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: getlun_ 14 1 4 */
  
-extern int deltet_(doublereal *epoch, char *eptype, doublereal *delta, ftnlen eptype_len);
+extern int deltet_(void *cspice_state, doublereal *epoch, char *eptype, doublereal *delta, ftnlen eptype_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
@@ -2301,9 +2301,9 @@ extern int deltet_(doublereal *epoch, char *eptype, doublereal *delta, ftnlen ep
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern doublereal det_(doublereal *m1);
+extern doublereal det_(void *cspice_state, doublereal *m1);
  
-extern int dgeodr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *re, doublereal *f, doublereal *jacobi);
+extern int dgeodr_(void *cspice_state, doublereal *x, doublereal *y, doublereal *z__, doublereal *re, doublereal *f, doublereal *jacobi);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2315,7 +2315,7 @@ extern int dgeodr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *re
 /*:ref: drdgeo_ 14 6 7 7 7 7 7 7 */
 /*:ref: invort_ 14 2 7 7 */
  
-extern doublereal dhfa_(doublereal *state, doublereal *bodyr);
+extern doublereal dhfa_(void *cspice_state, doublereal *state, doublereal *bodyr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -2326,7 +2326,7 @@ extern doublereal dhfa_(doublereal *state, doublereal *bodyr);
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: errdp_ 14 3 13 7 124 */
  
-extern int diags2_(doublereal *symmat, doublereal *diag, doublereal *rotate);
+extern int diags2_(void *cspice_state, doublereal *symmat, doublereal *diag, doublereal *rotate);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: moved_ 14 3 7 4 7 */
@@ -2334,7 +2334,7 @@ extern int diags2_(doublereal *symmat, doublereal *diag, doublereal *rotate);
 /*:ref: rquad_ 14 5 7 7 7 7 7 */
 /*:ref: vhatg_ 14 3 7 4 7 */
  
-extern int diffc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
+extern int diffc_(void *cspice_state, char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2346,7 +2346,7 @@ extern int diffc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnle
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: excess_ 14 3 4 13 124 */
  
-extern int diffd_(doublereal *a, doublereal *b, doublereal *c__);
+extern int diffd_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -2356,7 +2356,7 @@ extern int diffd_(doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int diffi_(integer *a, integer *b, integer *c__);
+extern int diffi_(void *cspice_state, integer *a, integer *b, integer *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -2366,21 +2366,21 @@ extern int diffi_(integer *a, integer *b, integer *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dlabbs_(integer *handle, integer *descr, logical *found);
+extern int dlabbs_(void *cspice_state, integer *handle, integer *descr, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dlabfs_(integer *handle, integer *descr, logical *found);
+extern int dlabfs_(void *cspice_state, integer *handle, integer *descr, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dlabns_(integer *handle);
+extern int dlabns_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -2392,7 +2392,7 @@ extern int dlabns_(integer *handle);
 /*:ref: dasadi_ 14 3 4 4 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int dlaens_(integer *handle);
+extern int dlaens_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
@@ -2400,19 +2400,19 @@ extern int dlaens_(integer *handle);
 /*:ref: dasudi_ 14 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dlafns_(integer *handle, integer *descr, integer *nxtdsc, logical *found);
+extern int dlafns_(void *cspice_state, integer *handle, integer *descr, integer *nxtdsc, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int dlafps_(integer *handle, integer *descr, integer *prvdsc, logical *found);
+extern int dlafps_(void *cspice_state, integer *handle, integer *descr, integer *prvdsc, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int dlaopn_(char *fname, char *ftype, char *ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len);
+extern int dlaopn_(void *cspice_state, char *fname, char *ftype, char *ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2422,9 +2422,9 @@ extern int dlaopn_(char *fname, char *ftype, char *ifname, integer *ncomch, inte
 /*:ref: dasonw_ 14 8 13 13 13 4 4 124 124 124 */
 /*:ref: dasadi_ 14 3 4 4 4 */
  
-extern logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2);
+extern logical dlassg_(void *cspice_state, integer *han1, integer *han2, integer *dsc1, integer *dsc2);
  
-extern int dlatdr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *jacobi);
+extern int dlatdr_(void *cspice_state, doublereal *x, doublereal *y, doublereal *z__, doublereal *jacobi);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2435,7 +2435,7 @@ extern int dlatdr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *ja
 /*:ref: drdlat_ 14 4 7 7 7 7 */
 /*:ref: invort_ 14 2 7 7 */
  
-extern int dnearp_(doublereal *state, doublereal *a, doublereal *b, doublereal *c__, doublereal *dnear, doublereal *dalt, logical *found);
+extern int dnearp_(void *cspice_state, doublereal *state, doublereal *a, doublereal *b, doublereal *c__, doublereal *dnear, doublereal *dalt, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
@@ -2448,10 +2448,10 @@ extern int dnearp_(doublereal *state, doublereal *a, doublereal *b, doublereal *
 /*:ref: vtmv_ 7 3 7 7 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int dp2hx_(doublereal *number, char *string, integer *length, ftnlen string_len);
+extern int dp2hx_(void *cspice_state, doublereal *number, char *string, integer *length, ftnlen string_len);
 /*:ref: int2hx_ 14 4 4 13 4 124 */
  
-extern int dpfmt_(doublereal *x, char *pictur, char *str, ftnlen pictur_len, ftnlen str_len);
+extern int dpfmt_(void *cspice_state, doublereal *x, char *pictur, char *str, ftnlen pictur_len, ftnlen str_len);
 /*:ref: pos_ 4 5 13 13 4 124 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2466,7 +2466,7 @@ extern int dpfmt_(doublereal *x, char *pictur, char *str, ftnlen pictur_len, ftn
 /*:ref: zzvsbstr_ 14 6 4 4 12 13 12 124 */
 /*:ref: ncpos_ 4 5 13 13 4 124 124 */
  
-extern int dpgrdr_(char *body, doublereal *x, doublereal *y, doublereal *z__, doublereal *re, doublereal *f, doublereal *jacobi, ftnlen body_len);
+extern int dpgrdr_(void *cspice_state, char *body, doublereal *x, doublereal *y, doublereal *z__, doublereal *re, doublereal *f, doublereal *jacobi, ftnlen body_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -2482,9 +2482,9 @@ extern int dpgrdr_(char *body, doublereal *x, doublereal *y, doublereal *z__, do
 /*:ref: plnsns_ 4 1 4 */
 /*:ref: dgeodr_ 14 6 7 7 7 7 7 7 */
  
-extern doublereal dpr_(void);
+extern doublereal dpr_(void *cspice_state);
  
-extern int dpspce_(doublereal *time, doublereal *geophs, doublereal *elems, doublereal *state);
+extern int dpspce_(void *cspice_state, doublereal *time, doublereal *geophs, doublereal *elems, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
@@ -2496,17 +2496,17 @@ extern int dpspce_(doublereal *time, doublereal *geophs, doublereal *elems, doub
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dpstr_(doublereal *x, integer *sigdig, char *string, ftnlen string_len);
+extern int dpstr_(void *cspice_state, doublereal *x, integer *sigdig, char *string, ftnlen string_len);
 /*:ref: intstr_ 14 3 4 13 124 */
  
-extern int dpstrf_(doublereal *x, integer *sigdig, char *format, char *string, ftnlen format_len, ftnlen string_len);
+extern int dpstrf_(void *cspice_state, doublereal *x, integer *sigdig, char *format, char *string, ftnlen format_len, ftnlen string_len);
 /*:ref: dpstr_ 14 4 7 4 13 124 */
 /*:ref: zzvststr_ 14 4 7 13 4 124 */
 /*:ref: zzvsbstr_ 14 6 4 4 12 13 12 124 */
  
-extern int drdcyl_(doublereal *r__, doublereal *long__, doublereal *z__, doublereal *jacobi);
+extern int drdcyl_(void *cspice_state, doublereal *r__, doublereal *long__, doublereal *z__, doublereal *jacobi);
  
-extern int drdgeo_(doublereal *long__, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *jacobi);
+extern int drdgeo_(void *cspice_state, doublereal *long__, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *jacobi);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2514,9 +2514,9 @@ extern int drdgeo_(doublereal *long__, doublereal *lat, doublereal *alt, doubler
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int drdlat_(doublereal *r__, doublereal *long__, doublereal *lat, doublereal *jacobi);
+extern int drdlat_(void *cspice_state, doublereal *r__, doublereal *long__, doublereal *lat, doublereal *jacobi);
  
-extern int drdpgr_(char *body, doublereal *lon, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *jacobi, ftnlen body_len);
+extern int drdpgr_(void *cspice_state, char *body, doublereal *lon, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *jacobi, ftnlen body_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -2532,16 +2532,16 @@ extern int drdpgr_(char *body, doublereal *lon, doublereal *lat, doublereal *alt
 /*:ref: plnsns_ 4 1 4 */
 /*:ref: drdgeo_ 14 6 7 7 7 7 7 7 */
  
-extern int drdsph_(doublereal *r__, doublereal *colat, doublereal *long__, doublereal *jacobi);
+extern int drdsph_(void *cspice_state, doublereal *r__, doublereal *colat, doublereal *long__, doublereal *jacobi);
  
-extern int drotat_(doublereal *angle, integer *iaxis, doublereal *dmout);
+extern int drotat_(void *cspice_state, doublereal *angle, integer *iaxis, doublereal *dmout);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dskb02_(integer *handle, integer *dladsc, integer *nv, integer *np, integer *nvxtot, doublereal *vtxbds, doublereal *voxsiz, doublereal *voxori, integer *vgrext, integer *cgscal, integer *vtxnpl, integer *voxnpt, integer *voxnpl);
+extern int dskb02_(void *cspice_state, integer *handle, integer *dladsc, integer *nv, integer *np, integer *nvxtot, doublereal *vtxbds, doublereal *voxsiz, doublereal *voxori, integer *vgrext, integer *cgscal, integer *vtxnpl, integer *voxnpt, integer *voxnpl);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
@@ -2551,7 +2551,7 @@ extern int dskb02_(integer *handle, integer *dladsc, integer *nv, integer *np, i
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dskcls_(integer *handle, logical *optmiz);
+extern int dskcls_(void *cspice_state, integer *handle, logical *optmiz);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dascls_ 14 1 4 */
@@ -2560,7 +2560,7 @@ extern int dskcls_(integer *handle, logical *optmiz);
 /*:ref: dasllc_ 14 1 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dskd02_(integer *handle, integer *dladsc, integer *item, integer *start, integer *room, integer *n, doublereal *values);
+extern int dskd02_(void *cspice_state, integer *handle, integer *dladsc, integer *item, integer *start, integer *room, integer *n, doublereal *values);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -2570,7 +2570,7 @@ extern int dskd02_(integer *handle, integer *dladsc, integer *item, integer *sta
 /*:ref: failed_ 12 0 */
 /*:ref: dasrdd_ 14 4 4 4 4 7 */
  
-extern int dskgd_(integer *handle, integer *dladsc, doublereal *dskdsc);
+extern int dskgd_(void *cspice_state, integer *handle, integer *dladsc, doublereal *dskdsc);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2579,7 +2579,7 @@ extern int dskgd_(integer *handle, integer *dladsc, doublereal *dskdsc);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasrdd_ 14 4 4 4 4 7 */
  
-extern int dski02_(integer *handle, integer *dladsc, integer *item, integer *start, integer *room, integer *n, integer *values);
+extern int dski02_(void *cspice_state, integer *handle, integer *dladsc, integer *item, integer *start, integer *room, integer *n, integer *values);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -2588,7 +2588,7 @@ extern int dski02_(integer *handle, integer *dladsc, integer *item, integer *sta
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
  
-extern int dskmi2_(integer *nv, doublereal *vrtces, integer *np, integer *plates, doublereal *finscl, integer *corscl, integer *worksz, integer *voxpsz, integer *voxlsz, logical *makvtl, integer *spxisz, integer *work, doublereal *spaixd, integer *spaixi);
+extern int dskmi2_(void *cspice_state, integer *nv, doublereal *vrtces, integer *np, integer *plates, doublereal *finscl, integer *corscl, integer *worksz, integer *voxpsz, integer *voxlsz, logical *makvtl, integer *spxisz, integer *work, doublereal *spaixd, integer *spaixi);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2600,7 +2600,7 @@ extern int dskmi2_(integer *nv, doublereal *vrtces, integer *np, integer *plates
 /*:ref: failed_ 12 0 */
 /*:ref: zzvrtplt_ 14 9 4 4 4 4 4 4 4 4 4 */
  
-extern int dskn02_(integer *handle, integer *dladsc, integer *plid, doublereal *normal);
+extern int dskn02_(void *cspice_state, integer *handle, integer *dladsc, integer *plid, doublereal *normal);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dskgd_ 14 3 4 4 7 */
@@ -2617,7 +2617,7 @@ extern int dskn02_(integer *handle, integer *dladsc, integer *plid, doublereal *
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: ucrss_ 14 3 7 7 7 */
  
-extern int dskobj_(char *dsk, integer *bodids, ftnlen dsk_len);
+extern int dskobj_(void *cspice_state, char *dsk, integer *bodids, ftnlen dsk_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
@@ -2639,13 +2639,13 @@ extern int dskobj_(char *dsk, integer *bodids, ftnlen dsk_len);
 /*:ref: validi_ 14 3 4 4 4 */
 /*:ref: dascls_ 14 1 4 */
  
-extern int dskopn_(char *fname, char *ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen ifname_len);
+extern int dskopn_(void *cspice_state, char *fname, char *ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dlaopn_ 14 8 13 13 13 4 4 124 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dskp02_(integer *handle, integer *dladsc, integer *start, integer *room, integer *n, integer *plates);
+extern int dskp02_(void *cspice_state, integer *handle, integer *dladsc, integer *start, integer *room, integer *n, integer *plates);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dskgd_ 14 3 4 4 7 */
@@ -2658,7 +2658,7 @@ extern int dskp02_(integer *handle, integer *dladsc, integer *start, integer *ro
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dski02_ 14 7 4 4 4 4 4 4 4 */
  
-extern int dskrb2_(integer *nv, doublereal *vrtces, integer *np, integer *plates, integer *corsys, doublereal *corpar, doublereal *mncor3, doublereal *mxcor3);
+extern int dskrb2_(void *cspice_state, integer *nv, doublereal *vrtces, integer *np, integer *plates, integer *corsys, doublereal *corpar, doublereal *mncor3, doublereal *mxcor3);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vnorm_ 7 1 7 */
@@ -2674,7 +2674,7 @@ extern int dskrb2_(integer *nv, doublereal *vrtces, integer *np, integer *plates
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int dsksrf_(char *dsk, integer *bodyid, integer *srfids, ftnlen dsk_len);
+extern int dsksrf_(void *cspice_state, char *dsk, integer *bodyid, integer *srfids, ftnlen dsk_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
@@ -2696,9 +2696,9 @@ extern int dsksrf_(char *dsk, integer *bodyid, integer *srfids, ftnlen dsk_len);
 /*:ref: validi_ 14 3 4 4 4 */
 /*:ref: dascls_ 14 1 4 */
  
-extern int dsktol_(integer *keywrd, doublereal *dpval);
-extern int dskgtl_(integer *keywrd, doublereal *dpval);
-extern int dskstl_(integer *keywrd, doublereal *dpval);
+extern int dsktol_(void *cspice_state, integer *keywrd, doublereal *dpval);
+extern int dskgtl_(void *cspice_state, integer *keywrd, doublereal *dpval);
+extern int dskstl_(void *cspice_state, integer *keywrd, doublereal *dpval);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -2707,7 +2707,7 @@ extern int dskstl_(integer *keywrd, doublereal *dpval);
 /*:ref: return_ 12 0 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int dskv02_(integer *handle, integer *dladsc, integer *start, integer *room, integer *n, doublereal *vrtces);
+extern int dskv02_(void *cspice_state, integer *handle, integer *dladsc, integer *start, integer *room, integer *n, doublereal *vrtces);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dskgd_ 14 3 4 4 7 */
@@ -2720,7 +2720,7 @@ extern int dskv02_(integer *handle, integer *dladsc, integer *start, integer *ro
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dskd02_ 14 7 4 4 4 4 4 4 7 */
  
-extern int dskw02_(integer *handle, integer *center, integer *surfid, integer *dclass, char *frame, integer *corsys, doublereal *corpar, doublereal *mncor1, doublereal *mxcor1, doublereal *mncor2, doublereal *mxcor2, doublereal *mncor3, doublereal *mxcor3, doublereal *first, doublereal *last, integer *nv, doublereal *vrtces, integer *np, integer *plates, doublereal *spaixd, integer *spaixi, ftnlen frame_len);
+extern int dskw02_(void *cspice_state, integer *handle, integer *center, integer *surfid, integer *dclass, char *frame, integer *corsys, doublereal *corpar, doublereal *mncor1, doublereal *mxcor1, doublereal *mncor2, doublereal *mxcor2, doublereal *mncor3, doublereal *mxcor3, doublereal *first, doublereal *last, integer *nv, doublereal *vrtces, integer *np, integer *plates, doublereal *spaixd, integer *spaixi, ftnlen frame_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -2743,7 +2743,7 @@ extern int dskw02_(integer *handle, integer *center, integer *surfid, integer *d
 /*:ref: dasadi_ 14 3 4 4 4 */
 /*:ref: dlaens_ 14 1 4 */
  
-extern int dskx02_(integer *handle, integer *dladsc, doublereal *vertex, doublereal *raydir, integer *plid, doublereal *xpt, logical *found);
+extern int dskx02_(void *cspice_state, integer *handle, integer *dladsc, doublereal *vertex, doublereal *raydir, integer *plid, doublereal *xpt, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dpmax_ 7 0 */
@@ -2778,7 +2778,7 @@ extern int dskx02_(integer *handle, integer *dladsc, doublereal *vertex, doubler
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: zzinvelt_ 14 7 7 4 7 7 7 4 12 */
  
-extern int dskxsi_(logical *pri, char *target, integer *nsurf, integer *srflst, doublereal *et, char *fixref, doublereal *vertex, doublereal *raydir, integer *maxd, integer *maxi, doublereal *xpt, integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *ic, logical *found, ftnlen target_len, ftnlen fixref_len);
+extern int dskxsi_(void *cspice_state, logical *pri, char *target, integer *nsurf, integer *srflst, doublereal *et, char *fixref, doublereal *vertex, doublereal *raydir, integer *maxd, integer *maxi, doublereal *xpt, integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *ic, logical *found, ftnlen target_len, ftnlen fixref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -2794,7 +2794,7 @@ extern int dskxsi_(logical *pri, char *target, integer *nsurf, integer *srflst, 
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: zzsbfxri_ 14 14 4 4 4 7 4 7 7 7 4 4 7 7 4 12 */
  
-extern int dskxv_(logical *pri, char *target, integer *nsurf, integer *srflst, doublereal *et, char *fixref, integer *nrays, doublereal *vtxarr, doublereal *dirarr, doublereal *xptarr, logical *fndarr, ftnlen target_len, ftnlen fixref_len);
+extern int dskxv_(void *cspice_state, logical *pri, char *target, integer *nsurf, integer *srflst, doublereal *et, char *fixref, integer *nrays, doublereal *vtxarr, doublereal *dirarr, doublereal *xptarr, logical *fndarr, ftnlen target_len, ftnlen fixref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -2810,13 +2810,13 @@ extern int dskxv_(logical *pri, char *target, integer *nsurf, integer *srflst, d
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: zzsbfxr_ 14 9 4 4 4 7 4 7 7 7 12 */
  
-extern int dskz02_(integer *handle, integer *dladsc, integer *nv, integer *np);
+extern int dskz02_(void *cspice_state, integer *handle, integer *dladsc, integer *nv, integer *np);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dski02_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dsphdr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *jacobi);
+extern int dsphdr_(void *cspice_state, doublereal *x, doublereal *y, doublereal *z__, doublereal *jacobi);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2827,31 +2827,31 @@ extern int dsphdr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *ja
 /*:ref: drdsph_ 14 4 7 7 7 7 */
 /*:ref: invort_ 14 2 7 7 */
  
-extern int ducrss_(doublereal *s1, doublereal *s2, doublereal *sout);
+extern int ducrss_(void *cspice_state, doublereal *s1, doublereal *s2, doublereal *sout);
 /*:ref: vsclg_ 14 4 7 7 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: dvcrss_ 14 3 7 7 7 */
 /*:ref: dvhat_ 14 2 7 7 */
  
-extern int dvcrss_(doublereal *s1, doublereal *s2, doublereal *sout);
+extern int dvcrss_(void *cspice_state, doublereal *s1, doublereal *s2, doublereal *sout);
 /*:ref: vcrss_ 14 3 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern doublereal dvdot_(doublereal *s1, doublereal *s2);
+extern doublereal dvdot_(void *cspice_state, doublereal *s1, doublereal *s2);
  
-extern int dvhat_(doublereal *s1, doublereal *sout);
+extern int dvhat_(void *cspice_state, doublereal *s1, doublereal *sout);
 /*:ref: unorm_ 14 3 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: vperp_ 14 3 7 7 7 */
 /*:ref: vsclip_ 14 2 7 7 */
  
-extern doublereal dvnorm_(doublereal *state);
+extern doublereal dvnorm_(void *cspice_state, doublereal *state);
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: vhat_ 14 2 7 7 */
 /*:ref: vdot_ 7 2 7 7 */
  
-extern doublereal dvsep_(doublereal *s1, doublereal *s2);
+extern doublereal dvsep_(void *cspice_state, doublereal *s1, doublereal *s2);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dvhat_ 14 2 7 7 */
@@ -2862,14 +2862,14 @@ extern doublereal dvsep_(doublereal *s1, doublereal *s2);
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: zzdiv_ 7 2 7 7 */
  
-extern int dxtrct_(char *keywd, integer *maxwds, char *string, integer *nfound, integer *parsed, doublereal *values, ftnlen keywd_len, ftnlen string_len);
+extern int dxtrct_(void *cspice_state, char *keywd, integer *maxwds, char *string, integer *nfound, integer *parsed, doublereal *values, ftnlen keywd_len, ftnlen string_len);
 /*:ref: wdindx_ 4 4 13 13 124 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: nblen_ 4 2 13 124 */
 /*:ref: fndnwd_ 14 5 13 4 4 4 124 */
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
  
-extern int edlimb_(doublereal *a, doublereal *b, doublereal *c__, doublereal *viewpt, doublereal *limb);
+extern int edlimb_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__, doublereal *viewpt, doublereal *limb);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2882,7 +2882,7 @@ extern int edlimb_(doublereal *a, doublereal *b, doublereal *c__, doublereal *vi
 /*:ref: vsclg_ 14 4 7 7 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int ednmpt_(doublereal *a, doublereal *b, doublereal *c__, doublereal *normal, doublereal *point);
+extern int ednmpt_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__, doublereal *normal, doublereal *point);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2892,7 +2892,7 @@ extern int ednmpt_(doublereal *a, doublereal *b, doublereal *c__, doublereal *no
 /*:ref: touchd_ 7 1 7 */
 /*:ref: vzero_ 12 1 7 */
  
-extern int edpnt_(doublereal *p, doublereal *a, doublereal *b, doublereal *c__, doublereal *ep);
+extern int edpnt_(void *cspice_state, doublereal *p, doublereal *a, doublereal *b, doublereal *c__, doublereal *ep);
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2902,7 +2902,7 @@ extern int edpnt_(doublereal *p, doublereal *a, doublereal *b, doublereal *c__, 
 /*:ref: vzero_ 12 1 7 */
 /*:ref: touchd_ 7 1 7 */
  
-extern int edterm_(char *trmtyp, char *source, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, integer *npts, doublereal *trgepc, doublereal *obspos, doublereal *trmpts, ftnlen trmtyp_len, ftnlen source_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int edterm_(void *cspice_state, char *trmtyp, char *source, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, integer *npts, doublereal *trgepc, doublereal *obspos, doublereal *trmpts, ftnlen trmtyp_len, ftnlen source_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -2921,7 +2921,7 @@ extern int edterm_(char *trmtyp, char *source, char *target, doublereal *et, cha
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: zzedterm_ 14 9 13 7 7 7 7 7 4 7 124 */
  
-extern int ekacec_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, char *cvals, logical *isnull, ftnlen column_len, ftnlen cvals_len);
+extern int ekacec_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, char *cvals, logical *isnull, ftnlen column_len, ftnlen cvals_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -2936,7 +2936,7 @@ extern int ekacec_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekad03_ 14 7 4 4 4 4 13 12 124 */
 /*:ref: zzekad06_ 14 8 4 4 4 4 4 13 12 124 */
  
-extern int ekaced_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, doublereal *dvals, logical *isnull, ftnlen column_len);
+extern int ekaced_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, doublereal *dvals, logical *isnull, ftnlen column_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -2951,7 +2951,7 @@ extern int ekaced_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekad02_ 14 6 4 4 4 4 7 12 */
 /*:ref: zzekad05_ 14 7 4 4 4 4 4 7 12 */
  
-extern int ekacei_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, integer *ivals, logical *isnull, ftnlen column_len);
+extern int ekacei_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, integer *ivals, logical *isnull, ftnlen column_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -2966,7 +2966,7 @@ extern int ekacei_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekad01_ 14 6 4 4 4 4 4 12 */
 /*:ref: zzekad04_ 14 7 4 4 4 4 4 4 12 */
  
-extern int ekaclc_(integer *handle, integer *segno, char *column, char *cvals, integer *entszs, logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len, ftnlen cvals_len);
+extern int ekaclc_(void *cspice_state, integer *handle, integer *segno, char *column, char *cvals, integer *entszs, logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len, ftnlen cvals_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
@@ -2981,7 +2981,7 @@ extern int ekaclc_(integer *handle, integer *segno, char *column, char *cvals, i
 /*:ref: zzekac06_ 14 7 4 4 4 13 4 12 124 */
 /*:ref: zzekac09_ 14 7 4 4 4 13 12 4 124 */
  
-extern int ekacld_(integer *handle, integer *segno, char *column, doublereal *dvals, integer *entszs, logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len);
+extern int ekacld_(void *cspice_state, integer *handle, integer *segno, char *column, doublereal *dvals, integer *entszs, logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
@@ -2996,7 +2996,7 @@ extern int ekacld_(integer *handle, integer *segno, char *column, doublereal *dv
 /*:ref: zzekac05_ 14 6 4 4 4 7 4 12 */
 /*:ref: zzekac08_ 14 6 4 4 4 7 12 4 */
  
-extern int ekacli_(integer *handle, integer *segno, char *column, integer *ivals, integer *entszs, logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len);
+extern int ekacli_(void *cspice_state, integer *handle, integer *segno, char *column, integer *ivals, integer *entszs, logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
@@ -3011,7 +3011,7 @@ extern int ekacli_(integer *handle, integer *segno, char *column, integer *ivals
 /*:ref: zzekac04_ 14 6 4 4 4 4 4 12 */
 /*:ref: zzekac07_ 14 6 4 4 4 4 12 4 */
  
-extern int ekappr_(integer *handle, integer *segno, integer *recno);
+extern int ekappr_(void *cspice_state, integer *handle, integer *segno, integer *recno);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -3021,7 +3021,7 @@ extern int ekappr_(integer *handle, integer *segno, integer *recno);
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: ekinsr_ 14 3 4 4 4 */
  
-extern int ekbseg_(integer *handle, char *tabnam, integer *ncols, char *cnames, char *decls, integer *segno, ftnlen tabnam_len, ftnlen cnames_len, ftnlen decls_len);
+extern int ekbseg_(void *cspice_state, integer *handle, char *tabnam, integer *ncols, char *cnames, char *decls, integer *segno, ftnlen tabnam_len, ftnlen cnames_len, ftnlen decls_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -3041,13 +3041,13 @@ extern int ekbseg_(integer *handle, char *tabnam, integer *ncols, char *cnames, 
 /*:ref: zzekbs01_ 14 8 4 13 4 13 4 4 124 124 */
 /*:ref: zzekbs02_ 14 8 4 13 4 13 4 4 124 124 */
  
-extern int ekcls_(integer *handle);
+extern int ekcls_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dascls_ 14 1 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int ekdelr_(integer *handle, integer *segno, integer *recno);
+extern int ekdelr_(void *cspice_state, integer *handle, integer *segno, integer *recno);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -3078,7 +3078,7 @@ extern int ekdelr_(integer *handle, integer *segno, integer *recno);
 /*:ref: zzektrdl_ 14 3 4 4 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int ekffld_(integer *handle, integer *segno, integer *rcptrs);
+extern int ekffld_(void *cspice_state, integer *handle, integer *segno, integer *rcptrs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
@@ -3088,7 +3088,7 @@ extern int ekffld_(integer *handle, integer *segno, integer *rcptrs);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int ekfind_(char *query, integer *nmrows, logical *error, char *errmsg, ftnlen query_len, ftnlen errmsg_len);
+extern int ekfind_(void *cspice_state, char *query, integer *nmrows, logical *error, char *errmsg, ftnlen query_len, ftnlen errmsg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekqini_ 14 6 4 4 4 13 7 124 */
@@ -3100,7 +3100,7 @@ extern int ekfind_(char *query, integer *nmrows, logical *error, char *errmsg, f
 /*:ref: zzeksemc_ 14 9 13 4 13 12 13 4 124 124 124 */
 /*:ref: eksrch_ 14 8 4 13 7 4 12 13 124 124 */
  
-extern int ekifld_(integer *handle, char *tabnam, integer *ncols, integer *nrows, char *cnames, char *decls, integer *segno, integer *rcptrs, ftnlen tabnam_len, ftnlen cnames_len, ftnlen decls_len);
+extern int ekifld_(void *cspice_state, integer *handle, char *tabnam, integer *ncols, integer *nrows, char *cnames, char *decls, integer *segno, integer *rcptrs, ftnlen tabnam_len, ftnlen cnames_len, ftnlen decls_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3115,7 +3115,7 @@ extern int ekifld_(integer *handle, char *tabnam, integer *ncols, integer *nrows
 /*:ref: zzekif01_ 14 3 4 4 4 */
 /*:ref: zzekif02_ 14 2 4 4 */
  
-extern int ekinsr_(integer *handle, integer *segno, integer *recno);
+extern int ekinsr_(void *cspice_state, integer *handle, integer *segno, integer *recno);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -3135,7 +3135,7 @@ extern int ekinsr_(integer *handle, integer *segno, integer *recno);
 /*:ref: zzektrin_ 14 4 4 4 4 4 */
 /*:ref: zzekrbck_ 14 6 13 4 4 4 4 124 */
  
-extern integer eknseg_(integer *handle);
+extern integer eknseg_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -3145,7 +3145,7 @@ extern integer eknseg_(integer *handle);
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: zzektrsz_ 4 2 4 4 */
  
-extern int ekopn_(char *fname, char *ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen ifname_len);
+extern int ekopn_(void *cspice_state, char *fname, char *ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3159,7 +3159,7 @@ extern int ekopn_(char *fname, char *ifname, integer *ncomch, integer *handle, f
 /*:ref: zzektrit_ 14 2 4 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int ekopr_(char *fname, integer *handle, ftnlen fname_len);
+extern int ekopr_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasopr_ 14 3 13 4 124 */
@@ -3167,7 +3167,7 @@ extern int ekopr_(char *fname, integer *handle, ftnlen fname_len);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
  
-extern int ekops_(integer *handle);
+extern int ekops_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasops_ 14 1 4 */
@@ -3178,7 +3178,7 @@ extern int ekops_(integer *handle);
 /*:ref: zzektrit_ 14 2 4 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int ekopw_(char *fname, integer *handle, ftnlen fname_len);
+extern int ekopw_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasopw_ 14 3 13 4 124 */
@@ -3186,7 +3186,7 @@ extern int ekopw_(char *fname, integer *handle, ftnlen fname_len);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
  
-extern int ekpsel_(char *query, integer *n, integer *xbegs, integer *xends, char *xtypes, char *xclass, char *tabs, char *cols, logical *error, char *errmsg, ftnlen query_len, ftnlen xtypes_len, ftnlen xclass_len, ftnlen tabs_len, ftnlen cols_len, ftnlen errmsg_len);
+extern int ekpsel_(void *cspice_state, char *query, integer *n, integer *xbegs, integer *xends, char *xtypes, char *xclass, char *tabs, char *cols, logical *error, char *errmsg, ftnlen query_len, ftnlen xtypes_len, ftnlen xclass_len, ftnlen tabs_len, ftnlen cols_len, ftnlen errmsg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekqini_ 14 6 4 4 4 13 7 124 */
@@ -3197,18 +3197,18 @@ extern int ekpsel_(char *query, integer *n, integer *xbegs, integer *xends, char
 /*:ref: zzekqtab_ 14 8 4 13 4 13 13 124 124 124 */
 /*:ref: ekcii_ 14 6 13 4 13 4 124 124 */
  
-extern int ekqmgr_(integer *cindex, integer *elment, char *eqryc, doublereal *eqryd, integer *eqryi, char *fname, integer *row, integer *selidx, char *column, integer *handle, integer *n, char *table, integer *attdsc, integer *ccount, logical *found, integer *nelt, integer *nmrows, logical *semerr, char *errmsg, char *cdata, doublereal *ddata, integer *idata, logical *null, ftnlen eqryc_len, ftnlen fname_len, ftnlen column_len, ftnlen table_len, ftnlen errmsg_len, ftnlen cdata_len);
-extern int eklef_(char *fname, integer *handle, ftnlen fname_len);
-extern int ekuef_(integer *handle);
-extern int ekntab_(integer *n);
-extern int ektnam_(integer *n, char *table, ftnlen table_len);
-extern int ekccnt_(char *table, integer *ccount, ftnlen table_len);
-extern int ekcii_(char *table, integer *cindex, char *column, integer *attdsc, ftnlen table_len, ftnlen column_len);
-extern int eksrch_(integer *eqryi, char *eqryc, doublereal *eqryd, integer *nmrows, logical *semerr, char *errmsg, ftnlen eqryc_len, ftnlen errmsg_len);
-extern int eknelt_(integer *selidx, integer *row, integer *nelt);
-extern int ekgc_(integer *selidx, integer *row, integer *elment, char *cdata, logical *null, logical *found, ftnlen cdata_len);
-extern int ekgd_(integer *selidx, integer *row, integer *elment, doublereal *ddata, logical *null, logical *found);
-extern int ekgi_(integer *selidx, integer *row, integer *elment, integer *idata, logical *null, logical *found);
+extern int ekqmgr_(void *cspice_state, integer *cindex, integer *elment, char *eqryc, doublereal *eqryd, integer *eqryi, char *fname, integer *row, integer *selidx, char *column, integer *handle, integer *n, char *table, integer *attdsc, integer *ccount, logical *found, integer *nelt, integer *nmrows, logical *semerr, char *errmsg, char *cdata, doublereal *ddata, integer *idata, logical *null, ftnlen eqryc_len, ftnlen fname_len, ftnlen column_len, ftnlen table_len, ftnlen errmsg_len, ftnlen cdata_len);
+extern int eklef_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int ekuef_(void *cspice_state, integer *handle);
+extern int ekntab_(void *cspice_state, integer *n);
+extern int ektnam_(void *cspice_state, integer *n, char *table, ftnlen table_len);
+extern int ekccnt_(void *cspice_state, char *table, integer *ccount, ftnlen table_len);
+extern int ekcii_(void *cspice_state, char *table, integer *cindex, char *column, integer *attdsc, ftnlen table_len, ftnlen column_len);
+extern int eksrch_(void *cspice_state, integer *eqryi, char *eqryc, doublereal *eqryd, integer *nmrows, logical *semerr, char *errmsg, ftnlen eqryc_len, ftnlen errmsg_len);
+extern int eknelt_(void *cspice_state, integer *selidx, integer *row, integer *nelt);
+extern int ekgc_(void *cspice_state, integer *selidx, integer *row, integer *elment, char *cdata, logical *null, logical *found, ftnlen cdata_len);
+extern int ekgd_(void *cspice_state, integer *selidx, integer *row, integer *elment, doublereal *ddata, logical *null, logical *found);
+extern int ekgi_(void *cspice_state, integer *selidx, integer *row, integer *elment, integer *idata, logical *null, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -3269,7 +3269,7 @@ extern int ekgi_(integer *selidx, integer *row, integer *elment, integer *idata,
 /*:ref: zzekrsd_ 14 8 4 4 4 4 4 7 12 12 */
 /*:ref: zzekrsi_ 14 8 4 4 4 4 4 4 12 12 */
  
-extern int ekrcec_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, char *cvals, logical *isnull, ftnlen column_len, ftnlen cvals_len);
+extern int ekrcec_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, char *cvals, logical *isnull, ftnlen column_len, ftnlen cvals_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -3286,7 +3286,7 @@ extern int ekrcec_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekrd06_ 14 10 4 4 4 4 4 4 13 12 12 124 */
 /*:ref: zzekrd09_ 14 8 4 4 4 4 4 13 12 124 */
  
-extern int ekrced_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, doublereal *dvals, logical *isnull, ftnlen column_len);
+extern int ekrced_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, doublereal *dvals, logical *isnull, ftnlen column_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -3303,7 +3303,7 @@ extern int ekrced_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekrd05_ 14 9 4 4 4 4 4 4 7 12 12 */
 /*:ref: zzekrd08_ 14 6 4 4 4 4 7 12 */
  
-extern int ekrcei_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, integer *ivals, logical *isnull, ftnlen column_len);
+extern int ekrcei_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, integer *ivals, logical *isnull, ftnlen column_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -3320,16 +3320,16 @@ extern int ekrcei_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekrd04_ 14 9 4 4 4 4 4 4 4 12 12 */
 /*:ref: zzekrd07_ 14 6 4 4 4 4 4 12 */
  
-extern int ekshdw_(integer *handle, logical *isshad);
+extern int ekshdw_(void *cspice_state, integer *handle, logical *isshad);
  
-extern int ekssum_(integer *handle, integer *segno, char *tabnam, integer *nrows, integer *ncols, char *cnames, char *dtypes, integer *sizes, integer *strlns, logical *indexd, logical *nullok, ftnlen tabnam_len, ftnlen cnames_len, ftnlen dtypes_len);
+extern int ekssum_(void *cspice_state, integer *handle, integer *segno, char *tabnam, integer *nrows, integer *ncols, char *cnames, char *dtypes, integer *sizes, integer *strlns, logical *indexd, logical *nullok, ftnlen tabnam_len, ftnlen cnames_len, ftnlen dtypes_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeksinf_ 14 8 4 4 13 4 13 4 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int ekucec_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, char *cvals, logical *isnull, ftnlen column_len, ftnlen cvals_len);
+extern int ekucec_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, char *cvals, logical *isnull, ftnlen column_len, ftnlen cvals_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -3346,7 +3346,7 @@ extern int ekucec_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekue03_ 14 7 4 4 4 4 13 12 124 */
 /*:ref: zzekue06_ 14 8 4 4 4 4 4 13 12 124 */
  
-extern int ekuced_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, doublereal *dvals, logical *isnull, ftnlen column_len);
+extern int ekuced_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, doublereal *dvals, logical *isnull, ftnlen column_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -3363,7 +3363,7 @@ extern int ekuced_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekue02_ 14 6 4 4 4 4 7 12 */
 /*:ref: zzekue05_ 14 7 4 4 4 4 4 7 12 */
  
-extern int ekucei_(integer *handle, integer *segno, integer *recno, char *column, integer *nvals, integer *ivals, logical *isnull, ftnlen column_len);
+extern int ekucei_(void *cspice_state, integer *handle, integer *segno, integer *recno, char *column, integer *nvals, integer *ivals, logical *isnull, ftnlen column_len);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: zzekcdsc_ 14 5 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
@@ -3380,31 +3380,31 @@ extern int ekucei_(integer *handle, integer *segno, integer *recno, char *column
 /*:ref: zzekue01_ 14 6 4 4 4 4 4 12 */
 /*:ref: zzekue04_ 14 7 4 4 4 4 4 4 12 */
  
-extern int el2cgv_(doublereal *ellips, doublereal *center, doublereal *smajor, doublereal *sminor);
+extern int el2cgv_(void *cspice_state, doublereal *ellips, doublereal *center, doublereal *smajor, doublereal *sminor);
 /*:ref: vequ_ 14 2 7 7 */
  
-extern logical elemc_(char *item, char *a, ftnlen item_len, ftnlen a_len);
+extern logical elemc_(void *cspice_state, char *item, char *a, ftnlen item_len, ftnlen a_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bsrchc_ 4 5 13 4 13 124 124 */
 /*:ref: cardc_ 4 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical elemd_(doublereal *item, doublereal *a);
+extern logical elemd_(void *cspice_state, doublereal *item, doublereal *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bsrchd_ 4 3 7 4 7 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical elemi_(integer *item, integer *a);
+extern logical elemi_(void *cspice_state, integer *item, integer *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bsrchi_ 4 3 4 4 4 */
 /*:ref: cardi_ 4 1 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int elltof_(doublereal *ma, doublereal *ecc, doublereal *e);
+extern int elltof_(void *cspice_state, doublereal *ma, doublereal *ecc, doublereal *e);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -3414,18 +3414,18 @@ extern int elltof_(doublereal *ma, doublereal *ecc, doublereal *e);
 /*:ref: halfpi_ 7 0 */
 /*:ref: dcbrt_ 7 1 7 */
  
-extern int enchar_(integer *number, char *string, ftnlen string_len);
-extern int dechar_(char *string, integer *number, ftnlen string_len);
+extern int enchar_(void *cspice_state, integer *number, char *string, ftnlen string_len);
+extern int dechar_(void *cspice_state, char *string, integer *number, ftnlen string_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: chbase_ 4 0 */
  
-extern logical eqchr_(char *a, char *b, ftnlen a_len, ftnlen b_len);
-extern logical nechr_(char *a, char *b, ftnlen a_len, ftnlen b_len);
+extern logical eqchr_(void *cspice_state, char *a, char *b, ftnlen a_len, ftnlen b_len);
+extern logical nechr_(void *cspice_state, char *a, char *b, ftnlen a_len, ftnlen b_len);
  
-extern int eqncpv_(doublereal *et, doublereal *epoch, doublereal *eqel, doublereal *rapol, doublereal *decpol, doublereal *state);
+extern int eqncpv_(void *cspice_state, doublereal *et, doublereal *epoch, doublereal *eqel, doublereal *rapol, doublereal *decpol, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
@@ -3438,9 +3438,9 @@ extern int eqncpv_(doublereal *et, doublereal *epoch, doublereal *eqel, doublere
 /*:ref: vlcom3_ 14 7 7 7 7 7 7 7 7 */
 /*:ref: mxv_ 14 3 7 7 7 */
  
-extern logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len);
+extern logical eqstr_(void *cspice_state, char *a, char *b, ftnlen a_len, ftnlen b_len);
  
-extern int erract_(char *op, char *action, ftnlen op_len, ftnlen action_len);
+extern int erract_(void *cspice_state, char *op, char *action, ftnlen op_len, ftnlen action_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
@@ -3451,7 +3451,7 @@ extern int erract_(char *op, char *action, ftnlen op_len, ftnlen action_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int errch_(char *marker, char *string, ftnlen marker_len, ftnlen string_len);
+extern int errch_(void *cspice_state, char *marker, char *string, ftnlen marker_len, ftnlen string_len);
 /*:ref: allowd_ 12 0 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: getlms_ 14 2 13 124 */
@@ -3459,7 +3459,7 @@ extern int errch_(char *marker, char *string, ftnlen marker_len, ftnlen string_l
 /*:ref: nblen_ 4 2 13 124 */
 /*:ref: putlms_ 14 2 13 124 */
  
-extern int errdev_(char *op, char *device, ftnlen op_len, ftnlen device_len);
+extern int errdev_(void *cspice_state, char *op, char *device, ftnlen op_len, ftnlen device_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
@@ -3470,7 +3470,7 @@ extern int errdev_(char *op, char *device, ftnlen op_len, ftnlen device_len);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: putdev_ 14 2 13 124 */
  
-extern int errdp_(char *marker, doublereal *dpnum, ftnlen marker_len);
+extern int errdp_(void *cspice_state, char *marker, doublereal *dpnum, ftnlen marker_len);
 /*:ref: allowd_ 12 0 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: getlms_ 14 2 13 124 */
@@ -3479,16 +3479,16 @@ extern int errdp_(char *marker, doublereal *dpnum, ftnlen marker_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: putlms_ 14 2 13 124 */
  
-extern int errfnm_(char *marker, integer *unit, ftnlen marker_len);
+extern int errfnm_(void *cspice_state, char *marker, integer *unit, ftnlen marker_len);
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int errhan_(char *marker, integer *handle, ftnlen marker_len);
+extern int errhan_(void *cspice_state, char *marker, integer *handle, ftnlen marker_len);
 /*:ref: zzddhnfo_ 14 7 4 13 4 4 4 12 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int errint_(char *marker, integer *integr, ftnlen marker_len);
+extern int errint_(void *cspice_state, char *marker, integer *integr, ftnlen marker_len);
 /*:ref: allowd_ 12 0 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: getlms_ 14 2 13 124 */
@@ -3496,7 +3496,7 @@ extern int errint_(char *marker, integer *integr, ftnlen marker_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: putlms_ 14 2 13 124 */
  
-extern int errprt_(char *op, char *list, ftnlen op_len, ftnlen list_len);
+extern int errprt_(void *cspice_state, char *op, char *list, ftnlen op_len, ftnlen list_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: msgsel_ 12 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -3508,10 +3508,10 @@ extern int errprt_(char *op, char *list, ftnlen op_len, ftnlen list_len);
 /*:ref: setprt_ 12 5 12 12 12 12 12 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
+extern integer esrchc_(void *cspice_state, char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
 /*:ref: eqstr_ 12 4 13 13 124 124 */
  
-extern int et2lst_(doublereal *et, integer *body, doublereal *long__, char *type__, integer *hr, integer *mn, integer *sc, char *time, char *ampm, ftnlen type_len, ftnlen time_len, ftnlen ampm_len);
+extern int et2lst_(void *cspice_state, doublereal *et, integer *body, doublereal *long__, char *type__, integer *hr, integer *mn, integer *sc, char *time, char *ampm, ftnlen type_len, ftnlen time_len, ftnlen ampm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -3536,7 +3536,7 @@ extern int et2lst_(doublereal *et, integer *body, doublereal *long__, char *type
 /*:ref: brcktd_ 7 3 7 7 7 */
 /*:ref: dpfmt_ 14 5 7 13 13 124 124 */
  
-extern int et2utc_(doublereal *et, char *format, integer *prec, char *utcstr, ftnlen format_len, ftnlen utcstr_len);
+extern int et2utc_(void *cspice_state, doublereal *et, char *format, integer *prec, char *utcstr, ftnlen format_len, ftnlen utcstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
@@ -3553,7 +3553,7 @@ extern int et2utc_(doublereal *et, char *format, integer *prec, char *utcstr, ft
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int etcal_(doublereal *et, char *string, ftnlen string_len);
+extern int etcal_(void *cspice_state, doublereal *et, char *string, ftnlen string_len);
 /*:ref: spd_ 7 0 */
 /*:ref: intmax_ 4 0 */
 /*:ref: intmin_ 4 0 */
@@ -3563,7 +3563,7 @@ extern int etcal_(doublereal *et, char *string, ftnlen string_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
  
-extern int eul2m_(doublereal *angle3, doublereal *angle2, doublereal *angle1, integer *axis3, integer *axis2, integer *axis1, doublereal *r__);
+extern int eul2m_(void *cspice_state, doublereal *angle3, doublereal *angle2, doublereal *angle1, integer *axis3, integer *axis2, integer *axis1, doublereal *r__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3573,7 +3573,7 @@ extern int eul2m_(doublereal *angle3, doublereal *angle2, doublereal *angle1, in
 /*:ref: rotate_ 14 3 7 4 7 */
 /*:ref: rotmat_ 14 4 7 7 4 7 */
  
-extern int ev2lin_(doublereal *et, doublereal *geophs, doublereal *elems, doublereal *state);
+extern int ev2lin_(void *cspice_state, doublereal *et, doublereal *geophs, doublereal *elems, doublereal *state);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3583,11 +3583,11 @@ extern int ev2lin_(doublereal *et, doublereal *geophs, doublereal *elems, double
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: brcktd_ 7 3 7 7 7 */
  
-extern logical even_(integer *i__);
+extern logical even_(void *cspice_state, integer *i__);
  
-extern doublereal exact_(doublereal *number, doublereal *value, doublereal *tol);
+extern doublereal exact_(void *cspice_state, doublereal *number, doublereal *value, doublereal *tol);
  
-extern int excess_(integer *number, char *struct__, ftnlen struct_len);
+extern int excess_(void *cspice_state, integer *number, char *struct__, ftnlen struct_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -3596,7 +3596,7 @@ extern int excess_(integer *number, char *struct__, ftnlen struct_len);
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical exists_(char *file, ftnlen file_len);
+extern logical exists_(void *cspice_state, char *file, ftnlen file_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3605,9 +3605,9 @@ extern logical exists_(char *file, ftnlen file_len);
 /*:ref: rtrim_ 4 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int expln_(char *msg, char *expl, ftnlen msg_len, ftnlen expl_len);
+extern int expln_(void *cspice_state, char *msg, char *expl, ftnlen msg_len, ftnlen expl_len);
  
-extern integer fetchc_(integer *nth, char *set, ftnlen set_len);
+extern integer fetchc_(void *cspice_state, integer *nth, char *set, ftnlen set_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -3616,7 +3616,7 @@ extern integer fetchc_(integer *nth, char *set, ftnlen set_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer fetchd_(integer *nth, doublereal *set);
+extern integer fetchd_(void *cspice_state, integer *nth, doublereal *set);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -3625,7 +3625,7 @@ extern integer fetchd_(integer *nth, doublereal *set);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer fetchi_(integer *nth, integer *set);
+extern integer fetchi_(void *cspice_state, integer *nth, integer *set);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -3634,13 +3634,13 @@ extern integer fetchi_(integer *nth, integer *set);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int fillc_(char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
+extern int fillc_(void *cspice_state, char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
  
-extern int filld_(doublereal *value, integer *ndim, doublereal *array);
+extern int filld_(void *cspice_state, doublereal *value, integer *ndim, doublereal *array);
  
-extern int filli_(integer *value, integer *ndim, integer *array);
+extern int filli_(void *cspice_state, integer *value, integer *ndim, integer *array);
  
-extern int fn2lun_(char *filnam, integer *lunit, ftnlen filnam_len);
+extern int fn2lun_(void *cspice_state, char *filnam, integer *lunit, ftnlen filnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3649,13 +3649,13 @@ extern int fn2lun_(char *filnam, integer *lunit, ftnlen filnam_len);
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int fndlun_(integer *unit);
-extern int reslun_(integer *unit);
-extern int frelun_(integer *unit);
+extern int fndlun_(void *cspice_state, integer *unit);
+extern int reslun_(void *cspice_state, integer *unit);
+extern int frelun_(void *cspice_state, integer *unit);
  
-extern int fndnwd_(char *string, integer *start, integer *b, integer *e, ftnlen string_len);
+extern int fndnwd_(void *cspice_state, char *string, integer *start, integer *b, integer *e, ftnlen string_len);
  
-extern int fovray_(char *inst, doublereal *raydir, char *rframe, char *abcorr, char *obsrvr, doublereal *et, logical *visibl, ftnlen inst_len, ftnlen rframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int fovray_(void *cspice_state, char *inst, doublereal *raydir, char *rframe, char *abcorr, char *obsrvr, doublereal *et, logical *visibl, ftnlen inst_len, ftnlen rframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzgffvin_ 14 13 13 13 7 13 13 13 13 124 124 124 124 124 124 */
@@ -3663,7 +3663,7 @@ extern int fovray_(char *inst, doublereal *raydir, char *rframe, char *abcorr, c
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzgffvst_ 14 2 7 12 */
  
-extern int fovtrg_(char *inst, char *target, char *tshape, char *tframe, char *abcorr, char *obsrvr, doublereal *et, logical *visibl, ftnlen inst_len, ftnlen target_len, ftnlen tshape_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int fovtrg_(void *cspice_state, char *inst, char *target, char *tshape, char *tframe, char *abcorr, char *obsrvr, doublereal *et, logical *visibl, ftnlen inst_len, ftnlen target_len, ftnlen tshape_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
@@ -3674,16 +3674,16 @@ extern int fovtrg_(char *inst, char *target, char *tshape, char *tframe, char *a
 /*:ref: failed_ 12 0 */
 /*:ref: zzgffvst_ 14 2 7 12 */
  
-extern int frame_(doublereal *x, doublereal *y, doublereal *z__);
+extern int frame_(void *cspice_state, doublereal *x, doublereal *y, doublereal *z__);
 /*:ref: vhatip_ 14 1 7 */
  
-extern int framex_(char *cname, char *frname, integer *frcode, integer *cent, integer *class__, integer *clssid, logical *found, ftnlen cname_len, ftnlen frname_len);
-extern int namfrm_(char *frname, integer *frcode, ftnlen frname_len);
-extern int frmnam_(integer *frcode, char *frname, ftnlen frname_len);
-extern int frinfo_(integer *frcode, integer *cent, integer *class__, integer *clssid, logical *found);
-extern int cidfrm_(integer *cent, integer *frcode, char *frname, logical *found, ftnlen frname_len);
-extern int cnmfrm_(char *cname, integer *frcode, char *frname, logical *found, ftnlen cname_len, ftnlen frname_len);
-extern int ccifrm_(integer *class__, integer *clssid, integer *frcode, char *frname, integer *cent, logical *found, ftnlen frname_len);
+extern int framex_(void *cspice_state, char *cname, char *frname, integer *frcode, integer *cent, integer *class__, integer *clssid, logical *found, ftnlen cname_len, ftnlen frname_len);
+extern int namfrm_(void *cspice_state, char *frname, integer *frcode, ftnlen frname_len);
+extern int frmnam_(void *cspice_state, integer *frcode, char *frname, ftnlen frname_len);
+extern int frinfo_(void *cspice_state, integer *frcode, integer *cent, integer *class__, integer *clssid, logical *found);
+extern int cidfrm_(void *cspice_state, integer *cent, integer *frcode, char *frname, logical *found, ftnlen frname_len);
+extern int cnmfrm_(void *cspice_state, char *cname, integer *frcode, char *frname, logical *found, ftnlen cname_len, ftnlen frname_len);
+extern int ccifrm_(void *cspice_state, integer *class__, integer *clssid, integer *frcode, char *frname, integer *cent, logical *found, ftnlen frname_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -3716,7 +3716,7 @@ extern int ccifrm_(integer *class__, integer *clssid, integer *frcode, char *frn
 /*:ref: gnpool_ 14 8 13 4 4 4 13 12 124 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int frmchg_(integer *frame1, integer *frame2, doublereal *et, doublereal *xform);
+extern int frmchg_(void *cspice_state, integer *frame1, integer *frame2, doublereal *et, doublereal *xform);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -3731,7 +3731,7 @@ extern int frmchg_(integer *frame1, integer *frame2, doublereal *et, doublereal 
 /*:ref: failed_ 12 0 */
 /*:ref: invstm_ 14 2 7 7 */
  
-extern int frmget_(integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
+extern int frmget_(void *cspice_state, integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
@@ -3749,15 +3749,15 @@ extern int frmget_(integer *infrm, doublereal *et, doublereal *xform, integer *o
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern integer frstnb_(char *string, ftnlen string_len);
+extern integer frstnb_(void *cspice_state, char *string, ftnlen string_len);
  
-extern integer frstnp_(char *string, ftnlen string_len);
+extern integer frstnp_(void *cspice_state, char *string, ftnlen string_len);
  
-extern integer frstpc_(char *string, ftnlen string_len);
+extern integer frstpc_(void *cspice_state, char *string, ftnlen string_len);
  
-extern integer gcd_(integer *a, integer *b);
+extern integer gcd_(void *cspice_state, integer *a, integer *b);
  
-extern int georec_(doublereal *long__, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *rectan);
+extern int georec_(void *cspice_state, doublereal *long__, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *rectan);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3767,7 +3767,7 @@ extern int georec_(doublereal *long__, doublereal *lat, doublereal *alt, doubler
 /*:ref: surfnm_ 14 5 7 7 7 7 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int getelm_(integer *frstyr, char *lines, doublereal *epoch, doublereal *elems, ftnlen lines_len);
+extern int getelm_(void *cspice_state, integer *frstyr, char *lines, doublereal *epoch, doublereal *elems, ftnlen lines_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzgetelm_ 14 8 4 13 7 7 12 13 124 124 */
@@ -3776,7 +3776,7 @@ extern int getelm_(integer *frstyr, char *lines, doublereal *epoch, doublereal *
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int getfat_(char *file, char *arch, char *kertyp, ftnlen file_len, ftnlen arch_len, ftnlen kertyp_len);
+extern int getfat_(void *cspice_state, char *file, char *arch, char *kertyp, ftnlen file_len, ftnlen arch_len, ftnlen kertyp_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3797,7 +3797,7 @@ extern int getfat_(char *file, char *arch, char *kertyp, ftnlen file_len, ftnlen
 /*:ref: zzckspk_ 14 3 4 13 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int getfov_(integer *instid, integer *room, char *shape, char *frame, doublereal *bsight, integer *n, doublereal *bounds, ftnlen shape_len, ftnlen frame_len);
+extern int getfov_(void *cspice_state, integer *instid, integer *room, char *shape, char *frame, doublereal *bsight, integer *n, doublereal *bounds, ftnlen shape_len, ftnlen frame_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
@@ -3826,7 +3826,7 @@ extern int getfov_(integer *instid, integer *room, char *shape, char *frame, dou
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vscl_ 14 3 7 7 7 */
  
-extern int getlun_(integer *unit);
+extern int getlun_(void *cspice_state, integer *unit);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: fndlun_ 14 1 4 */
@@ -3835,7 +3835,7 @@ extern int getlun_(integer *unit);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int getmsg_(char *option, char *msg, ftnlen option_len, ftnlen msg_len);
+extern int getmsg_(void *cspice_state, char *option, char *msg, ftnlen option_len, ftnlen msg_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: getsms_ 14 2 13 124 */
@@ -3844,9 +3844,9 @@ extern int getmsg_(char *option, char *msg, ftnlen option_len, ftnlen msg_len);
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern logical gfbail_(void);
+extern logical gfbail_(void *cspice_state);
  
-extern int gfdist_(char *target, char *abcorr, char *obsrvr, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
+extern int gfdist_(void *cspice_state, char *target, char *abcorr, char *obsrvr, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3860,7 +3860,7 @@ extern int gfdist_(char *target, char *abcorr, char *obsrvr, char *relate, doubl
 /*:ref: gfevnt_ 14 28 200 200 13 4 13 13 7 4 12 13 7 7 7 7 12 200 200 200 4 4 7 12 212 7 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfevnt_(U_fp udstep, U_fp udrefn, char *gquant, integer *qnpars, char *qpnams, char *qcpars, doublereal *qdpars, integer *qipars, logical *qlpars, char *op, doublereal *refval, doublereal *tol, doublereal *adjust, doublereal *cnfine, logical *rpt, U_fp udrepi, U_fp udrepu, U_fp udrepf, integer *mw, integer *nw, doublereal *work, logical *bail, L_fp udbail, doublereal *result, ftnlen gquant_len, ftnlen qpnams_len, ftnlen qcpars_len, ftnlen op_len);
+extern int gfevnt_(void *cspice_state, U_fp udstep, U_fp udrefn, char *gquant, integer *qnpars, char *qpnams, char *qcpars, doublereal *qdpars, integer *qipars, logical *qlpars, char *op, doublereal *refval, doublereal *tol, doublereal *adjust, doublereal *cnfine, logical *rpt, U_fp udrepi, U_fp udrepu, U_fp udrepf, integer *mw, integer *nw, doublereal *work, logical *bail, L_fp udbail, doublereal *result, ftnlen gquant_len, ftnlen qpnams_len, ftnlen qcpars_len, ftnlen op_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -3881,7 +3881,7 @@ extern int gfevnt_(U_fp udstep, U_fp udrefn, char *gquant, integer *qnpars, char
 /*:ref: zzgfpain_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: zzgfilin_ 14 15 13 13 13 13 13 13 13 7 124 124 124 124 124 124 124 */
  
-extern int gffove_(char *inst, char *tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, char *obsrvr, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, doublereal *cnfine, doublereal *result, ftnlen inst_len, ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int gffove_(void *cspice_state, char *inst, char *tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, char *obsrvr, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, doublereal *cnfine, doublereal *result, ftnlen inst_len, ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -3897,7 +3897,7 @@ extern int gffove_(char *inst, char *tshape, doublereal *raydir, char *target, c
 /*:ref: wnfetd_ 14 4 7 4 7 7 */
 /*:ref: zzgfsolv_ 14 13 200 200 200 12 212 12 7 7 7 7 12 200 7 */
  
-extern int gfilum_(char *method, char *angtyp, char *target, char *illmn, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen method_len, ftnlen angtyp_len, ftnlen target_len, ftnlen illmn_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
+extern int gfilum_(void *cspice_state, char *method, char *angtyp, char *target, char *illmn, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen method_len, ftnlen angtyp_len, ftnlen target_len, ftnlen illmn_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -3913,7 +3913,7 @@ extern int gfilum_(char *method, char *angtyp, char *target, char *illmn, char *
 /*:ref: gfevnt_ 14 28 200 200 13 4 13 13 7 4 12 13 7 7 7 7 12 200 200 200 4 4 7 12 212 7 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfocce_(char *occtyp, char *front, char *fshape, char *fframe, char *back, char *bshape, char *bframe, char *abcorr, char *obsrvr, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, doublereal *cnfine, doublereal *result, ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int gfocce_(void *cspice_state, char *occtyp, char *front, char *fshape, char *fframe, char *back, char *bshape, char *bframe, char *abcorr, char *obsrvr, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, doublereal *cnfine, doublereal *result, ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -3931,7 +3931,7 @@ extern int gfocce_(char *occtyp, char *front, char *fshape, char *fframe, char *
 /*:ref: wnfetd_ 14 4 7 4 7 7 */
 /*:ref: zzgfsolv_ 14 13 200 200 200 12 212 12 7 7 7 7 12 200 7 */
  
-extern int gfoclt_(char *occtyp, char *front, char *fshape, char *fframe, char *back, char *bshape, char *bframe, char *abcorr, char *obsrvr, doublereal *step, doublereal *cnfine, doublereal *result, ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int gfoclt_(void *cspice_state, char *occtyp, char *front, char *fshape, char *fframe, char *back, char *bshape, char *bframe, char *abcorr, char *obsrvr, doublereal *step, doublereal *cnfine, doublereal *result, ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -3944,7 +3944,7 @@ extern int gfoclt_(char *occtyp, char *front, char *fshape, char *fframe, char *
 /*:ref: gfocce_ 14 29 13 13 13 13 13 13 13 13 13 7 200 200 12 200 200 200 12 212 7 7 124 124 124 124 124 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfpa_(char *target, char *illmn, char *abcorr, char *obsrvr, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
+extern int gfpa_(void *cspice_state, char *target, char *illmn, char *abcorr, char *obsrvr, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: odd_ 12 1 4 */
@@ -3959,7 +3959,7 @@ extern int gfpa_(char *target, char *illmn, char *abcorr, char *obsrvr, char *re
 /*:ref: gfevnt_ 14 28 200 200 13 4 13 13 7 4 12 13 7 7 7 7 12 200 200 200 4 4 7 12 212 7 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfposc_(char *target, char *frame, char *abcorr, char *obsrvr, char *crdsys, char *coord, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen frame_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen crdsys_len, ftnlen coord_len, ftnlen relate_len);
+extern int gfposc_(void *cspice_state, char *target, char *frame, char *abcorr, char *obsrvr, char *crdsys, char *coord, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen frame_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen crdsys_len, ftnlen coord_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: even_ 12 1 4 */
@@ -3974,10 +3974,10 @@ extern int gfposc_(char *target, char *frame, char *abcorr, char *obsrvr, char *
 /*:ref: gfevnt_ 14 28 200 200 13 4 13 13 7 4 12 13 7 7 7 7 12 200 200 200 4 4 7 12 212 7 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfrefn_(doublereal *t1, doublereal *t2, logical *s1, logical *s2, doublereal *t);
+extern int gfrefn_(void *cspice_state, doublereal *t1, doublereal *t2, logical *s1, logical *s2, doublereal *t);
 /*:ref: brcktd_ 7 3 7 7 7 */
  
-extern int gfrfov_(char *inst, doublereal *raydir, char *rframe, char *abcorr, char *obsrvr, doublereal *step, doublereal *cnfine, doublereal *result, ftnlen inst_len, ftnlen rframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int gfrfov_(void *cspice_state, char *inst, doublereal *raydir, char *rframe, char *abcorr, char *obsrvr, doublereal *step, doublereal *cnfine, doublereal *result, ftnlen inst_len, ftnlen rframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -3990,10 +3990,10 @@ extern int gfrfov_(char *inst, doublereal *raydir, char *rframe, char *abcorr, c
 /*:ref: gffove_ 14 24 13 13 7 13 13 13 13 7 200 200 12 200 200 200 12 212 7 7 124 124 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfrprt_(doublereal *window, char *begmss, char *endmss, doublereal *ivbeg, doublereal *ivend, doublereal *time, ftnlen begmss_len, ftnlen endmss_len);
-extern int gfrepi_(doublereal *window, char *begmss, char *endmss, ftnlen begmss_len, ftnlen endmss_len);
-extern int gfrepu_(doublereal *ivbeg, doublereal *ivend, doublereal *time);
-extern int gfrepf_(void);
+extern int gfrprt_(void *cspice_state, doublereal *window, char *begmss, char *endmss, doublereal *ivbeg, doublereal *ivend, doublereal *time, ftnlen begmss_len, ftnlen endmss_len);
+extern int gfrepi_(void *cspice_state, doublereal *window, char *begmss, char *endmss, ftnlen begmss_len, ftnlen endmss_len);
+extern int gfrepu_(void *cspice_state, doublereal *ivbeg, doublereal *ivend, doublereal *time);
+extern int gfrepf_(void *cspice_state);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -4012,7 +4012,7 @@ extern int gfrepf_(void);
 /*:ref: stdio_ 14 3 13 4 124 */
 /*:ref: zzgfdsps_ 14 6 4 13 13 4 124 124 */
  
-extern int gfrr_(char *target, char *abcorr, char *obsrvr, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
+extern int gfrr_(void *cspice_state, char *target, char *abcorr, char *obsrvr, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: odd_ 12 1 4 */
@@ -4027,7 +4027,7 @@ extern int gfrr_(char *target, char *abcorr, char *obsrvr, char *relate, doubler
 /*:ref: gfevnt_ 14 28 200 200 13 4 13 13 7 4 12 13 7 7 7 7 12 200 200 200 4 4 7 12 212 7 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfsep_(char *targ1, char *shape1, char *frame1, char *targ2, char *shape2, char *frame2, char *abcorr, char *obsrvr, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen targ1_len, ftnlen shape1_len, ftnlen frame1_len, ftnlen targ2_len, ftnlen shape2_len, ftnlen frame2_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
+extern int gfsep_(void *cspice_state, char *targ1, char *shape1, char *frame1, char *targ2, char *shape2, char *frame2, char *abcorr, char *obsrvr, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen targ1_len, ftnlen shape1_len, ftnlen frame1_len, ftnlen targ2_len, ftnlen shape2_len, ftnlen frame2_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: even_ 12 1 4 */
@@ -4042,7 +4042,7 @@ extern int gfsep_(char *targ1, char *shape1, char *frame1, char *targ2, char *sh
 /*:ref: gfevnt_ 14 28 200 200 13 4 13 13 7 4 12 13 7 7 7 7 12 200 200 200 4 4 7 12 212 7 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfsntc_(char *target, char *fixref, char *method, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *coord, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen fixref_len, ftnlen method_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen coord_len, ftnlen relate_len);
+extern int gfsntc_(void *cspice_state, char *target, char *fixref, char *method, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *coord, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen fixref_len, ftnlen method_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen coord_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: even_ 12 1 4 */
@@ -4057,15 +4057,15 @@ extern int gfsntc_(char *target, char *fixref, char *method, char *abcorr, char 
 /*:ref: gfevnt_ 14 28 200 200 13 4 13 13 7 4 12 13 7 7 7 7 12 200 200 200 4 4 7 12 212 7 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfstep_(doublereal *time, doublereal *step);
-extern int gfsstp_(doublereal *step);
+extern int gfstep_(void *cspice_state, doublereal *time, doublereal *step);
+extern int gfsstp_(void *cspice_state, doublereal *step);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
  
-extern int gfstol_(doublereal *value);
+extern int gfstol_(void *cspice_state, doublereal *value);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4074,7 +4074,7 @@ extern int gfstol_(doublereal *value);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzholdd_ 14 4 4 4 12 7 */
  
-extern int gfsubc_(char *target, char *fixref, char *method, char *abcorr, char *obsrvr, char *crdsys, char *coord, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen fixref_len, ftnlen method_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen crdsys_len, ftnlen coord_len, ftnlen relate_len);
+extern int gfsubc_(void *cspice_state, char *target, char *fixref, char *method, char *abcorr, char *obsrvr, char *crdsys, char *coord, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen target_len, ftnlen fixref_len, ftnlen method_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen crdsys_len, ftnlen coord_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: even_ 12 1 4 */
@@ -4089,7 +4089,7 @@ extern int gfsubc_(char *target, char *fixref, char *method, char *abcorr, char 
 /*:ref: gfevnt_ 14 28 200 200 13 4 13 13 7 4 12 13 7 7 7 7 12 200 200 200 4 4 7 12 212 7 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gftfov_(char *inst, char *target, char *tshape, char *tframe, char *abcorr, char *obsrvr, doublereal *step, doublereal *cnfine, doublereal *result, ftnlen inst_len, ftnlen target_len, ftnlen tshape_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int gftfov_(void *cspice_state, char *inst, char *target, char *tshape, char *tframe, char *abcorr, char *obsrvr, doublereal *step, doublereal *cnfine, doublereal *result, ftnlen inst_len, ftnlen target_len, ftnlen tshape_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
@@ -4103,7 +4103,7 @@ extern int gftfov_(char *inst, char *target, char *tshape, char *tframe, char *a
 /*:ref: gffove_ 14 24 13 13 7 13 13 13 13 7 200 200 12 200 200 200 12 212 7 7 124 124 124 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfudb_(U_fp udfuns, U_fp udfunb, doublereal *step, doublereal *cnfine, doublereal *result);
+extern int gfudb_(void *cspice_state, U_fp udfuns, U_fp udfunb, doublereal *step, doublereal *cnfine, doublereal *result);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -4118,7 +4118,7 @@ extern int gfudb_(U_fp udfuns, U_fp udfunb, doublereal *step, doublereal *cnfine
 /*:ref: zzgfudb_ 14 13 200 200 7 200 200 12 200 200 200 12 212 7 7 */
 /*:ref: gfbail_ 12 :*/
  
-extern int gfuds_(U_fp udfuns, U_fp udqdec, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen relate_len);
+extern int gfuds_(void *cspice_state, U_fp udfuns, U_fp udqdec, char *relate, doublereal *refval, doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, doublereal *result, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4133,9 +4133,9 @@ extern int gfuds_(U_fp udfuns, U_fp udqdec, char *relate, doublereal *refval, do
 /*:ref: zzgfrelx_ 14 25 200 200 200 200 200 13 7 7 7 7 4 4 7 12 200 200 200 13 13 12 212 7 124 124 124 */
 /*:ref: gfbail_ 12 :*/
  
-extern doublereal halfpi_(void);
+extern doublereal halfpi_(void *cspice_state);
  
-extern int hrmesp_(integer *n, doublereal *first, doublereal *step, doublereal *yvals, doublereal *x, doublereal *work, doublereal *f, doublereal *df);
+extern int hrmesp_(void *cspice_state, integer *n, doublereal *first, doublereal *step, doublereal *yvals, doublereal *x, doublereal *work, doublereal *f, doublereal *df);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4143,7 +4143,7 @@ extern int hrmesp_(integer *n, doublereal *first, doublereal *step, doublereal *
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int hrmint_(integer *n, doublereal *xvals, doublereal *yvals, doublereal *x, doublereal *work, doublereal *f, doublereal *df);
+extern int hrmint_(void *cspice_state, integer *n, doublereal *xvals, doublereal *yvals, doublereal *x, doublereal *work, doublereal *f, doublereal *df);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4152,18 +4152,18 @@ extern int hrmint_(integer *n, doublereal *xvals, doublereal *yvals, doublereal 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
  
-extern int hx2dp_(char *string, doublereal *number, logical *error, char *errmsg, ftnlen string_len, ftnlen errmsg_len);
+extern int hx2dp_(void *cspice_state, char *string, doublereal *number, logical *error, char *errmsg, ftnlen string_len, ftnlen errmsg_len);
 /*:ref: dpmin_ 7 0 */
 /*:ref: dpmax_ 7 0 */
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: hx2int_ 14 6 13 4 12 13 124 124 */
  
-extern int hx2int_(char *string, integer *number, logical *error, char *errmsg, ftnlen string_len, ftnlen errmsg_len);
+extern int hx2int_(void *cspice_state, char *string, integer *number, logical *error, char *errmsg, ftnlen string_len, ftnlen errmsg_len);
 /*:ref: intmin_ 4 0 */
 /*:ref: intmax_ 4 0 */
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
  
-extern int hyptof_(doublereal *ma, doublereal *ecc, doublereal *f);
+extern int hyptof_(void *cspice_state, doublereal *ma, doublereal *ecc, doublereal *f);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dpmax_ 7 0 */
@@ -4171,15 +4171,15 @@ extern int hyptof_(doublereal *ma, doublereal *ecc, doublereal *f);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dcbrt_ 7 1 7 */
  
-extern int ident_(doublereal *matrix);
+extern int ident_(void *cspice_state, doublereal *matrix);
  
-extern int idw2at_(char *idword, char *arch, char *type__, ftnlen idword_len, ftnlen arch_len, ftnlen type_len);
+extern int idw2at_(void *cspice_state, char *idword, char *arch, char *type__, ftnlen idword_len, ftnlen arch_len, ftnlen type_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: pos_ 4 5 13 13 4 124 124 */
  
-extern int illum_(char *target, doublereal *et, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *phase, doublereal *solar, doublereal *emissn, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int illum_(void *cspice_state, char *target, doublereal *et, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *phase, doublereal *solar, doublereal *emissn, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -4198,7 +4198,7 @@ extern int illum_(char *target, doublereal *et, char *abcorr, char *obsrvr, doub
 /*:ref: surfnm_ 14 5 7 7 7 7 7 */
 /*:ref: vsep_ 7 2 7 7 */
  
-extern int illumf_(char *method, char *target, char *ilusrc, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, doublereal *incdnc, doublereal *emissn, logical *visibl, logical *lit, ftnlen method_len, ftnlen target_len, ftnlen ilusrc_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int illumf_(void *cspice_state, char *method, char *target, char *ilusrc, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, doublereal *incdnc, doublereal *emissn, logical *visibl, logical *lit, ftnlen method_len, ftnlen target_len, ftnlen ilusrc_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -4230,7 +4230,7 @@ extern int illumf_(char *method, char *target, char *ilusrc, doublereal *et, cha
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: zzraysfx_ 14 5 7 7 7 7 12 */
  
-extern int illumg_(char *method, char *target, char *ilusrc, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, doublereal *incdnc, doublereal *emissn, ftnlen method_len, ftnlen target_len, ftnlen ilusrc_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int illumg_(void *cspice_state, char *method, char *target, char *ilusrc, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, doublereal *incdnc, doublereal *emissn, ftnlen method_len, ftnlen target_len, ftnlen ilusrc_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -4256,13 +4256,13 @@ extern int illumg_(char *method, char *target, char *ilusrc, doublereal *et, cha
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: vsep_ 7 2 7 7 */
  
-extern int ilumin_(char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, doublereal *solar, doublereal *emissn, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int ilumin_(void *cspice_state, char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, doublereal *solar, doublereal *emissn, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: illumg_ 14 19 13 13 13 7 13 13 13 7 7 7 7 7 7 124 124 124 124 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int incnsg_(doublereal *apex, doublereal *axis, doublereal *angle, doublereal *endpt1, doublereal *endpt2, integer *nxpts, doublereal *xpt1, doublereal *xpt2);
+extern int incnsg_(void *cspice_state, doublereal *apex, doublereal *axis, doublereal *angle, doublereal *endpt1, doublereal *endpt2, integer *nxpts, doublereal *xpt1, doublereal *xpt2);
 /*:ref: return_ 12 0 */
 /*:ref: unorm_ 14 3 7 7 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -4288,7 +4288,7 @@ extern int incnsg_(doublereal *apex, doublereal *axis, doublereal *angle, double
 /*:ref: mtxv_ 14 3 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int inedpl_(doublereal *a, doublereal *b, doublereal *c__, doublereal *plane, doublereal *ellips, logical *found);
+extern int inedpl_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__, doublereal *plane, doublereal *ellips, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4304,7 +4304,7 @@ extern int inedpl_(doublereal *a, doublereal *b, doublereal *c__, doublereal *pl
 /*:ref: vsclip_ 14 2 7 7 */
 /*:ref: cgv2el_ 14 4 7 7 7 7 */
  
-extern int inelpl_(doublereal *ellips, doublereal *plane, integer *nxpts, doublereal *xpt1, doublereal *xpt2);
+extern int inelpl_(void *cspice_state, doublereal *ellips, doublereal *plane, integer *nxpts, doublereal *xpt1, doublereal *xpt2);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: pl2nvc_ 14 3 7 7 7 */
@@ -4325,7 +4325,7 @@ extern int inelpl_(doublereal *ellips, doublereal *plane, integer *nxpts, double
 /*:ref: vnormg_ 7 2 7 4 */
 /*:ref: vlcom3_ 14 7 7 7 7 7 7 7 7 */
  
-extern int inrypl_(doublereal *vertex, doublereal *dir, doublereal *plane, integer *nxpts, doublereal *xpt);
+extern int inrypl_(void *cspice_state, doublereal *vertex, doublereal *dir, doublereal *plane, integer *nxpts, doublereal *xpt);
 /*:ref: return_ 12 0 */
 /*:ref: dpmax_ 7 0 */
 /*:ref: vnorm_ 7 1 7 */
@@ -4344,11 +4344,11 @@ extern int inrypl_(doublereal *vertex, doublereal *dir, doublereal *plane, integ
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vsclip_ 14 2 7 7 */
  
-extern int insang_(doublereal *v, doublereal *e1, doublereal *e2, doublereal *e3, logical *found, doublereal *scale);
+extern int insang_(void *cspice_state, doublereal *v, doublereal *e1, doublereal *e2, doublereal *e3, logical *found, doublereal *scale);
 /*:ref: vcrss_ 14 3 7 7 7 */
 /*:ref: vdot_ 7 2 7 7 */
  
-extern int inslac_(char *elts, integer *ne, integer *loc, char *array, integer *na, ftnlen elts_len, ftnlen array_len);
+extern int inslac_(void *cspice_state, char *elts, integer *ne, integer *loc, char *array, integer *na, ftnlen elts_len, ftnlen array_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4356,7 +4356,7 @@ extern int inslac_(char *elts, integer *ne, integer *loc, char *array, integer *
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int inslad_(doublereal *elts, integer *ne, integer *loc, doublereal *array, integer *na);
+extern int inslad_(void *cspice_state, doublereal *elts, integer *ne, integer *loc, doublereal *array, integer *na);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4364,7 +4364,7 @@ extern int inslad_(doublereal *elts, integer *ne, integer *loc, doublereal *arra
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int inslai_(integer *elts, integer *ne, integer *loc, integer *array, integer *na);
+extern int inslai_(void *cspice_state, integer *elts, integer *ne, integer *loc, integer *array, integer *na);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4372,7 +4372,7 @@ extern int inslai_(integer *elts, integer *ne, integer *loc, integer *array, int
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int insrtc_(char *item, char *a, ftnlen item_len, ftnlen a_len);
+extern int insrtc_(void *cspice_state, char *item, char *a, ftnlen item_len, ftnlen a_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sizec_ 4 2 13 124 */
@@ -4384,7 +4384,7 @@ extern int insrtc_(char *item, char *a, ftnlen item_len, ftnlen a_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int insrtd_(doublereal *item, doublereal *a);
+extern int insrtd_(void *cspice_state, doublereal *item, doublereal *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -4396,7 +4396,7 @@ extern int insrtd_(doublereal *item, doublereal *a);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int insrti_(integer *item, integer *a);
+extern int insrti_(void *cspice_state, integer *item, integer *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sizei_ 4 1 4 */
@@ -4408,16 +4408,16 @@ extern int insrti_(integer *item, integer *a);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int inssub_(char *in, char *sub, integer *loc, char *out, ftnlen in_len, ftnlen sub_len, ftnlen out_len);
+extern int inssub_(void *cspice_state, char *in, char *sub, integer *loc, char *out, ftnlen in_len, ftnlen sub_len, ftnlen out_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int int2hx_(integer *number, char *string, integer *length, ftnlen string_len);
+extern int int2hx_(void *cspice_state, integer *number, char *string, integer *length, ftnlen string_len);
  
-extern int interc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
+extern int interc_(void *cspice_state, char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4429,7 +4429,7 @@ extern int interc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnl
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: excess_ 14 3 4 13 124 */
  
-extern int interd_(doublereal *a, doublereal *b, doublereal *c__);
+extern int interd_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -4439,7 +4439,7 @@ extern int interd_(doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int interi_(integer *a, integer *b, integer *c__);
+extern int interi_(void *cspice_state, integer *a, integer *b, integer *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -4449,22 +4449,22 @@ extern int interi_(integer *a, integer *b, integer *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int intord_(integer *n, char *string, ftnlen string_len);
+extern int intord_(void *cspice_state, integer *n, char *string, ftnlen string_len);
 /*:ref: inttxt_ 14 3 4 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int intstr_(integer *number, char *string, ftnlen string_len);
+extern int intstr_(void *cspice_state, integer *number, char *string, ftnlen string_len);
  
-extern int inttxt_(integer *n, char *string, ftnlen string_len);
+extern int inttxt_(void *cspice_state, integer *n, char *string, ftnlen string_len);
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int invert_(doublereal *m1, doublereal *mout);
+extern int invert_(void *cspice_state, doublereal *m1, doublereal *mout);
 /*:ref: det_ 7 1 7 */
 /*:ref: filld_ 14 3 7 4 7 */
 /*:ref: vsclg_ 14 4 7 7 4 7 */
  
-extern int invort_(doublereal *m, doublereal *mit);
+extern int invort_(void *cspice_state, doublereal *m, doublereal *mit);
 /*:ref: dpmax_ 7 0 */
 /*:ref: unorm_ 14 3 7 7 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -4476,25 +4476,25 @@ extern int invort_(doublereal *m, doublereal *mit);
 /*:ref: vsclip_ 14 2 7 7 */
 /*:ref: xpose_ 14 2 7 7 */
  
-extern int invstm_(doublereal *mat, doublereal *invmat);
+extern int invstm_(void *cspice_state, doublereal *mat, doublereal *invmat);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: xposbl_ 14 5 7 4 4 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int ioerr_(char *action, char *file, integer *iostat, ftnlen action_len, ftnlen file_len);
+extern int ioerr_(void *cspice_state, char *action, char *file, integer *iostat, ftnlen action_len, ftnlen file_len);
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
  
-extern int irftrn_(char *refa, char *refb, doublereal *rotab, ftnlen refa_len, ftnlen refb_len);
+extern int irftrn_(void *cspice_state, char *refa, char *refb, doublereal *rotab, ftnlen refa_len, ftnlen refb_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
 /*:ref: irfrot_ 14 3 4 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int iso2utc_(char *tstrng, char *utcstr, char *error, ftnlen tstrng_len, ftnlen utcstr_len, ftnlen error_len);
+extern int iso2utc_(void *cspice_state, char *tstrng, char *utcstr, char *error, ftnlen tstrng_len, ftnlen utcstr_len, ftnlen error_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -4503,7 +4503,7 @@ extern int iso2utc_(char *tstrng, char *utcstr, char *error, ftnlen tstrng_len, 
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical isopen_(char *file, ftnlen file_len);
+extern logical isopen_(void *cspice_state, char *file, ftnlen file_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4511,15 +4511,15 @@ extern logical isopen_(char *file, ftnlen file_len);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern logical isordv_(integer *array, integer *n);
+extern logical isordv_(void *cspice_state, integer *array, integer *n);
  
-extern integer isrchc_(char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
+extern integer isrchc_(void *cspice_state, char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
  
-extern integer isrchd_(doublereal *value, integer *ndim, doublereal *array);
+extern integer isrchd_(void *cspice_state, doublereal *value, integer *ndim, doublereal *array);
  
-extern integer isrchi_(integer *value, integer *ndim, integer *array);
+extern integer isrchi_(void *cspice_state, integer *value, integer *ndim, integer *array);
  
-extern logical isrot_(doublereal *m, doublereal *ntol, doublereal *dtol);
+extern logical isrot_(void *cspice_state, doublereal *m, doublereal *ntol, doublereal *dtol);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4530,28 +4530,28 @@ extern logical isrot_(doublereal *m, doublereal *ntol, doublereal *dtol);
 /*:ref: det_ 7 1 7 */
 /*:ref: brcktd_ 7 3 7 7 7 */
  
-extern doublereal j1900_(void);
+extern doublereal j1900_(void *cspice_state);
  
-extern doublereal j1950_(void);
+extern doublereal j1950_(void *cspice_state);
  
-extern doublereal j2000_(void);
+extern doublereal j2000_(void *cspice_state);
  
-extern doublereal j2100_(void);
+extern doublereal j2100_(void *cspice_state);
  
-extern int jul2gr_(integer *year, integer *month, integer *day, integer *doy);
-extern int gr2jul_(integer *year, integer *month, integer *day, integer *doy);
+extern int jul2gr_(void *cspice_state, integer *year, integer *month, integer *day, integer *doy);
+extern int gr2jul_(void *cspice_state, integer *year, integer *month, integer *day, integer *doy);
 /*:ref: rmaini_ 14 4 4 4 4 4 */
 /*:ref: lstlti_ 4 3 4 4 4 */
  
-extern doublereal jyear_(void);
+extern doublereal jyear_(void *cspice_state);
  
-extern int keeper_(integer *which, char *kind, char *file, integer *count, char *filtyp, integer *handle, char *source, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
-extern int furnsh_(char *file, ftnlen file_len);
-extern int ktotal_(char *kind, integer *count, ftnlen kind_len);
-extern int kdata_(integer *which, char *kind, char *file, char *filtyp, char *source, integer *handle, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
-extern int kinfo_(char *file, char *filtyp, char *source, integer *handle, logical *found, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
-extern int kclear_(void);
-extern int unload_(char *file, ftnlen file_len);
+extern int keeper_(void *cspice_state, integer *which, char *kind, char *file, integer *count, char *filtyp, integer *handle, char *source, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
+extern int furnsh_(void *cspice_state, char *file, ftnlen file_len);
+extern int ktotal_(void *cspice_state, char *kind, integer *count, ftnlen kind_len);
+extern int kdata_(void *cspice_state, integer *which, char *kind, char *file, char *filtyp, char *source, integer *handle, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
+extern int kinfo_(void *cspice_state, char *file, char *filtyp, char *source, integer *handle, logical *found, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
+extern int kclear_(void *cspice_state);
+extern int unload_(void *cspice_state, char *file, ftnlen file_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -4592,7 +4592,7 @@ extern int unload_(char *file, ftnlen file_len);
 /*:ref: pcklof_ 14 3 13 4 124 */
 /*:ref: eklef_ 14 3 13 4 124 */
  
-extern doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k);
+extern doublereal kepleq_(void *cspice_state, doublereal *ml, doublereal *h__, doublereal *k);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
@@ -4600,7 +4600,7 @@ extern doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: kpsolv_ 7 1 7 */
  
-extern int kplfrm_(integer *frmcls, integer *idset);
+extern int kplfrm_(void *cspice_state, integer *frmcls, integer *idset);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: scardi_ 14 2 4 4 */
@@ -4616,32 +4616,32 @@ extern int kplfrm_(integer *frmcls, integer *idset);
 /*:ref: sizei_ 4 1 4 */
 /*:ref: validi_ 14 3 4 4 4 */
  
-extern doublereal kpsolv_(doublereal *evec);
+extern doublereal kpsolv_(void *cspice_state, doublereal *evec);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int kxtrct_(char *keywd, char *terms, integer *nterms, char *string, logical *found, char *substr, ftnlen keywd_len, ftnlen terms_len, ftnlen string_len, ftnlen substr_len);
+extern int kxtrct_(void *cspice_state, char *keywd, char *terms, integer *nterms, char *string, logical *found, char *substr, ftnlen keywd_len, ftnlen terms_len, ftnlen string_len, ftnlen substr_len);
 /*:ref: wdindx_ 4 4 13 13 124 124 */
 /*:ref: nblen_ 4 2 13 124 */
 /*:ref: fndnwd_ 14 5 13 4 4 4 124 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
 /*:ref: shiftl_ 14 7 13 4 13 13 124 124 124 */
  
-extern integer lastnb_(char *string, ftnlen string_len);
+extern integer lastnb_(void *cspice_state, char *string, ftnlen string_len);
  
-extern integer lastpc_(char *string, ftnlen string_len);
+extern integer lastpc_(void *cspice_state, char *string, ftnlen string_len);
  
-extern int latcyl_(doublereal *radius, doublereal *long__, doublereal *lat, doublereal *r__, doublereal *longc, doublereal *z__);
+extern int latcyl_(void *cspice_state, doublereal *radius, doublereal *long__, doublereal *lat, doublereal *r__, doublereal *longc, doublereal *z__);
  
-extern int latrec_(doublereal *radius, doublereal *long__, doublereal *lat, doublereal *rectan);
+extern int latrec_(void *cspice_state, doublereal *radius, doublereal *long__, doublereal *lat, doublereal *rectan);
  
-extern int latsph_(doublereal *radius, doublereal *long__, doublereal *lat, doublereal *rho, doublereal *colat, doublereal *longs);
+extern int latsph_(void *cspice_state, doublereal *radius, doublereal *long__, doublereal *lat, doublereal *rho, doublereal *colat, doublereal *longs);
 /*:ref: halfpi_ 7 0 */
  
-extern int latsrf_(char *method, char *target, doublereal *et, char *fixref, integer *npts, doublereal *lonlat, doublereal *srfpts, ftnlen method_len, ftnlen target_len, ftnlen fixref_len);
+extern int latsrf_(void *cspice_state, char *method, char *target, doublereal *et, char *fixref, integer *npts, doublereal *lonlat, doublereal *srfpts, ftnlen method_len, ftnlen target_len, ftnlen fixref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -4668,14 +4668,14 @@ extern int latsrf_(char *method, char *target, doublereal *et, char *fixref, int
 /*:ref: dpr_ 7 0 */
 /*:ref: vdot_ 7 2 7 7 */
  
-extern int lbuild_(char *items, integer *n, char *delim, char *list, ftnlen items_len, ftnlen delim_len, ftnlen list_len);
+extern int lbuild_(void *cspice_state, char *items, integer *n, char *delim, char *list, ftnlen items_len, ftnlen delim_len, ftnlen list_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int lcase_(char *in, char *out, ftnlen in_len, ftnlen out_len);
+extern int lcase_(void *cspice_state, char *in, char *out, ftnlen in_len, ftnlen out_len);
  
-extern doublereal lgresp_(integer *n, doublereal *first, doublereal *step, doublereal *yvals, doublereal *work, doublereal *x);
+extern doublereal lgresp_(void *cspice_state, integer *n, doublereal *first, doublereal *step, doublereal *yvals, doublereal *work, doublereal *x);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4683,16 +4683,7 @@ extern doublereal lgresp_(integer *n, doublereal *first, doublereal *step, doubl
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int lgrind_(integer *n, doublereal *xvals, doublereal *yvals, doublereal *work, doublereal *x, doublereal *p, doublereal *dp);
-/*:ref: return_ 12 0 */
-/*:ref: chkin_ 14 2 13 124 */
-/*:ref: setmsg_ 14 2 13 124 */
-/*:ref: errint_ 14 3 13 4 124 */
-/*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
-/*:ref: errdp_ 14 3 13 7 124 */
- 
-extern doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals, doublereal *work, doublereal *x);
+extern int lgrind_(void *cspice_state, integer *n, doublereal *xvals, doublereal *yvals, doublereal *work, doublereal *x, doublereal *p, doublereal *dp);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4701,7 +4692,16 @@ extern doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals, doub
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
  
-extern int limbpt_(char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *corloc, char *obsrvr, doublereal *refvec, doublereal *rolstp, integer *ncuts, doublereal *schstp, doublereal *soltol, integer *maxn, integer *npts, doublereal *points, doublereal *epochs, doublereal *tangts, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen corloc_len, ftnlen obsrvr_len);
+extern doublereal lgrint_(void *cspice_state, integer *n, doublereal *xvals, doublereal *yvals, doublereal *work, doublereal *x);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: errdp_ 14 3 13 7 124 */
+ 
+extern int limbpt_(void *cspice_state, char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *corloc, char *obsrvr, doublereal *refvec, doublereal *rolstp, integer *ncuts, doublereal *schstp, doublereal *soltol, integer *maxn, integer *npts, doublereal *points, doublereal *epochs, doublereal *tangts, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen corloc_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -4755,84 +4755,84 @@ extern int limbpt_(char *method, char *target, doublereal *et, char *fixref, cha
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: clight_ 7 0 */
  
-extern int ljucrs_(integer *n, char *input, char *output, ftnlen input_len, ftnlen output_len);
+extern int ljucrs_(void *cspice_state, integer *n, char *input, char *output, ftnlen input_len, ftnlen output_len);
  
-extern int ljust_(char *input, char *output, ftnlen input_len, ftnlen output_len);
+extern int ljust_(void *cspice_state, char *input, char *output, ftnlen input_len, ftnlen output_len);
  
-extern int lnkan_(integer *pool, integer *new__);
+extern int lnkan_(void *cspice_state, integer *pool, integer *new__);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int lnkfsl_(integer *head, integer *tail, integer *pool);
-/*:ref: chkin_ 14 2 13 124 */
-/*:ref: setmsg_ 14 2 13 124 */
-/*:ref: errint_ 14 3 13 4 124 */
-/*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
- 
-extern integer lnkhl_(integer *node, integer *pool);
+extern int lnkfsl_(void *cspice_state, integer *head, integer *tail, integer *pool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int lnkila_(integer *prev, integer *list, integer *pool);
+extern integer lnkhl_(void *cspice_state, integer *node, integer *pool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int lnkilb_(integer *list, integer *next, integer *pool);
+extern int lnkila_(void *cspice_state, integer *prev, integer *list, integer *pool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int lnkini_(integer *size, integer *pool);
+extern int lnkilb_(void *cspice_state, integer *list, integer *next, integer *pool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer lnknfn_(integer *pool);
- 
-extern integer lnknxt_(integer *node, integer *pool);
+extern int lnkini_(void *cspice_state, integer *size, integer *pool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer lnkprv_(integer *node, integer *pool);
+extern integer lnknfn_(void *cspice_state, integer *pool);
+ 
+extern integer lnknxt_(void *cspice_state, integer *node, integer *pool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer lnksiz_(integer *pool);
- 
-extern integer lnktl_(integer *node, integer *pool);
+extern integer lnkprv_(void *cspice_state, integer *node, integer *pool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int lnkxsl_(integer *head, integer *tail, integer *pool);
+extern integer lnksiz_(void *cspice_state, integer *pool);
+ 
+extern integer lnktl_(void *cspice_state, integer *node, integer *pool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int locati_(integer *id, integer *idsz, integer *list, integer *pool, integer *at, logical *presnt);
+extern int lnkxsl_(void *cspice_state, integer *head, integer *tail, integer *pool);
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+ 
+extern int locati_(void *cspice_state, integer *id, integer *idsz, integer *list, integer *pool, integer *at, logical *presnt);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: lnknfn_ 4 1 4 */
 /*:ref: lnksiz_ 4 1 4 */
@@ -4844,7 +4844,7 @@ extern int locati_(integer *id, integer *idsz, integer *list, integer *pool, int
 /*:ref: lnkxsl_ 14 3 4 4 4 */
 /*:ref: lnkilb_ 14 3 4 4 4 */
  
-extern int locln_(integer *unit, char *bmark, char *emark, char *line, integer *bline, integer *eline, logical *found, ftnlen bmark_len, ftnlen emark_len, ftnlen line_len);
+extern int locln_(void *cspice_state, integer *unit, char *bmark, char *emark, char *line, integer *bline, integer *eline, logical *found, ftnlen bmark_len, ftnlen emark_len, ftnlen line_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4856,11 +4856,11 @@ extern int locln_(integer *unit, char *bmark, char *emark, char *line, integer *
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ltrim_ 4 2 13 124 */
  
-extern int lparse_(char *list, char *delim, integer *nmax, integer *n, char *items, ftnlen list_len, ftnlen delim_len, ftnlen items_len);
+extern int lparse_(void *cspice_state, char *list, char *delim, integer *nmax, integer *n, char *items, ftnlen list_len, ftnlen delim_len, ftnlen items_len);
  
-extern int lparsm_(char *list, char *delims, integer *nmax, integer *n, char *items, ftnlen list_len, ftnlen delims_len, ftnlen items_len);
+extern int lparsm_(void *cspice_state, char *list, char *delims, integer *nmax, integer *n, char *items, ftnlen list_len, ftnlen delims_len, ftnlen items_len);
  
-extern int lparss_(char *list, char *delims, char *set, ftnlen list_len, ftnlen delims_len, ftnlen set_len);
+extern int lparss_(void *cspice_state, char *list, char *delims, char *set, ftnlen list_len, ftnlen delims_len, ftnlen set_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sizec_ 4 2 13 124 */
@@ -4871,7 +4871,7 @@ extern int lparss_(char *list, char *delims, char *set, ftnlen list_len, ftnlen 
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len, ftnlen abcorr_len);
+extern doublereal lspcn_(void *cspice_state, char *body, doublereal *et, char *abcorr, ftnlen body_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -4889,23 +4889,23 @@ extern doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_l
 /*:ref: mxv_ 14 3 7 7 7 */
 /*:ref: recrad_ 14 4 7 7 7 7 */
  
-extern integer lstcld_(doublereal *x, integer *n, doublereal *array);
+extern integer lstcld_(void *cspice_state, doublereal *x, integer *n, doublereal *array);
  
-extern integer lstcli_(integer *x, integer *n, integer *array);
+extern integer lstcli_(void *cspice_state, integer *x, integer *n, integer *array);
  
-extern integer lstlec_(char *string, integer *n, char *array, ftnlen string_len, ftnlen array_len);
+extern integer lstlec_(void *cspice_state, char *string, integer *n, char *array, ftnlen string_len, ftnlen array_len);
  
-extern integer lstled_(doublereal *x, integer *n, doublereal *array);
+extern integer lstled_(void *cspice_state, doublereal *x, integer *n, doublereal *array);
  
-extern integer lstlei_(integer *x, integer *n, integer *array);
+extern integer lstlei_(void *cspice_state, integer *x, integer *n, integer *array);
  
-extern integer lstltc_(char *string, integer *n, char *array, ftnlen string_len, ftnlen array_len);
+extern integer lstltc_(void *cspice_state, char *string, integer *n, char *array, ftnlen string_len, ftnlen array_len);
  
-extern integer lstltd_(doublereal *x, integer *n, doublereal *array);
+extern integer lstltd_(void *cspice_state, doublereal *x, integer *n, doublereal *array);
  
-extern integer lstlti_(integer *x, integer *n, integer *array);
+extern integer lstlti_(void *cspice_state, integer *x, integer *n, integer *array);
  
-extern int ltime_(doublereal *etobs, integer *obs, char *dir, integer *targ, doublereal *ettarg, doublereal *elapsd, ftnlen dir_len);
+extern int ltime_(void *cspice_state, doublereal *etobs, integer *obs, char *dir, integer *targ, doublereal *ettarg, doublereal *elapsd, ftnlen dir_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4918,10 +4918,10 @@ extern int ltime_(doublereal *etobs, integer *obs, char *dir, integer *targ, dou
 /*:ref: vdist_ 7 2 7 7 */
 /*:ref: failed_ 12 0 */
  
-extern integer ltrim_(char *string, ftnlen string_len);
+extern integer ltrim_(void *cspice_state, char *string, ftnlen string_len);
 /*:ref: frstnb_ 4 2 13 124 */
  
-extern int lun2fn_(integer *lunit, char *filnam, ftnlen filnam_len);
+extern int lun2fn_(void *cspice_state, integer *lunit, char *filnam, ftnlen filnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4929,23 +4929,23 @@ extern int lun2fn_(integer *lunit, char *filnam, ftnlen filnam_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int lx4dec_(char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
+extern int lx4dec_(void *cspice_state, char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
 /*:ref: lx4uns_ 14 5 13 4 4 4 124 */
 /*:ref: lx4sgn_ 14 5 13 4 4 4 124 */
  
-extern int lx4num_(char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
+extern int lx4num_(void *cspice_state, char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
 /*:ref: lx4dec_ 14 5 13 4 4 4 124 */
 /*:ref: lx4sgn_ 14 5 13 4 4 4 124 */
  
-extern int lx4sgn_(char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
+extern int lx4sgn_(void *cspice_state, char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
 /*:ref: lx4uns_ 14 5 13 4 4 4 124 */
  
-extern int lx4uns_(char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
+extern int lx4uns_(void *cspice_state, char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
  
-extern int lxname_(char *hdchrs, char *tlchrs, char *string, integer *first, integer *last, integer *idspec, integer *nchar, ftnlen hdchrs_len, ftnlen tlchrs_len, ftnlen string_len);
-extern int lxidnt_(integer *idspec, char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
-extern int lxdfid_(integer *idspec);
-extern int lxcsid_(char *hdchrs, char *tlchrs, integer *idspec, ftnlen hdchrs_len, ftnlen tlchrs_len);
+extern int lxname_(void *cspice_state, char *hdchrs, char *tlchrs, char *string, integer *first, integer *last, integer *idspec, integer *nchar, ftnlen hdchrs_len, ftnlen tlchrs_len, ftnlen string_len);
+extern int lxidnt_(void *cspice_state, integer *idspec, char *string, integer *first, integer *last, integer *nchar, ftnlen string_len);
+extern int lxdfid_(void *cspice_state, integer *idspec);
+extern int lxcsid_(void *cspice_state, char *hdchrs, char *tlchrs, integer *idspec, ftnlen hdchrs_len, ftnlen tlchrs_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -4961,9 +4961,9 @@ extern int lxcsid_(char *hdchrs, char *tlchrs, integer *idspec, ftnlen hdchrs_le
 /*:ref: insrti_ 14 2 4 4 */
 /*:ref: cardi_ 4 1 4 */
  
-extern int lxqstr_(char *string, char *qchar, integer *first, integer *last, integer *nchar, ftnlen string_len, ftnlen qchar_len);
+extern int lxqstr_(void *cspice_state, char *string, char *qchar, integer *first, integer *last, integer *nchar, ftnlen string_len, ftnlen qchar_len);
  
-extern int m2eul_(doublereal *r__, integer *axis3, integer *axis2, integer *axis1, doublereal *angle3, doublereal *angle2, doublereal *angle1);
+extern int m2eul_(void *cspice_state, doublereal *r__, integer *axis3, integer *axis2, integer *axis1, doublereal *angle3, doublereal *angle2, doublereal *angle1);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -4976,81 +4976,81 @@ extern int m2eul_(doublereal *r__, integer *axis3, integer *axis2, integer *axis
 /*:ref: mxm_ 14 3 7 7 7 */
 /*:ref: mtxm_ 14 3 7 7 7 */
  
-extern int m2q_(doublereal *r__, doublereal *q);
+extern int m2q_(void *cspice_state, doublereal *r__, doublereal *q);
 /*:ref: isrot_ 12 3 7 7 7 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen string_len, ftnlen templ_len, ftnlen wstr_len, ftnlen wchr_len);
+extern logical matchi_(void *cspice_state, char *string, char *templ, char *wstr, char *wchr, ftnlen string_len, ftnlen templ_len, ftnlen wstr_len, ftnlen wchr_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: samch_ 12 6 13 4 13 4 124 124 */
 /*:ref: nechr_ 12 4 13 13 124 124 */
 /*:ref: samchi_ 12 6 13 4 13 4 124 124 */
  
-extern logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen string_len, ftnlen templ_len, ftnlen wstr_len, ftnlen wchr_len);
+extern logical matchw_(void *cspice_state, char *string, char *templ, char *wstr, char *wchr, ftnlen string_len, ftnlen templ_len, ftnlen wstr_len, ftnlen wchr_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: samch_ 12 6 13 4 13 4 124 124 */
  
-extern int maxac_(char *array, integer *ndim, char *maxval, integer *loc, ftnlen array_len, ftnlen maxval_len);
+extern int maxac_(void *cspice_state, char *array, integer *ndim, char *maxval, integer *loc, ftnlen array_len, ftnlen maxval_len);
  
-extern int maxad_(doublereal *array, integer *ndim, doublereal *maxval, integer *loc);
+extern int maxad_(void *cspice_state, doublereal *array, integer *ndim, doublereal *maxval, integer *loc);
  
-extern int maxai_(integer *array, integer *ndim, integer *maxval, integer *loc);
+extern int maxai_(void *cspice_state, integer *array, integer *ndim, integer *maxval, integer *loc);
  
-extern int mequ_(doublereal *m1, doublereal *mout);
+extern int mequ_(void *cspice_state, doublereal *m1, doublereal *mout);
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int mequg_(doublereal *m1, integer *nr, integer *nc, doublereal *mout);
+extern int mequg_(void *cspice_state, doublereal *m1, integer *nr, integer *nc, doublereal *mout);
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int minac_(char *array, integer *ndim, char *minval, integer *loc, ftnlen array_len, ftnlen minval_len);
+extern int minac_(void *cspice_state, char *array, integer *ndim, char *minval, integer *loc, ftnlen array_len, ftnlen minval_len);
  
-extern int minad_(doublereal *array, integer *ndim, doublereal *minval, integer *loc);
+extern int minad_(void *cspice_state, doublereal *array, integer *ndim, doublereal *minval, integer *loc);
  
-extern int minai_(integer *array, integer *ndim, integer *minval, integer *loc);
+extern int minai_(void *cspice_state, integer *array, integer *ndim, integer *minval, integer *loc);
  
-extern int movec_(char *arrfrm, integer *ndim, char *arrto, ftnlen arrfrm_len, ftnlen arrto_len);
+extern int movec_(void *cspice_state, char *arrfrm, integer *ndim, char *arrto, ftnlen arrfrm_len, ftnlen arrto_len);
  
-extern int movei_(integer *arrfrm, integer *ndim, integer *arrto);
+extern int movei_(void *cspice_state, integer *arrfrm, integer *ndim, integer *arrto);
  
-extern int mtxm_(doublereal *m1, doublereal *m2, doublereal *mout);
+extern int mtxm_(void *cspice_state, doublereal *m1, doublereal *m2, doublereal *mout);
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int mtxmg_(doublereal *m1, doublereal *m2, integer *nc1, integer *nr1r2, integer *nc2, doublereal *mout);
+extern int mtxmg_(void *cspice_state, doublereal *m1, doublereal *m2, integer *nc1, integer *nr1r2, integer *nc2, doublereal *mout);
  
-extern int mtxv_(doublereal *matrix, doublereal *vin, doublereal *vout);
+extern int mtxv_(void *cspice_state, doublereal *matrix, doublereal *vin, doublereal *vout);
  
-extern int mtxvg_(doublereal *m1, doublereal *v2, integer *nc1, integer *nr1r2, doublereal *vout);
+extern int mtxvg_(void *cspice_state, doublereal *m1, doublereal *v2, integer *nc1, integer *nr1r2, doublereal *vout);
  
-extern int mxm_(doublereal *m1, doublereal *m2, doublereal *mout);
+extern int mxm_(void *cspice_state, doublereal *m1, doublereal *m2, doublereal *mout);
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int mxmg_(doublereal *m1, doublereal *m2, integer *row1, integer *col1, integer *col2, doublereal *mout);
+extern int mxmg_(void *cspice_state, doublereal *m1, doublereal *m2, integer *row1, integer *col1, integer *col2, doublereal *mout);
  
-extern int mxmt_(doublereal *m1, doublereal *m2, doublereal *mout);
+extern int mxmt_(void *cspice_state, doublereal *m1, doublereal *m2, doublereal *mout);
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int mxmtg_(doublereal *m1, doublereal *m2, integer *nr1, integer *nc1c2, integer *nr2, doublereal *mout);
+extern int mxmtg_(void *cspice_state, doublereal *m1, doublereal *m2, integer *nr1, integer *nc1c2, integer *nr2, doublereal *mout);
  
-extern int mxv_(doublereal *matrix, doublereal *vin, doublereal *vout);
+extern int mxv_(void *cspice_state, doublereal *matrix, doublereal *vin, doublereal *vout);
  
-extern int mxvg_(doublereal *m1, doublereal *v2, integer *nr1, integer *nc1r2, doublereal *vout);
+extern int mxvg_(void *cspice_state, doublereal *m1, doublereal *v2, integer *nr1, integer *nc1r2, doublereal *vout);
  
-extern integer nblen_(char *string, ftnlen string_len);
+extern integer nblen_(void *cspice_state, char *string, ftnlen string_len);
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: frstnb_ 4 2 13 124 */
  
-extern integer nbwid_(char *array, integer *nelt, ftnlen array_len);
+extern integer nbwid_(void *cspice_state, char *array, integer *nelt, ftnlen array_len);
  
-extern integer ncpos_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen chars_len);
+extern integer ncpos_(void *cspice_state, char *str, char *chars, integer *start, ftnlen str_len, ftnlen chars_len);
  
-extern integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen chars_len);
+extern integer ncposr_(void *cspice_state, char *str, char *chars, integer *start, ftnlen str_len, ftnlen chars_len);
  
-extern int nearpt_(doublereal *positn, doublereal *a, doublereal *b, doublereal *c__, doublereal *npoint, doublereal *alt);
+extern int nearpt_(void *cspice_state, doublereal *positn, doublereal *a, doublereal *b, doublereal *c__, doublereal *npoint, doublereal *alt);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5073,23 +5073,23 @@ extern int nearpt_(doublereal *positn, doublereal *a, doublereal *b, doublereal 
 /*:ref: vperp_ 14 3 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int nextwd_(char *string, char *next, char *rest, ftnlen string_len, ftnlen next_len, ftnlen rest_len);
+extern int nextwd_(void *cspice_state, char *string, char *next, char *rest, ftnlen string_len, ftnlen next_len, ftnlen rest_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
  
-extern logical notru_(logical *logcls, integer *n);
+extern logical notru_(void *cspice_state, logical *logcls, integer *n);
  
-extern int nparsd_(char *string, doublereal *x, char *error, integer *ptr, ftnlen string_len, ftnlen error_len);
+extern int nparsd_(void *cspice_state, char *string, doublereal *x, char *error, integer *ptr, ftnlen string_len, ftnlen error_len);
 /*:ref: dpmax_ 7 0 */
 /*:ref: zzinssub_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: prefix_ 14 5 13 4 13 124 124 */
 /*:ref: pi_ 7 0 */
  
-extern int nparsi_(char *string, integer *n, char *error, integer *pnter, ftnlen string_len, ftnlen error_len);
+extern int nparsi_(void *cspice_state, char *string, integer *n, char *error, integer *pnter, ftnlen string_len, ftnlen error_len);
 /*:ref: intmax_ 4 0 */
 /*:ref: intmin_ 4 0 */
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
  
-extern int npedln_(doublereal *a, doublereal *b, doublereal *c__, doublereal *linept, doublereal *linedr, doublereal *pnear, doublereal *dist);
+extern int npedln_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__, doublereal *linept, doublereal *linedr, doublereal *pnear, doublereal *dist);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: unorm_ 14 3 7 7 7 */
@@ -5109,7 +5109,7 @@ extern int npedln_(doublereal *a, doublereal *b, doublereal *c__, doublereal *li
 /*:ref: vprjpi_ 14 5 7 7 7 7 12 */
 /*:ref: vsclip_ 14 2 7 7 */
  
-extern int npelpt_(doublereal *point, doublereal *ellips, doublereal *pnear, doublereal *dist);
+extern int npelpt_(void *cspice_state, doublereal *point, doublereal *ellips, doublereal *pnear, doublereal *dist);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: el2cgv_ 14 4 7 7 7 7 */
@@ -5129,7 +5129,7 @@ extern int npelpt_(doublereal *point, doublereal *ellips, doublereal *pnear, dou
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vdist_ 7 2 7 7 */
  
-extern int nplnpt_(doublereal *linpt, doublereal *lindir, doublereal *point, doublereal *pnear, doublereal *dist);
+extern int nplnpt_(void *cspice_state, doublereal *linpt, doublereal *lindir, doublereal *point, doublereal *pnear, doublereal *dist);
 /*:ref: return_ 12 0 */
 /*:ref: vzero_ 12 1 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -5141,7 +5141,7 @@ extern int nplnpt_(doublereal *linpt, doublereal *lindir, doublereal *point, dou
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vdist_ 7 2 7 7 */
  
-extern int npsgpt_(doublereal *ep1, doublereal *ep2, doublereal *point, doublereal *pnear, doublereal *dist);
+extern int npsgpt_(void *cspice_state, doublereal *ep1, doublereal *ep2, doublereal *point, doublereal *pnear, doublereal *dist);
 /*:ref: return_ 12 0 */
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: vzero_ 12 1 7 */
@@ -5151,9 +5151,9 @@ extern int npsgpt_(doublereal *ep1, doublereal *ep2, doublereal *point, doublere
 /*:ref: failed_ 12 0 */
 /*:ref: vdot_ 7 2 7 7 */
  
-extern int nthwd_(char *string, integer *nth, char *word, integer *loc, ftnlen string_len, ftnlen word_len);
+extern int nthwd_(void *cspice_state, char *string, integer *nth, char *word, integer *loc, ftnlen string_len, ftnlen word_len);
  
-extern int nvc2pl_(doublereal *normal, doublereal *const__, doublereal *plane);
+extern int nvc2pl_(void *cspice_state, doublereal *normal, doublereal *const__, doublereal *plane);
 /*:ref: return_ 12 0 */
 /*:ref: unorm_ 14 3 7 7 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -5163,7 +5163,7 @@ extern int nvc2pl_(doublereal *normal, doublereal *const__, doublereal *plane);
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int nvp2pl_(doublereal *normal, doublereal *point, doublereal *plane);
+extern int nvp2pl_(void *cspice_state, doublereal *normal, doublereal *point, doublereal *plane);
 /*:ref: return_ 12 0 */
 /*:ref: vzero_ 12 1 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -5175,7 +5175,7 @@ extern int nvp2pl_(doublereal *normal, doublereal *point, doublereal *plane);
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int occult_(char *targ1, char *shape1, char *frame1, char *targ2, char *shape2, char *frame2, char *abcorr, char *obsrvr, doublereal *et, integer *ocltid, ftnlen targ1_len, ftnlen shape1_len, ftnlen frame1_len, ftnlen targ2_len, ftnlen shape2_len, ftnlen frame2_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int occult_(void *cspice_state, char *targ1, char *shape1, char *frame1, char *targ2, char *shape2, char *frame2, char *abcorr, char *obsrvr, doublereal *et, integer *ocltid, ftnlen targ1_len, ftnlen shape1_len, ftnlen frame1_len, ftnlen targ2_len, ftnlen shape2_len, ftnlen frame2_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -5191,43 +5191,43 @@ extern int occult_(char *targ1, char *shape1, char *frame1, char *targ2, char *s
 /*:ref: zzgfocst_ 14 2 7 12 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern logical odd_(integer *i__);
+extern logical odd_(void *cspice_state, integer *i__);
  
-extern logical opsgnd_(doublereal *x, doublereal *y);
+extern logical opsgnd_(void *cspice_state, doublereal *x, doublereal *y);
  
-extern logical opsgni_(integer *x, integer *y);
+extern logical opsgni_(void *cspice_state, integer *x, integer *y);
  
-extern integer ordc_(char *item, char *set, ftnlen item_len, ftnlen set_len);
+extern integer ordc_(void *cspice_state, char *item, char *set, ftnlen item_len, ftnlen set_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bsrchc_ 4 5 13 4 13 124 124 */
 /*:ref: cardc_ 4 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer ordd_(doublereal *item, doublereal *set);
+extern integer ordd_(void *cspice_state, doublereal *item, doublereal *set);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bsrchd_ 4 3 7 4 7 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int orderc_(char *array, integer *ndim, integer *iorder, ftnlen array_len);
+extern int orderc_(void *cspice_state, char *array, integer *ndim, integer *iorder, ftnlen array_len);
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int orderd_(doublereal *array, integer *ndim, integer *iorder);
+extern int orderd_(void *cspice_state, doublereal *array, integer *ndim, integer *iorder);
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int orderi_(integer *array, integer *ndim, integer *iorder);
+extern int orderi_(void *cspice_state, integer *array, integer *ndim, integer *iorder);
 /*:ref: swapi_ 14 2 4 4 */
  
-extern integer ordi_(integer *item, integer *set);
+extern integer ordi_(void *cspice_state, integer *item, integer *set);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bsrchi_ 4 3 4 4 4 */
 /*:ref: cardi_ 4 1 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int oscelt_(doublereal *state, doublereal *et, doublereal *mu, doublereal *elts);
+extern int oscelt_(void *cspice_state, doublereal *state, doublereal *et, doublereal *mu, doublereal *elts);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5250,7 +5250,7 @@ extern int oscelt_(doublereal *state, doublereal *et, doublereal *mu, doublereal
 /*:ref: vhat_ 14 2 7 7 */
 /*:ref: dacosh_ 7 1 7 */
  
-extern int oscltx_(doublereal *state, doublereal *et, doublereal *mu, doublereal *elts);
+extern int oscltx_(void *cspice_state, doublereal *state, doublereal *et, doublereal *mu, doublereal *elts);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dpmax_ 7 0 */
@@ -5270,7 +5270,7 @@ extern int oscltx_(doublereal *state, doublereal *et, doublereal *mu, doublereal
 /*:ref: recrad_ 14 4 7 7 7 7 */
 /*:ref: twopi_ 7 0 */
  
-extern int outmsg_(char *list, ftnlen list_len);
+extern int outmsg_(void *cspice_state, char *list, ftnlen list_len);
 /*:ref: lparse_ 14 8 13 13 4 4 13 124 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: getdev_ 14 2 13 124 */
@@ -5289,7 +5289,7 @@ extern int outmsg_(char *list, ftnlen list_len);
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int packac_(char *in, integer *pack, integer *npack, integer *maxout, integer *nout, char *out, ftnlen in_len, ftnlen out_len);
+extern int packac_(void *cspice_state, char *in, integer *pack, integer *npack, integer *maxout, integer *nout, char *out, ftnlen in_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5297,7 +5297,7 @@ extern int packac_(char *in, integer *pack, integer *npack, integer *maxout, int
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int packad_(doublereal *in, integer *pack, integer *npack, integer *maxout, integer *nout, doublereal *out);
+extern int packad_(void *cspice_state, doublereal *in, integer *pack, integer *npack, integer *maxout, integer *nout, doublereal *out);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5305,7 +5305,7 @@ extern int packad_(doublereal *in, integer *pack, integer *npack, integer *maxou
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int packai_(integer *in, integer *pack, integer *npack, integer *maxout, integer *nout, integer *out);
+extern int packai_(void *cspice_state, integer *in, integer *pack, integer *npack, integer *maxout, integer *nout, integer *out);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5313,17 +5313,17 @@ extern int packai_(integer *in, integer *pack, integer *npack, integer *maxout, 
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int parsqs_(char *string, char *qchar, char *value, integer *length, logical *error, char *errmsg, integer *ptr, ftnlen string_len, ftnlen qchar_len, ftnlen value_len, ftnlen errmsg_len);
+extern int parsqs_(void *cspice_state, char *string, char *qchar, char *value, integer *length, logical *error, char *errmsg, integer *ptr, ftnlen string_len, ftnlen qchar_len, ftnlen value_len, ftnlen errmsg_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern int partof_(doublereal *ma, doublereal *d__);
+extern int partof_(void *cspice_state, doublereal *ma, doublereal *d__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dcbrt_ 7 1 7 */
  
-extern int pck03a_(integer *handle, integer *ncsets, doublereal *coeffs, doublereal *epochs);
+extern int pck03a_(void *cspice_state, integer *handle, integer *ncsets, doublereal *coeffs, doublereal *epochs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5333,7 +5333,7 @@ extern int pck03a_(integer *handle, integer *ncsets, doublereal *coeffs, doubler
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: sgwfpk_ 14 5 4 4 7 4 7 */
  
-extern int pck03b_(integer *handle, char *segid, integer *body, char *frame, doublereal *first, doublereal *last, integer *chbdeg, ftnlen segid_len, ftnlen frame_len);
+extern int pck03b_(void *cspice_state, integer *handle, char *segid, integer *body, char *frame, doublereal *first, doublereal *last, integer *chbdeg, ftnlen segid_len, ftnlen frame_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5344,16 +5344,16 @@ extern int pck03b_(integer *handle, char *segid, integer *body, char *frame, dou
 /*:ref: failed_ 12 0 */
 /*:ref: sgbwfs_ 14 8 4 7 13 4 7 4 4 124 */
  
-extern int pck03e_(integer *handle);
+extern int pck03e_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sgwes_ 14 1 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckbsr_(char *fname, integer *handle, integer *body, doublereal *et, doublereal *descr, char *ident, logical *found, ftnlen fname_len, ftnlen ident_len);
-extern int pcklof_(char *fname, integer *handle, ftnlen fname_len);
-extern int pckuof_(integer *handle);
-extern int pcksfs_(integer *body, doublereal *et, integer *handle, doublereal *descr, char *ident, logical *found, ftnlen ident_len);
+extern int pckbsr_(void *cspice_state, char *fname, integer *handle, integer *body, doublereal *et, doublereal *descr, char *ident, logical *found, ftnlen fname_len, ftnlen ident_len);
+extern int pcklof_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int pckuof_(void *cspice_state, integer *handle);
+extern int pcksfs_(void *cspice_state, integer *body, doublereal *et, integer *handle, doublereal *descr, char *ident, logical *found, ftnlen ident_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -5386,7 +5386,7 @@ extern int pcksfs_(integer *body, doublereal *et, integer *handle, doublereal *d
 /*:ref: lnkila_ 14 3 4 4 4 */
 /*:ref: lnktl_ 4 2 4 4 */
  
-extern int pckcls_(integer *handle);
+extern int pckcls_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafbfs_ 14 1 4 */
@@ -5398,7 +5398,7 @@ extern int pckcls_(integer *handle);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int pckcov_(char *pck, integer *idcode, doublereal *cover, ftnlen pck_len);
+extern int pckcov_(void *cspice_state, char *pck, integer *idcode, doublereal *cover, ftnlen pck_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
@@ -5415,14 +5415,14 @@ extern int pckcov_(char *pck, integer *idcode, doublereal *cover, ftnlen pck_len
 /*:ref: wninsd_ 14 3 7 7 7 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int pcke02_(doublereal *et, doublereal *record, doublereal *eulang);
+extern int pcke02_(void *cspice_state, doublereal *et, doublereal *record, doublereal *eulang);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spke02_ 14 3 7 7 7 */
 /*:ref: twopi_ 7 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pcke03_(doublereal *et, doublereal *record, doublereal *rotmat);
+extern int pcke03_(void *cspice_state, doublereal *et, doublereal *record, doublereal *rotmat);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chbval_ 14 5 7 4 7 7 7 */
@@ -5432,14 +5432,14 @@ extern int pcke03_(doublereal *et, doublereal *record, doublereal *rotmat);
 /*:ref: vcrss_ 14 3 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pcke20_(doublereal *et, doublereal *record, doublereal *eulang);
+extern int pcke20_(void *cspice_state, doublereal *et, doublereal *record, doublereal *eulang);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spke20_ 14 3 7 7 7 */
 /*:ref: twopi_ 7 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckeul_(integer *body, doublereal *et, logical *found, char *ref, doublereal *eulang, ftnlen ref_len);
+extern int pckeul_(void *cspice_state, integer *body, doublereal *et, logical *found, char *ref, doublereal *eulang, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: pcksfs_ 14 7 4 7 4 7 13 12 124 */
@@ -5449,7 +5449,7 @@ extern int pckeul_(integer *body, doublereal *et, logical *found, char *ref, dou
 /*:ref: pcke02_ 14 3 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckfrm_(char *pck, integer *ids, ftnlen pck_len);
+extern int pckfrm_(void *cspice_state, char *pck, integer *ids, ftnlen pck_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
@@ -5466,7 +5466,7 @@ extern int pckfrm_(char *pck, integer *ids, ftnlen pck_len);
 /*:ref: insrti_ 14 2 4 4 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int pckmat_(integer *body, doublereal *et, integer *ref, doublereal *tsipm, logical *found);
+extern int pckmat_(void *cspice_state, integer *body, doublereal *et, integer *ref, doublereal *tsipm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: pcksfs_ 14 7 4 7 4 7 13 12 124 */
@@ -5485,14 +5485,14 @@ extern int pckmat_(integer *body, doublereal *et, integer *ref, doublereal *tsip
 /*:ref: pckr20_ 14 4 4 7 7 7 */
 /*:ref: pcke20_ 14 3 7 7 7 */
  
-extern int pckopn_(char *name__, char *ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen ifname_len);
+extern int pckopn_(void *cspice_state, char *name__, char *ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafonw_ 14 10 13 13 4 4 13 4 4 124 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckpds_(integer *body, char *frame, integer *type__, doublereal *first, doublereal *last, doublereal *descr, ftnlen frame_len);
+extern int pckpds_(void *cspice_state, integer *body, char *frame, integer *type__, doublereal *first, doublereal *last, doublereal *descr, ftnlen frame_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5505,14 +5505,14 @@ extern int pckpds_(integer *body, char *frame, integer *type__, doublereal *firs
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: dafps_ 14 5 4 4 7 4 7 */
  
-extern int pckr02_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int pckr02_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckr03_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int pckr03_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5523,7 +5523,7 @@ extern int pckr03_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: sgfrvi_ 14 6 4 7 7 7 4 12 */
 /*:ref: sgfpkt_ 14 6 4 7 4 4 7 4 */
  
-extern int pckr20_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int pckr20_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -5535,14 +5535,14 @@ extern int pckr20_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckuds_(doublereal *descr, integer *body, integer *frame, integer *type__, doublereal *first, doublereal *last, integer *begin, integer *end);
+extern int pckuds_(void *cspice_state, doublereal *descr, integer *body, integer *frame, integer *type__, doublereal *first, doublereal *last, integer *begin, integer *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckw02_(integer *handle, integer *body, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len);
+extern int pckw02_(void *cspice_state, integer *handle, integer *body, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5560,7 +5560,7 @@ extern int pckw02_(integer *handle, integer *body, char *frame, doublereal *firs
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int pckw20_(integer *handle, integer *clssid, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *ascale, doublereal *tscale, doublereal *initjd, doublereal *initfr, ftnlen frame_len, ftnlen segid_len);
+extern int pckw20_(void *cspice_state, integer *handle, integer *clssid, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *ascale, doublereal *tscale, doublereal *initjd, doublereal *initfr, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5580,9 +5580,9 @@ extern int pckw20_(integer *handle, integer *clssid, char *frame, doublereal *fi
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern integer pcwid_(char *array, integer *nelt, ftnlen array_len);
+extern integer pcwid_(void *cspice_state, char *array, integer *nelt, ftnlen array_len);
  
-extern int pgrrec_(char *body, doublereal *lon, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *rectan, ftnlen body_len);
+extern int pgrrec_(void *cspice_state, char *body, doublereal *lon, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *rectan, ftnlen body_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -5598,7 +5598,7 @@ extern int pgrrec_(char *body, doublereal *lon, doublereal *lat, doublereal *alt
 /*:ref: plnsns_ 4 1 4 */
 /*:ref: georec_ 14 6 7 7 7 7 7 7 */
  
-extern doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr, char *abcorr, ftnlen target_len, ftnlen illmn_len, ftnlen obsrvr_len, ftnlen abcorr_len);
+extern doublereal phaseq_(void *cspice_state, doublereal *et, char *target, char *illmn, char *obsrvr, char *abcorr, ftnlen target_len, ftnlen illmn_len, ftnlen obsrvr_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -5612,9 +5612,9 @@ extern doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrv
 /*:ref: failed_ 12 0 */
 /*:ref: zzgfpaq_ 14 7 7 4 4 4 13 7 124 */
  
-extern doublereal pi_(void);
+extern doublereal pi_(void *cspice_state);
  
-extern int pjelpl_(doublereal *elin, doublereal *plane, doublereal *elout);
+extern int pjelpl_(void *cspice_state, doublereal *elin, doublereal *plane, doublereal *elout);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: el2cgv_ 14 4 7 7 7 7 */
@@ -5624,23 +5624,23 @@ extern int pjelpl_(doublereal *elin, doublereal *plane, doublereal *elout);
 /*:ref: cgv2el_ 14 4 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pl2nvc_(doublereal *plane, doublereal *normal, doublereal *const__);
+extern int pl2nvc_(void *cspice_state, doublereal *plane, doublereal *normal, doublereal *const__);
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int pl2nvp_(doublereal *plane, doublereal *normal, doublereal *point);
+extern int pl2nvp_(void *cspice_state, doublereal *plane, doublereal *normal, doublereal *point);
 /*:ref: pl2nvc_ 14 3 7 7 7 */
 /*:ref: vscl_ 14 3 7 7 7 */
  
-extern int pl2psv_(doublereal *plane, doublereal *point, doublereal *span1, doublereal *span2);
+extern int pl2psv_(void *cspice_state, doublereal *plane, doublereal *point, doublereal *span1, doublereal *span2);
 /*:ref: pl2nvp_ 14 3 7 7 7 */
 /*:ref: frame_ 14 3 7 7 7 */
  
-extern integer plnsns_(integer *bodid);
+extern integer plnsns_(void *cspice_state, integer *bodid);
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
  
-extern doublereal pltar_(integer *nv, doublereal *vrtces, integer *np, integer *plates);
+extern doublereal pltar_(void *cspice_state, integer *nv, doublereal *vrtces, integer *np, integer *plates);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5651,9 +5651,9 @@ extern doublereal pltar_(integer *nv, doublereal *vrtces, integer *np, integer *
 /*:ref: vcrss_ 14 3 7 7 7 */
 /*:ref: vnorm_ 7 1 7 */
  
-extern int pltexp_(doublereal *iverts, doublereal *delta, doublereal *overts);
+extern int pltexp_(void *cspice_state, doublereal *iverts, doublereal *delta, doublereal *overts);
  
-extern int pltnp_(doublereal *point, doublereal *v1, doublereal *v2, doublereal *v3, doublereal *pnear, doublereal *dist);
+extern int pltnp_(void *cspice_state, doublereal *point, doublereal *v1, doublereal *v2, doublereal *v3, doublereal *pnear, doublereal *dist);
 /*:ref: return_ 12 0 */
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: vcrss_ 14 3 7 7 7 */
@@ -5666,11 +5666,11 @@ extern int pltnp_(doublereal *point, doublereal *v1, doublereal *v2, doublereal 
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int pltnrm_(doublereal *v1, doublereal *v2, doublereal *v3, doublereal *normal);
+extern int pltnrm_(void *cspice_state, doublereal *v1, doublereal *v2, doublereal *v3, doublereal *normal);
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: vcrss_ 14 3 7 7 7 */
  
-extern doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *plates);
+extern doublereal pltvol_(void *cspice_state, integer *nv, doublereal *vrtces, integer *np, integer *plates);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5680,30 +5680,30 @@ extern doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer 
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: det_ 7 1 7 */
  
-extern int polyds_(doublereal *coeffs, integer *deg, integer *nderiv, doublereal *t, doublereal *p);
+extern int polyds_(void *cspice_state, doublereal *coeffs, integer *deg, integer *nderiv, doublereal *t, doublereal *p);
  
-extern int pool_(char *kernel, integer *unit, char *name__, char *names, integer *nnames, char *agent, integer *n, doublereal *values, logical *found, logical *update, integer *start, integer *room, char *cvals, integer *ivals, char *type__, char *uwvars, integer *uwptrs, integer *uwpool, char *uwagnt, integer *usrctr, ftnlen kernel_len, ftnlen name_len, ftnlen names_len, ftnlen agent_len, ftnlen cvals_len, ftnlen type_len, ftnlen uwvars_len, ftnlen uwagnt_len);
-extern int clpool_(void);
-extern int ldpool_(char *kernel, ftnlen kernel_len);
-extern int rtpool_(char *name__, integer *n, doublereal *values, logical *found, ftnlen name_len);
-extern int expool_(char *name__, logical *found, ftnlen name_len);
-extern int wrpool_(integer *unit);
-extern int swpool_(char *agent, integer *nnames, char *names, ftnlen agent_len, ftnlen names_len);
-extern int cvpool_(char *agent, logical *update, ftnlen agent_len);
-extern int gcpool_(char *name__, integer *start, integer *room, integer *n, char *cvals, logical *found, ftnlen name_len, ftnlen cvals_len);
-extern int gdpool_(char *name__, integer *start, integer *room, integer *n, doublereal *values, logical *found, ftnlen name_len);
-extern int gipool_(char *name__, integer *start, integer *room, integer *n, integer *ivals, logical *found, ftnlen name_len);
-extern int dtpool_(char *name__, logical *found, integer *n, char *type__, ftnlen name_len, ftnlen type_len);
-extern int pcpool_(char *name__, integer *n, char *cvals, ftnlen name_len, ftnlen cvals_len);
-extern int pdpool_(char *name__, integer *n, doublereal *values, ftnlen name_len);
-extern int pipool_(char *name__, integer *n, integer *ivals, ftnlen name_len);
-extern int lmpool_(char *cvals, integer *n, ftnlen cvals_len);
-extern int szpool_(char *name__, integer *n, logical *found, ftnlen name_len);
-extern int dvpool_(char *name__, ftnlen name_len);
-extern int gnpool_(char *name__, integer *start, integer *room, integer *n, char *cvals, logical *found, ftnlen name_len, ftnlen cvals_len);
-extern int dwpool_(char *agent, ftnlen agent_len);
-extern int zzvupool_(char *uwvars, integer *uwptrs, integer *uwpool, char *uwagnt, ftnlen uwvars_len, ftnlen uwagnt_len);
-extern int zzpctrck_(integer *usrctr, logical *update);
+extern int pool_(void *cspice_state, char *kernel, integer *unit, char *name__, char *names, integer *nnames, char *agent, integer *n, doublereal *values, logical *found, logical *update, integer *start, integer *room, char *cvals, integer *ivals, char *type__, char *uwvars, integer *uwptrs, integer *uwpool, char *uwagnt, integer *usrctr, ftnlen kernel_len, ftnlen name_len, ftnlen names_len, ftnlen agent_len, ftnlen cvals_len, ftnlen type_len, ftnlen uwvars_len, ftnlen uwagnt_len);
+extern int clpool_(void *cspice_state);
+extern int ldpool_(void *cspice_state, char *kernel, ftnlen kernel_len);
+extern int rtpool_(void *cspice_state, char *name__, integer *n, doublereal *values, logical *found, ftnlen name_len);
+extern int expool_(void *cspice_state, char *name__, logical *found, ftnlen name_len);
+extern int wrpool_(void *cspice_state, integer *unit);
+extern int swpool_(void *cspice_state, char *agent, integer *nnames, char *names, ftnlen agent_len, ftnlen names_len);
+extern int cvpool_(void *cspice_state, char *agent, logical *update, ftnlen agent_len);
+extern int gcpool_(void *cspice_state, char *name__, integer *start, integer *room, integer *n, char *cvals, logical *found, ftnlen name_len, ftnlen cvals_len);
+extern int gdpool_(void *cspice_state, char *name__, integer *start, integer *room, integer *n, doublereal *values, logical *found, ftnlen name_len);
+extern int gipool_(void *cspice_state, char *name__, integer *start, integer *room, integer *n, integer *ivals, logical *found, ftnlen name_len);
+extern int dtpool_(void *cspice_state, char *name__, logical *found, integer *n, char *type__, ftnlen name_len, ftnlen type_len);
+extern int pcpool_(void *cspice_state, char *name__, integer *n, char *cvals, ftnlen name_len, ftnlen cvals_len);
+extern int pdpool_(void *cspice_state, char *name__, integer *n, doublereal *values, ftnlen name_len);
+extern int pipool_(void *cspice_state, char *name__, integer *n, integer *ivals, ftnlen name_len);
+extern int lmpool_(void *cspice_state, char *cvals, integer *n, ftnlen cvals_len);
+extern int szpool_(void *cspice_state, char *name__, integer *n, logical *found, ftnlen name_len);
+extern int dvpool_(void *cspice_state, char *name__, ftnlen name_len);
+extern int gnpool_(void *cspice_state, char *name__, integer *start, integer *room, integer *n, char *cvals, logical *found, ftnlen name_len, ftnlen cvals_len);
+extern int dwpool_(void *cspice_state, char *agent, ftnlen agent_len);
+extern int zzvupool_(void *cspice_state, char *uwvars, integer *uwptrs, integer *uwpool, char *uwagnt, ftnlen uwvars_len, ftnlen uwagnt_len);
+extern int zzpctrck_(void *cspice_state, integer *usrctr, logical *update);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5754,19 +5754,19 @@ extern int zzpctrck_(integer *usrctr, logical *update);
 /*:ref: movec_ 14 5 13 4 13 124 124 */
 /*:ref: zzctrchk_ 14 3 4 4 12 */
  
-extern integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen substr_len);
+extern integer pos_(void *cspice_state, char *str, char *substr, integer *start, ftnlen str_len, ftnlen substr_len);
  
-extern integer posr_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen substr_len);
+extern integer posr_(void *cspice_state, char *str, char *substr, integer *start, ftnlen str_len, ftnlen substr_len);
  
-extern int prefix_(char *pref, integer *spaces, char *string, ftnlen pref_len, ftnlen string_len);
+extern int prefix_(void *cspice_state, char *pref, integer *spaces, char *string, ftnlen pref_len, ftnlen string_len);
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: shiftr_ 14 7 13 4 13 13 124 124 124 */
  
-extern doublereal prodad_(doublereal *array, integer *n);
+extern doublereal prodad_(void *cspice_state, doublereal *array, integer *n);
  
-extern integer prodai_(integer *array, integer *n);
+extern integer prodai_(void *cspice_state, integer *array, integer *n);
  
-extern int prompt_(char *prmpt, char *string, ftnlen prmpt_len, ftnlen string_len);
+extern int prompt_(void *cspice_state, char *prmpt, char *string, ftnlen prmpt_len, ftnlen string_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -5774,7 +5774,7 @@ extern int prompt_(char *prmpt, char *string, ftnlen prmpt_len, ftnlen string_le
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int prop2b_(doublereal *gm, doublereal *pvinit, doublereal *dt, doublereal *pvprop);
+extern int prop2b_(void *cspice_state, doublereal *gm, doublereal *pvinit, doublereal *dt, doublereal *pvprop);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -5792,35 +5792,35 @@ extern int prop2b_(doublereal *gm, doublereal *pvinit, doublereal *dt, doublerea
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: vequg_ 14 3 7 4 7 */
  
-extern int prsdp_(char *string, doublereal *dpval, ftnlen string_len);
+extern int prsdp_(void *cspice_state, char *string, doublereal *dpval, ftnlen string_len);
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int prsint_(char *string, integer *intval, ftnlen string_len);
+extern int prsint_(void *cspice_state, char *string, integer *intval, ftnlen string_len);
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int prtenc_(integer *number, char *string, ftnlen string_len);
-extern int prtdec_(char *string, integer *number, ftnlen string_len);
+extern int prtenc_(void *cspice_state, integer *number, char *string, ftnlen string_len);
+extern int prtdec_(void *cspice_state, char *string, integer *number, ftnlen string_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical prtpkg_(logical *short__, logical *long__, logical *expl, logical *trace, logical *dfault, char *type__, ftnlen type_len);
-extern logical setprt_(logical *short__, logical *expl, logical *long__, logical *trace, logical *dfault);
-extern logical msgsel_(char *type__, ftnlen type_len);
+extern logical prtpkg_(void *cspice_state, logical *short__, logical *long__, logical *expl, logical *trace, logical *dfault, char *type__, ftnlen type_len);
+extern logical setprt_(void *cspice_state, logical *short__, logical *expl, logical *long__, logical *trace, logical *dfault);
+extern logical msgsel_(void *cspice_state, char *type__, ftnlen type_len);
 /*:ref: getdev_ 14 2 13 124 */
 /*:ref: wrline_ 14 4 13 13 124 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
  
-extern int psv2pl_(doublereal *point, doublereal *span1, doublereal *span2, doublereal *plane);
+extern int psv2pl_(void *cspice_state, doublereal *point, doublereal *span1, doublereal *span2, doublereal *plane);
 /*:ref: return_ 12 0 */
 /*:ref: ucrss_ 14 3 7 7 7 */
 /*:ref: vzero_ 12 1 7 */
@@ -5832,19 +5832,19 @@ extern int psv2pl_(doublereal *point, doublereal *span1, doublereal *span2, doub
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int putact_(integer *action);
-extern int getact_(integer *action);
+extern int putact_(void *cspice_state, integer *action);
+extern int getact_(void *cspice_state, integer *action);
  
-extern int putdev_(char *device, ftnlen device_len);
-extern int getdev_(char *device, ftnlen device_len);
+extern int putdev_(void *cspice_state, char *device, ftnlen device_len);
+extern int getdev_(void *cspice_state, char *device, ftnlen device_len);
  
-extern int putlms_(char *msg, ftnlen msg_len);
-extern int getlms_(char *msg, ftnlen msg_len);
+extern int putlms_(void *cspice_state, char *msg, ftnlen msg_len);
+extern int getlms_(void *cspice_state, char *msg, ftnlen msg_len);
  
-extern int putsms_(char *msg, ftnlen msg_len);
-extern int getsms_(char *msg, ftnlen msg_len);
+extern int putsms_(void *cspice_state, char *msg, ftnlen msg_len);
+extern int getsms_(void *cspice_state, char *msg, ftnlen msg_len);
  
-extern int pxform_(char *from, char *to, doublereal *et, doublereal *rotate, ftnlen from_len, ftnlen to_len);
+extern int pxform_(void *cspice_state, char *from, char *to, doublereal *et, doublereal *rotate, ftnlen from_len, ftnlen to_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -5855,7 +5855,7 @@ extern int pxform_(char *from, char *to, doublereal *et, doublereal *rotate, ftn
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pxfrm2_(char *from, char *to, doublereal *etfrom, doublereal *etto, doublereal *rotate, ftnlen from_len, ftnlen to_len);
+extern int pxfrm2_(void *cspice_state, char *from, char *to, doublereal *etfrom, doublereal *etto, doublereal *rotate, ftnlen from_len, ftnlen to_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -5867,39 +5867,39 @@ extern int pxfrm2_(char *from, char *to, doublereal *etfrom, doublereal *etto, d
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int q2m_(doublereal *q, doublereal *r__);
+extern int q2m_(void *cspice_state, doublereal *q, doublereal *r__);
  
-extern int qderiv_(integer *n, doublereal *f0, doublereal *f2, doublereal *delta, doublereal *dfdt);
+extern int qderiv_(void *cspice_state, integer *n, doublereal *f0, doublereal *f2, doublereal *delta, doublereal *dfdt);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: vlcomg_ 14 6 4 7 7 7 7 7 */
  
-extern int qdq2av_(doublereal *q, doublereal *dq, doublereal *av);
+extern int qdq2av_(void *cspice_state, doublereal *q, doublereal *dq, doublereal *av);
 /*:ref: vhatg_ 14 3 7 4 7 */
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: qxq_ 14 3 7 7 7 */
 /*:ref: vscl_ 14 3 7 7 7 */
  
-extern int quote_(char *in, char *left, char *right, char *out, ftnlen in_len, ftnlen left_len, ftnlen right_len, ftnlen out_len);
+extern int quote_(void *cspice_state, char *in, char *left, char *right, char *out, ftnlen in_len, ftnlen left_len, ftnlen right_len, ftnlen out_len);
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: prefix_ 14 5 13 4 13 124 124 */
  
-extern int qxq_(doublereal *q1, doublereal *q2, doublereal *qout);
+extern int qxq_(void *cspice_state, doublereal *q1, doublereal *q2, doublereal *qout);
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vcrss_ 14 3 7 7 7 */
 /*:ref: vlcom3_ 14 7 7 7 7 7 7 7 7 */
  
-extern int radrec_(doublereal *range, doublereal *ra, doublereal *dec, doublereal *rectan);
+extern int radrec_(void *cspice_state, doublereal *range, doublereal *ra, doublereal *dec, doublereal *rectan);
 /*:ref: latrec_ 14 4 7 7 7 7 */
  
-extern int rav2xf_(doublereal *rot, doublereal *av, doublereal *xform);
+extern int rav2xf_(void *cspice_state, doublereal *rot, doublereal *av, doublereal *xform);
 /*:ref: mxm_ 14 3 7 7 7 */
  
-extern int raxisa_(doublereal *matrix, doublereal *axis, doublereal *angle);
+extern int raxisa_(void *cspice_state, doublereal *matrix, doublereal *axis, doublereal *angle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: m2q_ 14 2 7 7 */
@@ -5910,7 +5910,7 @@ extern int raxisa_(doublereal *matrix, doublereal *axis, doublereal *angle);
 /*:ref: vhat_ 14 2 7 7 */
 /*:ref: vnorm_ 7 1 7 */
  
-extern int rdencc_(integer *unit, integer *n, char *data, ftnlen data_len);
+extern int rdencc_(void *cspice_state, integer *unit, integer *n, char *data, ftnlen data_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5920,7 +5920,7 @@ extern int rdencc_(integer *unit, integer *n, char *data, ftnlen data_len);
 /*:ref: hx2int_ 14 6 13 4 12 13 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int rdencd_(integer *unit, integer *n, doublereal *data);
+extern int rdencd_(void *cspice_state, integer *unit, integer *n, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5930,7 +5930,7 @@ extern int rdencd_(integer *unit, integer *n, doublereal *data);
 /*:ref: hx2dp_ 14 6 13 7 12 13 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int rdenci_(integer *unit, integer *n, integer *data);
+extern int rdenci_(void *cspice_state, integer *unit, integer *n, integer *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5940,10 +5940,10 @@ extern int rdenci_(integer *unit, integer *n, integer *data);
 /*:ref: hx2int_ 14 6 13 4 12 13 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int rdker_(char *kernel, char *line, integer *number, logical *eof, ftnlen kernel_len, ftnlen line_len);
-extern int rdknew_(char *kernel, ftnlen kernel_len);
-extern int rdkdat_(char *line, logical *eof, ftnlen line_len);
-extern int rdklin_(char *kernel, integer *number, ftnlen kernel_len);
+extern int rdker_(void *cspice_state, char *kernel, char *line, integer *number, logical *eof, ftnlen kernel_len, ftnlen line_len);
+extern int rdknew_(void *cspice_state, char *kernel, ftnlen kernel_len);
+extern int rdkdat_(void *cspice_state, char *line, logical *eof, ftnlen line_len);
+extern int rdklin_(void *cspice_state, char *kernel, integer *number, ftnlen kernel_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5956,7 +5956,7 @@ extern int rdklin_(char *kernel, integer *number, ftnlen kernel_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: failed_ 12 0 */
  
-extern int rdkvar_(char *tabsym, integer *tabptr, doublereal *tabval, char *name__, logical *eof, ftnlen tabsym_len, ftnlen name_len);
+extern int rdkvar_(void *cspice_state, char *tabsym, integer *tabptr, doublereal *tabval, char *name__, logical *eof, ftnlen tabsym_len, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: failed_ 12 0 */
@@ -5971,15 +5971,15 @@ extern int rdkvar_(char *tabsym, integer *tabptr, doublereal *tabval, char *name
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
 /*:ref: syenqd_ 14 7 13 7 13 4 7 124 124 */
  
-extern int rdnbl_(char *file, char *line, logical *eof, ftnlen file_len, ftnlen line_len);
+extern int rdnbl_(void *cspice_state, char *file, char *line, logical *eof, ftnlen file_len, ftnlen line_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: rdtext_ 14 5 13 13 12 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int rdtext_(char *file, char *line, logical *eof, ftnlen file_len, ftnlen line_len);
-extern int cltext_(char *file, ftnlen file_len);
+extern int rdtext_(void *cspice_state, char *file, char *line, logical *eof, ftnlen file_len, ftnlen line_len);
+extern int cltext_(void *cspice_state, char *file, ftnlen file_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5990,7 +5990,7 @@ extern int cltext_(char *file, ftnlen file_len);
 /*:ref: isrchi_ 4 3 4 4 4 */
 /*:ref: getlun_ 14 1 4 */
  
-extern int readla_(integer *unit, integer *maxlin, integer *numlin, char *array, logical *eof, ftnlen array_len);
+extern int readla_(void *cspice_state, integer *unit, integer *maxlin, integer *numlin, char *array, logical *eof, ftnlen array_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6000,7 +6000,7 @@ extern int readla_(integer *unit, integer *maxlin, integer *numlin, char *array,
 /*:ref: readln_ 14 4 4 13 12 124 */
 /*:ref: failed_ 12 0 */
  
-extern int readln_(integer *unit, char *line, logical *eof, ftnlen line_len);
+extern int readln_(void *cspice_state, integer *unit, char *line, logical *eof, ftnlen line_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errfnm_ 14 3 13 4 124 */
@@ -6008,10 +6008,10 @@ extern int readln_(integer *unit, char *line, logical *eof, ftnlen line_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int reccyl_(doublereal *rectan, doublereal *r__, doublereal *long__, doublereal *z__);
+extern int reccyl_(void *cspice_state, doublereal *rectan, doublereal *r__, doublereal *long__, doublereal *z__);
 /*:ref: twopi_ 7 0 */
  
-extern int recgeo_(doublereal *rectan, doublereal *re, doublereal *f, doublereal *long__, doublereal *lat, doublereal *alt);
+extern int recgeo_(void *cspice_state, doublereal *rectan, doublereal *re, doublereal *f, doublereal *long__, doublereal *lat, doublereal *alt);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6022,9 +6022,9 @@ extern int recgeo_(doublereal *rectan, doublereal *re, doublereal *f, doublereal
 /*:ref: surfnm_ 14 5 7 7 7 7 7 */
 /*:ref: reclat_ 14 4 7 7 7 7 */
  
-extern int reclat_(doublereal *rectan, doublereal *radius, doublereal *long__, doublereal *lat);
+extern int reclat_(void *cspice_state, doublereal *rectan, doublereal *radius, doublereal *long__, doublereal *lat);
  
-extern int recpgr_(char *body, doublereal *rectan, doublereal *re, doublereal *f, doublereal *lon, doublereal *lat, doublereal *alt, ftnlen body_len);
+extern int recpgr_(void *cspice_state, char *body, doublereal *rectan, doublereal *re, doublereal *f, doublereal *lon, doublereal *lat, doublereal *alt, ftnlen body_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -6042,13 +6042,13 @@ extern int recpgr_(char *body, doublereal *rectan, doublereal *re, doublereal *f
 /*:ref: twopi_ 7 0 */
 /*:ref: brcktd_ 7 3 7 7 7 */
  
-extern int recrad_(doublereal *rectan, doublereal *range, doublereal *ra, doublereal *dec);
+extern int recrad_(void *cspice_state, doublereal *rectan, doublereal *range, doublereal *ra, doublereal *dec);
 /*:ref: reclat_ 14 4 7 7 7 7 */
 /*:ref: twopi_ 7 0 */
  
-extern int recsph_(doublereal *rectan, doublereal *r__, doublereal *colat, doublereal *long__);
+extern int recsph_(void *cspice_state, doublereal *rectan, doublereal *r__, doublereal *colat, doublereal *long__);
  
-extern int refchg_(integer *frame1, integer *frame2, doublereal *et, doublereal *rotate);
+extern int refchg_(void *cspice_state, integer *frame1, integer *frame2, doublereal *et, doublereal *rotate);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ident_ 14 1 7 */
@@ -6064,7 +6064,7 @@ extern int refchg_(integer *frame1, integer *frame2, doublereal *et, doublereal 
 /*:ref: failed_ 12 0 */
 /*:ref: xpose_ 14 2 7 7 */
  
-extern int remlac_(integer *ne, integer *loc, char *array, integer *na, ftnlen array_len);
+extern int remlac_(void *cspice_state, integer *ne, integer *loc, char *array, integer *na, ftnlen array_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6072,7 +6072,7 @@ extern int remlac_(integer *ne, integer *loc, char *array, integer *na, ftnlen a
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int remlad_(integer *ne, integer *loc, doublereal *array, integer *na);
+extern int remlad_(void *cspice_state, integer *ne, integer *loc, doublereal *array, integer *na);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6080,7 +6080,7 @@ extern int remlad_(integer *ne, integer *loc, doublereal *array, integer *na);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int remlai_(integer *ne, integer *loc, integer *array, integer *na);
+extern int remlai_(void *cspice_state, integer *ne, integer *loc, integer *array, integer *na);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6088,7 +6088,7 @@ extern int remlai_(integer *ne, integer *loc, integer *array, integer *na);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int removc_(char *item, char *a, ftnlen item_len, ftnlen a_len);
+extern int removc_(void *cspice_state, char *item, char *a, ftnlen item_len, ftnlen a_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -6096,7 +6096,7 @@ extern int removc_(char *item, char *a, ftnlen item_len, ftnlen a_len);
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int removd_(doublereal *item, doublereal *a);
+extern int removd_(void *cspice_state, doublereal *item, doublereal *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -6104,7 +6104,7 @@ extern int removd_(doublereal *item, doublereal *a);
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int removi_(integer *item, integer *a);
+extern int removi_(void *cspice_state, integer *item, integer *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -6112,7 +6112,7 @@ extern int removi_(integer *item, integer *a);
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int remsub_(char *in, integer *left, integer *right, char *out, ftnlen in_len, ftnlen out_len);
+extern int remsub_(void *cspice_state, char *in, integer *left, integer *right, char *out, ftnlen in_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6121,28 +6121,28 @@ extern int remsub_(char *in, integer *left, integer *right, char *out, ftnlen in
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern int reordc_(integer *iorder, integer *ndim, char *array, ftnlen array_len);
+extern int reordc_(void *cspice_state, integer *iorder, integer *ndim, char *array, ftnlen array_len);
  
-extern int reordd_(integer *iorder, integer *ndim, doublereal *array);
+extern int reordd_(void *cspice_state, integer *iorder, integer *ndim, doublereal *array);
  
-extern int reordi_(integer *iorder, integer *ndim, integer *array);
+extern int reordi_(void *cspice_state, integer *iorder, integer *ndim, integer *array);
  
-extern int reordl_(integer *iorder, integer *ndim, logical *array);
+extern int reordl_(void *cspice_state, integer *iorder, integer *ndim, logical *array);
  
-extern int replch_(char *instr, char *old, char *new__, char *outstr, ftnlen instr_len, ftnlen old_len, ftnlen new_len, ftnlen outstr_len);
+extern int replch_(void *cspice_state, char *instr, char *old, char *new__, char *outstr, ftnlen instr_len, ftnlen old_len, ftnlen new_len, ftnlen outstr_len);
  
-extern int replwd_(char *instr, integer *nth, char *new__, char *outstr, ftnlen instr_len, ftnlen new_len, ftnlen outstr_len);
+extern int replwd_(void *cspice_state, char *instr, integer *nth, char *new__, char *outstr, ftnlen instr_len, ftnlen new_len, ftnlen outstr_len);
 /*:ref: nthwd_ 14 6 13 4 13 4 124 124 */
 /*:ref: fndnwd_ 14 5 13 4 4 4 124 */
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern int repmc_(char *in, char *marker, char *value, char *out, ftnlen in_len, ftnlen marker_len, ftnlen value_len, ftnlen out_len);
+extern int repmc_(void *cspice_state, char *in, char *marker, char *value, char *out, ftnlen in_len, ftnlen marker_len, ftnlen value_len, ftnlen out_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: zzrepsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int repmct_(char *in, char *marker, integer *value, char *case__, char *out, ftnlen in_len, ftnlen marker_len, ftnlen case_len, ftnlen out_len);
+extern int repmct_(void *cspice_state, char *in, char *marker, integer *value, char *case__, char *out, ftnlen in_len, ftnlen marker_len, ftnlen case_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -6157,13 +6157,13 @@ extern int repmct_(char *in, char *marker, integer *value, char *case__, char *o
 /*:ref: lcase_ 14 4 13 13 124 124 */
 /*:ref: repsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int repmd_(char *in, char *marker, doublereal *value, integer *sigdig, char *out, ftnlen in_len, ftnlen marker_len, ftnlen out_len);
+extern int repmd_(void *cspice_state, char *in, char *marker, doublereal *value, integer *sigdig, char *out, ftnlen in_len, ftnlen marker_len, ftnlen out_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: dpstr_ 14 4 7 4 13 124 */
 /*:ref: zzrepsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int repmf_(char *in, char *marker, doublereal *value, integer *sigdig, char *format, char *out, ftnlen in_len, ftnlen marker_len, ftnlen format_len, ftnlen out_len);
+extern int repmf_(void *cspice_state, char *in, char *marker, doublereal *value, integer *sigdig, char *format, char *out, ftnlen in_len, ftnlen marker_len, ftnlen format_len, ftnlen out_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -6171,13 +6171,13 @@ extern int repmf_(char *in, char *marker, doublereal *value, integer *sigdig, ch
 /*:ref: dpstrf_ 14 6 7 4 13 13 124 124 */
 /*:ref: zzrepsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int repmi_(char *in, char *marker, integer *value, char *out, ftnlen in_len, ftnlen marker_len, ftnlen out_len);
+extern int repmi_(void *cspice_state, char *in, char *marker, integer *value, char *out, ftnlen in_len, ftnlen marker_len, ftnlen out_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
 /*:ref: zzrepsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int repmot_(char *in, char *marker, integer *value, char *case__, char *out, ftnlen in_len, ftnlen marker_len, ftnlen case_len, ftnlen out_len);
+extern int repmot_(void *cspice_state, char *in, char *marker, integer *value, char *case__, char *out, ftnlen in_len, ftnlen marker_len, ftnlen case_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -6192,7 +6192,7 @@ extern int repmot_(char *in, char *marker, integer *value, char *case__, char *o
 /*:ref: lcase_ 14 4 13 13 124 124 */
 /*:ref: repsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int repsub_(char *in, integer *left, integer *right, char *string, char *out, ftnlen in_len, ftnlen string_len, ftnlen out_len);
+extern int repsub_(void *cspice_state, char *in, integer *left, integer *right, char *string, char *out, ftnlen in_len, ftnlen string_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6201,44 +6201,44 @@ extern int repsub_(char *in, integer *left, integer *right, char *string, char *
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: sumai_ 4 2 4 4 */
  
-extern int reset_(void);
+extern int reset_(void *cspice_state);
 /*:ref: seterr_ 12 1 12 */
 /*:ref: putsms_ 14 2 13 124 */
 /*:ref: putlms_ 14 2 13 124 */
 /*:ref: accept_ 12 1 12 */
  
-extern logical return_(void);
+extern logical return_(void *cspice_state);
 /*:ref: failed_ 12 0 */
 /*:ref: getact_ 14 1 4 */
  
-extern int rjust_(char *input, char *output, ftnlen input_len, ftnlen output_len);
+extern int rjust_(void *cspice_state, char *input, char *output, ftnlen input_len, ftnlen output_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern int rmaind_(doublereal *num, doublereal *denom, doublereal *q, doublereal *rem);
+extern int rmaind_(void *cspice_state, doublereal *num, doublereal *denom, doublereal *q, doublereal *rem);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int rmaini_(integer *num, integer *denom, integer *q, integer *rem);
+extern int rmaini_(void *cspice_state, integer *num, integer *denom, integer *q, integer *rem);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int rmdupc_(integer *nelt, char *array, ftnlen array_len);
+extern int rmdupc_(void *cspice_state, integer *nelt, char *array, ftnlen array_len);
 /*:ref: shellc_ 14 3 4 13 124 */
  
-extern int rmdupd_(integer *nelt, doublereal *array);
+extern int rmdupd_(void *cspice_state, integer *nelt, doublereal *array);
 /*:ref: shelld_ 14 2 4 7 */
  
-extern int rmdupi_(integer *nelt, integer *array);
+extern int rmdupi_(void *cspice_state, integer *nelt, integer *array);
 /*:ref: shelli_ 14 2 4 4 */
  
-extern int rotate_(doublereal *angle, integer *iaxis, doublereal *mout);
+extern int rotate_(void *cspice_state, doublereal *angle, integer *iaxis, doublereal *mout);
  
-extern int rotget_(integer *infrm, doublereal *et, doublereal *rotate, integer *outfrm, logical *found);
+extern int rotget_(void *cspice_state, integer *infrm, doublereal *et, doublereal *rotate, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
@@ -6256,14 +6256,14 @@ extern int rotget_(integer *infrm, doublereal *et, doublereal *rotate, integer *
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int rotmat_(doublereal *m1, doublereal *angle, integer *iaxis, doublereal *mout);
+extern int rotmat_(void *cspice_state, doublereal *m1, doublereal *angle, integer *iaxis, doublereal *mout);
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int rotvec_(doublereal *v1, doublereal *angle, integer *iaxis, doublereal *vout);
+extern int rotvec_(void *cspice_state, doublereal *v1, doublereal *angle, integer *iaxis, doublereal *vout);
  
-extern doublereal rpd_(void);
+extern doublereal rpd_(void *cspice_state);
  
-extern int rquad_(doublereal *a, doublereal *b, doublereal *c__, doublereal *root1, doublereal *root2);
+extern int rquad_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__, doublereal *root1, doublereal *root2);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6271,10 +6271,10 @@ extern int rquad_(doublereal *a, doublereal *b, doublereal *c__, doublereal *roo
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern integer rtrim_(char *string, ftnlen string_len);
+extern integer rtrim_(void *cspice_state, char *string, ftnlen string_len);
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern int saelgv_(doublereal *vec1, doublereal *vec2, doublereal *smajor, doublereal *sminor);
+extern int saelgv_(void *cspice_state, doublereal *vec1, doublereal *vec2, doublereal *smajor, doublereal *sminor);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: moved_ 14 3 7 4 7 */
@@ -6286,24 +6286,24 @@ extern int saelgv_(doublereal *vec1, doublereal *vec2, doublereal *smajor, doubl
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vsclip_ 14 2 7 7 */
  
-extern logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen str1_len, ftnlen str2_len);
+extern logical samch_(void *cspice_state, char *str1, integer *l1, char *str2, integer *l2, ftnlen str1_len, ftnlen str2_len);
  
-extern logical samchi_(char *str1, integer *l1, char *str2, integer *l2, ftnlen str1_len, ftnlen str2_len);
+extern logical samchi_(void *cspice_state, char *str1, integer *l1, char *str2, integer *l2, ftnlen str1_len, ftnlen str2_len);
 /*:ref: eqchr_ 12 4 13 13 124 124 */
  
-extern logical sameai_(integer *a1, integer *a2, integer *ndim);
+extern logical sameai_(void *cspice_state, integer *a1, integer *a2, integer *ndim);
  
-extern logical samsbi_(char *str1, integer *b1, integer *e1, char *str2, integer *b2, integer *e2, ftnlen str1_len, ftnlen str2_len);
+extern logical samsbi_(void *cspice_state, char *str1, integer *b1, integer *e1, char *str2, integer *b2, integer *e2, ftnlen str1_len, ftnlen str2_len);
 /*:ref: nechr_ 12 4 13 13 124 124 */
  
-extern logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2, integer *e2, ftnlen str1_len, ftnlen str2_len);
+extern logical samsub_(void *cspice_state, char *str1, integer *b1, integer *e1, char *str2, integer *b2, integer *e2, ftnlen str1_len, ftnlen str2_len);
  
-extern int sc01_(integer *sc, char *clkstr, doublereal *ticks, doublereal *sclkdp, doublereal *et, ftnlen clkstr_len);
-extern int sctk01_(integer *sc, char *clkstr, doublereal *ticks, ftnlen clkstr_len);
-extern int scfm01_(integer *sc, doublereal *ticks, char *clkstr, ftnlen clkstr_len);
-extern int scte01_(integer *sc, doublereal *sclkdp, doublereal *et);
-extern int scet01_(integer *sc, doublereal *et, doublereal *sclkdp);
-extern int scec01_(integer *sc, doublereal *et, doublereal *sclkdp);
+extern int sc01_(void *cspice_state, integer *sc, char *clkstr, doublereal *ticks, doublereal *sclkdp, doublereal *et, ftnlen clkstr_len);
+extern int sctk01_(void *cspice_state, integer *sc, char *clkstr, doublereal *ticks, ftnlen clkstr_len);
+extern int scfm01_(void *cspice_state, integer *sc, doublereal *ticks, char *clkstr, ftnlen clkstr_len);
+extern int scte01_(void *cspice_state, integer *sc, doublereal *sclkdp, doublereal *et);
+extern int scet01_(void *cspice_state, integer *sc, doublereal *et, doublereal *sclkdp);
+extern int scec01_(void *cspice_state, integer *sc, doublereal *et, doublereal *sclkdp);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -6328,9 +6328,9 @@ extern int scec01_(integer *sc, doublereal *et, doublereal *sclkdp);
 /*:ref: prefix_ 14 5 13 4 13 124 124 */
 /*:ref: unitim_ 7 5 7 13 13 124 124 */
  
-extern int scanit_(char *string, integer *start, integer *room, integer *nmarks, char *marks, integer *mrklen, integer *pnters, integer *ntokns, integer *ident, integer *beg, integer *end, ftnlen string_len, ftnlen marks_len);
-extern int scanpr_(integer *nmarks, char *marks, integer *mrklen, integer *pnters, ftnlen marks_len);
-extern int scan_(char *string, char *marks, integer *mrklen, integer *pnters, integer *room, integer *start, integer *ntokns, integer *ident, integer *beg, integer *end, ftnlen string_len, ftnlen marks_len);
+extern int scanit_(void *cspice_state, char *string, integer *start, integer *room, integer *nmarks, char *marks, integer *mrklen, integer *pnters, integer *ntokns, integer *ident, integer *beg, integer *end, ftnlen string_len, ftnlen marks_len);
+extern int scanpr_(void *cspice_state, integer *nmarks, char *marks, integer *mrklen, integer *pnters, ftnlen marks_len);
+extern int scan_(void *cspice_state, char *string, char *marks, integer *mrklen, integer *pnters, integer *room, integer *start, integer *ntokns, integer *ident, integer *beg, integer *end, ftnlen string_len, ftnlen marks_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6341,10 +6341,10 @@ extern int scan_(char *string, char *marks, integer *mrklen, integer *pnters, in
 /*:ref: rtrim_ 4 2 13 124 */
 /*:ref: ncpos_ 4 5 13 13 4 124 124 */
  
-extern int scanrj_(integer *ids, integer *n, integer *ntokns, integer *ident, integer *beg, integer *end);
+extern int scanrj_(void *cspice_state, integer *ids, integer *n, integer *ntokns, integer *ident, integer *beg, integer *end);
 /*:ref: isrchi_ 4 3 4 4 4 */
  
-extern int scardc_(integer *card, char *cell, ftnlen cell_len);
+extern int scardc_(void *cspice_state, integer *card, char *cell, ftnlen cell_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dechar_ 14 3 13 4 124 */
@@ -6354,7 +6354,7 @@ extern int scardc_(integer *card, char *cell, ftnlen cell_len);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: enchar_ 14 3 4 13 124 */
  
-extern int scardd_(integer *card, doublereal *cell);
+extern int scardd_(void *cspice_state, integer *card, doublereal *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6362,7 +6362,7 @@ extern int scardd_(integer *card, doublereal *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int scardi_(integer *card, integer *cell);
+extern int scardi_(void *cspice_state, integer *card, integer *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6370,7 +6370,7 @@ extern int scardi_(integer *card, integer *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int scdecd_(integer *sc, doublereal *sclkdp, char *sclkch, ftnlen sclkch_len);
+extern int scdecd_(void *cspice_state, integer *sc, doublereal *sclkdp, char *sclkch, ftnlen sclkch_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: scpart_ 14 4 4 4 7 7 */
@@ -6387,7 +6387,7 @@ extern int scdecd_(integer *sc, doublereal *sclkdp, char *sclkch, ftnlen sclkch_
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: prefix_ 14 5 13 4 13 124 124 */
  
-extern int sce2c_(integer *sc, doublereal *et, doublereal *sclkdp);
+extern int sce2c_(void *cspice_state, integer *sc, doublereal *et, doublereal *sclkdp);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sctype_ 4 1 4 */
@@ -6397,14 +6397,14 @@ extern int sce2c_(integer *sc, doublereal *et, doublereal *sclkdp);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sce2s_(integer *sc, doublereal *et, char *sclkch, ftnlen sclkch_len);
+extern int sce2s_(void *cspice_state, integer *sc, doublereal *et, char *sclkch, ftnlen sclkch_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sce2t_ 14 3 4 7 7 */
 /*:ref: scdecd_ 14 4 4 7 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sce2t_(integer *sc, doublereal *et, doublereal *sclkdp);
+extern int sce2t_(void *cspice_state, integer *sc, doublereal *et, doublereal *sclkdp);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sctype_ 4 1 4 */
@@ -6414,7 +6414,7 @@ extern int sce2t_(integer *sc, doublereal *et, doublereal *sclkdp);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int scencd_(integer *sc, char *sclkch, doublereal *sclkdp, ftnlen sclkch_len);
+extern int scencd_(void *cspice_state, integer *sc, char *sclkch, doublereal *sclkdp, ftnlen sclkch_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cpos_ 4 5 13 13 4 124 124 */
@@ -6428,7 +6428,7 @@ extern int scencd_(integer *sc, char *sclkch, doublereal *sclkdp, ftnlen sclkch_
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
  
-extern int scfmt_(integer *sc, doublereal *ticks, char *clkstr, ftnlen clkstr_len);
+extern int scfmt_(void *cspice_state, integer *sc, doublereal *ticks, char *clkstr, ftnlen clkstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sctype_ 4 1 4 */
@@ -6438,9 +6438,9 @@ extern int scfmt_(integer *sc, doublereal *ticks, char *clkstr, ftnlen clkstr_le
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sclu01_(char *name__, integer *sc, integer *maxnv, integer *n, integer *ival, doublereal *dval, ftnlen name_len);
-extern int scli01_(char *name__, integer *sc, integer *maxnv, integer *n, integer *ival, ftnlen name_len);
-extern int scld01_(char *name__, integer *sc, integer *maxnv, integer *n, doublereal *dval, ftnlen name_len);
+extern int sclu01_(void *cspice_state, char *name__, integer *sc, integer *maxnv, integer *n, integer *ival, doublereal *dval, ftnlen name_len);
+extern int scli01_(void *cspice_state, char *name__, integer *sc, integer *maxnv, integer *n, integer *ival, ftnlen name_len);
+extern int scld01_(void *cspice_state, char *name__, integer *sc, integer *maxnv, integer *n, doublereal *dval, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -6457,7 +6457,7 @@ extern int scld01_(char *name__, integer *sc, integer *maxnv, integer *n, double
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
 /*:ref: repmd_ 14 8 13 13 7 4 13 124 124 124 */
  
-extern int scpars_(integer *sc, char *sclkch, logical *error, char *msg, doublereal *sclkdp, ftnlen sclkch_len, ftnlen msg_len);
+extern int scpars_(void *cspice_state, integer *sc, char *sclkch, logical *error, char *msg, doublereal *sclkdp, ftnlen sclkch_len, ftnlen msg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -6473,7 +6473,7 @@ extern int scpars_(integer *sc, char *sclkch, logical *error, char *msg, doubler
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
  
-extern int scpart_(integer *sc, integer *nparts, doublereal *pstart, doublereal *pstop);
+extern int scpart_(void *cspice_state, integer *sc, integer *nparts, doublereal *pstart, doublereal *pstop);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
@@ -6488,7 +6488,7 @@ extern int scpart_(integer *sc, integer *nparts, doublereal *pstart, doublereal 
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int scps01_(integer *sc, char *clkstr, logical *error, char *msg, doublereal *ticks, ftnlen clkstr_len, ftnlen msg_len);
+extern int scps01_(void *cspice_state, integer *sc, char *clkstr, logical *error, char *msg, doublereal *ticks, ftnlen clkstr_len, ftnlen msg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: scli01_ 14 6 13 4 4 4 4 124 */
@@ -6500,14 +6500,14 @@ extern int scps01_(integer *sc, char *clkstr, logical *error, char *msg, doubler
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
  
-extern int scs2e_(integer *sc, char *sclkch, doublereal *et, ftnlen sclkch_len);
+extern int scs2e_(void *cspice_state, integer *sc, char *sclkch, doublereal *et, ftnlen sclkch_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: scencd_ 14 4 4 13 7 124 */
 /*:ref: sct2e_ 14 3 4 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sct2e_(integer *sc, doublereal *sclkdp, doublereal *et);
+extern int sct2e_(void *cspice_state, integer *sc, doublereal *sclkdp, doublereal *et);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sctype_ 4 1 4 */
@@ -6517,7 +6517,7 @@ extern int sct2e_(integer *sc, doublereal *sclkdp, doublereal *et);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sctiks_(integer *sc, char *clkstr, doublereal *ticks, ftnlen clkstr_len);
+extern int sctiks_(void *cspice_state, integer *sc, char *clkstr, doublereal *ticks, ftnlen clkstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sctype_ 4 1 4 */
@@ -6527,9 +6527,9 @@ extern int sctiks_(integer *sc, char *clkstr, doublereal *ticks, ftnlen clkstr_l
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sctran_(char *clknam, integer *clkid, logical *found, ftnlen clknam_len);
-extern int scn2id_(char *clknam, integer *clkid, logical *found, ftnlen clknam_len);
-extern int scid2n_(integer *clkid, char *clknam, logical *found, ftnlen clknam_len);
+extern int sctran_(void *cspice_state, char *clknam, integer *clkid, logical *found, ftnlen clknam_len);
+extern int scn2id_(void *cspice_state, char *clknam, integer *clkid, logical *found, ftnlen clknam_len);
+extern int scid2n_(void *cspice_state, integer *clkid, char *clknam, logical *found, ftnlen clknam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -6541,7 +6541,7 @@ extern int scid2n_(integer *clkid, char *clknam, logical *found, ftnlen clknam_l
 /*:ref: bodc2n_ 14 4 4 13 12 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern integer sctype_(integer *sc);
+extern integer sctype_(void *cspice_state, integer *sc);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
@@ -6553,7 +6553,7 @@ extern integer sctype_(integer *sc);
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sdiffc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
+extern int sdiffc_(void *cspice_state, char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6565,7 +6565,7 @@ extern int sdiffc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnl
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: excess_ 14 3 4 13 124 */
  
-extern int sdiffd_(doublereal *a, doublereal *b, doublereal *c__);
+extern int sdiffd_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -6575,7 +6575,7 @@ extern int sdiffd_(doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sdiffi_(integer *a, integer *b, integer *c__);
+extern int sdiffi_(void *cspice_state, integer *a, integer *b, integer *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -6585,14 +6585,14 @@ extern int sdiffi_(integer *a, integer *b, integer *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sepool_(char *item, integer *fidx, char *contin, char *string, integer *size, integer *lidx, logical *found, ftnlen item_len, ftnlen contin_len, ftnlen string_len);
+extern int sepool_(void *cspice_state, char *item, integer *fidx, char *contin, char *string, integer *size, integer *lidx, logical *found, ftnlen item_len, ftnlen contin_len, ftnlen string_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: gcpool_ 14 8 13 4 4 4 13 12 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: rtrim_ 4 2 13 124 */
  
-extern logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen b_len);
+extern logical setc_(void *cspice_state, char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen b_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -6601,7 +6601,7 @@ extern logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ft
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern logical setd_(doublereal *a, char *op, doublereal *b, ftnlen op_len);
+extern logical setd_(void *cspice_state, doublereal *a, char *op, doublereal *b, ftnlen op_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -6610,10 +6610,10 @@ extern logical setd_(doublereal *a, char *op, doublereal *b, ftnlen op_len);
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern logical seterr_(logical *status);
-extern logical failed_(void);
+extern logical seterr_(void *cspice_state, logical *status);
+extern logical failed_(void *cspice_state);
  
-extern logical seti_(integer *a, char *op, integer *b, ftnlen op_len);
+extern logical seti_(void *cspice_state, integer *a, char *op, integer *b, ftnlen op_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -6622,11 +6622,11 @@ extern logical seti_(integer *a, char *op, integer *b, ftnlen op_len);
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int setmsg_(char *msg, ftnlen msg_len);
+extern int setmsg_(void *cspice_state, char *msg, ftnlen msg_len);
 /*:ref: allowd_ 12 0 */
 /*:ref: putlms_ 14 2 13 124 */
  
-extern int sgfcon_(integer *handle, doublereal *descr, integer *first, integer *last, doublereal *values);
+extern int sgfcon_(void *cspice_state, integer *handle, doublereal *descr, integer *first, integer *last, doublereal *values);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sgmeta_ 14 4 4 7 4 4 */
@@ -6637,7 +6637,7 @@ extern int sgfcon_(integer *handle, doublereal *descr, integer *first, integer *
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int sgfpkt_(integer *handle, doublereal *descr, integer *first, integer *last, doublereal *values, integer *ends);
+extern int sgfpkt_(void *cspice_state, integer *handle, doublereal *descr, integer *first, integer *last, doublereal *values, integer *ends);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sgmeta_ 14 4 4 7 4 4 */
@@ -6648,7 +6648,7 @@ extern int sgfpkt_(integer *handle, doublereal *descr, integer *first, integer *
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int sgfref_(integer *handle, doublereal *descr, integer *first, integer *last, doublereal *values);
+extern int sgfref_(void *cspice_state, integer *handle, doublereal *descr, integer *first, integer *last, doublereal *values);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sgmeta_ 14 4 4 7 4 4 */
@@ -6659,7 +6659,7 @@ extern int sgfref_(integer *handle, doublereal *descr, integer *first, integer *
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int sgfrvi_(integer *handle, doublereal *descr, doublereal *x, doublereal *value, integer *indx, logical *found);
+extern int sgfrvi_(void *cspice_state, integer *handle, doublereal *descr, doublereal *x, doublereal *value, integer *indx, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intmax_ 4 0 */
@@ -6673,7 +6673,7 @@ extern int sgfrvi_(integer *handle, doublereal *descr, doublereal *x, doublereal
 /*:ref: lstled_ 4 3 7 4 7 */
 /*:ref: errdp_ 14 3 13 7 124 */
  
-extern int sgmeta_(integer *handle, doublereal *descr, integer *mnemon, integer *value);
+extern int sgmeta_(void *cspice_state, integer *handle, doublereal *descr, integer *mnemon, integer *value);
 /*:ref: return_ 12 0 */
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -6685,12 +6685,12 @@ extern int sgmeta_(integer *handle, doublereal *descr, integer *mnemon, integer 
 /*:ref: failed_ 12 0 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int sgseqw_(integer *handle, doublereal *descr, char *segid, integer *nconst, doublereal *const__, integer *npkts, integer *pktsiz, doublereal *pktdat, integer *nrefs, doublereal *refdat, integer *idxtyp, ftnlen segid_len);
-extern int sgbwfs_(integer *handle, doublereal *descr, char *segid, integer *nconst, doublereal *const__, integer *pktsiz, integer *idxtyp, ftnlen segid_len);
-extern int sgbwvs_(integer *handle, doublereal *descr, char *segid, integer *nconst, doublereal *const__, integer *idxtyp, ftnlen segid_len);
-extern int sgwfpk_(integer *handle, integer *npkts, doublereal *pktdat, integer *nrefs, doublereal *refdat);
-extern int sgwvpk_(integer *handle, integer *npkts, integer *pktsiz, doublereal *pktdat, integer *nrefs, doublereal *refdat);
-extern int sgwes_(integer *handle);
+extern int sgseqw_(void *cspice_state, integer *handle, doublereal *descr, char *segid, integer *nconst, doublereal *const__, integer *npkts, integer *pktsiz, doublereal *pktdat, integer *nrefs, doublereal *refdat, integer *idxtyp, ftnlen segid_len);
+extern int sgbwfs_(void *cspice_state, integer *handle, doublereal *descr, char *segid, integer *nconst, doublereal *const__, integer *pktsiz, integer *idxtyp, ftnlen segid_len);
+extern int sgbwvs_(void *cspice_state, integer *handle, doublereal *descr, char *segid, integer *nconst, doublereal *const__, integer *idxtyp, ftnlen segid_len);
+extern int sgwfpk_(void *cspice_state, integer *handle, integer *npkts, doublereal *pktdat, integer *nrefs, doublereal *refdat);
+extern int sgwvpk_(void *cspice_state, integer *handle, integer *npkts, integer *pktsiz, doublereal *pktdat, integer *nrefs, doublereal *refdat);
+extern int sgwes_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6711,20 +6711,20 @@ extern int sgwes_(integer *handle);
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafena_ 14 0 */
  
-extern int sharpr_(doublereal *rot);
+extern int sharpr_(void *cspice_state, doublereal *rot);
 /*:ref: vhatip_ 14 1 7 */
 /*:ref: ucrss_ 14 3 7 7 7 */
  
-extern int shellc_(integer *ndim, char *array, ftnlen array_len);
+extern int shellc_(void *cspice_state, integer *ndim, char *array, ftnlen array_len);
 /*:ref: swapc_ 14 4 13 13 124 124 */
  
-extern int shelld_(integer *ndim, doublereal *array);
+extern int shelld_(void *cspice_state, integer *ndim, doublereal *array);
 /*:ref: swapd_ 14 2 7 7 */
  
-extern int shelli_(integer *ndim, integer *array);
+extern int shelli_(void *cspice_state, integer *ndim, integer *array);
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int shiftc_(char *in, char *dir, integer *nshift, char *fillc, char *out, ftnlen in_len, ftnlen dir_len, ftnlen fillc_len, ftnlen out_len);
+extern int shiftc_(void *cspice_state, char *in, char *dir, integer *nshift, char *fillc, char *out, ftnlen in_len, ftnlen dir_len, ftnlen fillc_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: shiftl_ 14 7 13 4 13 13 124 124 124 */
@@ -6734,16 +6734,16 @@ extern int shiftc_(char *in, char *dir, integer *nshift, char *fillc, char *out,
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int shiftl_(char *in, integer *nshift, char *fillc, char *out, ftnlen in_len, ftnlen fillc_len, ftnlen out_len);
+extern int shiftl_(void *cspice_state, char *in, integer *nshift, char *fillc, char *out, ftnlen in_len, ftnlen fillc_len, ftnlen out_len);
  
-extern int shiftr_(char *in, integer *nshift, char *fillc, char *out, ftnlen in_len, ftnlen fillc_len, ftnlen out_len);
+extern int shiftr_(void *cspice_state, char *in, integer *nshift, char *fillc, char *out, ftnlen in_len, ftnlen fillc_len, ftnlen out_len);
  
-extern int sigdgt_(char *in, char *out, ftnlen in_len, ftnlen out_len);
+extern int sigdgt_(void *cspice_state, char *in, char *out, ftnlen in_len, ftnlen out_len);
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: cpos_ 4 5 13 13 4 124 124 */
  
-extern int sigerr_(char *msg, ftnlen msg_len);
+extern int sigerr_(void *cspice_state, char *msg, ftnlen msg_len);
 /*:ref: getact_ 14 1 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: seterr_ 12 1 12 */
@@ -6753,7 +6753,7 @@ extern int sigerr_(char *msg, ftnlen msg_len);
 /*:ref: accept_ 12 1 12 */
 /*:ref: byebye_ 14 2 13 124 */
  
-extern int sincpt_(char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, logical *found, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len);
+extern int sincpt_(void *cspice_state, char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, logical *found, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -6775,7 +6775,7 @@ extern int sincpt_(char *method, char *target, doublereal *et, char *fixref, cha
 /*:ref: zzsudski_ 14 4 4 4 4 4 */
 /*:ref: zzsfxcor_ 14 22 200 200 200 4 7 13 12 12 12 12 13 4 4 4 4 7 7 7 7 12 124 124 */
  
-extern integer sizec_(char *cell, ftnlen cell_len);
+extern integer sizec_(void *cspice_state, char *cell, ftnlen cell_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dechar_ 14 3 13 4 124 */
@@ -6784,7 +6784,7 @@ extern integer sizec_(char *cell, ftnlen cell_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer sized_(doublereal *cell);
+extern integer sized_(void *cspice_state, doublereal *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6792,7 +6792,7 @@ extern integer sized_(doublereal *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer sizei_(integer *cell);
+extern integer sizei_(void *cspice_state, integer *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6800,22 +6800,22 @@ extern integer sizei_(integer *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical smsgnd_(doublereal *x, doublereal *y);
+extern logical smsgnd_(void *cspice_state, doublereal *x, doublereal *y);
  
-extern logical smsgni_(integer *x, integer *y);
+extern logical smsgni_(void *cspice_state, integer *x, integer *y);
  
-extern logical somfls_(logical *logcls, integer *n);
+extern logical somfls_(void *cspice_state, logical *logcls, integer *n);
  
-extern logical somtru_(logical *logcls, integer *n);
+extern logical somtru_(void *cspice_state, logical *logcls, integer *n);
  
-extern int spca2b_(char *text, char *binary, ftnlen text_len, ftnlen binary_len);
+extern int spca2b_(void *cspice_state, char *text, char *binary, ftnlen text_len, ftnlen binary_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: txtopr_ 14 3 13 4 124 */
 /*:ref: spct2b_ 14 3 4 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spcac_(integer *handle, integer *unit, char *bmark, char *emark, ftnlen bmark_len, ftnlen emark_len);
+extern int spcac_(void *cspice_state, integer *handle, integer *unit, char *bmark, char *emark, ftnlen bmark_len, ftnlen emark_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -6832,14 +6832,14 @@ extern int spcac_(integer *handle, integer *unit, char *bmark, char *emark, ftnl
 /*:ref: dafarr_ 14 2 4 4 */
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern int spcb2a_(char *binary, char *text, ftnlen binary_len, ftnlen text_len);
+extern int spcb2a_(void *cspice_state, char *binary, char *text, ftnlen binary_len, ftnlen text_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: txtopn_ 14 3 13 4 124 */
 /*:ref: spcb2t_ 14 3 13 4 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spcb2t_(char *binary, integer *unit, ftnlen binary_len);
+extern int spcb2t_(void *cspice_state, char *binary, integer *unit, ftnlen binary_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafb2t_ 14 3 13 4 124 */
@@ -6852,14 +6852,14 @@ extern int spcb2t_(char *binary, integer *unit, ftnlen binary_len);
 /*:ref: spcec_ 14 2 4 4 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int spcdc_(integer *handle);
+extern int spcdc_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafrfr_ 14 8 4 4 4 13 4 4 4 124 */
 /*:ref: dafrrr_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spcec_(integer *handle, integer *unit);
+extern int spcec_(void *cspice_state, integer *handle, integer *unit);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafsih_ 14 3 4 13 124 */
@@ -6872,14 +6872,14 @@ extern int spcec_(integer *handle, integer *unit);
 /*:ref: errfnm_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int spcopn_(char *spc, char *ifname, integer *handle, ftnlen spc_len, ftnlen ifname_len);
+extern int spcopn_(void *cspice_state, char *spc, char *ifname, integer *handle, ftnlen spc_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafopn_ 14 8 13 4 4 13 4 4 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spcrfl_(integer *handle, char *line, logical *eoc, ftnlen line_len);
-extern int spcrnl_(char *line, logical *eoc, ftnlen line_len);
+extern int spcrfl_(void *cspice_state, integer *handle, char *line, logical *eoc, ftnlen line_len);
+extern int spcrnl_(void *cspice_state, char *line, logical *eoc, ftnlen line_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafrfr_ 14 8 4 4 4 13 4 4 4 124 */
@@ -6892,7 +6892,7 @@ extern int spcrnl_(char *line, logical *eoc, ftnlen line_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: pos_ 4 5 13 13 4 124 124 */
  
-extern int spct2b_(integer *unit, char *binary, ftnlen binary_len);
+extern int spct2b_(void *cspice_state, integer *unit, char *binary, ftnlen binary_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: daft2b_ 14 4 4 13 4 124 */
@@ -6908,16 +6908,16 @@ extern int spct2b_(integer *unit, char *binary, ftnlen binary_len);
 /*:ref: spcac_ 14 6 4 4 13 13 124 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern doublereal spd_(void);
+extern doublereal spd_(void *cspice_state);
  
-extern int sphcyl_(doublereal *radius, doublereal *colat, doublereal *slong, doublereal *r__, doublereal *long__, doublereal *z__);
+extern int sphcyl_(void *cspice_state, doublereal *radius, doublereal *colat, doublereal *slong, doublereal *r__, doublereal *long__, doublereal *z__);
  
-extern int sphlat_(doublereal *r__, doublereal *colat, doublereal *longs, doublereal *radius, doublereal *long__, doublereal *lat);
+extern int sphlat_(void *cspice_state, doublereal *r__, doublereal *colat, doublereal *longs, doublereal *radius, doublereal *long__, doublereal *lat);
 /*:ref: halfpi_ 7 0 */
  
-extern int sphrec_(doublereal *r__, doublereal *colat, doublereal *long__, doublereal *rectan);
+extern int sphrec_(void *cspice_state, doublereal *r__, doublereal *colat, doublereal *long__, doublereal *rectan);
  
-extern doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1, doublereal *long2, doublereal *lat2);
+extern doublereal sphsd_(void *cspice_state, doublereal *radius, doublereal *long1, doublereal *lat1, doublereal *long2, doublereal *lat2);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6926,7 +6926,7 @@ extern doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: brcktd_ 7 3 7 7 7 */
  
-extern int spk14a_(integer *handle, integer *ncsets, doublereal *coeffs, doublereal *epochs);
+extern int spk14a_(void *cspice_state, integer *handle, integer *ncsets, doublereal *coeffs, doublereal *epochs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6936,7 +6936,7 @@ extern int spk14a_(integer *handle, integer *ncsets, doublereal *coeffs, doubler
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: sgwfpk_ 14 5 4 4 7 4 7 */
  
-extern int spk14b_(integer *handle, char *segid, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, integer *chbdeg, ftnlen segid_len, ftnlen frame_len);
+extern int spk14b_(void *cspice_state, integer *handle, char *segid, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, integer *chbdeg, ftnlen segid_len, ftnlen frame_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6947,13 +6947,13 @@ extern int spk14b_(integer *handle, char *segid, integer *body, integer *center,
 /*:ref: failed_ 12 0 */
 /*:ref: sgbwfs_ 14 8 4 7 13 4 7 4 4 124 */
  
-extern int spk14e_(integer *handle);
+extern int spk14e_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sgwes_ 14 1 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkacs_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int spkacs_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzprscor_ 14 3 13 12 124 */
@@ -6968,7 +6968,7 @@ extern int spkacs_(integer *targ, doublereal *et, char *ref, char *abcorr, integ
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: spkaps_ 14 11 4 7 13 13 7 7 7 7 7 124 124 */
  
-extern int spkapo_(integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int spkapo_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
@@ -6988,7 +6988,7 @@ extern int spkapo_(integer *targ, doublereal *et, char *ref, doublereal *sobs, c
 /*:ref: stlabx_ 14 3 7 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
  
-extern int spkapp_(integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int spkapp_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
@@ -7008,7 +7008,7 @@ extern int spkapp_(integer *targ, doublereal *et, char *ref, doublereal *sobs, c
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
  
-extern int spkaps_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int spkaps_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzprscor_ 14 3 13 12 124 */
@@ -7023,10 +7023,10 @@ extern int spkaps_(integer *targ, doublereal *et, char *ref, char *abcorr, doubl
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int spkbsr_(char *fname, integer *handle, integer *body, doublereal *et, doublereal *descr, char *ident, logical *found, ftnlen fname_len, ftnlen ident_len);
-extern int spklef_(char *fname, integer *handle, ftnlen fname_len);
-extern int spkuef_(integer *handle);
-extern int spksfs_(integer *body, doublereal *et, integer *handle, doublereal *descr, char *ident, logical *found, ftnlen ident_len);
+extern int spkbsr_(void *cspice_state, char *fname, integer *handle, integer *body, doublereal *et, doublereal *descr, char *ident, logical *found, ftnlen fname_len, ftnlen ident_len);
+extern int spklef_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int spkuef_(void *cspice_state, integer *handle);
+extern int spksfs_(void *cspice_state, integer *body, doublereal *et, integer *handle, doublereal *descr, char *ident, logical *found, ftnlen ident_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -7059,7 +7059,7 @@ extern int spksfs_(integer *body, doublereal *et, integer *handle, doublereal *d
 /*:ref: lnkila_ 14 3 4 4 4 */
 /*:ref: lnktl_ 4 2 4 4 */
  
-extern int spkcls_(integer *handle);
+extern int spkcls_(void *cspice_state, integer *handle);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafbfs_ 14 1 4 */
@@ -7071,7 +7071,7 @@ extern int spkcls_(integer *handle);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int spkcov_(char *spk, integer *idcode, doublereal *cover, ftnlen spk_len);
+extern int spkcov_(void *cspice_state, char *spk, integer *idcode, doublereal *cover, ftnlen spk_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
@@ -7088,7 +7088,7 @@ extern int spkcov_(char *spk, integer *idcode, doublereal *cover, ftnlen spk_len
 /*:ref: wninsd_ 14 3 7 7 7 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int spkcpo_(char *target, doublereal *et, char *outref, char *refloc, char *abcorr, doublereal *obspos, char *obsctr, char *obsref, doublereal *state, doublereal *lt, ftnlen target_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsctr_len, ftnlen obsref_len);
+extern int spkcpo_(void *cspice_state, char *target, doublereal *et, char *outref, char *refloc, char *abcorr, doublereal *obspos, char *obsctr, char *obsref, doublereal *state, doublereal *lt, ftnlen target_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsctr_len, ftnlen obsref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vequ_ 14 2 7 7 */
@@ -7096,7 +7096,7 @@ extern int spkcpo_(char *target, doublereal *et, char *outref, char *refloc, cha
 /*:ref: spkcvo_ 14 17 13 7 13 13 13 7 7 13 13 7 7 124 124 124 124 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkcpt_(doublereal *trgpos, char *trgctr, char *trgref, doublereal *et, char *outref, char *refloc, char *abcorr, char *obsrvr, doublereal *state, doublereal *lt, ftnlen trgctr_len, ftnlen trgref_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int spkcpt_(void *cspice_state, doublereal *trgpos, char *trgctr, char *trgref, doublereal *et, char *outref, char *refloc, char *abcorr, char *obsrvr, doublereal *state, doublereal *lt, ftnlen trgctr_len, ftnlen trgref_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vequ_ 14 2 7 7 */
@@ -7104,7 +7104,7 @@ extern int spkcpt_(doublereal *trgpos, char *trgctr, char *trgref, doublereal *e
 /*:ref: spkcvt_ 14 17 7 7 13 13 7 13 13 13 13 7 7 124 124 124 124 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkcvo_(char *target, doublereal *et, char *outref, char *refloc, char *abcorr, doublereal *obssta, doublereal *obsepc, char *obsctr, char *obsref, doublereal *state, doublereal *lt, ftnlen target_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsctr_len, ftnlen obsref_len);
+extern int spkcvo_(void *cspice_state, char *target, doublereal *et, char *outref, char *refloc, char *abcorr, doublereal *obssta, doublereal *obsepc, char *obsctr, char *obsref, doublereal *state, doublereal *lt, ftnlen target_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsctr_len, ftnlen obsref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -7126,7 +7126,7 @@ extern int spkcvo_(char *target, doublereal *et, char *outref, char *refloc, cha
 /*:ref: zzspkfao_ 14 10 4 7 13 13 200 7 7 7 124 124 */
 /*:ref: zzcorsxf_ 14 4 12 7 7 7 */
  
-extern int spkcvt_(doublereal *trgsta, doublereal *trgepc, char *trgctr, char *trgref, doublereal *et, char *outref, char *refloc, char *abcorr, char *obsrvr, doublereal *state, doublereal *lt, ftnlen trgctr_len, ftnlen trgref_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int spkcvt_(void *cspice_state, doublereal *trgsta, doublereal *trgepc, char *trgctr, char *trgref, doublereal *et, char *outref, char *refloc, char *abcorr, char *obsrvr, doublereal *state, doublereal *lt, ftnlen trgctr_len, ftnlen trgref_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -7148,11 +7148,11 @@ extern int spkcvt_(doublereal *trgsta, doublereal *trgepc, char *trgctr, char *t
 /*:ref: zzspkfat_ 14 10 200 7 13 13 4 7 7 7 124 124 */
 /*:ref: zzcorsxf_ 14 4 12 7 7 7 */
  
-extern int spke01_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke01_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int spke02_(doublereal *et, doublereal *record, doublereal *xyzdot);
+extern int spke02_(void *cspice_state, doublereal *et, doublereal *record, doublereal *xyzdot);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7162,7 +7162,7 @@ extern int spke02_(doublereal *et, doublereal *record, doublereal *xyzdot);
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: chbint_ 14 6 7 4 7 7 7 7 */
  
-extern int spke03_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke03_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7172,7 +7172,7 @@ extern int spke03_(doublereal *et, doublereal *record, doublereal *state);
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: chbval_ 14 5 7 4 7 7 7 */
  
-extern int spke05_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke05_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: moved_ 14 3 7 4 7 */
@@ -7184,18 +7184,18 @@ extern int spke05_(doublereal *et, doublereal *record, doublereal *state);
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spke08_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke08_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: xposeg_ 14 4 7 4 4 7 */
 /*:ref: lgresp_ 7 6 4 7 7 7 7 7 */
  
-extern int spke09_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke09_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: xposeg_ 14 4 7 4 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: lgrint_ 7 5 4 7 7 7 7 */
  
-extern int spke10_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke10_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: pi_ 7 0 */
@@ -7213,25 +7213,25 @@ extern int spke10_(doublereal *et, doublereal *record, doublereal *state);
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int spke12_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke12_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: hrmesp_ 14 8 4 7 7 7 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spke13_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke13_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: hrmint_ 14 7 4 7 7 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spke14_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke14_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chbval_ 14 5 7 4 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spke15_(doublereal *et, doublereal *recin, doublereal *state);
+extern int spke15_(void *cspice_state, doublereal *et, doublereal *recin, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vequ_ 14 2 7 7 */
@@ -7253,7 +7253,7 @@ extern int spke15_(doublereal *et, doublereal *recin, doublereal *state);
 /*:ref: vrotv_ 14 4 7 7 7 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int spke17_(doublereal *et, doublereal *recin, doublereal *state);
+extern int spke17_(void *cspice_state, doublereal *et, doublereal *recin, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7262,7 +7262,7 @@ extern int spke17_(doublereal *et, doublereal *recin, doublereal *state);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: eqncpv_ 14 6 7 7 7 7 7 7 */
  
-extern int spke18_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke18_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7274,7 +7274,7 @@ extern int spke18_(doublereal *et, doublereal *record, doublereal *state);
 /*:ref: hrmint_ 14 7 4 7 7 7 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int spke19_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke19_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7286,7 +7286,7 @@ extern int spke19_(doublereal *et, doublereal *record, doublereal *state);
 /*:ref: xpsgip_ 14 3 4 4 7 */
 /*:ref: lgrint_ 7 5 4 7 7 7 7 */
  
-extern int spke20_(doublereal *et, doublereal *record, doublereal *xyzdot);
+extern int spke20_(void *cspice_state, doublereal *et, doublereal *record, doublereal *xyzdot);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7296,7 +7296,7 @@ extern int spke20_(doublereal *et, doublereal *record, doublereal *xyzdot);
 /*:ref: chbigr_ 14 6 4 7 7 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int spke21_(doublereal *et, doublereal *record, doublereal *state);
+extern int spke21_(void *cspice_state, doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7305,7 +7305,7 @@ extern int spke21_(doublereal *et, doublereal *record, doublereal *state);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int spkez_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int spkez_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -7326,7 +7326,7 @@ extern int spkez_(integer *targ, doublereal *et, char *ref, char *abcorr, intege
 /*:ref: vsclip_ 14 2 7 7 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
  
-extern int spkezp_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int spkezp_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -7347,7 +7347,7 @@ extern int spkezp_(integer *targ, doublereal *et, char *ref, char *abcorr, integ
 /*:ref: refchg_ 14 4 4 4 7 7 */
 /*:ref: mxv_ 14 3 7 7 7 */
  
-extern int spkezr_(char *targ, doublereal *et, char *ref, char *abcorr, char *obs, doublereal *starg, doublereal *lt, ftnlen targ_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obs_len);
+extern int spkezr_(void *cspice_state, char *targ, doublereal *et, char *ref, char *abcorr, char *obs, doublereal *starg, doublereal *lt, ftnlen targ_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obs_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -7358,7 +7358,7 @@ extern int spkezr_(char *targ, doublereal *et, char *ref, char *abcorr, char *ob
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: spkez_ 14 9 4 7 13 13 4 7 7 124 124 */
  
-extern int spkgeo_(integer *targ, doublereal *et, char *ref, integer *obs, doublereal *state, doublereal *lt, ftnlen ref_len);
+extern int spkgeo_(void *cspice_state, integer *targ, doublereal *et, char *ref, integer *obs, doublereal *state, doublereal *lt, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -7390,7 +7390,7 @@ extern int spkgeo_(integer *targ, doublereal *et, char *ref, integer *obs, doubl
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: clight_ 7 0 */
  
-extern int spkgps_(integer *targ, doublereal *et, char *ref, integer *obs, doublereal *pos, doublereal *lt, ftnlen ref_len);
+extern int spkgps_(void *cspice_state, integer *targ, doublereal *et, char *ref, integer *obs, doublereal *pos, doublereal *lt, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -7422,7 +7422,7 @@ extern int spkgps_(integer *targ, doublereal *et, char *ref, integer *obs, doubl
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: clight_ 7 0 */
  
-extern int spkltc_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int spkltc_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -7440,7 +7440,7 @@ extern int spkltc_(integer *targ, doublereal *et, char *ref, char *abcorr, doubl
 /*:ref: touchd_ 7 1 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int spkobj_(char *spk, integer *ids, ftnlen spk_len);
+extern int spkobj_(void *cspice_state, char *spk, integer *ids, ftnlen spk_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
@@ -7457,7 +7457,7 @@ extern int spkobj_(char *spk, integer *ids, ftnlen spk_len);
 /*:ref: insrti_ 14 2 4 4 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int spkopa_(char *file, integer *handle, ftnlen file_len);
+extern int spkopa_(void *cspice_state, char *file, integer *handle, ftnlen file_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: exists_ 12 2 13 124 */
@@ -7469,14 +7469,14 @@ extern int spkopa_(char *file, integer *handle, ftnlen file_len);
 /*:ref: failed_ 12 0 */
 /*:ref: dafopw_ 14 3 13 4 124 */
  
-extern int spkopn_(char *name__, char *ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen ifname_len);
+extern int spkopn_(void *cspice_state, char *name__, char *ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafonw_ 14 10 13 13 4 4 13 4 4 124 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkpds_(integer *body, integer *center, char *frame, integer *type__, doublereal *first, doublereal *last, doublereal *descr, ftnlen frame_len);
+extern int spkpds_(void *cspice_state, integer *body, integer *center, char *frame, integer *type__, doublereal *first, doublereal *last, doublereal *descr, ftnlen frame_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7489,7 +7489,7 @@ extern int spkpds_(integer *body, integer *center, char *frame, integer *type__,
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: dafps_ 14 5 4 4 7 4 7 */
  
-extern int spkpos_(char *targ, doublereal *et, char *ref, char *abcorr, char *obs, doublereal *ptarg, doublereal *lt, ftnlen targ_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obs_len);
+extern int spkpos_(void *cspice_state, char *targ, doublereal *et, char *ref, char *abcorr, char *obs, doublereal *ptarg, doublereal *lt, ftnlen targ_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obs_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -7500,7 +7500,7 @@ extern int spkpos_(char *targ, doublereal *et, char *ref, char *abcorr, char *ob
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
  
-extern int spkpv_(integer *handle, doublereal *descr, doublereal *et, char *ref, doublereal *state, integer *center, ftnlen ref_len);
+extern int spkpv_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, char *ref, doublereal *state, integer *center, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -7514,7 +7514,7 @@ extern int spkpv_(integer *handle, doublereal *descr, doublereal *et, char *ref,
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkpvn_(integer *handle, doublereal *descr, doublereal *et, integer *ref, doublereal *state, integer *center);
+extern int spkpvn_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, integer *ref, doublereal *state, integer *center);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7557,7 +7557,7 @@ extern int spkpvn_(integer *handle, doublereal *descr, doublereal *et, integer *
 /*:ref: spkr21_ 14 4 4 7 7 7 */
 /*:ref: spke21_ 14 3 7 7 7 */
  
-extern int spkr01_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr01_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7565,21 +7565,21 @@ extern int spkr01_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: lstltd_ 4 3 7 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkr02_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr02_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkr03_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr03_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkr05_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr05_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7591,7 +7591,7 @@ extern int spkr05_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: lstltd_ 4 3 7 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int spkr08_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr08_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -7603,7 +7603,7 @@ extern int spkr08_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: odd_ 12 1 4 */
  
-extern int spkr09_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr09_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -7616,7 +7616,7 @@ extern int spkr09_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: lstltd_ 4 3 7 4 7 */
 /*:ref: odd_ 12 1 4 */
  
-extern int spkr10_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr10_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sgfcon_ 14 5 4 7 4 4 7 */
@@ -7626,19 +7626,19 @@ extern int spkr10_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkr12_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr12_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spkr08_ 14 4 4 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkr13_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr13_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spkr09_ 14 4 4 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkr14_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr14_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7649,7 +7649,7 @@ extern int spkr14_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: sgfrvi_ 14 6 4 7 7 7 4 12 */
 /*:ref: sgfpkt_ 14 6 4 7 4 4 7 4 */
  
-extern int spkr15_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr15_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7659,7 +7659,7 @@ extern int spkr15_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int spkr17_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr17_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7669,7 +7669,7 @@ extern int spkr17_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int spkr18_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr18_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7683,7 +7683,7 @@ extern int spkr18_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: odd_ 12 1 4 */
 /*:ref: lstltd_ 4 3 7 4 7 */
  
-extern int spkr19_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr19_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7698,7 +7698,7 @@ extern int spkr19_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: lstltd_ 4 3 7 4 7 */
 /*:ref: odd_ 12 1 4 */
  
-extern int spkr20_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr20_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7710,7 +7710,7 @@ extern int spkr20_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkr21_(integer *handle, doublereal *descr, doublereal *et, doublereal *record);
+extern int spkr21_(void *cspice_state, integer *handle, doublereal *descr, doublereal *et, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7721,49 +7721,49 @@ extern int spkr21_(integer *handle, doublereal *descr, doublereal *et, doublerea
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: lstltd_ 4 3 7 4 7 */
  
-extern int spks01_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks01_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spks02_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks02_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spks03_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks03_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spks05_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks05_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spks08_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks08_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafada_ 14 2 7 4 */
  
-extern int spks09_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks09_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafada_ 14 2 7 4 */
  
-extern int spks10_(integer *srchan, doublereal *srcdsc, integer *dsthan, doublereal *dstdsc, char *dstsid, ftnlen dstsid_len);
+extern int spks10_(void *cspice_state, integer *srchan, doublereal *srcdsc, integer *dsthan, doublereal *dstdsc, char *dstsid, ftnlen dstsid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7782,19 +7782,19 @@ extern int spks10_(integer *srchan, doublereal *srcdsc, integer *dsthan, doubler
 /*:ref: sgwfpk_ 14 5 4 4 7 4 7 */
 /*:ref: sgwes_ 14 1 4 */
  
-extern int spks12_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks12_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spks08_ 14 5 4 4 4 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spks13_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks13_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spks09_ 14 5 4 4 4 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spks14_(integer *srchan, doublereal *srcdsc, integer *dsthan, doublereal *dstdsc, char *dstsid, ftnlen dstsid_len);
+extern int spks14_(void *cspice_state, integer *srchan, doublereal *srcdsc, integer *dsthan, doublereal *dstdsc, char *dstsid, ftnlen dstsid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7812,21 +7812,21 @@ extern int spks14_(integer *srchan, doublereal *srcdsc, integer *dsthan, doubler
 /*:ref: spk14a_ 14 4 4 4 7 7 */
 /*:ref: spk14e_ 14 1 4 */
  
-extern int spks15_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks15_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafada_ 14 2 7 4 */
  
-extern int spks17_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks17_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafada_ 14 2 7 4 */
  
-extern int spks18_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks18_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -7836,7 +7836,7 @@ extern int spks18_(integer *handle, integer *baddr, integer *eaddr, doublereal *
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafada_ 14 2 7 4 */
  
-extern int spks19_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks19_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -7852,7 +7852,7 @@ extern int spks19_(integer *handle, integer *baddr, integer *eaddr, doublereal *
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: dafada_ 14 2 7 4 */
  
-extern int spks20_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks20_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
@@ -7861,20 +7861,20 @@ extern int spks20_(integer *handle, integer *baddr, integer *eaddr, doublereal *
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spks21_(integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
+extern int spks21_(void *cspice_state, integer *handle, integer *baddr, integer *eaddr, doublereal *begin, doublereal *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkssb_(integer *targ, doublereal *et, char *ref, doublereal *starg, ftnlen ref_len);
+extern int spkssb_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *starg, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spkgeo_ 14 7 4 7 13 4 7 7 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spksub_(integer *handle, doublereal *descr, char *ident, doublereal *begin, doublereal *end, integer *newh, ftnlen ident_len);
+extern int spksub_(void *cspice_state, integer *handle, doublereal *descr, char *ident, doublereal *begin, doublereal *end, integer *newh, ftnlen ident_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7903,14 +7903,14 @@ extern int spksub_(integer *handle, doublereal *descr, char *ident, doublereal *
 /*:ref: spks21_ 14 5 4 4 4 7 7 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int spkuds_(doublereal *descr, integer *body, integer *center, integer *frame, integer *type__, doublereal *first, doublereal *last, integer *begin, integer *end);
+extern int spkuds_(void *cspice_state, doublereal *descr, integer *body, integer *center, integer *frame, integer *type__, doublereal *first, doublereal *last, integer *begin, integer *end);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int spkw01_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *n, doublereal *dlines, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
+extern int spkw01_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *n, doublereal *dlines, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -7927,7 +7927,7 @@ extern int spkw01_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw02_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len);
+extern int spkw02_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7945,7 +7945,7 @@ extern int spkw02_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw03_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len);
+extern int spkw03_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7963,7 +7963,7 @@ extern int spkw03_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw05_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *gm, integer *n, doublereal *states, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
+extern int spkw05_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *gm, integer *n, doublereal *states, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -7980,7 +7980,7 @@ extern int spkw05_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw08_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epoch1, doublereal *step, ftnlen frame_len, ftnlen segid_len);
+extern int spkw08_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epoch1, doublereal *step, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -7998,7 +7998,7 @@ extern int spkw08_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw09_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
+extern int spkw09_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -8015,7 +8015,7 @@ extern int spkw09_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw10_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *consts, integer *n, doublereal *elems, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
+extern int spkw10_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *consts, integer *n, doublereal *elems, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spkpds_ 14 8 4 4 13 4 7 7 7 124 */
@@ -8027,7 +8027,7 @@ extern int spkw10_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: sgwfpk_ 14 5 4 4 7 4 7 */
 /*:ref: sgwes_ 14 1 4 */
  
-extern int spkw12_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epoch1, doublereal *step, ftnlen frame_len, ftnlen segid_len);
+extern int spkw12_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epoch1, doublereal *step, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -8046,7 +8046,7 @@ extern int spkw12_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw13_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
+extern int spkw13_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -8064,7 +8064,7 @@ extern int spkw13_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw15_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *epoch, doublereal *tp, doublereal *pa, doublereal *p, doublereal *ecc, doublereal *j2flg, doublereal *pv, doublereal *gm, doublereal *j2, doublereal *radius, ftnlen frame_len, ftnlen segid_len);
+extern int spkw15_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *epoch, doublereal *tp, doublereal *pa, doublereal *p, doublereal *ecc, doublereal *j2flg, doublereal *pv, doublereal *gm, doublereal *j2, doublereal *radius, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vhat_ 14 2 7 7 */
@@ -8085,7 +8085,7 @@ extern int spkw15_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw17_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *epoch, doublereal *eqel, doublereal *rapol, doublereal *decpol, ftnlen frame_len, ftnlen segid_len);
+extern int spkw17_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *epoch, doublereal *eqel, doublereal *rapol, doublereal *decpol, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: moved_ 14 3 7 4 7 */
@@ -8101,7 +8101,7 @@ extern int spkw17_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw18_(integer *handle, integer *subtyp, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *packts, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
+extern int spkw18_(void *cspice_state, integer *handle, integer *subtyp, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *packts, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8119,7 +8119,7 @@ extern int spkw18_(integer *handle, integer *subtyp, integer *body, integer *cen
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw19_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *nintvl, integer *npkts, integer *subtps, integer *degres, doublereal *packts, doublereal *epochs, doublereal *ivlbds, logical *sellst, ftnlen frame_len, ftnlen segid_len);
+extern int spkw19_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *nintvl, integer *npkts, integer *subtps, integer *degres, doublereal *packts, doublereal *epochs, doublereal *ivlbds, logical *sellst, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8137,7 +8137,7 @@ extern int spkw19_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw20_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *dscale, doublereal *tscale, doublereal *initjd, doublereal *initfr, ftnlen frame_len, ftnlen segid_len);
+extern int spkw20_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *dscale, doublereal *tscale, doublereal *initjd, doublereal *initfr, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8157,7 +8157,7 @@ extern int spkw20_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw21_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *n, integer *dlsize, doublereal *dlines, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
+extern int spkw21_(void *cspice_state, integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *n, integer *dlsize, doublereal *dlines, doublereal *epochs, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8174,7 +8174,7 @@ extern int spkw21_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int srfc2s_(integer *code, integer *bodyid, char *srfstr, logical *isname, ftnlen srfstr_len);
+extern int srfc2s_(void *cspice_state, integer *code, integer *bodyid, char *srfstr, logical *isname, ftnlen srfstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzsrfc2n_ 14 5 4 4 13 12 124 */
@@ -8182,7 +8182,7 @@ extern int srfc2s_(integer *code, integer *bodyid, char *srfstr, logical *isname
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
  
-extern int srfcss_(integer *code, char *bodstr, char *srfstr, logical *isname, ftnlen bodstr_len, ftnlen srfstr_len);
+extern int srfcss_(void *cspice_state, integer *code, char *bodstr, char *srfstr, logical *isname, ftnlen bodstr_len, ftnlen srfstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bods2c_ 14 4 13 4 12 124 */
@@ -8191,7 +8191,7 @@ extern int srfcss_(integer *code, char *bodstr, char *srfstr, logical *isname, f
 /*:ref: zzsrfc2n_ 14 5 4 4 13 12 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
  
-extern int srfnrm_(char *method, char *target, doublereal *et, char *fixref, integer *npts, doublereal *srfpts, doublereal *normls, ftnlen method_len, ftnlen target_len, ftnlen fixref_len);
+extern int srfnrm_(void *cspice_state, char *method, char *target, doublereal *et, char *fixref, integer *npts, doublereal *srfpts, doublereal *normls, ftnlen method_len, ftnlen target_len, ftnlen fixref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -8214,7 +8214,7 @@ extern int srfnrm_(char *method, char *target, doublereal *et, char *fixref, int
 /*:ref: zzsbfnrm_ 14 7 4 4 4 7 4 7 7 */
 /*:ref: vhatip_ 14 1 7 */
  
-extern int srfrec_(integer *body, doublereal *long__, doublereal *lat, doublereal *rectan);
+extern int srfrec_(void *cspice_state, integer *body, doublereal *long__, doublereal *lat, doublereal *rectan);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
@@ -8222,7 +8222,7 @@ extern int srfrec_(integer *body, doublereal *long__, doublereal *lat, doublerea
 /*:ref: edpnt_ 14 5 7 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int srfs2c_(char *srfstr, char *bodstr, integer *code, logical *found, ftnlen srfstr_len, ftnlen bodstr_len);
+extern int srfs2c_(void *cspice_state, char *srfstr, char *bodstr, integer *code, logical *found, ftnlen srfstr_len, ftnlen bodstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bods2c_ 14 4 13 4 12 124 */
@@ -8231,7 +8231,7 @@ extern int srfs2c_(char *srfstr, char *bodstr, integer *code, logical *found, ft
 /*:ref: zzsrfn2c_ 14 5 13 4 4 12 124 */
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
  
-extern int srfscc_(char *srfstr, integer *bodyid, integer *code, logical *found, ftnlen srfstr_len);
+extern int srfscc_(void *cspice_state, char *srfstr, integer *bodyid, integer *code, logical *found, ftnlen srfstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzsrfn2c_ 14 5 13 4 4 12 124 */
@@ -8239,7 +8239,7 @@ extern int srfscc_(char *srfstr, integer *bodyid, integer *code, logical *found,
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
  
-extern int srfxpt_(char *method, char *target, doublereal *et, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, doublereal *spoint, doublereal *dist, doublereal *trgepc, doublereal *obspos, logical *found, ftnlen method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len);
+extern int srfxpt_(void *cspice_state, char *method, char *target, doublereal *et, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, doublereal *spoint, doublereal *dist, doublereal *trgepc, doublereal *obspos, logical *found, ftnlen method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -8277,7 +8277,7 @@ extern int srfxpt_(char *method, char *target, doublereal *et, char *abcorr, cha
 /*:ref: clight_ 7 0 */
 /*:ref: touchd_ 7 1 7 */
  
-extern int ssizec_(integer *size, char *cell, ftnlen cell_len);
+extern int ssizec_(void *cspice_state, integer *size, char *cell, ftnlen cell_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8286,7 +8286,7 @@ extern int ssizec_(integer *size, char *cell, ftnlen cell_len);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: enchar_ 14 3 4 13 124 */
  
-extern int ssized_(integer *size, doublereal *cell);
+extern int ssized_(void *cspice_state, integer *size, doublereal *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8294,7 +8294,7 @@ extern int ssized_(integer *size, doublereal *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int ssizei_(integer *size, integer *cell);
+extern int ssizei_(void *cspice_state, integer *size, integer *cell);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8302,7 +8302,7 @@ extern int ssizei_(integer *size, integer *cell);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int stcc01_(char *catfnm, char *tabnam, logical *istyp1, char *errmsg, ftnlen catfnm_len, ftnlen tabnam_len, ftnlen errmsg_len);
+extern int stcc01_(void *cspice_state, char *catfnm, char *tabnam, logical *istyp1, char *errmsg, ftnlen catfnm_len, ftnlen tabnam_len, ftnlen errmsg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ekopr_ 14 3 13 4 124 */
@@ -8313,7 +8313,7 @@ extern int stcc01_(char *catfnm, char *tabnam, logical *istyp1, char *errmsg, ft
 /*:ref: nblen_ 4 2 13 124 */
 /*:ref: ekcls_ 14 1 4 */
  
-extern int stcf01_(char *catnam, doublereal *westra, doublereal *eastra, doublereal *sthdec, doublereal *nthdec, integer *nstars, ftnlen catnam_len);
+extern int stcf01_(void *cspice_state, char *catnam, doublereal *westra, doublereal *eastra, doublereal *sthdec, doublereal *nthdec, integer *nstars, ftnlen catnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dpr_ 7 0 */
@@ -8325,7 +8325,7 @@ extern int stcf01_(char *catnam, doublereal *westra, doublereal *eastra, doubler
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int stcg01_(integer *index, doublereal *ra, doublereal *dec, doublereal *rasig, doublereal *decsig, integer *catnum, char *sptype, doublereal *vmag, ftnlen sptype_len);
+extern int stcg01_(void *cspice_state, integer *index, doublereal *ra, doublereal *dec, doublereal *rasig, doublereal *decsig, integer *catnum, char *sptype, doublereal *vmag, ftnlen sptype_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ekgd_ 14 6 4 4 4 7 12 12 */
@@ -8337,7 +8337,7 @@ extern int stcg01_(integer *index, doublereal *ra, doublereal *dec, doublereal *
 /*:ref: ekgc_ 14 7 4 4 4 13 12 12 124 */
 /*:ref: rpd_ 7 0 */
  
-extern int stcl01_(char *catfnm, char *tabnam, integer *handle, ftnlen catfnm_len, ftnlen tabnam_len);
+extern int stcl01_(void *cspice_state, char *catfnm, char *tabnam, integer *handle, ftnlen catfnm_len, ftnlen tabnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: stcc01_ 14 7 13 13 12 13 124 124 124 */
@@ -8347,7 +8347,7 @@ extern int stcl01_(char *catfnm, char *tabnam, integer *handle, ftnlen catfnm_le
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: eklef_ 14 3 13 4 124 */
  
-extern int stdio_(char *name__, integer *unit, ftnlen name_len);
+extern int stdio_(void *cspice_state, char *name__, integer *unit, ftnlen name_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: return_ 12 0 */
@@ -8357,7 +8357,7 @@ extern int stdio_(char *name__, integer *unit, ftnlen name_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int stelab_(doublereal *pobj, doublereal *vobs, doublereal *appobj);
+extern int stelab_(void *cspice_state, doublereal *pobj, doublereal *vobs, doublereal *appobj);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vhat_ 14 2 7 7 */
@@ -8373,14 +8373,14 @@ extern int stelab_(doublereal *pobj, doublereal *vobs, doublereal *appobj);
 /*:ref: vrotv_ 14 4 7 7 7 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int stlabx_(doublereal *pobj, doublereal *vobs, doublereal *corpos);
+extern int stlabx_(void *cspice_state, doublereal *pobj, doublereal *vobs, doublereal *corpos);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int stmp03_(doublereal *x, doublereal *c0, doublereal *c1, doublereal *c2, doublereal *c3);
+extern int stmp03_(void *cspice_state, doublereal *x, doublereal *c0, doublereal *c1, doublereal *c2, doublereal *c3);
 /*:ref: dpmax_ 7 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8388,14 +8388,14 @@ extern int stmp03_(doublereal *x, doublereal *c0, doublereal *c1, doublereal *c2
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int stpool_(char *item, integer *nth, char *contin, char *string, integer *size, logical *found, ftnlen item_len, ftnlen contin_len, ftnlen string_len);
+extern int stpool_(void *cspice_state, char *item, integer *nth, char *contin, char *string, integer *size, logical *found, ftnlen item_len, ftnlen contin_len, ftnlen string_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: rtrim_ 4 2 13 124 */
 /*:ref: gcpool_ 14 8 13 4 4 4 13 12 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int str2et_(char *string, doublereal *et, ftnlen string_len);
+extern int str2et_(void *cspice_state, char *string, doublereal *et, ftnlen string_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: timdef_ 14 6 13 13 13 124 124 124 */
@@ -8418,7 +8418,7 @@ extern int str2et_(char *string, doublereal *et, ftnlen string_len);
 /*:ref: dpfmt_ 14 5 7 13 13 124 124 */
 /*:ref: gr2jul_ 14 4 4 4 4 4 */
  
-extern int subpnt_(char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int subpnt_(void *cspice_state, char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -8455,7 +8455,7 @@ extern int subpnt_(char *method, char *target, doublereal *et, char *fixref, cha
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: touchd_ 7 1 7 */
  
-extern int subpt_(char *method, char *target, doublereal *et, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *alt, ftnlen method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int subpt_(void *cspice_state, char *method, char *target, doublereal *et, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *alt, ftnlen method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -8473,7 +8473,7 @@ extern int subpt_(char *method, char *target, doublereal *et, char *abcorr, char
 /*:ref: surfpt_ 14 7 7 7 7 7 7 7 12 */
 /*:ref: vdist_ 7 2 7 7 */
  
-extern int subslr_(char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int subslr_(void *cspice_state, char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -8509,7 +8509,7 @@ extern int subslr_(char *method, char *target, doublereal *et, char *fixref, cha
 /*:ref: spkcpt_ 14 16 7 13 13 7 13 13 13 13 7 7 124 124 124 124 124 124 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int subsol_(char *method, char *target, doublereal *et, char *abcorr, char *obsrvr, doublereal *spoint, ftnlen method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int subsol_(void *cspice_state, char *method, char *target, doublereal *et, char *abcorr, char *obsrvr, doublereal *spoint, ftnlen method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -8526,14 +8526,14 @@ extern int subsol_(char *method, char *target, doublereal *et, char *abcorr, cha
 /*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
 /*:ref: surfpt_ 14 7 7 7 7 7 7 7 12 */
  
-extern int suffix_(char *suff, integer *spaces, char *string, ftnlen suff_len, ftnlen string_len);
+extern int suffix_(void *cspice_state, char *suff, integer *spaces, char *string, ftnlen suff_len, ftnlen string_len);
 /*:ref: lastnb_ 4 2 13 124 */
  
-extern doublereal sumad_(doublereal *array, integer *n);
+extern doublereal sumad_(void *cspice_state, doublereal *array, integer *n);
  
-extern integer sumai_(integer *array, integer *n);
+extern integer sumai_(void *cspice_state, integer *array, integer *n);
  
-extern int surfnm_(doublereal *a, doublereal *b, doublereal *c__, doublereal *point, doublereal *normal);
+extern int surfnm_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__, doublereal *point, doublereal *normal);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8543,7 +8543,7 @@ extern int surfnm_(doublereal *a, doublereal *b, doublereal *c__, doublereal *po
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: vhatip_ 14 1 7 */
  
-extern int surfpt_(doublereal *positn, doublereal *u, doublereal *a, doublereal *b, doublereal *c__, doublereal *point, logical *found);
+extern int surfpt_(void *cspice_state, doublereal *positn, doublereal *u, doublereal *a, doublereal *b, doublereal *c__, doublereal *point, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: vzero_ 12 1 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -8561,7 +8561,7 @@ extern int surfpt_(doublereal *positn, doublereal *u, doublereal *a, doublereal 
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int surfpv_(doublereal *stvrtx, doublereal *stdir, doublereal *a, doublereal *b, doublereal *c__, doublereal *stx, logical *found);
+extern int surfpv_(void *cspice_state, doublereal *stvrtx, doublereal *stdir, doublereal *a, doublereal *b, doublereal *c__, doublereal *stx, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: surfpt_ 14 7 7 7 7 7 7 7 12 */
@@ -8580,7 +8580,7 @@ extern int surfpv_(doublereal *stvrtx, doublereal *stdir, doublereal *a, doubler
 /*:ref: dpmax_ 7 0 */
 /*:ref: vlcom3_ 14 7 7 7 7 7 7 7 7 */
  
-extern int swapac_(integer *n, integer *locn, integer *m, integer *locm, char *array, ftnlen array_len);
+extern int swapac_(void *cspice_state, integer *n, integer *locn, integer *m, integer *locm, char *array, ftnlen array_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8590,7 +8590,7 @@ extern int swapac_(integer *n, integer *locn, integer *m, integer *locm, char *a
 /*:ref: swapc_ 14 4 13 13 124 124 */
 /*:ref: cyacip_ 14 6 4 13 4 13 124 124 */
  
-extern int swapad_(integer *n, integer *locn, integer *m, integer *locm, doublereal *array);
+extern int swapad_(void *cspice_state, integer *n, integer *locn, integer *m, integer *locm, doublereal *array);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8600,7 +8600,7 @@ extern int swapad_(integer *n, integer *locn, integer *m, integer *locm, doubler
 /*:ref: swapd_ 14 2 7 7 */
 /*:ref: cyadip_ 14 5 4 13 4 7 124 */
  
-extern int swapai_(integer *n, integer *locn, integer *m, integer *locm, integer *array);
+extern int swapai_(void *cspice_state, integer *n, integer *locn, integer *m, integer *locm, integer *array);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -8610,13 +8610,13 @@ extern int swapai_(integer *n, integer *locn, integer *m, integer *locm, integer
 /*:ref: swapi_ 14 2 4 4 */
 /*:ref: cyaiip_ 14 5 4 13 4 4 124 */
  
-extern int swapc_(char *a, char *b, ftnlen a_len, ftnlen b_len);
+extern int swapc_(void *cspice_state, char *a, char *b, ftnlen a_len, ftnlen b_len);
  
-extern int swapd_(doublereal *a, doublereal *b);
+extern int swapd_(void *cspice_state, doublereal *a, doublereal *b);
  
-extern int swapi_(integer *a, integer *b);
+extern int swapi_(void *cspice_state, integer *a, integer *b);
  
-extern int sxform_(char *from, char *to, doublereal *et, doublereal *xform, ftnlen from_len, ftnlen to_len);
+extern int sxform_(void *cspice_state, char *from, char *to, doublereal *et, doublereal *xform, ftnlen from_len, ftnlen to_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -8627,7 +8627,7 @@ extern int sxform_(char *from, char *to, doublereal *et, doublereal *xform, ftnl
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sydelc_(char *name__, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int sydelc_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8640,7 +8640,7 @@ extern int sydelc_(char *name__, char *tabsym, integer *tabptr, char *tabval, ft
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sydeld_(char *name__, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sydeld_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8656,7 +8656,7 @@ extern int sydeld_(char *name__, char *tabsym, integer *tabptr, doublereal *tabv
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sydeli_(char *name__, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sydeli_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8669,28 +8669,28 @@ extern int sydeli_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer sydimc_(char *name__, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern integer sydimc_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
 /*:ref: bsrchc_ 4 5 13 4 13 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer sydimd_(char *name__, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern integer sydimd_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
 /*:ref: bsrchc_ 4 5 13 4 13 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern integer sydimi_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
 /*:ref: bsrchc_ 4 5 13 4 13 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sydupc_(char *name__, char *copy, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen copy_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int sydupc_(void *cspice_state, char *name__, char *copy, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen copy_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8709,7 +8709,7 @@ extern int sydupc_(char *name__, char *copy, char *tabsym, integer *tabptr, char
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sydupd_(char *name__, char *copy, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen copy_len, ftnlen tabsym_len);
+extern int sydupd_(void *cspice_state, char *name__, char *copy, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen copy_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8731,7 +8731,7 @@ extern int sydupd_(char *name__, char *copy, char *tabsym, integer *tabptr, doub
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sydupi_(char *name__, char *copy, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen copy_len, ftnlen tabsym_len);
+extern int sydupi_(void *cspice_state, char *name__, char *copy, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen copy_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8750,7 +8750,7 @@ extern int sydupi_(char *name__, char *copy, char *tabsym, integer *tabptr, inte
 /*:ref: inslai_ 14 5 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syenqc_(char *name__, char *value, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen value_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int syenqc_(void *cspice_state, char *name__, char *value, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen value_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8765,7 +8765,7 @@ extern int syenqc_(char *name__, char *value, char *tabsym, integer *tabptr, cha
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syenqd_(char *name__, doublereal *value, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int syenqd_(void *cspice_state, char *name__, doublereal *value, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8782,7 +8782,7 @@ extern int syenqd_(char *name__, doublereal *value, char *tabsym, integer *tabpt
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syenqi_(char *name__, integer *value, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int syenqi_(void *cspice_state, char *name__, integer *value, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8799,25 +8799,25 @@ extern int syenqi_(char *name__, integer *value, char *tabsym, integer *tabptr, 
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syfetc_(integer *nth, char *tabsym, integer *tabptr, char *tabval, char *name__, logical *found, ftnlen tabsym_len, ftnlen tabval_len, ftnlen name_len);
+extern int syfetc_(void *cspice_state, integer *nth, char *tabsym, integer *tabptr, char *tabval, char *name__, logical *found, ftnlen tabsym_len, ftnlen tabval_len, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syfetd_(integer *nth, char *tabsym, integer *tabptr, doublereal *tabval, char *name__, logical *found, ftnlen tabsym_len, ftnlen name_len);
+extern int syfetd_(void *cspice_state, integer *nth, char *tabsym, integer *tabptr, doublereal *tabval, char *name__, logical *found, ftnlen tabsym_len, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syfeti_(integer *nth, char *tabsym, integer *tabptr, integer *tabval, char *name__, logical *found, ftnlen tabsym_len, ftnlen name_len);
+extern int syfeti_(void *cspice_state, integer *nth, char *tabsym, integer *tabptr, integer *tabval, char *name__, logical *found, ftnlen tabsym_len, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sygetc_(char *name__, char *tabsym, integer *tabptr, char *tabval, integer *n, char *values, logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen values_len);
+extern int sygetc_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, char *tabval, integer *n, char *values, logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen values_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8826,7 +8826,7 @@ extern int sygetc_(char *name__, char *tabsym, integer *tabptr, char *tabval, in
 /*:ref: movec_ 14 5 13 4 13 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sygetd_(char *name__, char *tabsym, integer *tabptr, doublereal *tabval, integer *n, doublereal *values, logical *found, ftnlen name_len, ftnlen tabsym_len);
+extern int sygetd_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, doublereal *tabval, integer *n, doublereal *values, logical *found, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8835,7 +8835,7 @@ extern int sygetd_(char *name__, char *tabsym, integer *tabptr, doublereal *tabv
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sygeti_(char *name__, char *tabsym, integer *tabptr, integer *tabval, integer *n, integer *values, logical *found, ftnlen name_len, ftnlen tabsym_len);
+extern int sygeti_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, integer *tabval, integer *n, integer *values, logical *found, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8844,7 +8844,7 @@ extern int sygeti_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int synthc_(char *name__, integer *nth, char *tabsym, integer *tabptr, char *tabval, char *value, logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen value_len);
+extern int synthc_(void *cspice_state, char *name__, integer *nth, char *tabsym, integer *tabptr, char *tabval, char *value, logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen value_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8852,7 +8852,7 @@ extern int synthc_(char *name__, integer *nth, char *tabsym, integer *tabptr, ch
 /*:ref: sumai_ 4 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int synthd_(char *name__, integer *nth, char *tabsym, integer *tabptr, doublereal *tabval, doublereal *value, logical *found, ftnlen name_len, ftnlen tabsym_len);
+extern int synthd_(void *cspice_state, char *name__, integer *nth, char *tabsym, integer *tabptr, doublereal *tabval, doublereal *value, logical *found, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8860,7 +8860,7 @@ extern int synthd_(char *name__, integer *nth, char *tabsym, integer *tabptr, do
 /*:ref: sumai_ 4 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int synthi_(char *name__, integer *nth, char *tabsym, integer *tabptr, integer *tabval, integer *value, logical *found, ftnlen name_len, ftnlen tabsym_len);
+extern int synthi_(void *cspice_state, char *name__, integer *nth, char *tabsym, integer *tabptr, integer *tabval, integer *value, logical *found, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8868,7 +8868,7 @@ extern int synthi_(char *name__, integer *nth, char *tabsym, integer *tabptr, in
 /*:ref: sumai_ 4 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syordc_(char *name__, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int syordc_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8877,7 +8877,7 @@ extern int syordc_(char *name__, char *tabsym, integer *tabptr, char *tabval, ft
 /*:ref: shellc_ 14 3 4 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syordd_(char *name__, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int syordd_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8886,7 +8886,7 @@ extern int syordd_(char *name__, char *tabsym, integer *tabptr, doublereal *tabv
 /*:ref: shelld_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syordi_(char *name__, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int syordi_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8895,7 +8895,7 @@ extern int syordi_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
 /*:ref: shelli_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sypopc_(char *name__, char *tabsym, integer *tabptr, char *tabval, char *value, logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen value_len);
+extern int sypopc_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, char *tabval, char *value, logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen value_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8908,7 +8908,7 @@ extern int sypopc_(char *name__, char *tabsym, integer *tabptr, char *tabval, ch
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sypopd_(char *name__, char *tabsym, integer *tabptr, doublereal *tabval, doublereal *value, logical *found, ftnlen name_len, ftnlen tabsym_len);
+extern int sypopd_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, doublereal *tabval, doublereal *value, logical *found, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8924,7 +8924,7 @@ extern int sypopd_(char *name__, char *tabsym, integer *tabptr, doublereal *tabv
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sypopi_(char *name__, char *tabsym, integer *tabptr, integer *tabval, integer *value, logical *found, ftnlen name_len, ftnlen tabsym_len);
+extern int sypopi_(void *cspice_state, char *name__, char *tabsym, integer *tabptr, integer *tabval, integer *value, logical *found, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8937,7 +8937,7 @@ extern int sypopi_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sypshc_(char *name__, char *value, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen value_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int sypshc_(void *cspice_state, char *name__, char *value, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen value_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8952,7 +8952,7 @@ extern int sypshc_(char *name__, char *value, char *tabsym, integer *tabptr, cha
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sypshd_(char *name__, doublereal *value, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sypshd_(void *cspice_state, char *name__, doublereal *value, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8969,7 +8969,7 @@ extern int sypshd_(char *name__, doublereal *value, char *tabsym, integer *tabpt
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sypshi_(char *name__, integer *value, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sypshi_(void *cspice_state, char *name__, integer *value, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -8986,7 +8986,7 @@ extern int sypshi_(char *name__, integer *value, char *tabsym, integer *tabptr, 
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syputc_(char *name__, char *values, integer *n, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen values_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int syputc_(void *cspice_state, char *name__, char *values, integer *n, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen values_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9005,7 +9005,7 @@ extern int syputc_(char *name__, char *values, integer *n, char *tabsym, integer
 /*:ref: inslai_ 14 5 4 4 4 4 4 */
 /*:ref: scardi_ 14 2 4 4 */
  
-extern int syputd_(char *name__, doublereal *values, integer *n, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int syputd_(void *cspice_state, char *name__, doublereal *values, integer *n, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9028,7 +9028,7 @@ extern int syputd_(char *name__, doublereal *values, integer *n, char *tabsym, i
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: inslad_ 14 5 7 4 4 7 4 */
  
-extern int syputi_(char *name__, integer *values, integer *n, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int syputi_(void *cspice_state, char *name__, integer *values, integer *n, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9047,7 +9047,7 @@ extern int syputi_(char *name__, integer *values, integer *n, char *tabsym, inte
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: inslai_ 14 5 4 4 4 4 4 */
  
-extern int syrenc_(char *old, char *new__, char *tabsym, integer *tabptr, char *tabval, ftnlen old_len, ftnlen new_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int syrenc_(void *cspice_state, char *old, char *new__, char *tabsym, integer *tabptr, char *tabval, ftnlen old_len, ftnlen new_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9062,7 +9062,7 @@ extern int syrenc_(char *old, char *new__, char *tabsym, integer *tabptr, char *
 /*:ref: swapai_ 14 5 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syrend_(char *old, char *new__, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen old_len, ftnlen new_len, ftnlen tabsym_len);
+extern int syrend_(void *cspice_state, char *old, char *new__, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen old_len, ftnlen new_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9078,7 +9078,7 @@ extern int syrend_(char *old, char *new__, char *tabsym, integer *tabptr, double
 /*:ref: swapai_ 14 5 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syreni_(char *old, char *new__, char *tabsym, integer *tabptr, integer *tabval, ftnlen old_len, ftnlen new_len, ftnlen tabsym_len);
+extern int syreni_(void *cspice_state, char *old, char *new__, char *tabsym, integer *tabptr, integer *tabval, ftnlen old_len, ftnlen new_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9093,7 +9093,7 @@ extern int syreni_(char *old, char *new__, char *tabsym, integer *tabptr, intege
 /*:ref: swapac_ 14 6 4 4 4 4 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syselc_(char *name__, integer *begin, integer *end, char *tabsym, integer *tabptr, char *tabval, char *values, logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen values_len);
+extern int syselc_(void *cspice_state, char *name__, integer *begin, integer *end, char *tabsym, integer *tabptr, char *tabval, char *values, logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen values_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9102,7 +9102,7 @@ extern int syselc_(char *name__, integer *begin, integer *end, char *tabsym, int
 /*:ref: movec_ 14 5 13 4 13 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syseld_(char *name__, integer *begin, integer *end, char *tabsym, integer *tabptr, doublereal *tabval, doublereal *values, logical *found, ftnlen name_len, ftnlen tabsym_len);
+extern int syseld_(void *cspice_state, char *name__, integer *begin, integer *end, char *tabsym, integer *tabptr, doublereal *tabval, doublereal *values, logical *found, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9111,7 +9111,7 @@ extern int syseld_(char *name__, integer *begin, integer *end, char *tabsym, int
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syseli_(char *name__, integer *begin, integer *end, char *tabsym, integer *tabptr, integer *tabval, integer *values, logical *found, ftnlen name_len, ftnlen tabsym_len);
+extern int syseli_(void *cspice_state, char *name__, integer *begin, integer *end, char *tabsym, integer *tabptr, integer *tabval, integer *values, logical *found, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9120,7 +9120,7 @@ extern int syseli_(char *name__, integer *begin, integer *end, char *tabsym, int
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sysetc_(char *name__, char *value, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen value_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int sysetc_(void *cspice_state, char *name__, char *value, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen value_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9139,7 +9139,7 @@ extern int sysetc_(char *name__, char *value, char *tabsym, integer *tabptr, cha
 /*:ref: scardi_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sysetd_(char *name__, doublereal *value, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sysetd_(void *cspice_state, char *name__, doublereal *value, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9162,7 +9162,7 @@ extern int sysetd_(char *name__, doublereal *value, char *tabsym, integer *tabpt
 /*:ref: inslad_ 14 5 7 4 4 7 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int syseti_(char *name__, integer *value, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int syseti_(void *cspice_state, char *name__, integer *value, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9181,7 +9181,7 @@ extern int syseti_(char *name__, integer *value, char *tabsym, integer *tabptr, 
 /*:ref: inslai_ 14 5 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sytrnc_(char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int sytrnc_(void *cspice_state, char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9193,7 +9193,7 @@ extern int sytrnc_(char *name__, integer *i__, integer *j, char *tabsym, integer
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sytrnd_(char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sytrnd_(void *cspice_state, char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9205,7 +9205,7 @@ extern int sytrnd_(char *name__, integer *i__, integer *j, char *tabsym, integer
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sytrni_(char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sytrni_(void *cspice_state, char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9217,15 +9217,15 @@ extern int sytrni_(char *name__, integer *i__, integer *j, char *tabsym, integer
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int tcheck_(doublereal *tvec, char *type__, logical *mods, char *modify, logical *ok, char *error, ftnlen type_len, ftnlen modify_len, ftnlen error_len);
-extern int tparch_(char *type__, ftnlen type_len);
-extern int tchckd_(char *type__, ftnlen type_len);
+extern int tcheck_(void *cspice_state, doublereal *tvec, char *type__, logical *mods, char *modify, logical *ok, char *error, ftnlen type_len, ftnlen modify_len, ftnlen error_len);
+extern int tparch_(void *cspice_state, char *type__, ftnlen type_len);
+extern int tchckd_(void *cspice_state, char *type__, ftnlen type_len);
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: repmd_ 14 8 13 13 7 4 13 124 124 124 */
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
  
-extern int termpt_(char *method, char *ilusrc, char *target, doublereal *et, char *fixref, char *abcorr, char *corloc, char *obsrvr, doublereal *refvec, doublereal *rolstp, integer *ncuts, doublereal *schstp, doublereal *soltol, integer *maxn, integer *npts, doublereal *points, doublereal *epochs, doublereal *trmvcs, ftnlen method_len, ftnlen ilusrc_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen corloc_len, ftnlen obsrvr_len);
+extern int termpt_(void *cspice_state, char *method, char *ilusrc, char *target, doublereal *et, char *fixref, char *abcorr, char *corloc, char *obsrvr, doublereal *refvec, doublereal *rolstp, integer *ncuts, doublereal *schstp, doublereal *soltol, integer *maxn, integer *npts, doublereal *points, doublereal *epochs, doublereal *trmvcs, ftnlen method_len, ftnlen ilusrc_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen corloc_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -9276,10 +9276,10 @@ extern int termpt_(char *method, char *ilusrc, char *target, doublereal *et, cha
 /*:ref: mtxv_ 14 3 7 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
  
-extern int texpyr_(integer *year);
-extern int tsetyr_(integer *year);
+extern int texpyr_(void *cspice_state, integer *year);
+extern int tsetyr_(void *cspice_state, integer *year);
  
-extern int timdef_(char *action, char *item, char *value, ftnlen action_len, ftnlen item_len, ftnlen value_len);
+extern int timdef_(void *cspice_state, char *action, char *item, char *value, ftnlen action_len, ftnlen item_len, ftnlen value_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -9292,7 +9292,7 @@ extern int timdef_(char *action, char *item, char *value, ftnlen action_len, ftn
 /*:ref: prefix_ 14 5 13 4 13 124 124 */
 /*:ref: zzutcpm_ 14 7 13 4 7 7 4 12 124 */
  
-extern int timout_(doublereal *et, char *pictur, char *output, ftnlen pictur_len, ftnlen output_len);
+extern int timout_(void *cspice_state, doublereal *et, char *pictur, char *output, ftnlen pictur_len, ftnlen output_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: scanpr_ 14 5 4 13 4 4 124 */
@@ -9320,14 +9320,14 @@ extern int timout_(doublereal *et, char *pictur, char *output, ftnlen pictur_len
 /*:ref: lcase_ 14 4 13 13 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int tipbod_(char *ref, integer *body, doublereal *et, doublereal *tipm, ftnlen ref_len);
+extern int tipbod_(void *cspice_state, char *ref, integer *body, doublereal *et, doublereal *tipm, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: tisbod_ 14 5 13 4 7 7 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int tisbod_(char *ref, integer *body, doublereal *et, doublereal *tsipm, ftnlen ref_len);
+extern int tisbod_(void *cspice_state, char *ref, integer *body, doublereal *et, doublereal *tsipm, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -9367,7 +9367,7 @@ extern int tisbod_(char *ref, integer *body, doublereal *et, doublereal *tsipm, 
 /*:ref: irfrot_ 14 3 4 4 7 */
 /*:ref: mxm_ 14 3 7 7 7 */
  
-extern int tkfram_(integer *id, doublereal *rot, integer *frame, logical *found);
+extern int tkfram_(void *cspice_state, integer *id, doublereal *rot, integer *frame, logical *found);
 /*:ref: lnkini_ 14 2 4 4 */
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -9404,22 +9404,22 @@ extern int tkfram_(integer *id, doublereal *rot, integer *frame, logical *found)
 /*:ref: q2m_ 14 2 7 7 */
 /*:ref: swpool_ 14 5 13 4 13 124 124 */
  
-extern int tkvrsn_(char *item, char *verstr, ftnlen item_len, ftnlen verstr_len);
+extern int tkvrsn_(void *cspice_state, char *item, char *verstr, ftnlen item_len, ftnlen verstr_len);
 /*:ref: eqstr_ 12 4 13 13 124 124 */
  
-extern int tostdo_(char *line, ftnlen line_len);
+extern int tostdo_(void *cspice_state, char *line, ftnlen line_len);
 /*:ref: stdio_ 14 3 13 4 124 */
 /*:ref: writln_ 14 3 13 4 124 */
  
-extern H_f touchc_(char *ret_val, ftnlen ret_val_len, char *string, ftnlen string_len);
+extern H_f touchc_(void *cspice_state, char *ret_val, ftnlen ret_val_len, char *string, ftnlen string_len);
  
-extern doublereal touchd_(doublereal *dp);
+extern doublereal touchd_(void *cspice_state, doublereal *dp);
  
-extern integer touchi_(integer *int__);
+extern integer touchi_(void *cspice_state, integer *int__);
  
-extern logical touchl_(logical *log__);
+extern logical touchl_(void *cspice_state, logical *log__);
  
-extern int tparse_(char *string, doublereal *sp2000, char *error, ftnlen string_len, ftnlen error_len);
+extern int tparse_(void *cspice_state, char *string, doublereal *sp2000, char *error, ftnlen string_len, ftnlen error_len);
 /*:ref: tpartv_ 14 15 13 7 4 13 13 12 12 12 13 13 124 124 124 124 124 */
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: j2000_ 7 0 */
@@ -9428,7 +9428,7 @@ extern int tparse_(char *string, doublereal *sp2000, char *error, ftnlen string_
 /*:ref: texpyr_ 14 1 4 */
 /*:ref: rmaini_ 14 4 4 4 4 4 */
  
-extern int tpartv_(char *string, doublereal *tvec, integer *ntvec, char *type__, char *modify, logical *mods, logical *yabbrv, logical *succes, char *pictur, char *error, ftnlen string_len, ftnlen type_len, ftnlen modify_len, ftnlen pictur_len, ftnlen error_len);
+extern int tpartv_(void *cspice_state, char *string, doublereal *tvec, integer *ntvec, char *type__, char *modify, logical *mods, logical *yabbrv, logical *succes, char *pictur, char *error, ftnlen string_len, ftnlen type_len, ftnlen modify_len, ftnlen pictur_len, ftnlen error_len);
 /*:ref: zztpats_ 12 6 4 4 13 13 124 124 */
 /*:ref: zztokns_ 12 4 13 13 124 124 */
 /*:ref: zzcmbt_ 12 5 13 13 12 124 124 */
@@ -9451,22 +9451,22 @@ extern int tpartv_(char *string, doublereal *tvec, integer *ntvec, char *type__,
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: rtrim_ 4 2 13 124 */
  
-extern int tpictr_(char *sample, char *pictur, logical *ok, char *error, ftnlen sample_len, ftnlen pictur_len, ftnlen error_len);
+extern int tpictr_(void *cspice_state, char *sample, char *pictur, logical *ok, char *error, ftnlen sample_len, ftnlen pictur_len, ftnlen error_len);
 /*:ref: tpartv_ 14 15 13 7 4 13 13 12 12 12 13 13 124 124 124 124 124 */
  
-extern doublereal trace_(doublereal *matrix);
+extern doublereal trace_(void *cspice_state, doublereal *matrix);
  
-extern doublereal traceg_(doublereal *matrix, integer *ndim);
+extern doublereal traceg_(void *cspice_state, doublereal *matrix, integer *ndim);
  
-extern int trcpkg_(integer *depth, integer *index, char *module, char *trace, char *name__, ftnlen module_len, ftnlen trace_len, ftnlen name_len);
-extern int chkin_(char *module, ftnlen module_len);
-extern int chkout_(char *module, ftnlen module_len);
-extern int trcdep_(integer *depth);
-extern int trcmxd_(integer *depth);
-extern int trcnam_(integer *index, char *name__, ftnlen name_len);
-extern int qcktrc_(char *trace, ftnlen trace_len);
-extern int freeze_(void);
-extern int trcoff_(void);
+extern int trcpkg_(void *cspice_state, integer *depth, integer *index, char *module, char *trace, char *name__, ftnlen module_len, ftnlen trace_len, ftnlen name_len);
+extern int chkin_(void *cspice_state, char *module, ftnlen module_len);
+extern int chkout_(void *cspice_state, char *module, ftnlen module_len);
+extern int trcdep_(void *cspice_state, integer *depth);
+extern int trcmxd_(void *cspice_state, integer *depth);
+extern int trcnam_(void *cspice_state, integer *index, char *name__, ftnlen name_len);
+extern int qcktrc_(void *cspice_state, char *trace, ftnlen trace_len);
+extern int freeze_(void *cspice_state);
+extern int trcoff_(void *cspice_state);
 /*:ref: wrline_ 14 4 13 13 124 124 */
 /*:ref: frstnb_ 4 2 13 124 */
 /*:ref: getdev_ 14 2 13 124 */
@@ -9476,7 +9476,7 @@ extern int trcoff_(void);
 /*:ref: intstr_ 14 3 4 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int ttrans_(char *from, char *to, doublereal *tvec, ftnlen from_len, ftnlen to_len);
+extern int ttrans_(void *cspice_state, char *from, char *to, doublereal *tvec, ftnlen from_len, ftnlen to_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spd_ 7 0 */
@@ -9507,9 +9507,9 @@ extern int ttrans_(char *from, char *to, doublereal *tvec, ftnlen from_len, ftnl
 /*:ref: lstled_ 4 3 7 4 7 */
 /*:ref: lstlti_ 4 3 4 4 4 */
  
-extern doublereal twopi_(void);
+extern doublereal twopi_(void *cspice_state);
  
-extern int twovec_(doublereal *axdef, integer *indexa, doublereal *plndef, integer *indexp, doublereal *mout);
+extern int twovec_(void *cspice_state, doublereal *axdef, integer *indexa, doublereal *plndef, integer *indexp, doublereal *mout);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9521,14 +9521,14 @@ extern int twovec_(doublereal *axdef, integer *indexa, doublereal *plndef, integ
 /*:ref: xpose_ 14 2 7 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int twovxf_(doublereal *axdef, integer *indexa, doublereal *plndef, integer *indexp, doublereal *xform);
+extern int twovxf_(void *cspice_state, doublereal *axdef, integer *indexa, doublereal *plndef, integer *indexp, doublereal *xform);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zztwovxf_ 14 5 7 4 7 4 7 */
 /*:ref: invstm_ 14 2 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int txtopn_(char *fname, integer *unit, ftnlen fname_len);
+extern int txtopn_(void *cspice_state, char *fname, integer *unit, ftnlen fname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9538,7 +9538,7 @@ extern int txtopn_(char *fname, integer *unit, ftnlen fname_len);
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int txtopr_(char *fname, integer *unit, ftnlen fname_len);
+extern int txtopr_(void *cspice_state, char *fname, integer *unit, ftnlen fname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9548,30 +9548,30 @@ extern int txtopr_(char *fname, integer *unit, ftnlen fname_len);
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern doublereal tyear_(void);
+extern doublereal tyear_(void *cspice_state);
  
-extern int ucase_(char *in, char *out, ftnlen in_len, ftnlen out_len);
+extern int ucase_(void *cspice_state, char *in, char *out, ftnlen in_len, ftnlen out_len);
  
-extern int ucrss_(doublereal *v1, doublereal *v2, doublereal *vout);
+extern int ucrss_(void *cspice_state, doublereal *v1, doublereal *v2, doublereal *vout);
 /*:ref: vnorm_ 7 1 7 */
  
-extern int uddc_(U_fp udfunc, doublereal *x, doublereal *dx, logical *isdecr);
+extern int uddc_(void *cspice_state, U_fp udfunc, doublereal *x, doublereal *dx, logical *isdecr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: uddf_ 14 4 200 7 7 7 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int uddf_(S_fp udfunc, doublereal *x, doublereal *dx, doublereal *deriv);
+extern int uddf_(void *cspice_state, S_fp udfunc, doublereal *x, doublereal *dx, doublereal *deriv);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: qderiv_ 14 5 4 7 7 7 7 */
  
-extern int udf_(doublereal *x, doublereal *value);
+extern int udf_(void *cspice_state, doublereal *x, doublereal *value);
  
-extern int unionc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
+extern int unionc_(void *cspice_state, char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9583,7 +9583,7 @@ extern int unionc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnl
 /*:ref: scardc_ 14 3 4 13 124 */
 /*:ref: excess_ 14 3 4 13 124 */
  
-extern int uniond_(doublereal *a, doublereal *b, doublereal *c__);
+extern int uniond_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9593,7 +9593,7 @@ extern int uniond_(doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int unioni_(integer *a, integer *b, integer *c__);
+extern int unioni_(void *cspice_state, integer *a, integer *b, integer *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardi_ 4 1 4 */
@@ -9603,7 +9603,7 @@ extern int unioni_(integer *a, integer *b, integer *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen insys_len, ftnlen outsys_len);
+extern doublereal unitim_(void *cspice_state, doublereal *epoch, char *insys, char *outsys, ftnlen insys_len, ftnlen outsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spd_ 7 0 */
@@ -9626,13 +9626,13 @@ extern doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen i
 /*:ref: setc_ 12 6 13 13 13 124 124 124 */
 /*:ref: elemc_ 12 4 13 13 124 124 */
  
-extern int unorm_(doublereal *v1, doublereal *vout, doublereal *vmag);
+extern int unorm_(void *cspice_state, doublereal *v1, doublereal *vout, doublereal *vmag);
 /*:ref: vnorm_ 7 1 7 */
  
-extern int unormg_(doublereal *v1, integer *ndim, doublereal *vout, doublereal *vmag);
+extern int unormg_(void *cspice_state, doublereal *v1, integer *ndim, doublereal *vout, doublereal *vmag);
 /*:ref: vnormg_ 7 2 7 4 */
  
-extern int utc2et_(char *utcstr, doublereal *et, ftnlen utcstr_len);
+extern int utc2et_(void *cspice_state, char *utcstr, doublereal *et, ftnlen utcstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: tpartv_ 14 15 13 7 4 13 13 12 12 12 13 13 124 124 124 124 124 */
@@ -9645,11 +9645,11 @@ extern int utc2et_(char *utcstr, doublereal *et, ftnlen utcstr_len);
 /*:ref: ttrans_ 14 5 13 13 7 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int vadd_(doublereal *v1, doublereal *v2, doublereal *vout);
+extern int vadd_(void *cspice_state, doublereal *v1, doublereal *v2, doublereal *vout);
  
-extern int vaddg_(doublereal *v1, doublereal *v2, integer *ndim, doublereal *vout);
+extern int vaddg_(void *cspice_state, doublereal *v1, doublereal *v2, integer *ndim, doublereal *vout);
  
-extern int validc_(integer *size, integer *n, char *a, ftnlen a_len);
+extern int validc_(void *cspice_state, integer *size, integer *n, char *a, ftnlen a_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9660,7 +9660,7 @@ extern int validc_(integer *size, integer *n, char *a, ftnlen a_len);
 /*:ref: ssizec_ 14 3 4 13 124 */
 /*:ref: scardc_ 14 3 4 13 124 */
  
-extern int validd_(integer *size, integer *n, doublereal *a);
+extern int validd_(void *cspice_state, integer *size, integer *n, doublereal *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9671,7 +9671,7 @@ extern int validd_(integer *size, integer *n, doublereal *a);
 /*:ref: ssized_ 14 2 4 7 */
 /*:ref: scardd_ 14 2 4 7 */
  
-extern int validi_(integer *size, integer *n, integer *a);
+extern int validi_(void *cspice_state, integer *size, integer *n, integer *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9682,53 +9682,53 @@ extern int validi_(integer *size, integer *n, integer *a);
 /*:ref: ssizei_ 14 2 4 4 */
 /*:ref: scardi_ 14 2 4 4 */
  
-extern int vcrss_(doublereal *v1, doublereal *v2, doublereal *vout);
+extern int vcrss_(void *cspice_state, doublereal *v1, doublereal *v2, doublereal *vout);
  
-extern doublereal vdist_(doublereal *v1, doublereal *v2);
+extern doublereal vdist_(void *cspice_state, doublereal *v1, doublereal *v2);
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: vnorm_ 7 1 7 */
  
-extern doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim);
+extern doublereal vdistg_(void *cspice_state, doublereal *v1, doublereal *v2, integer *ndim);
  
-extern doublereal vdot_(doublereal *v1, doublereal *v2);
+extern doublereal vdot_(void *cspice_state, doublereal *v1, doublereal *v2);
  
-extern doublereal vdotg_(doublereal *v1, doublereal *v2, integer *ndim);
+extern doublereal vdotg_(void *cspice_state, doublereal *v1, doublereal *v2, integer *ndim);
  
-extern int vequ_(doublereal *vin, doublereal *vout);
+extern int vequ_(void *cspice_state, doublereal *vin, doublereal *vout);
  
-extern int vequg_(doublereal *vin, integer *ndim, doublereal *vout);
+extern int vequg_(void *cspice_state, doublereal *vin, integer *ndim, doublereal *vout);
  
-extern int vhat_(doublereal *v1, doublereal *vout);
+extern int vhat_(void *cspice_state, doublereal *v1, doublereal *vout);
 /*:ref: vnorm_ 7 1 7 */
  
-extern int vhatg_(doublereal *v1, integer *ndim, doublereal *vout);
+extern int vhatg_(void *cspice_state, doublereal *v1, integer *ndim, doublereal *vout);
 /*:ref: vnormg_ 7 2 7 4 */
  
-extern int vhatip_(doublereal *v);
+extern int vhatip_(void *cspice_state, doublereal *v);
 /*:ref: vnorm_ 7 1 7 */
  
-extern int vlcom_(doublereal *a, doublereal *v1, doublereal *b, doublereal *v2, doublereal *sum);
+extern int vlcom_(void *cspice_state, doublereal *a, doublereal *v1, doublereal *b, doublereal *v2, doublereal *sum);
  
-extern int vlcom3_(doublereal *a, doublereal *v1, doublereal *b, doublereal *v2, doublereal *c__, doublereal *v3, doublereal *sum);
+extern int vlcom3_(void *cspice_state, doublereal *a, doublereal *v1, doublereal *b, doublereal *v2, doublereal *c__, doublereal *v3, doublereal *sum);
  
-extern int vlcomg_(integer *n, doublereal *a, doublereal *v1, doublereal *b, doublereal *v2, doublereal *sum);
+extern int vlcomg_(void *cspice_state, integer *n, doublereal *a, doublereal *v1, doublereal *b, doublereal *v2, doublereal *sum);
  
-extern int vminug_(doublereal *vin, integer *ndim, doublereal *vout);
+extern int vminug_(void *cspice_state, doublereal *vin, integer *ndim, doublereal *vout);
  
-extern int vminus_(doublereal *v1, doublereal *vout);
+extern int vminus_(void *cspice_state, doublereal *v1, doublereal *vout);
  
-extern doublereal vnorm_(doublereal *v1);
+extern doublereal vnorm_(void *cspice_state, doublereal *v1);
  
-extern doublereal vnormg_(doublereal *v1, integer *ndim);
+extern doublereal vnormg_(void *cspice_state, doublereal *v1, integer *ndim);
  
-extern int vpack_(doublereal *x, doublereal *y, doublereal *z__, doublereal *v);
+extern int vpack_(void *cspice_state, doublereal *x, doublereal *y, doublereal *z__, doublereal *v);
  
-extern int vperp_(doublereal *a, doublereal *b, doublereal *p);
+extern int vperp_(void *cspice_state, doublereal *a, doublereal *b, doublereal *p);
 /*:ref: vproj_ 14 3 7 7 7 */
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: vsclip_ 14 2 7 7 */
  
-extern int vprjp_(doublereal *vin, doublereal *plane, doublereal *vout);
+extern int vprjp_(void *cspice_state, doublereal *vin, doublereal *plane, doublereal *vout);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: pl2nvc_ 14 3 7 7 7 */
@@ -9736,7 +9736,7 @@ extern int vprjp_(doublereal *vin, doublereal *plane, doublereal *vout);
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int vprjpi_(doublereal *vin, doublereal *projpl, doublereal *invpl, doublereal *vout, logical *found);
+extern int vprjpi_(void *cspice_state, doublereal *vin, doublereal *projpl, doublereal *invpl, doublereal *vout, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: pl2nvc_ 14 3 7 7 7 */
@@ -9745,23 +9745,23 @@ extern int vprjpi_(doublereal *vin, doublereal *projpl, doublereal *invpl, doubl
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int vproj_(doublereal *a, doublereal *b, doublereal *p);
+extern int vproj_(void *cspice_state, doublereal *a, doublereal *b, doublereal *p);
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vscl_ 14 3 7 7 7 */
  
-extern int vprojg_(doublereal *a, doublereal *b, integer *ndim, doublereal *p);
+extern int vprojg_(void *cspice_state, doublereal *a, doublereal *b, integer *ndim, doublereal *p);
 /*:ref: vdotg_ 7 3 7 7 4 */
 /*:ref: vsclg_ 14 4 7 7 4 7 */
  
-extern doublereal vrel_(doublereal *v1, doublereal *v2);
+extern doublereal vrel_(void *cspice_state, doublereal *v1, doublereal *v2);
 /*:ref: vdist_ 7 2 7 7 */
 /*:ref: vnorm_ 7 1 7 */
  
-extern doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim);
+extern doublereal vrelg_(void *cspice_state, doublereal *v1, doublereal *v2, integer *ndim);
 /*:ref: vdistg_ 7 3 7 7 4 */
 /*:ref: vnormg_ 7 2 7 4 */
  
-extern int vrotv_(doublereal *v, doublereal *axis, doublereal *theta, doublereal *r__);
+extern int vrotv_(void *cspice_state, doublereal *v, doublereal *axis, doublereal *theta, doublereal *r__);
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: vhat_ 14 2 7 7 */
@@ -9771,44 +9771,44 @@ extern int vrotv_(doublereal *v, doublereal *axis, doublereal *theta, doublereal
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int vscl_(doublereal *s, doublereal *v1, doublereal *vout);
+extern int vscl_(void *cspice_state, doublereal *s, doublereal *v1, doublereal *vout);
  
-extern int vsclg_(doublereal *s, doublereal *v1, integer *ndim, doublereal *vout);
+extern int vsclg_(void *cspice_state, doublereal *s, doublereal *v1, integer *ndim, doublereal *vout);
  
-extern int vsclip_(doublereal *s, doublereal *v);
+extern int vsclip_(void *cspice_state, doublereal *s, doublereal *v);
  
-extern doublereal vsep_(doublereal *v1, doublereal *v2);
+extern doublereal vsep_(void *cspice_state, doublereal *v1, doublereal *v2);
 /*:ref: unorm_ 14 3 7 7 7 */
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: pi_ 7 0 */
  
-extern doublereal vsepg_(doublereal *v1, doublereal *v2, integer *ndim);
+extern doublereal vsepg_(void *cspice_state, doublereal *v1, doublereal *v2, integer *ndim);
 /*:ref: vnormg_ 7 2 7 4 */
 /*:ref: vdotg_ 7 3 7 7 4 */
 /*:ref: pi_ 7 0 */
  
-extern int vsub_(doublereal *v1, doublereal *v2, doublereal *vout);
+extern int vsub_(void *cspice_state, doublereal *v1, doublereal *v2, doublereal *vout);
  
-extern int vsubg_(doublereal *v1, doublereal *v2, integer *ndim, doublereal *vout);
+extern int vsubg_(void *cspice_state, doublereal *v1, doublereal *v2, integer *ndim, doublereal *vout);
  
-extern doublereal vtmv_(doublereal *v1, doublereal *matrix, doublereal *v2);
+extern doublereal vtmv_(void *cspice_state, doublereal *v1, doublereal *matrix, doublereal *v2);
  
-extern doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer *nrow, integer *ncol);
+extern doublereal vtmvg_(void *cspice_state, doublereal *v1, doublereal *matrix, doublereal *v2, integer *nrow, integer *ncol);
  
-extern int vupack_(doublereal *v, doublereal *x, doublereal *y, doublereal *z__);
+extern int vupack_(void *cspice_state, doublereal *v, doublereal *x, doublereal *y, doublereal *z__);
  
-extern logical vzero_(doublereal *v);
+extern logical vzero_(void *cspice_state, doublereal *v);
  
-extern logical vzerog_(doublereal *v, integer *ndim);
+extern logical vzerog_(void *cspice_state, doublereal *v, integer *ndim);
  
-extern integer wdcnt_(char *string, ftnlen string_len);
+extern integer wdcnt_(void *cspice_state, char *string, ftnlen string_len);
  
-extern integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len);
+extern integer wdindx_(void *cspice_state, char *string, char *word, ftnlen string_len, ftnlen word_len);
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: frstnb_ 4 2 13 124 */
  
-extern integer wncard_(doublereal *window);
+extern integer wncard_(void *cspice_state, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9818,7 +9818,7 @@ extern integer wncard_(doublereal *window);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wncomd_(doublereal *left, doublereal *right, doublereal *window, doublereal *result);
+extern int wncomd_(void *cspice_state, doublereal *left, doublereal *right, doublereal *window, doublereal *result);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9829,13 +9829,13 @@ extern int wncomd_(doublereal *left, doublereal *right, doublereal *window, doub
 /*:ref: wninsd_ 14 3 7 7 7 */
 /*:ref: failed_ 12 0 */
  
-extern int wncond_(doublereal *left, doublereal *right, doublereal *window);
+extern int wncond_(void *cspice_state, doublereal *left, doublereal *right, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: wnexpd_ 14 3 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wndifd_(doublereal *a, doublereal *b, doublereal *c__);
+extern int wndifd_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9848,20 +9848,20 @@ extern int wndifd_(doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern logical wnelmd_(doublereal *point, doublereal *window);
+extern logical wnelmd_(void *cspice_state, doublereal *point, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnexpd_(doublereal *left, doublereal *right, doublereal *window);
+extern int wnexpd_(void *cspice_state, doublereal *left, doublereal *right, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnextd_(char *side, doublereal *window, ftnlen side_len);
+extern int wnextd_(void *cspice_state, char *side, doublereal *window, ftnlen side_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9870,7 +9870,7 @@ extern int wnextd_(char *side, doublereal *window, ftnlen side_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnfetd_(doublereal *window, integer *n, doublereal *left, doublereal *right);
+extern int wnfetd_(void *cspice_state, doublereal *window, integer *n, doublereal *left, doublereal *right);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9878,27 +9878,27 @@ extern int wnfetd_(doublereal *window, integer *n, doublereal *left, doublereal 
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnfild_(doublereal *small, doublereal *window);
+extern int wnfild_(void *cspice_state, doublereal *small, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnfltd_(doublereal *small, doublereal *window);
+extern int wnfltd_(void *cspice_state, doublereal *small, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical wnincd_(doublereal *left, doublereal *right, doublereal *window);
+extern logical wnincd_(void *cspice_state, doublereal *left, doublereal *right, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wninsd_(doublereal *left, doublereal *right, doublereal *window);
+extern int wninsd_(void *cspice_state, doublereal *left, doublereal *right, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -9910,7 +9910,7 @@ extern int wninsd_(doublereal *left, doublereal *right, doublereal *window);
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: excess_ 14 3 4 13 124 */
  
-extern int wnintd_(doublereal *a, doublereal *b, doublereal *c__);
+extern int wnintd_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9920,7 +9920,7 @@ extern int wnintd_(doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len);
+extern logical wnreld_(void *cspice_state, doublereal *a, char *op, doublereal *b, ftnlen op_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9930,7 +9930,7 @@ extern logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnsumd_(doublereal *window, doublereal *meas, doublereal *avg, doublereal *stddev, integer *short__, integer *long__);
+extern int wnsumd_(void *cspice_state, doublereal *window, doublereal *meas, doublereal *avg, doublereal *stddev, integer *short__, integer *long__);
 /*:ref: return_ 12 0 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: even_ 12 1 4 */
@@ -9939,7 +9939,7 @@ extern int wnsumd_(doublereal *window, doublereal *meas, doublereal *avg, double
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnunid_(doublereal *a, doublereal *b, doublereal *c__);
+extern int wnunid_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9949,7 +9949,7 @@ extern int wnunid_(doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnvald_(integer *size, integer *n, doublereal *a);
+extern int wnvald_(void *cspice_state, integer *size, integer *n, doublereal *a);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: odd_ 12 1 4 */
@@ -9960,7 +9960,7 @@ extern int wnvald_(integer *size, integer *n, doublereal *a);
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: wninsd_ 14 3 7 7 7 */
  
-extern int wrencc_(integer *unit, integer *n, char *data, ftnlen data_len);
+extern int wrencc_(void *cspice_state, integer *unit, integer *n, char *data, ftnlen data_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9968,7 +9968,7 @@ extern int wrencc_(integer *unit, integer *n, char *data, ftnlen data_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wrencd_(integer *unit, integer *n, doublereal *data);
+extern int wrencd_(void *cspice_state, integer *unit, integer *n, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9977,7 +9977,7 @@ extern int wrencd_(integer *unit, integer *n, doublereal *data);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dp2hx_ 14 4 7 13 4 124 */
  
-extern int wrenci_(integer *unit, integer *n, integer *data);
+extern int wrenci_(void *cspice_state, integer *unit, integer *n, integer *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9986,7 +9986,7 @@ extern int wrenci_(integer *unit, integer *n, integer *data);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: int2hx_ 14 4 4 13 4 124 */
  
-extern int writla_(integer *numlin, char *array, integer *unit, ftnlen array_len);
+extern int writla_(void *cspice_state, integer *numlin, char *array, integer *unit, ftnlen array_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -9996,7 +9996,7 @@ extern int writla_(integer *numlin, char *array, integer *unit, ftnlen array_len
 /*:ref: writln_ 14 3 13 4 124 */
 /*:ref: failed_ 12 0 */
  
-extern int writln_(char *line, integer *unit, ftnlen line_len);
+extern int writln_(void *cspice_state, char *line, integer *unit, ftnlen line_len);
 /*:ref: rtrim_ 4 2 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10005,7 +10005,7 @@ extern int writln_(char *line, integer *unit, ftnlen line_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wrkvar_(integer *unit, char *name__, char *dirctv, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen dirctv_len, ftnlen tabsym_len);
+extern int wrkvar_(void *cspice_state, integer *unit, char *name__, char *dirctv, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen dirctv_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sydimd_ 4 6 13 13 4 7 124 124 */
@@ -10016,8 +10016,8 @@ extern int wrkvar_(integer *unit, char *name__, char *dirctv, char *tabsym, inte
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wrline_(char *device, char *line, ftnlen device_len, ftnlen line_len);
-extern int clline_(char *device, ftnlen device_len);
+extern int wrline_(void *cspice_state, char *device, char *line, ftnlen device_len, ftnlen line_len);
+extern int clline_(void *cspice_state, char *device, ftnlen device_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: rtrim_ 4 2 13 124 */
@@ -10026,7 +10026,7 @@ extern int clline_(char *device, ftnlen device_len);
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
  
-extern int xdda_(doublereal *vertex, doublereal *raydir, integer *grdext, integer *maxnvx, integer *nvx, integer *voxlst);
+extern int xdda_(void *cspice_state, doublereal *vertex, doublereal *raydir, integer *grdext, integer *maxnvx, integer *nvx, integer *voxlst);
 /*:ref: return_ 12 0 */
 /*:ref: vzero_ 12 1 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -10040,8 +10040,8 @@ extern int xdda_(doublereal *vertex, doublereal *raydir, integer *grdext, intege
 /*:ref: dpmax_ 7 0 */
 /*:ref: zzingrd_ 12 2 4 4 */
  
-extern int xf2eul_(doublereal *xform, integer *axisa, integer *axisb, integer *axisc, doublereal *eulang, logical *unique);
-extern int eul2xf_(doublereal *eulang, integer *axisa, integer *axisb, integer *axisc, doublereal *xform);
+extern int xf2eul_(void *cspice_state, doublereal *xform, integer *axisa, integer *axisb, integer *axisc, doublereal *eulang, logical *unique);
+extern int eul2xf_(void *cspice_state, doublereal *eulang, integer *axisa, integer *axisb, integer *axisc, doublereal *xform);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: m2eul_ 14 7 7 4 4 4 7 7 7 */
@@ -10053,10 +10053,10 @@ extern int eul2xf_(doublereal *eulang, integer *axisa, integer *axisb, integer *
 /*:ref: eul2m_ 14 7 7 7 7 4 4 4 7 */
 /*:ref: mxm_ 14 3 7 7 7 */
  
-extern int xf2rav_(doublereal *xform, doublereal *rot, doublereal *av);
+extern int xf2rav_(void *cspice_state, doublereal *xform, doublereal *rot, doublereal *av);
 /*:ref: mtxm_ 14 3 7 7 7 */
  
-extern int xfmsta_(doublereal *istate, char *icosys, char *ocosys, char *body, doublereal *ostate, ftnlen icosys_len, ftnlen ocosys_len, ftnlen body_len);
+extern int xfmsta_(void *cspice_state, doublereal *istate, char *icosys, char *ocosys, char *body, doublereal *ostate, ftnlen icosys_len, ftnlen ocosys_len, ftnlen body_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -10096,20 +10096,20 @@ extern int xfmsta_(doublereal *istate, char *icosys, char *ocosys, char *body, d
 /*:ref: dgeodr_ 14 6 7 7 7 7 7 7 */
 /*:ref: dpgrdr_ 14 8 13 7 7 7 7 7 7 124 */
  
-extern int xposbl_(doublereal *bmat, integer *nrow, integer *ncol, integer *bsize, doublereal *btmat);
+extern int xposbl_(void *cspice_state, doublereal *bmat, integer *nrow, integer *ncol, integer *bsize, doublereal *btmat);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int xpose_(doublereal *m1, doublereal *mout);
+extern int xpose_(void *cspice_state, doublereal *m1, doublereal *mout);
  
-extern int xposeg_(doublereal *matrix, integer *nrow, integer *ncol, doublereal *xposem);
+extern int xposeg_(void *cspice_state, doublereal *matrix, integer *nrow, integer *ncol, doublereal *xposem);
  
-extern int xpsgip_(integer *nrow, integer *ncol, doublereal *matrix);
+extern int xpsgip_(void *cspice_state, integer *nrow, integer *ncol, doublereal *matrix);
  
-extern int zzaddlnk_(integer *aval, integer *bval, integer *maxa, integer *cellsz, integer *pntrs, integer *ncell, integer *cells);
+extern int zzaddlnk_(void *cspice_state, integer *aval, integer *bval, integer *maxa, integer *cellsz, integer *pntrs, integer *ncell, integer *cells);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10117,7 +10117,7 @@ extern int zzaddlnk_(integer *aval, integer *bval, integer *maxa, integer *cells
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzascii_(char *file, char *line, logical *check, char *termin, ftnlen file_len, ftnlen line_len, ftnlen termin_len);
+extern int zzascii_(void *cspice_state, char *file, char *line, logical *check, char *termin, ftnlen file_len, ftnlen line_len, ftnlen termin_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzplatfm_ 14 4 13 13 124 124 */
@@ -10130,7 +10130,7 @@ extern int zzascii_(char *file, char *line, logical *check, char *termin, ftnlen
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzasryel_(char *extrem, doublereal *ellips, doublereal *vertex, doublereal *dir, doublereal *angle, doublereal *extpt, ftnlen extrem_len);
+extern int zzasryel_(void *cspice_state, char *extrem, doublereal *ellips, doublereal *vertex, doublereal *dir, doublereal *angle, doublereal *extpt, ftnlen extrem_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
@@ -10158,9 +10158,9 @@ extern int zzasryel_(char *extrem, doublereal *ellips, doublereal *vertex, doubl
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vsep_ 7 2 7 7 */
  
-extern int zzbodblt_(integer *room, char *names, char *nornam, integer *codes, integer *nvals, char *device, char *reqst, ftnlen names_len, ftnlen nornam_len, ftnlen device_len, ftnlen reqst_len);
-extern int zzbodget_(integer *room, char *names, char *nornam, integer *codes, integer *nvals, ftnlen names_len, ftnlen nornam_len);
-extern int zzbodlst_(char *device, char *reqst, ftnlen device_len, ftnlen reqst_len);
+extern int zzbodblt_(void *cspice_state, integer *room, char *names, char *nornam, integer *codes, integer *nvals, char *device, char *reqst, ftnlen names_len, ftnlen nornam_len, ftnlen device_len, ftnlen reqst_len);
+extern int zzbodget_(void *cspice_state, integer *room, char *names, char *nornam, integer *codes, integer *nvals, ftnlen names_len, ftnlen nornam_len);
+extern int zzbodlst_(void *cspice_state, char *device, char *reqst, ftnlen device_len, ftnlen reqst_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -10180,9 +10180,9 @@ extern int zzbodlst_(char *device, char *reqst, ftnlen device_len, ftnlen reqst_
 /*:ref: orderi_ 14 3 4 4 4 */
 /*:ref: orderc_ 14 4 13 4 4 124 */
  
-extern integer zzbodbry_(integer *body);
+extern integer zzbodbry_(void *cspice_state, integer *body);
  
-extern int zzbodini_(char *names, char *nornam, integer *codes, integer *nvals, integer *maxval, integer *bnmlst, integer *bnmpol, char *bnmnms, integer *bnmidx, integer *bidlst, integer *bidpol, integer *bidids, integer *bididx, ftnlen names_len, ftnlen nornam_len, ftnlen bnmnms_len);
+extern int zzbodini_(void *cspice_state, char *names, char *nornam, integer *codes, integer *nvals, integer *maxval, integer *bnmlst, integer *bnmpol, char *bnmnms, integer *bnmidx, integer *bidlst, integer *bidpol, integer *bidids, integer *bididx, ftnlen names_len, ftnlen nornam_len, ftnlen bnmnms_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -10194,7 +10194,7 @@ extern int zzbodini_(char *names, char *nornam, integer *codes, integer *nvals, 
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: zzhsiadd_ 14 6 4 4 4 4 4 12 */
  
-extern int zzbodker_(char *names, char *nornam, integer *codes, integer *nvals, logical *extker, integer *bnmlst, integer *bnmpol, char *bnmnms, integer *bnmidx, integer *bidlst, integer *bidpol, integer *bidids, integer *bididx, ftnlen names_len, ftnlen nornam_len, ftnlen bnmnms_len);
+extern int zzbodker_(void *cspice_state, char *names, char *nornam, integer *codes, integer *nvals, logical *extker, integer *bnmlst, integer *bnmpol, char *bnmnms, integer *bnmidx, integer *bidlst, integer *bidpol, integer *bidids, integer *bididx, ftnlen names_len, ftnlen nornam_len, ftnlen bnmnms_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: gcpool_ 14 8 13 4 4 4 13 12 124 124 */
@@ -10209,20 +10209,20 @@ extern int zzbodker_(char *names, char *nornam, integer *codes, integer *nvals, 
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
 /*:ref: zzbodini_ 14 16 13 13 4 4 4 4 4 13 4 4 4 4 4 124 124 124 */
  
-extern int zzbods2c_(integer *usrctr, char *savnam, integer *savcde, logical *savfnd, char *name__, integer *code, logical *found, ftnlen savnam_len, ftnlen name_len);
+extern int zzbods2c_(void *cspice_state, integer *usrctr, char *savnam, integer *savcde, logical *savfnd, char *name__, integer *code, logical *found, ftnlen savnam_len, ftnlen name_len);
 /*:ref: return_ 12 0 */
 /*:ref: zzbctrck_ 14 2 4 12 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bods2c_ 14 4 13 4 12 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzbodtrn_(char *name__, integer *code, logical *found, integer *usrctr, logical *update, ftnlen name_len);
-extern int zzbodn2c_(char *name__, integer *code, logical *found, ftnlen name_len);
-extern int zzbodc2n_(integer *code, char *name__, logical *found, ftnlen name_len);
-extern int zzboddef_(char *name__, integer *code, ftnlen name_len);
-extern int zzbodkik_(void);
-extern int zzbodrst_(void);
-extern int zzbctrck_(integer *usrctr, logical *update);
+extern int zzbodtrn_(void *cspice_state, char *name__, integer *code, logical *found, integer *usrctr, logical *update, ftnlen name_len);
+extern int zzbodn2c_(void *cspice_state, char *name__, integer *code, logical *found, ftnlen name_len);
+extern int zzbodc2n_(void *cspice_state, integer *code, char *name__, logical *found, ftnlen name_len);
+extern int zzboddef_(void *cspice_state, char *name__, integer *code, ftnlen name_len);
+extern int zzbodkik_(void *cspice_state);
+extern int zzbodrst_(void *cspice_state);
+extern int zzbctrck_(void *cspice_state, integer *usrctr, logical *update);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -10244,7 +10244,7 @@ extern int zzbctrck_(integer *usrctr, logical *update);
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: zzctrchk_ 14 3 4 4 12 */
  
-extern int zzbodvcd_(integer *bodyid, char *item, integer *maxn, integer *varctr, integer *n, doublereal *values, ftnlen item_len);
+extern int zzbodvcd_(void *cspice_state, integer *bodyid, char *item, integer *maxn, integer *varctr, integer *n, doublereal *values, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzpctrck_ 14 2 4 12 */
@@ -10252,7 +10252,7 @@ extern int zzbodvcd_(integer *bodyid, char *item, integer *maxn, integer *varctr
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzbquad_(doublereal *a, doublereal *b, doublereal *c__, doublereal *ub, integer *n, integer *nx, doublereal *r1, doublereal *r2);
+extern int zzbquad_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__, doublereal *ub, integer *n, integer *nx, doublereal *r1, doublereal *r2);
 /*:ref: return_ 12 0 */
 /*:ref: dpmax_ 7 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -10262,7 +10262,7 @@ extern int zzbquad_(doublereal *a, doublereal *b, doublereal *c__, doublereal *u
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: touchd_ 7 1 7 */
  
-extern int zzchrlat_(doublereal *midlat, doublereal *dlon, doublereal *eptlat);
+extern int zzchrlat_(void *cspice_state, doublereal *midlat, doublereal *dlon, doublereal *eptlat);
 /*:ref: return_ 12 0 */
 /*:ref: pi_ 7 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -10273,11 +10273,11 @@ extern int zzchrlat_(doublereal *midlat, doublereal *dlon, doublereal *eptlat);
 /*:ref: halfpi_ 7 0 */
 /*:ref: brcktd_ 7 3 7 7 7 */
  
-extern int zzck4d2i_(doublereal *dpcoef, integer *nsets, doublereal *parcod, integer *i__);
+extern int zzck4d2i_(void *cspice_state, doublereal *dpcoef, integer *nsets, doublereal *parcod, integer *i__);
  
-extern int zzck4i2d_(integer *i__, integer *nsets, doublereal *parcod, doublereal *dpcoef);
+extern int zzck4i2d_(void *cspice_state, integer *i__, integer *nsets, doublereal *parcod, doublereal *dpcoef);
  
-extern int zzckcv01_(integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
+extern int zzckcv01_(void *cspice_state, integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10292,7 +10292,7 @@ extern int zzckcv01_(integer *handle, integer *arrbeg, integer *arrend, integer 
 /*:ref: sct2e_ 14 3 4 7 7 */
 /*:ref: wninsd_ 14 3 7 7 7 */
  
-extern int zzckcv02_(integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
+extern int zzckcv02_(void *cspice_state, integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10305,7 +10305,7 @@ extern int zzckcv02_(integer *handle, integer *arrbeg, integer *arrend, integer 
 /*:ref: sct2e_ 14 3 4 7 7 */
 /*:ref: wninsd_ 14 3 7 7 7 */
  
-extern int zzckcv03_(integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
+extern int zzckcv03_(void *cspice_state, integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10320,7 +10320,7 @@ extern int zzckcv03_(integer *handle, integer *arrbeg, integer *arrend, integer 
 /*:ref: sct2e_ 14 3 4 7 7 */
 /*:ref: wninsd_ 14 3 7 7 7 */
  
-extern int zzckcv04_(integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
+extern int zzckcv04_(void *cspice_state, integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10336,7 +10336,7 @@ extern int zzckcv04_(integer *handle, integer *arrbeg, integer *arrend, integer 
 /*:ref: sct2e_ 14 3 4 7 7 */
 /*:ref: wninsd_ 14 3 7 7 7 */
  
-extern int zzckcv05_(integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *dc, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
+extern int zzckcv05_(void *cspice_state, integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *dc, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10350,7 +10350,7 @@ extern int zzckcv05_(integer *handle, integer *arrbeg, integer *arrend, integer 
 /*:ref: sct2e_ 14 3 4 7 7 */
 /*:ref: wninsd_ 14 3 7 7 7 */
  
-extern int zzckcv06_(integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *dc, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
+extern int zzckcv06_(void *cspice_state, integer *handle, integer *arrbeg, integer *arrend, integer *sclkid, doublereal *dc, doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10364,7 +10364,7 @@ extern int zzckcv06_(integer *handle, integer *arrbeg, integer *arrend, integer 
 /*:ref: sct2e_ 14 3 4 7 7 */
 /*:ref: wninsd_ 14 3 7 7 7 */
  
-extern int zzckspk_(integer *handle, char *ckspk, ftnlen ckspk_len);
+extern int zzckspk_(void *cspice_state, integer *handle, char *ckspk, ftnlen ckspk_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafhsf_ 14 3 4 4 4 */
@@ -10377,12 +10377,12 @@ extern int zzckspk_(integer *handle, char *ckspk, ftnlen ckspk_len);
 /*:ref: zzsizeok_ 14 6 4 4 4 4 12 4 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int zzcln_(integer *lookat, integer *nameat, integer *namlst, integer *datlst, integer *nmpool, integer *chpool, integer *dppool);
+extern int zzcln_(void *cspice_state, integer *lookat, integer *nameat, integer *namlst, integer *datlst, integer *nmpool, integer *chpool, integer *dppool);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: lnkfsl_ 14 3 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzcnquad_(doublereal *a, doublereal *b, doublereal *c__, doublereal *ub, integer *n, doublereal *r1, doublereal *r2);
+extern int zzcnquad_(void *cspice_state, doublereal *a, doublereal *b, doublereal *c__, doublereal *ub, integer *n, doublereal *r1, doublereal *r2);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dpmax_ 7 0 */
@@ -10390,24 +10390,24 @@ extern int zzcnquad_(doublereal *a, doublereal *b, doublereal *c__, doublereal *
 /*:ref: touchd_ 7 1 7 */
 /*:ref: zzbquad_ 14 8 7 7 7 7 4 4 7 7 */
  
-extern int zzcorepc_(char *abcorr, doublereal *et, doublereal *lt, doublereal *etcorr, ftnlen abcorr_len);
+extern int zzcorepc_(void *cspice_state, char *abcorr, doublereal *et, doublereal *lt, doublereal *etcorr, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzprscor_ 14 3 13 12 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzcorsxf_(logical *xmit, doublereal *dlt, doublereal *xform, doublereal *corxfm);
+extern int zzcorsxf_(void *cspice_state, logical *xmit, doublereal *dlt, doublereal *xform, doublereal *corxfm);
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: vsclip_ 14 2 7 7 */
  
-extern int zzcputim_(doublereal *tvec);
+extern int zzcputim_(void *cspice_state, doublereal *tvec);
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzctr_(integer *newctr, integer *oldctr, logical *update);
-extern int zzctruin_(integer *oldctr);
-extern int zzctrsin_(integer *oldctr);
-extern int zzctrinc_(integer *oldctr);
-extern int zzctrchk_(integer *newctr, integer *oldctr, logical *update);
+extern int zzctr_(void *cspice_state, integer *newctr, integer *oldctr, logical *update);
+extern int zzctruin_(void *cspice_state, integer *oldctr);
+extern int zzctrsin_(void *cspice_state, integer *oldctr);
+extern int zzctrinc_(void *cspice_state, integer *oldctr);
+extern int zzctrchk_(void *cspice_state, integer *newctr, integer *oldctr, logical *update);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10416,16 +10416,16 @@ extern int zzctrchk_(integer *newctr, integer *oldctr, logical *update);
 /*:ref: intmax_ 4 0 */
 /*:ref: intmin_ 4 0 */
  
-extern int zzcvpool_(char *agent, integer *usrctr, logical *update, ftnlen agent_len);
+extern int zzcvpool_(void *cspice_state, char *agent, integer *usrctr, logical *update, ftnlen agent_len);
 /*:ref: return_ 12 0 */
 /*:ref: zzpctrck_ 14 2 4 12 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cvpool_ 14 3 13 12 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzcvstat_(doublereal *et, char *ref, integer *center, doublereal *state, ftnlen ref_len);
-extern int zzcvxsta_(doublereal *et, char *ref, integer *center, doublereal *state, ftnlen ref_len);
-extern int zzcvssta_(doublereal *state, integer *center, doublereal *et, char *ref, ftnlen ref_len);
+extern int zzcvstat_(void *cspice_state, doublereal *et, char *ref, integer *center, doublereal *state, ftnlen ref_len);
+extern int zzcvxsta_(void *cspice_state, doublereal *et, char *ref, integer *center, doublereal *state, ftnlen ref_len);
+extern int zzcvssta_(void *cspice_state, doublereal *state, integer *center, doublereal *et, char *ref, ftnlen ref_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -10437,7 +10437,7 @@ extern int zzcvssta_(doublereal *state, integer *center, doublereal *et, char *r
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int zzcxbrut_(doublereal *apex, doublereal *axis, doublereal *angle, doublereal *endpt1, doublereal *endpt2, doublereal *xpt, logical *isbrck);
+extern int zzcxbrut_(void *cspice_state, doublereal *apex, doublereal *axis, doublereal *angle, doublereal *endpt1, doublereal *endpt2, doublereal *xpt, logical *isbrck);
 /*:ref: return_ 12 0 */
 /*:ref: vzero_ 12 1 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -10455,7 +10455,7 @@ extern int zzcxbrut_(doublereal *apex, doublereal *axis, doublereal *angle, doub
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int zzdafgdr_(integer *handle, integer *recno, doublereal *dprec, logical *found);
+extern int zzdafgdr_(void *cspice_state, integer *handle, integer *recno, doublereal *dprec, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhgsd_ 14 5 13 4 13 124 124 */
@@ -10473,7 +10473,7 @@ extern int zzdafgdr_(integer *handle, integer *recno, doublereal *dprec, logical
 /*:ref: zzxlated_ 14 5 4 13 4 7 124 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int zzdafgfr_(integer *handle, char *idword, integer *nd, integer *ni, char *ifname, integer *fward, integer *bward, integer *free, logical *found, ftnlen idword_len, ftnlen ifname_len);
+extern int zzdafgfr_(void *cspice_state, integer *handle, char *idword, integer *nd, integer *ni, char *ifname, integer *fward, integer *bward, integer *free, logical *found, ftnlen idword_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhgsd_ 14 5 13 4 13 124 124 */
@@ -10490,7 +10490,7 @@ extern int zzdafgfr_(integer *handle, char *idword, integer *nd, integer *ni, ch
 /*:ref: failed_ 12 0 */
 /*:ref: zzxlatei_ 14 5 4 13 4 4 124 */
  
-extern int zzdafgsr_(integer *handle, integer *recno, integer *nd, integer *ni, doublereal *dprec, logical *found);
+extern int zzdafgsr_(void *cspice_state, integer *handle, integer *recno, integer *nd, integer *ni, doublereal *dprec, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhgsd_ 14 5 13 4 13 124 124 */
@@ -10509,7 +10509,7 @@ extern int zzdafgsr_(integer *handle, integer *recno, integer *nd, integer *ni, 
 /*:ref: zzxlatei_ 14 5 4 13 4 4 124 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int zzdafnfr_(integer *lun, char *idword, integer *nd, integer *ni, char *ifname, integer *fward, integer *bward, integer *free, char *format, ftnlen idword_len, ftnlen ifname_len, ftnlen format_len);
+extern int zzdafnfr_(void *cspice_state, integer *lun, char *idword, integer *nd, integer *ni, char *ifname, integer *fward, integer *bward, integer *free, char *format, ftnlen idword_len, ftnlen ifname_len, ftnlen format_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzftpstr_ 14 8 13 13 13 13 124 124 124 124 */
@@ -10520,7 +10520,7 @@ extern int zzdafnfr_(integer *lun, char *idword, integer *nd, integer *ni, char 
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdasgrd_(integer *handle, integer *recno, doublereal *record);
+extern int zzdasgrd_(void *cspice_state, integer *handle, integer *recno, doublereal *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhnfc_ 14 1 4 */
@@ -10534,7 +10534,7 @@ extern int zzdasgrd_(integer *handle, integer *recno, doublereal *record);
 /*:ref: errfnm_ 14 3 13 4 124 */
 /*:ref: zzxlated_ 14 5 4 13 4 7 124 */
  
-extern int zzdasgri_(integer *handle, integer *recno, integer *record);
+extern int zzdasgri_(void *cspice_state, integer *handle, integer *recno, integer *record);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhnfc_ 14 1 4 */
@@ -10548,7 +10548,7 @@ extern int zzdasgri_(integer *handle, integer *recno, integer *record);
 /*:ref: errfnm_ 14 3 13 4 124 */
 /*:ref: zzxlatei_ 14 5 4 13 4 4 124 */
  
-extern int zzdasnfr_(integer *lun, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, char *format, ftnlen idword_len, ftnlen ifname_len, ftnlen format_len);
+extern int zzdasnfr_(void *cspice_state, integer *lun, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, char *format, ftnlen idword_len, ftnlen ifname_len, ftnlen format_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzftpstr_ 14 8 13 13 13 13 124 124 124 124 */
@@ -10559,7 +10559,7 @@ extern int zzdasnfr_(integer *lun, char *idword, char *ifname, integer *nresvr, 
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdasrfr_(integer *handle, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len);
+extern int zzdasrfr_(void *cspice_state, integer *handle, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhnfc_ 14 1 4 */
@@ -10573,9 +10573,9 @@ extern int zzdasrfr_(integer *handle, char *idword, char *ifname, integer *nresv
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: zzxlatei_ 14 5 4 13 4 4 124 */
  
-extern integer zzddhclu_(logical *utlck, integer *nut);
+extern integer zzddhclu_(void *cspice_state, logical *utlck, integer *nut);
  
-extern int zzddhf2h_(char *fname, integer *ftabs, integer *ftamh, integer *ftarc, integer *ftbff, integer *fthan, char *ftnam, integer *ftrtm, doublereal *ftmnm, integer *nft, integer *utcst, integer *uthan, logical *utlck, integer *utlun, integer *nut, logical *exists, logical *opened, integer *handle, logical *found, doublereal *mnm, ftnlen fname_len, ftnlen ftnam_len);
+extern int zzddhf2h_(void *cspice_state, char *fname, integer *ftabs, integer *ftamh, integer *ftarc, integer *ftbff, integer *fthan, char *ftnam, integer *ftrtm, doublereal *ftmnm, integer *nft, integer *utcst, integer *uthan, logical *utlck, integer *utlun, integer *nut, logical *exists, logical *opened, integer *handle, logical *found, doublereal *mnm, ftnlen fname_len, ftnlen ftnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -10590,12 +10590,12 @@ extern int zzddhf2h_(char *fname, integer *ftabs, integer *ftamh, integer *ftarc
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: zzddhmnm_ 7 1 4 */
  
-extern int zzddhgsd_(char *class__, integer *id, char *label, ftnlen class_len, ftnlen label_len);
+extern int zzddhgsd_(void *cspice_state, char *class__, integer *id, char *label, ftnlen class_len, ftnlen label_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
  
-extern int zzddhgtu_(integer *utcst, integer *uthan, logical *utlck, integer *utlun, integer *nut, integer *uindex);
+extern int zzddhgtu_(void *cspice_state, integer *utcst, integer *uthan, logical *utlck, integer *utlun, integer *nut, integer *uindex);
 /*:ref: return_ 12 0 */
 /*:ref: getlun_ 14 1 4 */
 /*:ref: failed_ 12 0 */
@@ -10606,7 +10606,7 @@ extern int zzddhgtu_(integer *utcst, integer *uthan, logical *utlck, integer *ut
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzddhini_(integer *natbff, integer *supbff, integer *numsup, char *stramh, char *strarc, char *strbff, ftnlen stramh_len, ftnlen strarc_len, ftnlen strbff_len);
+extern int zzddhini_(void *cspice_state, integer *natbff, integer *supbff, integer *numsup, char *stramh, char *strarc, char *strbff, ftnlen stramh_len, ftnlen strarc_len, ftnlen strbff_len);
 /*:ref: return_ 12 0 */
 /*:ref: zzddhgsd_ 14 5 13 4 13 124 124 */
 /*:ref: zzplatfm_ 14 4 13 13 124 124 */
@@ -10619,17 +10619,17 @@ extern int zzddhini_(integer *natbff, integer *supbff, integer *numsup, char *st
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: nextwd_ 14 6 13 13 13 124 124 124 */
  
-extern int zzddhivf_(char *nsum, integer *bff, logical *found, ftnlen nsum_len);
+extern int zzddhivf_(void *cspice_state, char *nsum, integer *bff, logical *found, ftnlen nsum_len);
  
-extern int zzddhman_(logical *lock, char *arch, char *fname, char *method, integer *handle, integer *unit, integer *intamh, integer *intarc, integer *intbff, logical *native, logical *found, logical *kill, ftnlen arch_len, ftnlen fname_len, ftnlen method_len);
-extern int zzddhopn_(char *fname, char *method, char *arch, integer *handle, ftnlen fname_len, ftnlen method_len, ftnlen arch_len);
-extern int zzddhcls_(integer *handle, char *arch, logical *kill, ftnlen arch_len);
-extern int zzddhhlu_(integer *handle, char *arch, logical *lock, integer *unit, ftnlen arch_len);
-extern int zzddhunl_(integer *handle, char *arch, ftnlen arch_len);
-extern int zzddhnfo_(integer *handle, char *fname, integer *intarc, integer *intbff, integer *intamh, logical *found, ftnlen fname_len);
-extern int zzddhisn_(integer *handle, logical *native, logical *found);
-extern int zzddhfnh_(char *fname, integer *handle, logical *found, ftnlen fname_len);
-extern int zzddhluh_(integer *unit, integer *handle, logical *found);
+extern int zzddhman_(void *cspice_state, logical *lock, char *arch, char *fname, char *method, integer *handle, integer *unit, integer *intamh, integer *intarc, integer *intbff, logical *native, logical *found, logical *kill, ftnlen arch_len, ftnlen fname_len, ftnlen method_len);
+extern int zzddhopn_(void *cspice_state, char *fname, char *method, char *arch, integer *handle, ftnlen fname_len, ftnlen method_len, ftnlen arch_len);
+extern int zzddhcls_(void *cspice_state, integer *handle, char *arch, logical *kill, ftnlen arch_len);
+extern int zzddhhlu_(void *cspice_state, integer *handle, char *arch, logical *lock, integer *unit, ftnlen arch_len);
+extern int zzddhunl_(void *cspice_state, integer *handle, char *arch, ftnlen arch_len);
+extern int zzddhnfo_(void *cspice_state, integer *handle, char *fname, integer *intarc, integer *intbff, integer *intamh, logical *found, ftnlen fname_len);
+extern int zzddhisn_(void *cspice_state, integer *handle, logical *native, logical *found);
+extern int zzddhfnh_(void *cspice_state, char *fname, integer *handle, logical *found, ftnlen fname_len);
+extern int zzddhluh_(void *cspice_state, integer *unit, integer *handle, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -10655,7 +10655,7 @@ extern int zzddhluh_(integer *unit, integer *handle, logical *found);
 /*:ref: zzddhrmu_ 14 7 4 4 4 4 12 4 4 */
 /*:ref: frelun_ 14 1 4 */
  
-extern doublereal zzddhmnm_(integer *unit);
+extern doublereal zzddhmnm_(void *cspice_state, integer *unit);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhini_ 14 9 4 4 4 13 13 13 124 124 124 */
@@ -10666,7 +10666,7 @@ extern doublereal zzddhmnm_(integer *unit);
 /*:ref: isrchi_ 4 3 4 4 4 */
 /*:ref: zzxlatei_ 14 5 4 13 4 4 124 */
  
-extern int zzddhnfc_(integer *natbff);
+extern int zzddhnfc_(void *cspice_state, integer *natbff);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhgsd_ 14 5 13 4 13 124 124 */
@@ -10678,7 +10678,7 @@ extern int zzddhnfc_(integer *natbff);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzddhppf_(integer *unit, integer *arch, integer *bff);
+extern int zzddhppf_(void *cspice_state, integer *unit, integer *arch, integer *bff);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhgsd_ 14 5 13 4 13 124 124 */
@@ -10697,10 +10697,10 @@ extern int zzddhppf_(integer *unit, integer *arch, integer *bff);
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: zzddhivf_ 14 4 13 4 12 124 */
  
-extern int zzddhrcm_(integer *nut, integer *utcst, integer *reqcnt);
+extern int zzddhrcm_(void *cspice_state, integer *nut, integer *utcst, integer *reqcnt);
 /*:ref: intmax_ 4 0 */
  
-extern int zzddhrmu_(integer *uindex, integer *nft, integer *utcst, integer *uthan, logical *utlck, integer *utlun, integer *nut);
+extern int zzddhrmu_(void *cspice_state, integer *uindex, integer *nft, integer *utcst, integer *uthan, logical *utlck, integer *utlun, integer *nut);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -10708,7 +10708,7 @@ extern int zzddhrmu_(integer *uindex, integer *nft, integer *utcst, integer *uth
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: reslun_ 14 1 4 */
  
-extern doublereal zzdiv_(doublereal *numr, doublereal *denom);
+extern doublereal zzdiv_(void *cspice_state, doublereal *numr, doublereal *denom);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dpmax_ 7 0 */
@@ -10717,20 +10717,20 @@ extern doublereal zzdiv_(doublereal *numr, doublereal *denom);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdscm_(doublereal *epoch, doublereal *eccp, doublereal *argpp, doublereal *tc, doublereal *inclp, doublereal *nodep, doublereal *np, doublereal *snodm, doublereal *cnodm, doublereal *sinim, doublereal *cosim, doublereal *sinomm, doublereal *cosomm, doublereal *day, doublereal *e3, doublereal *ee2, doublereal *eccm, doublereal *emsq, doublereal *gam, doublereal *peo, doublereal *pgho, doublereal *pho, doublereal *pinco, doublereal *plo, doublereal *rtemsq, doublereal *se2, doublereal *se3, doublereal *sgh2, doublereal *sgh3, doublereal *sgh4, doublereal *sh2, doublereal *sh3, doublereal *si2, doublereal *si3, doublereal *sl2, doublereal *sl3, doublereal *sl4, doublereal *s1, doublereal *s2, doublereal *s3, doublereal *s4, doublereal *s5, doublereal *s6, doublereal *s7, doublereal *ss1, doublereal *ss2, doublereal *ss3, doublereal *ss4, doublereal *ss5, doublereal *ss6, doublereal *ss7, doublereal *sz1, doublereal *sz2, doublereal *sz3, doublereal *sz11, doublereal *sz12, doublereal *sz13, doublereal *sz21, doublereal *sz22, doublereal *sz23, doublereal *sz31, doublereal *sz32, doublereal *sz33, doublereal *xgh2, doublereal *xgh3, doublereal *xgh4, doublereal *xh2, doublereal *xh3, doublereal *xi2, doublereal *xi3, doublereal *xl2, doublereal *xl3, doublereal *xl4, doublereal *xn, doublereal *z1, doublereal *z2, doublereal *z3, doublereal *z11, doublereal *z12, doublereal *z13, doublereal *z21, doublereal *z22, doublereal *z23, doublereal *z31, doublereal *z32, doublereal *z33, doublereal *zmol, doublereal *zmos);
+extern int zzdscm_(void *cspice_state, doublereal *epoch, doublereal *eccp, doublereal *argpp, doublereal *tc, doublereal *inclp, doublereal *nodep, doublereal *np, doublereal *snodm, doublereal *cnodm, doublereal *sinim, doublereal *cosim, doublereal *sinomm, doublereal *cosomm, doublereal *day, doublereal *e3, doublereal *ee2, doublereal *eccm, doublereal *emsq, doublereal *gam, doublereal *peo, doublereal *pgho, doublereal *pho, doublereal *pinco, doublereal *plo, doublereal *rtemsq, doublereal *se2, doublereal *se3, doublereal *sgh2, doublereal *sgh3, doublereal *sgh4, doublereal *sh2, doublereal *sh3, doublereal *si2, doublereal *si3, doublereal *sl2, doublereal *sl3, doublereal *sl4, doublereal *s1, doublereal *s2, doublereal *s3, doublereal *s4, doublereal *s5, doublereal *s6, doublereal *s7, doublereal *ss1, doublereal *ss2, doublereal *ss3, doublereal *ss4, doublereal *ss5, doublereal *ss6, doublereal *ss7, doublereal *sz1, doublereal *sz2, doublereal *sz3, doublereal *sz11, doublereal *sz12, doublereal *sz13, doublereal *sz21, doublereal *sz22, doublereal *sz23, doublereal *sz31, doublereal *sz32, doublereal *sz33, doublereal *xgh2, doublereal *xgh3, doublereal *xgh4, doublereal *xh2, doublereal *xh3, doublereal *xi2, doublereal *xi3, doublereal *xl2, doublereal *xl3, doublereal *xl4, doublereal *xn, doublereal *z1, doublereal *z2, doublereal *z3, doublereal *z11, doublereal *z12, doublereal *z13, doublereal *z21, doublereal *z22, doublereal *z23, doublereal *z31, doublereal *z32, doublereal *z33, doublereal *zmol, doublereal *zmos);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdsin_(doublereal *geophs, doublereal *cosim, doublereal *emsq, doublereal *argpo, doublereal *s1, doublereal *s2, doublereal *s3, doublereal *s4, doublereal *s5, doublereal *sinim, doublereal *ss1, doublereal *ss2, doublereal *ss3, doublereal *ss4, doublereal *ss5, doublereal *sz1, doublereal *sz3, doublereal *sz11, doublereal *sz13, doublereal *sz21, doublereal *sz23, doublereal *sz31, doublereal *sz33, doublereal *t, doublereal *tc, doublereal *gsto, doublereal *mo, doublereal *mdot, doublereal *no, doublereal *nodeo, doublereal *nodedot, doublereal *xpidot, doublereal *z1, doublereal *z3, doublereal *z11, doublereal *z13, doublereal *z21, doublereal *z23, doublereal *z31, doublereal *z33, doublereal *ecco, doublereal *eccsq, doublereal *eccm, doublereal *argpm, doublereal *inclm, doublereal *mm, doublereal *xn, doublereal *nodem, integer *irez, doublereal *atime, doublereal *d2201, doublereal *d2211, doublereal *d3210, doublereal *d3222, doublereal *d4410, doublereal *d4422, doublereal *d5220, doublereal *d5232, doublereal *d5421, doublereal *d5433, doublereal *dedt, doublereal *didt, doublereal *dmdt, doublereal *dndt, doublereal *dnodt, doublereal *domdt, doublereal *del1, doublereal *del2, doublereal *del3, doublereal *xfact, doublereal *xlamo, doublereal *xli, doublereal *xni);
+extern int zzdsin_(void *cspice_state, doublereal *geophs, doublereal *cosim, doublereal *emsq, doublereal *argpo, doublereal *s1, doublereal *s2, doublereal *s3, doublereal *s4, doublereal *s5, doublereal *sinim, doublereal *ss1, doublereal *ss2, doublereal *ss3, doublereal *ss4, doublereal *ss5, doublereal *sz1, doublereal *sz3, doublereal *sz11, doublereal *sz13, doublereal *sz21, doublereal *sz23, doublereal *sz31, doublereal *sz33, doublereal *t, doublereal *tc, doublereal *gsto, doublereal *mo, doublereal *mdot, doublereal *no, doublereal *nodeo, doublereal *nodedot, doublereal *xpidot, doublereal *z1, doublereal *z3, doublereal *z11, doublereal *z13, doublereal *z21, doublereal *z23, doublereal *z31, doublereal *z33, doublereal *ecco, doublereal *eccsq, doublereal *eccm, doublereal *argpm, doublereal *inclm, doublereal *mm, doublereal *xn, doublereal *nodem, integer *irez, doublereal *atime, doublereal *d2201, doublereal *d2211, doublereal *d3210, doublereal *d3222, doublereal *d4410, doublereal *d4422, doublereal *d5220, doublereal *d5232, doublereal *d5421, doublereal *d5433, doublereal *dedt, doublereal *didt, doublereal *dmdt, doublereal *dndt, doublereal *dnodt, doublereal *domdt, doublereal *del1, doublereal *del2, doublereal *del3, doublereal *xfact, doublereal *xlamo, doublereal *xli, doublereal *xni);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: pi_ 7 0 */
 /*:ref: twopi_ 7 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdskbbl_(integer *bodyid);
+extern int zzdskbbl_(void *cspice_state, integer *bodyid);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -10740,12 +10740,12 @@ extern int zzdskbbl_(integer *bodyid);
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdskbsr_(char *fname, integer *bodyid, integer *handle, L_fp cmpfun, integer *usrctr, logical *update, integer *dladsc, doublereal *dskdsc, logical *found, ftnlen fname_len);
-extern int zzdsklsf_(char *fname, integer *handle, ftnlen fname_len);
-extern int zzdskusf_(integer *handle);
-extern int zzdskbss_(integer *bodyid);
-extern int zzdsksns_(L_fp cmpfun, integer *handle, integer *dladsc, doublereal *dskdsc, logical *found);
-extern int zzdskchk_(integer *usrctr, logical *update);
+extern int zzdskbsr_(void *cspice_state, char *fname, integer *bodyid, integer *handle, L_fp cmpfun, integer *usrctr, logical *update, integer *dladsc, doublereal *dskdsc, logical *found, ftnlen fname_len);
+extern int zzdsklsf_(void *cspice_state, char *fname, integer *handle, ftnlen fname_len);
+extern int zzdskusf_(void *cspice_state, integer *handle);
+extern int zzdskbss_(void *cspice_state, integer *bodyid);
+extern int zzdsksns_(void *cspice_state, L_fp cmpfun, integer *handle, integer *dladsc, doublereal *dskdsc, logical *found);
+extern int zzdskchk_(void *cspice_state, integer *usrctr, logical *update);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -10776,7 +10776,7 @@ extern int zzdskchk_(integer *usrctr, logical *update);
 /*:ref: lnkila_ 14 3 4 4 4 */
 /*:ref: zzctrchk_ 14 3 4 4 12 */
  
-extern int zzdskbun_(integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, integer *nseg, integer *hanbuf, integer *dlabuf, doublereal *dskbuf, doublereal *offbuf, doublereal *ctrbuf, doublereal *radbuf, doublereal *point, doublereal *normal);
+extern int zzdskbun_(void *cspice_state, integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, integer *nseg, integer *hanbuf, integer *dlabuf, doublereal *dskbuf, doublereal *offbuf, doublereal *ctrbuf, doublereal *radbuf, doublereal *point, doublereal *normal);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10801,7 +10801,7 @@ extern int zzdskbun_(integer *bodyid, integer *nsurf, integer *srflst, doublerea
 /*:ref: vhatip_ 14 1 7 */
 /*:ref: mtxv_ 14 3 7 7 7 */
  
-extern int zzdskbux_(integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, integer *nseg, integer *hanbuf, integer *dlabuf, doublereal *dskbuf, doublereal *offbuf, doublereal *ctrbuf, doublereal *radbuf, doublereal *vertex, doublereal *raydir, doublereal *xpt, integer *segidx, doublereal *dc, integer *ic, logical *found);
+extern int zzdskbux_(void *cspice_state, integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, integer *nseg, integer *hanbuf, integer *dlabuf, doublereal *dskbuf, doublereal *offbuf, doublereal *ctrbuf, doublereal *radbuf, doublereal *vertex, doublereal *raydir, doublereal *xpt, integer *segidx, doublereal *dc, integer *ic, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10828,7 +10828,7 @@ extern int zzdskbux_(integer *bodyid, integer *nsurf, integer *srflst, doublerea
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: mtxv_ 14 3 7 7 7 */
  
-extern int zzdsksba_(integer *bodyid, integer *maxbod, integer *stsize, integer *btbody, integer *btnbod, integer *btsegp, integer *btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, integer *stfree, doublereal *stoff, doublereal *stctr, doublereal *strad);
+extern int zzdsksba_(void *cspice_state, integer *bodyid, integer *maxbod, integer *stsize, integer *btbody, integer *btnbod, integer *btsegp, integer *btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, integer *stfree, doublereal *stoff, doublereal *stctr, doublereal *strad);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: isrchi_ 4 3 4 4 4 */
@@ -10850,10 +10850,10 @@ extern int zzdsksba_(integer *bodyid, integer *maxbod, integer *stsize, integer 
 /*:ref: frmnam_ 14 3 4 13 124 */
 /*:ref: spkgps_ 14 7 4 7 13 4 7 7 124 */
  
-extern int zzdsksbf_(integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, doublereal *raydir, doublereal *point, doublereal *xpt, integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *ic, logical *found, doublereal *normal);
-extern int zzsbfxr_(integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, doublereal *raydir, doublereal *xpt, logical *found);
-extern int zzsbfxri_(integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, doublereal *raydir, doublereal *xpt, integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *ic, logical *found);
-extern int zzsbfnrm_(integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *point, doublereal *normal);
+extern int zzdsksbf_(void *cspice_state, integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, doublereal *raydir, doublereal *point, doublereal *xpt, integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *ic, logical *found, doublereal *normal);
+extern int zzsbfxr_(void *cspice_state, integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, doublereal *raydir, doublereal *xpt, logical *found);
+extern int zzsbfxri_(void *cspice_state, integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, doublereal *raydir, doublereal *xpt, integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *ic, logical *found);
+extern int zzsbfnrm_(void *cspice_state, integer *bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *point, doublereal *normal);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -10870,14 +10870,14 @@ extern int zzsbfnrm_(integer *bodyid, integer *nsurf, integer *srflst, doublerea
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: zzdskbun_ 14 14 4 4 4 7 4 4 4 4 7 7 7 7 7 7 */
  
-extern int zzdsksbi_(integer *maxbod, integer *stsize, integer *btbody, integer *btnbod, integer *btsegp, integer *btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, integer *stfree, doublereal *stoff, doublereal *stctr, doublereal *strad);
+extern int zzdsksbi_(void *cspice_state, integer *maxbod, integer *stsize, integer *btbody, integer *btnbod, integer *btsegp, integer *btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, integer *stfree, doublereal *stoff, doublereal *stctr, doublereal *strad);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: cleari_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdsksbr_(integer *needed, integer *maxbod, integer *stsize, integer *btbody, integer *btnbod, integer *btsegp, integer *btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, integer *stfree, doublereal *stoff, doublereal *stctr, doublereal *strad);
+extern int zzdsksbr_(void *cspice_state, integer *needed, integer *maxbod, integer *stsize, integer *btbody, integer *btnbod, integer *btsegp, integer *btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, integer *stfree, doublereal *stoff, doublereal *stctr, doublereal *strad);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -10887,18 +10887,18 @@ extern int zzdsksbr_(integer *needed, integer *maxbod, integer *stsize, integer 
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: movei_ 14 3 4 4 4 */
  
-extern logical zzdsksel_(integer *surfid, integer *nsurf, integer *srflst, integer *bodyid, integer *dclass, integer *corsys, doublereal *corpar, doublereal *cor1, doublereal *cor2, integer *framid, doublereal *pos, doublereal *et, integer *handle, integer *dladsc, doublereal *dskdsc);
-extern logical zzdsksbd_(integer *bodyid);
-extern logical zzdskbdc_(integer *handle, integer *dladsc, doublereal *dskdsc);
-extern logical zzdsknot_(integer *handle, integer *dladsc, doublereal *dskdsc);
-extern logical zzdsksit_(integer *bodyid, integer *nsurf, integer *srflst, doublereal *et);
-extern logical zzdskcit_(integer *handle, integer *dladsc, doublereal *dskdsc);
-extern logical zzdskusc_(integer *bodyid, doublereal *et, doublereal *cor1, doublereal *cor2);
-extern logical zzdskumc_(integer *handle, integer *dladsc, doublereal *dskdsc);
-extern logical zzdskmsc_(integer *bodyid, integer *surfid, integer *framid, integer *corsys, doublereal *corpar, doublereal *et, doublereal *cor1, doublereal *cor2);
-extern logical zzdskmmc_(integer *handle, integer *dladsc, doublereal *dskdsc);
-extern logical zzdsksrc_(integer *surfid, integer *bodyid, integer *dclass, doublereal *et, integer *framid, doublereal *pos);
-extern logical zzdskmrc_(integer *handle, integer *dladsc, doublereal *dskdsc);
+extern logical zzdsksel_(void *cspice_state, integer *surfid, integer *nsurf, integer *srflst, integer *bodyid, integer *dclass, integer *corsys, doublereal *corpar, doublereal *cor1, doublereal *cor2, integer *framid, doublereal *pos, doublereal *et, integer *handle, integer *dladsc, doublereal *dskdsc);
+extern logical zzdsksbd_(void *cspice_state, integer *bodyid);
+extern logical zzdskbdc_(void *cspice_state, integer *handle, integer *dladsc, doublereal *dskdsc);
+extern logical zzdsknot_(void *cspice_state, integer *handle, integer *dladsc, doublereal *dskdsc);
+extern logical zzdsksit_(void *cspice_state, integer *bodyid, integer *nsurf, integer *srflst, doublereal *et);
+extern logical zzdskcit_(void *cspice_state, integer *handle, integer *dladsc, doublereal *dskdsc);
+extern logical zzdskusc_(void *cspice_state, integer *bodyid, doublereal *et, doublereal *cor1, doublereal *cor2);
+extern logical zzdskumc_(void *cspice_state, integer *handle, integer *dladsc, doublereal *dskdsc);
+extern logical zzdskmsc_(void *cspice_state, integer *bodyid, integer *surfid, integer *framid, integer *corsys, doublereal *corpar, doublereal *et, doublereal *cor1, doublereal *cor2);
+extern logical zzdskmmc_(void *cspice_state, integer *handle, integer *dladsc, doublereal *dskdsc);
+extern logical zzdsksrc_(void *cspice_state, integer *surfid, integer *bodyid, integer *dclass, doublereal *et, integer *framid, doublereal *pos);
+extern logical zzdskmrc_(void *cspice_state, integer *handle, integer *dladsc, doublereal *dskdsc);
 /*:ref: touchi_ 4 1 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -10915,7 +10915,7 @@ extern logical zzdskmrc_(integer *handle, integer *dladsc, doublereal *dskdsc);
 /*:ref: reclat_ 14 4 7 7 7 7 */
 /*:ref: recgeo_ 14 6 7 7 7 7 7 7 */
  
-extern doublereal zzdsksgr_(doublereal *dskdsc);
+extern doublereal zzdsksgr_(void *cspice_state, doublereal *dskdsc);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
@@ -10925,7 +10925,7 @@ extern doublereal zzdsksgr_(doublereal *dskdsc);
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzdsksgx_(integer *handle, integer *dladsc, integer *dtype, doublereal *et, doublereal *vertex, doublereal *raydir, doublereal *xpt, doublereal *dc, integer *ic, logical *found);
+extern int zzdsksgx_(void *cspice_state, integer *handle, integer *dladsc, integer *dtype, doublereal *et, doublereal *vertex, doublereal *raydir, doublereal *xpt, doublereal *dc, integer *ic, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: touchd_ 7 1 7 */
@@ -10935,7 +10935,7 @@ extern int zzdsksgx_(integer *handle, integer *dladsc, integer *dtype, doublerea
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdsksph_(integer *bodyid, integer *nsurf, integer *srflst, doublereal *minrad, doublereal *maxrad);
+extern int zzdsksph_(void *cspice_state, integer *bodyid, integer *nsurf, integer *srflst, doublereal *minrad, doublereal *maxrad);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -10961,20 +10961,20 @@ extern int zzdsksph_(integer *bodyid, integer *nsurf, integer *srflst, doublerea
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: movei_ 14 3 4 4 4 */
  
-extern int zzdspc_(integer *irez, doublereal *d2201, doublereal *d2211, doublereal *d3210, doublereal *d3222, doublereal *d4410, doublereal *d4422, doublereal *d5220, doublereal *d5232, doublereal *d5421, doublereal *d5433, doublereal *dedt, doublereal *del1, doublereal *del2, doublereal *del3, doublereal *didt, doublereal *dmdt, doublereal *dnodt, doublereal *domdt, doublereal *argpo, doublereal *argpdot, doublereal *t, doublereal *tc, doublereal *gsto, doublereal *xfact, doublereal *xlamo, doublereal *no, doublereal *atime, doublereal *eccm, doublereal *argpm, doublereal *inclm, doublereal *xli, doublereal *mm, doublereal *xni, doublereal *nodem, doublereal *dndt, doublereal *xn);
+extern int zzdspc_(void *cspice_state, integer *irez, doublereal *d2201, doublereal *d2211, doublereal *d3210, doublereal *d3222, doublereal *d4410, doublereal *d4422, doublereal *d5220, doublereal *d5232, doublereal *d5421, doublereal *d5433, doublereal *dedt, doublereal *del1, doublereal *del2, doublereal *del3, doublereal *didt, doublereal *dmdt, doublereal *dnodt, doublereal *domdt, doublereal *argpo, doublereal *argpdot, doublereal *t, doublereal *tc, doublereal *gsto, doublereal *xfact, doublereal *xlamo, doublereal *no, doublereal *atime, doublereal *eccm, doublereal *argpm, doublereal *inclm, doublereal *xli, doublereal *mm, doublereal *xni, doublereal *nodem, doublereal *dndt, doublereal *xn);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdspr_(integer *opmode, doublereal *e3, doublereal *ee2, doublereal *peo, doublereal *pgho, doublereal *pho, doublereal *pinco, doublereal *plo, doublereal *se2, doublereal *se3, doublereal *sgh2, doublereal *sgh3, doublereal *sgh4, doublereal *sh2, doublereal *sh3, doublereal *si2, doublereal *si3, doublereal *sl2, doublereal *sl3, doublereal *sl4, doublereal *t, doublereal *xgh2, doublereal *xgh3, doublereal *xgh4, doublereal *xh2, doublereal *xh3, doublereal *xi2, doublereal *xi3, doublereal *xl2, doublereal *xl3, doublereal *xl4, doublereal *zmol, doublereal *zmos, doublereal *inclo, logical *doinit, doublereal *eccp, doublereal *inclp, doublereal *nodep, doublereal *argpp, doublereal *mp);
+extern int zzdspr_(void *cspice_state, integer *opmode, doublereal *e3, doublereal *ee2, doublereal *peo, doublereal *pgho, doublereal *pho, doublereal *pinco, doublereal *plo, doublereal *se2, doublereal *se3, doublereal *sgh2, doublereal *sgh3, doublereal *sgh4, doublereal *sh2, doublereal *sh3, doublereal *si2, doublereal *si3, doublereal *sl2, doublereal *sl3, doublereal *sl4, doublereal *t, doublereal *xgh2, doublereal *xgh3, doublereal *xgh4, doublereal *xh2, doublereal *xh3, doublereal *xi2, doublereal *xi3, doublereal *xl2, doublereal *xl3, doublereal *xl4, doublereal *zmol, doublereal *zmos, doublereal *inclo, logical *doinit, doublereal *eccp, doublereal *inclp, doublereal *nodep, doublereal *argpp, doublereal *mp);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
 /*:ref: pi_ 7 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzdynbid_(char *frname, integer *frcode, char *item, integer *idcode, ftnlen frname_len, ftnlen item_len);
+extern int zzdynbid_(void *cspice_state, char *frname, integer *frcode, char *item, integer *idcode, ftnlen frname_len, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -10992,7 +10992,7 @@ extern int zzdynbid_(char *frname, integer *frcode, char *item, integer *idcode,
 /*:ref: bods2c_ 14 4 13 4 12 124 */
 /*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
  
-extern int zzdynfid_(char *frname, integer *frcode, char *item, integer *idcode, ftnlen frname_len, ftnlen item_len);
+extern int zzdynfid_(void *cspice_state, char *frname, integer *frcode, char *item, integer *idcode, ftnlen frname_len, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -11012,7 +11012,7 @@ extern int zzdynfid_(char *frname, integer *frcode, char *item, integer *idcode,
 /*:ref: prsint_ 14 3 13 4 124 */
 /*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
  
-extern int zzdynfr0_(integer *infram, integer *center, doublereal *et, doublereal *xform, integer *basfrm);
+extern int zzdynfr0_(void *cspice_state, integer *infram, integer *center, doublereal *et, doublereal *xform, integer *basfrm);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
@@ -11072,7 +11072,7 @@ extern int zzdynfr0_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: zzdynvai_ 14 8 13 4 13 4 4 4 124 124 */
 /*:ref: polyds_ 14 5 7 4 4 7 7 */
  
-extern int zzdynfrm_(integer *infram, integer *center, doublereal *et, doublereal *xform, integer *basfrm);
+extern int zzdynfrm_(void *cspice_state, integer *infram, integer *center, doublereal *et, doublereal *xform, integer *basfrm);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
@@ -11132,7 +11132,7 @@ extern int zzdynfrm_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: zzdynvai_ 14 8 13 4 13 4 4 4 124 124 */
 /*:ref: polyds_ 14 5 7 4 4 7 7 */
  
-extern int zzdynoac_(char *frname, integer *frcode, char *item, integer *maxn, integer *n, char *values, logical *found, ftnlen frname_len, ftnlen item_len, ftnlen values_len);
+extern int zzdynoac_(void *cspice_state, char *frname, integer *frcode, char *item, integer *maxn, integer *n, char *values, logical *found, ftnlen frname_len, ftnlen item_len, ftnlen values_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -11148,7 +11148,7 @@ extern int zzdynoac_(char *frname, integer *frcode, char *item, integer *maxn, i
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: gcpool_ 14 8 13 4 4 4 13 12 124 124 */
  
-extern int zzdynoad_(char *frname, integer *frcode, char *item, integer *maxn, integer *n, doublereal *values, logical *found, ftnlen frname_len, ftnlen item_len);
+extern int zzdynoad_(void *cspice_state, char *frname, integer *frcode, char *item, integer *maxn, integer *n, doublereal *values, logical *found, ftnlen frname_len, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -11164,7 +11164,7 @@ extern int zzdynoad_(char *frname, integer *frcode, char *item, integer *maxn, i
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
  
-extern int zzdynrot_(integer *infram, integer *center, doublereal *et, doublereal *rotate, integer *basfrm);
+extern int zzdynrot_(void *cspice_state, integer *infram, integer *center, doublereal *et, doublereal *rotate, integer *basfrm);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
@@ -11222,7 +11222,7 @@ extern int zzdynrot_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: zzdynvai_ 14 8 13 4 13 4 4 4 124 124 */
 /*:ref: polyds_ 14 5 7 4 4 7 7 */
  
-extern int zzdynrt0_(integer *infram, integer *center, doublereal *et, doublereal *rotate, integer *basfrm);
+extern int zzdynrt0_(void *cspice_state, integer *infram, integer *center, doublereal *et, doublereal *rotate, integer *basfrm);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
@@ -11280,7 +11280,7 @@ extern int zzdynrt0_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: zzdynvai_ 14 8 13 4 13 4 4 4 124 124 */
 /*:ref: polyds_ 14 5 7 4 4 7 7 */
  
-extern int zzdynvac_(char *frname, integer *frcode, char *item, integer *maxn, integer *n, char *values, ftnlen frname_len, ftnlen item_len, ftnlen values_len);
+extern int zzdynvac_(void *cspice_state, char *frname, integer *frcode, char *item, integer *maxn, integer *n, char *values, ftnlen frname_len, ftnlen item_len, ftnlen values_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -11296,7 +11296,7 @@ extern int zzdynvac_(char *frname, integer *frcode, char *item, integer *maxn, i
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: gcpool_ 14 8 13 4 4 4 13 12 124 124 */
  
-extern int zzdynvad_(char *frname, integer *frcode, char *item, integer *maxn, integer *n, doublereal *values, ftnlen frname_len, ftnlen item_len);
+extern int zzdynvad_(void *cspice_state, char *frname, integer *frcode, char *item, integer *maxn, integer *n, doublereal *values, ftnlen frname_len, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -11312,7 +11312,7 @@ extern int zzdynvad_(char *frname, integer *frcode, char *item, integer *maxn, i
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
  
-extern int zzdynvai_(char *frname, integer *frcode, char *item, integer *maxn, integer *n, integer *values, ftnlen frname_len, ftnlen item_len);
+extern int zzdynvai_(void *cspice_state, char *frname, integer *frcode, char *item, integer *maxn, integer *n, integer *values, ftnlen frname_len, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: intstr_ 14 3 4 13 124 */
@@ -11328,7 +11328,7 @@ extern int zzdynvai_(char *frname, integer *frcode, char *item, integer *maxn, i
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
  
-extern int zzedterm_(char *type__, doublereal *a, doublereal *b, doublereal *c__, doublereal *srcrad, doublereal *srcpos, integer *npts, doublereal *trmpts, ftnlen type_len);
+extern int zzedterm_(void *cspice_state, char *type__, doublereal *a, doublereal *b, doublereal *c__, doublereal *srcrad, doublereal *srcpos, integer *npts, doublereal *trmpts, ftnlen type_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -11357,7 +11357,7 @@ extern int zzedterm_(char *type__, doublereal *a, doublereal *b, doublereal *c__
 /*:ref: vsep_ 7 2 7 7 */
 /*:ref: vdot_ 7 2 7 7 */
  
-extern int zzedtmpt_(logical *umbral, doublereal *a, doublereal *b, doublereal *c__, doublereal *r__, doublereal *axis, doublereal *plnvec, doublereal *point);
+extern int zzedtmpt_(void *cspice_state, logical *umbral, doublereal *a, doublereal *b, doublereal *c__, doublereal *r__, doublereal *axis, doublereal *plnvec, doublereal *point);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -11384,7 +11384,7 @@ extern int zzedtmpt_(logical *umbral, doublereal *a, doublereal *b, doublereal *
 /*:ref: vdist_ 7 2 7 7 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzekac01_(integer *handle, integer *segdsc, integer *coldsc, integer *ivals, logical *nlflgs, integer *rcptrs, integer *wkindx);
+extern int zzekac01_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *ivals, logical *nlflgs, integer *rcptrs, integer *wkindx);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11402,7 +11402,7 @@ extern int zzekac01_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzektr1s_ 14 4 4 4 4 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int zzekac02_(integer *handle, integer *segdsc, integer *coldsc, doublereal *dvals, logical *nlflgs, integer *rcptrs, integer *wkindx);
+extern int zzekac02_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, doublereal *dvals, logical *nlflgs, integer *rcptrs, integer *wkindx);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11420,7 +11420,7 @@ extern int zzekac02_(integer *handle, integer *segdsc, integer *coldsc, doublere
 /*:ref: zzektr1s_ 14 4 4 4 4 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int zzekac03_(integer *handle, integer *segdsc, integer *coldsc, char *cvals, logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen cvals_len);
+extern int zzekac03_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, char *cvals, logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen cvals_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11440,7 +11440,7 @@ extern int zzekac03_(integer *handle, integer *segdsc, integer *coldsc, char *cv
 /*:ref: zzektr1s_ 14 4 4 4 4 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int zzekac04_(integer *handle, integer *segdsc, integer *coldsc, integer *ivals, integer *entszs, logical *nlflgs);
+extern int zzekac04_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *ivals, integer *entszs, logical *nlflgs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11455,7 +11455,7 @@ extern int zzekac04_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
  
-extern int zzekac05_(integer *handle, integer *segdsc, integer *coldsc, doublereal *dvals, integer *entszs, logical *nlflgs);
+extern int zzekac05_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, doublereal *dvals, integer *entszs, logical *nlflgs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11470,7 +11470,7 @@ extern int zzekac05_(integer *handle, integer *segdsc, integer *coldsc, doublere
 /*:ref: zzekpgwd_ 14 3 4 4 7 */
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
  
-extern int zzekac06_(integer *handle, integer *segdsc, integer *coldsc, char *cvals, integer *entszs, logical *nlflgs, ftnlen cvals_len);
+extern int zzekac06_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, char *cvals, integer *entszs, logical *nlflgs, ftnlen cvals_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11485,7 +11485,7 @@ extern int zzekac06_(integer *handle, integer *segdsc, integer *coldsc, char *cv
 /*:ref: zzekpgwc_ 14 4 4 4 13 124 */
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
  
-extern int zzekac07_(integer *handle, integer *segdsc, integer *coldsc, integer *ivals, logical *nlflgs, integer *wkindx);
+extern int zzekac07_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *ivals, logical *nlflgs, integer *wkindx);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11502,7 +11502,7 @@ extern int zzekac07_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekwpai_ 14 6 4 4 4 4 4 4 */
 /*:ref: zzekwpal_ 14 6 4 4 4 12 4 4 */
  
-extern int zzekac08_(integer *handle, integer *segdsc, integer *coldsc, doublereal *dvals, logical *nlflgs, integer *wkindx);
+extern int zzekac08_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, doublereal *dvals, logical *nlflgs, integer *wkindx);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11519,7 +11519,7 @@ extern int zzekac08_(integer *handle, integer *segdsc, integer *coldsc, doublere
 /*:ref: zzekwpai_ 14 6 4 4 4 4 4 4 */
 /*:ref: zzekwpal_ 14 6 4 4 4 12 4 4 */
  
-extern int zzekac09_(integer *handle, integer *segdsc, integer *coldsc, char *cvals, logical *nlflgs, integer *wkindx, ftnlen cvals_len);
+extern int zzekac09_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, char *cvals, logical *nlflgs, integer *wkindx, ftnlen cvals_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
@@ -11536,14 +11536,14 @@ extern int zzekac09_(integer *handle, integer *segdsc, integer *coldsc, char *cv
 /*:ref: zzekwpai_ 14 6 4 4 4 4 4 4 */
 /*:ref: zzekwpal_ 14 6 4 4 4 12 4 4 */
  
-extern int zzekacps_(integer *handle, integer *segdsc, integer *type__, integer *n, integer *p, integer *base);
+extern int zzekacps_(void *cspice_state, integer *handle, integer *segdsc, integer *type__, integer *n, integer *p, integer *base);
 /*:ref: zzekpgan_ 14 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzekslnk_ 14 4 4 4 4 4 */
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
 /*:ref: zzektrap_ 14 4 4 4 4 4 */
  
-extern int zzekad01_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *ival, logical *isnull);
+extern int zzekad01_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *ival, logical *isnull);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -11558,7 +11558,7 @@ extern int zzekad01_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekaps_ 14 6 4 4 4 12 4 4 */
 /*:ref: zzekiii1_ 14 6 4 4 4 4 4 12 */
  
-extern int zzekad02_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, logical *isnull);
+extern int zzekad02_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, logical *isnull);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -11574,7 +11574,7 @@ extern int zzekad02_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekaps_ 14 6 4 4 4 12 4 4 */
 /*:ref: zzekiid1_ 14 6 4 4 4 7 4 12 */
  
-extern int zzekad03_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, char *cval, logical *isnull, ftnlen cval_len);
+extern int zzekad03_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, char *cval, logical *isnull, ftnlen cval_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -11592,7 +11592,7 @@ extern int zzekad03_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
 /*:ref: zzekiic1_ 14 7 4 4 4 13 4 12 124 */
  
-extern int zzekad04_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, integer *ivals, logical *isnull);
+extern int zzekad04_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, integer *ivals, logical *isnull);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -11606,7 +11606,7 @@ extern int zzekad04_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekaps_ 14 6 4 4 4 12 4 4 */
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
  
-extern int zzekad05_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, doublereal *dvals, logical *isnull);
+extern int zzekad05_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, doublereal *dvals, logical *isnull);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -11621,7 +11621,7 @@ extern int zzekad05_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekaps_ 14 6 4 4 4 12 4 4 */
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
  
-extern int zzekad06_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, char *cvals, logical *isnull, ftnlen cvals_len);
+extern int zzekad06_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, char *cvals, logical *isnull, ftnlen cvals_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -11638,7 +11638,7 @@ extern int zzekad06_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekaps_ 14 6 4 4 4 12 4 4 */
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
  
-extern int zzekaps_(integer *handle, integer *segdsc, integer *type__, logical *new__, integer *p, integer *base);
+extern int zzekaps_(void *cspice_state, integer *handle, integer *segdsc, integer *type__, logical *new__, integer *p, integer *base);
 /*:ref: zzekpgan_ 14 4 4 4 4 4 */
 /*:ref: zzekpgal_ 14 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
@@ -11646,7 +11646,7 @@ extern int zzekaps_(integer *handle, integer *segdsc, integer *type__, logical *
 /*:ref: zzeksfwd_ 14 4 4 4 4 4 */
 /*:ref: zzektrap_ 14 4 4 4 4 4 */
  
-extern int zzekbs01_(integer *handle, char *tabnam, integer *ncols, char *cnames, integer *cdscrs, integer *segno, ftnlen tabnam_len, ftnlen cnames_len);
+extern int zzekbs01_(void *cspice_state, integer *handle, char *tabnam, integer *ncols, char *cnames, integer *cdscrs, integer *segno, ftnlen tabnam_len, ftnlen cnames_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11666,7 +11666,7 @@ extern int zzekbs01_(integer *handle, char *tabnam, integer *ncols, char *cnames
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: zzektrap_ 14 4 4 4 4 4 */
  
-extern int zzekbs02_(integer *handle, char *tabnam, integer *ncols, char *cnames, integer *cdscrs, integer *segno, ftnlen tabnam_len, ftnlen cnames_len);
+extern int zzekbs02_(void *cspice_state, integer *handle, char *tabnam, integer *ncols, char *cnames, integer *cdscrs, integer *segno, ftnlen tabnam_len, ftnlen cnames_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11685,7 +11685,7 @@ extern int zzekbs02_(integer *handle, char *tabnam, integer *ncols, char *cnames
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: zzektrap_ 14 4 4 4 4 4 */
  
-extern int zzekcchk_(char *query, integer *eqryi, char *eqryc, integer *ntab, char *tablst, char *alslst, integer *base, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen tablst_len, ftnlen alslst_len, ftnlen errmsg_len);
+extern int zzekcchk_(void *cspice_state, char *query, integer *eqryi, char *eqryc, integer *ntab, char *tablst, char *alslst, integer *base, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen tablst_len, ftnlen alslst_len, ftnlen errmsg_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -11698,7 +11698,7 @@ extern int zzekcchk_(char *query, integer *eqryi, char *eqryc, integer *ntab, ch
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
  
-extern int zzekcdsc_(integer *handle, integer *segdsc, char *column, integer *coldsc, ftnlen column_len);
+extern int zzekcdsc_(void *cspice_state, integer *handle, integer *segdsc, char *column, integer *coldsc, ftnlen column_len);
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: dasrdc_ 14 7 4 4 4 4 4 13 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
@@ -11710,7 +11710,7 @@ extern int zzekcdsc_(integer *handle, integer *segdsc, char *column, integer *co
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekcix1_(integer *handle, integer *coldsc);
+extern int zzekcix1_(void *cspice_state, integer *handle, integer *coldsc);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11718,10 +11718,10 @@ extern int zzekcix1_(integer *handle, integer *coldsc);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzektrit_ 14 2 4 4 */
  
-extern int zzekcnam_(integer *handle, integer *coldsc, char *column, ftnlen column_len);
+extern int zzekcnam_(void *cspice_state, integer *handle, integer *coldsc, char *column, ftnlen column_len);
 /*:ref: dasrdc_ 14 7 4 4 4 4 4 13 124 */
  
-extern int zzekde01_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern int zzekde01_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11740,7 +11740,7 @@ extern int zzekde01_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: errhan_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzekde02_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern int zzekde02_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11759,7 +11759,7 @@ extern int zzekde02_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: errhan_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzekde03_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern int zzekde03_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11780,7 +11780,7 @@ extern int zzekde03_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: errhan_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzekde04_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern int zzekde04_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11798,7 +11798,7 @@ extern int zzekde04_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: errhan_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzekde05_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern int zzekde05_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11818,7 +11818,7 @@ extern int zzekde05_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: errhan_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzekde06_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern int zzekde06_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -11838,14 +11838,14 @@ extern int zzekde06_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: errhan_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzekdps_(integer *handle, integer *segdsc, integer *type__, integer *p);
+extern int zzekdps_(void *cspice_state, integer *handle, integer *segdsc, integer *type__, integer *p);
 /*:ref: zzekpgfr_ 14 3 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
 /*:ref: zzektrls_ 4 3 4 4 4 */
 /*:ref: zzektrdl_ 14 3 4 4 4 */
  
-extern integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *rows, integer *elts);
+extern integer zzekecmp_(void *cspice_state, integer *hans, integer *sgdscs, integer *cldscs, integer *rows, integer *elts);
 /*:ref: zzekrsi_ 14 8 4 4 4 4 4 4 12 12 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -11856,7 +11856,7 @@ extern integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, intege
 /*:ref: zzekrsd_ 14 8 4 4 4 4 4 7 12 12 */
 /*:ref: zzekrsc_ 14 10 4 4 4 4 4 4 13 12 12 124 */
  
-extern int zzekencd_(char *query, integer *eqryi, char *eqryc, doublereal *eqryd, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len);
+extern int zzekencd_(void *cspice_state, char *query, integer *eqryi, char *eqryc, doublereal *eqryd, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekqini_ 14 6 4 4 4 13 7 124 */
@@ -11867,7 +11867,7 @@ extern int zzekencd_(char *query, integer *eqryi, char *eqryc, doublereal *eqryd
 /*:ref: zzektres_ 14 10 13 4 13 7 12 13 4 124 124 124 */
 /*:ref: zzeksemc_ 14 9 13 4 13 12 13 4 124 124 124 */
  
-extern int zzekerc1_(integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *recptr, logical *null, integer *prvidx, integer *prvptr, ftnlen ckey_len);
+extern int zzekerc1_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *recptr, logical *null, integer *prvidx, integer *prvptr, ftnlen ckey_len);
 /*:ref: failed_ 12 0 */
 /*:ref: zzektrsz_ 4 2 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -11878,7 +11878,7 @@ extern int zzekerc1_(integer *handle, integer *segdsc, integer *coldsc, char *ck
 /*:ref: zzektrdp_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern int zzekerd1_(integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *recptr, logical *null, integer *prvidx, integer *prvptr);
+extern int zzekerd1_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *recptr, logical *null, integer *prvidx, integer *prvptr);
 /*:ref: failed_ 12 0 */
 /*:ref: zzektrsz_ 4 2 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -11889,7 +11889,7 @@ extern int zzekerd1_(integer *handle, integer *segdsc, integer *coldsc, doublere
 /*:ref: zzektrdp_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern int zzekeri1_(integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *recptr, logical *null, integer *prvidx, integer *prvptr);
+extern int zzekeri1_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *recptr, logical *null, integer *prvidx, integer *prvptr);
 /*:ref: failed_ 12 0 */
 /*:ref: zzektrsz_ 4 2 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -11900,7 +11900,7 @@ extern int zzekeri1_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzektrdp_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern integer zzekesiz_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: zzeksz04_ 4 4 4 4 4 4 */
 /*:ref: zzeksz05_ 4 4 4 4 4 4 */
 /*:ref: zzeksz06_ 4 4 4 4 4 4 */
@@ -11914,7 +11914,7 @@ extern integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, inte
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekff01_(integer *handle, integer *segno, integer *rcptrs);
+extern int zzekff01_(void *cspice_state, integer *handle, integer *segno, integer *rcptrs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeksrd_ 14 3 4 4 4 */
@@ -11931,7 +11931,7 @@ extern int zzekff01_(integer *handle, integer *segno, integer *rcptrs);
 /*:ref: zzektr1s_ 14 4 4 4 4 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int zzekfrx_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *pos);
+extern int zzekfrx_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *pos);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekrsc_ 14 10 4 4 4 4 4 4 13 12 12 124 */
@@ -11947,7 +11947,7 @@ extern int zzekfrx_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*:ref: zzeklerd_ 14 8 4 4 4 7 4 12 4 4 */
 /*:ref: zzekleri_ 14 8 4 4 4 4 4 12 4 4 */
  
-extern int zzekgcdp_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *datptr);
+extern int zzekgcdp_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *datptr);
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -11957,33 +11957,33 @@ extern int zzekgcdp_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzekgei_(integer *handle, integer *addrss, integer *ival);
+extern int zzekgei_(void *cspice_state, integer *handle, integer *addrss, integer *ival);
 /*:ref: dasrdc_ 14 7 4 4 4 4 4 13 124 */
 /*:ref: prtdec_ 14 3 13 4 124 */
  
-extern int zzekgfwd_(integer *handle, integer *type__, integer *p, integer *fward);
+extern int zzekgfwd_(void *cspice_state, integer *handle, integer *type__, integer *p, integer *fward);
 /*:ref: zzekpgbs_ 14 3 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzekgei_ 14 3 4 4 4 */
 /*:ref: dasrdd_ 14 4 4 4 4 7 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzekglnk_(integer *handle, integer *type__, integer *p, integer *nlinks);
+extern int zzekglnk_(void *cspice_state, integer *handle, integer *type__, integer *p, integer *nlinks);
 /*:ref: zzekpgbs_ 14 3 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzekgei_ 14 3 4 4 4 */
 /*:ref: dasrdd_ 14 4 4 4 4 7 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzekgrcp_(integer *handle, integer *recptr, integer *ptr);
+extern int zzekgrcp_(void *cspice_state, integer *handle, integer *recptr, integer *ptr);
 /*:ref: zzekpgch_ 14 3 4 13 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzekgrs_(integer *handle, integer *recptr, integer *status);
+extern int zzekgrs_(void *cspice_state, integer *handle, integer *recptr, integer *status);
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzekif01_(integer *handle, integer *segno, integer *rcptrs);
+extern int zzekif01_(void *cspice_state, integer *handle, integer *segno, integer *rcptrs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
@@ -11993,7 +11993,7 @@ extern int zzekif01_(integer *handle, integer *segno, integer *rcptrs);
 /*:ref: zzekaps_ 14 6 4 4 4 12 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekif02_(integer *handle, integer *segno);
+extern int zzekif02_(void *cspice_state, integer *handle, integer *segno);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekmloc_ 14 4 4 4 4 4 */
@@ -12005,7 +12005,7 @@ extern int zzekif02_(integer *handle, integer *segno);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekiic1_(integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *recptr, logical *null, ftnlen ckey_len);
+extern int zzekiic1_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *recptr, logical *null, ftnlen ckey_len);
 /*:ref: failed_ 12 0 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12017,7 +12017,7 @@ extern int zzekiic1_(integer *handle, integer *segdsc, integer *coldsc, char *ck
 /*:ref: zzeklerc_ 14 9 4 4 4 13 4 12 4 4 124 */
 /*:ref: zzektrin_ 14 4 4 4 4 4 */
  
-extern int zzekiid1_(integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *recptr, logical *null);
+extern int zzekiid1_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *recptr, logical *null);
 /*:ref: failed_ 12 0 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12029,7 +12029,7 @@ extern int zzekiid1_(integer *handle, integer *segdsc, integer *coldsc, doublere
 /*:ref: zzeklerd_ 14 8 4 4 4 7 4 12 4 4 */
 /*:ref: zzektrin_ 14 4 4 4 4 4 */
  
-extern int zzekiii1_(integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *recptr, logical *null);
+extern int zzekiii1_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *recptr, logical *null);
 /*:ref: failed_ 12 0 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12041,7 +12041,7 @@ extern int zzekiii1_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekleri_ 14 8 4 4 4 4 4 12 4 4 */
 /*:ref: zzektrin_ 14 4 4 4 4 4 */
  
-extern integer zzekille_(integer *handle, integer *segdsc, integer *coldsc, integer *nrows, integer *dtype, char *cval, doublereal *dval, integer *ival, ftnlen cval_len);
+extern integer zzekille_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *nrows, integer *dtype, char *cval, doublereal *dval, integer *ival, ftnlen cval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12052,7 +12052,7 @@ extern integer zzekille_(integer *handle, integer *segdsc, integer *coldsc, inte
 /*:ref: zzeklled_ 14 6 4 4 4 7 4 4 */
 /*:ref: zzekllei_ 14 6 4 4 4 4 4 4 */
  
-extern integer zzekillt_(integer *handle, integer *segdsc, integer *coldsc, integer *nrows, integer *dtype, char *cval, doublereal *dval, integer *ival, ftnlen cval_len);
+extern integer zzekillt_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *nrows, integer *dtype, char *cval, doublereal *dval, integer *ival, ftnlen cval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12063,7 +12063,7 @@ extern integer zzekillt_(integer *handle, integer *segdsc, integer *coldsc, inte
 /*:ref: zzeklltd_ 14 6 4 4 4 7 4 4 */
 /*:ref: zzekllti_ 14 6 4 4 4 4 4 4 */
  
-extern int zzekinqc_(char *value, integer *length, integer *lexbeg, integer *lexend, integer *eqryi, char *eqryc, integer *descr, ftnlen value_len, ftnlen eqryc_len);
+extern int zzekinqc_(void *cspice_state, char *value, integer *length, integer *lexbeg, integer *lexend, integer *eqryi, char *eqryc, integer *descr, ftnlen value_len, ftnlen eqryc_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12073,7 +12073,7 @@ extern int zzekinqc_(char *value, integer *length, integer *lexbeg, integer *lex
 /*:ref: cleari_ 14 2 4 4 */
 /*:ref: zzekweqi_ 14 4 13 4 4 124 */
  
-extern int zzekinqn_(doublereal *value, integer *type__, integer *lexbeg, integer *lexend, integer *eqryi, doublereal *eqryd, integer *descr);
+extern int zzekinqn_(void *cspice_state, doublereal *value, integer *type__, integer *lexbeg, integer *lexend, integer *eqryi, doublereal *eqryd, integer *descr);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12083,7 +12083,7 @@ extern int zzekinqn_(doublereal *value, integer *type__, integer *lexbeg, intege
 /*:ref: cleari_ 14 2 4 4 */
 /*:ref: zzekweqi_ 14 4 13 4 4 124 */
  
-extern int zzekixdl_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern int zzekixdl_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekfrx_ 14 5 4 4 4 4 4 */
@@ -12095,7 +12095,7 @@ extern int zzekixdl_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: errhan_ 14 3 13 4 124 */
  
-extern int zzekixlk_(integer *handle, integer *coldsc, integer *key, integer *recptr);
+extern int zzekixlk_(void *cspice_state, integer *handle, integer *coldsc, integer *key, integer *recptr);
 /*:ref: zzektrdp_ 14 4 4 4 4 4 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12104,7 +12104,7 @@ extern int zzekixlk_(integer *handle, integer *coldsc, integer *key, integer *re
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekjoin_(integer *jbase1, integer *jbase2, integer *njcnst, logical *active, integer *cpidx1, integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, integer *jbase3, integer *nrows);
+extern int zzekjoin_(void *cspice_state, integer *jbase1, integer *jbase2, integer *njcnst, logical *active, integer *cpidx1, integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, integer *jbase3, integer *nrows);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12117,12 +12117,12 @@ extern int zzekjoin_(integer *jbase1, integer *jbase2, integer *njcnst, logical 
 /*:ref: zzekjprp_ 14 23 4 4 4 4 4 4 4 4 4 4 12 4 4 4 4 4 4 4 4 4 4 4 4 */
 /*:ref: zzekjnxt_ 14 2 12 4 */
  
-extern int zzekjsqz_(integer *jrsbas);
+extern int zzekjsqz_(void *cspice_state, integer *jrsbas);
 /*:ref: zzeksrd_ 14 3 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzeksupd_ 14 3 4 4 4 */
  
-extern int zzekjsrt_(integer *njrs, integer *ubases, integer *norder, integer *otabs, integer *ocols, integer *oelts, integer *senses, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, integer *ordbas);
+extern int zzekjsrt_(void *cspice_state, integer *njrs, integer *ubases, integer *norder, integer *otabs, integer *ocols, integer *oelts, integer *senses, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, integer *ordbas);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12143,9 +12143,9 @@ extern int zzekjsrt_(integer *njrs, integer *ubases, integer *norder, integer *o
 /*:ref: zzekspsh_ 14 2 4 4 */
 /*:ref: zzeksupd_ 14 3 4 4 4 */
  
-extern int zzekjtst_(integer *segvec, integer *jbase1, integer *nt1, integer *rb1, integer *nr1, integer *jbase2, integer *nt2, integer *rb2, integer *nr2, integer *njcnst, logical *active, integer *cpidx1, integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, logical *found, integer *rowvec);
-extern int zzekjprp_(integer *segvec, integer *jbase1, integer *nt1, integer *rb1, integer *nr1, integer *jbase2, integer *nt2, integer *rb2, integer *nr2, integer *njcnst, logical *active, integer *cpidx1, integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs);
-extern int zzekjnxt_(logical *found, integer *rowvec);
+extern int zzekjtst_(void *cspice_state, integer *segvec, integer *jbase1, integer *nt1, integer *rb1, integer *nr1, integer *jbase2, integer *nt2, integer *rb2, integer *nr2, integer *njcnst, logical *active, integer *cpidx1, integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, logical *found, integer *rowvec);
+extern int zzekjprp_(void *cspice_state, integer *segvec, integer *jbase1, integer *nt1, integer *rb1, integer *nr1, integer *jbase2, integer *nt2, integer *rb2, integer *nr2, integer *njcnst, logical *active, integer *cpidx1, integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs);
+extern int zzekjnxt_(void *cspice_state, logical *found, integer *rowvec);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -12160,7 +12160,7 @@ extern int zzekjnxt_(logical *found, integer *rowvec);
 /*:ref: zzekrcmp_ 12 12 4 4 4 4 4 4 4 4 4 4 4 4 */
 /*:ref: zzekvmch_ 12 13 4 12 4 4 4 4 4 4 4 4 4 4 4 */
  
-extern int zzekkey_(integer *handle, integer *segdsc, integer *nrows, integer *ncnstr, integer *clidxs, integer *dsclst, integer *ops, integer *dtypes, char *chrbuf, integer *cbegs, integer *cends, doublereal *dvals, integer *ivals, logical *active, integer *key, integer *keydsc, integer *begidx, integer *endidx, logical *found, ftnlen chrbuf_len);
+extern int zzekkey_(void *cspice_state, integer *handle, integer *segdsc, integer *nrows, integer *ncnstr, integer *clidxs, integer *dsclst, integer *ops, integer *dtypes, char *chrbuf, integer *cbegs, integer *cends, doublereal *dvals, integer *ivals, logical *active, integer *key, integer *keydsc, integer *begidx, integer *endidx, logical *found, ftnlen chrbuf_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12176,7 +12176,7 @@ extern int zzekkey_(integer *handle, integer *segdsc, integer *nrows, integer *n
 /*:ref: ordi_ 4 2 4 4 */
 /*:ref: movei_ 14 3 4 4 4 */
  
-extern int zzeklerc_(integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *recptr, logical *null, integer *prvidx, integer *prvptr, ftnlen ckey_len);
+extern int zzeklerc_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *recptr, logical *null, integer *prvidx, integer *prvptr, ftnlen ckey_len);
 /*:ref: failed_ 12 0 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12187,7 +12187,7 @@ extern int zzeklerc_(integer *handle, integer *segdsc, integer *coldsc, char *ck
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: zzekerc1_ 14 9 4 4 4 13 4 12 4 4 124 */
  
-extern int zzeklerd_(integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *recptr, logical *null, integer *prvidx, integer *prvptr);
+extern int zzeklerd_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *recptr, logical *null, integer *prvidx, integer *prvptr);
 /*:ref: failed_ 12 0 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12198,7 +12198,7 @@ extern int zzeklerd_(integer *handle, integer *segdsc, integer *coldsc, doublere
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: zzekerd1_ 14 8 4 4 4 7 4 12 4 4 */
  
-extern int zzekleri_(integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *recptr, logical *null, integer *prvidx, integer *prvptr);
+extern int zzekleri_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *recptr, logical *null, integer *prvidx, integer *prvptr);
 /*:ref: failed_ 12 0 */
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12209,7 +12209,7 @@ extern int zzekleri_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: zzekeri1_ 14 8 4 4 4 4 4 12 4 4 */
  
-extern int zzekllec_(integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *prvloc, integer *prvptr, ftnlen ckey_len);
+extern int zzekllec_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *prvloc, integer *prvptr, ftnlen ckey_len);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12220,7 +12220,7 @@ extern int zzekllec_(integer *handle, integer *segdsc, integer *coldsc, char *ck
 /*:ref: zzekixlk_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern int zzeklled_(integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *prvloc, integer *prvptr);
+extern int zzeklled_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *prvloc, integer *prvptr);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12231,7 +12231,7 @@ extern int zzeklled_(integer *handle, integer *segdsc, integer *coldsc, doublere
 /*:ref: zzekixlk_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern int zzekllei_(integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *prvloc, integer *prvptr);
+extern int zzekllei_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *prvloc, integer *prvptr);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12242,7 +12242,7 @@ extern int zzekllei_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekixlk_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern int zzeklltc_(integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *prvloc, integer *prvptr, ftnlen ckey_len);
+extern int zzeklltc_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, char *ckey, integer *prvloc, integer *prvptr, ftnlen ckey_len);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12253,7 +12253,7 @@ extern int zzeklltc_(integer *handle, integer *segdsc, integer *coldsc, char *ck
 /*:ref: zzekixlk_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern int zzeklltd_(integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *prvloc, integer *prvptr);
+extern int zzeklltd_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, doublereal *dkey, integer *prvloc, integer *prvptr);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12264,7 +12264,7 @@ extern int zzeklltd_(integer *handle, integer *segdsc, integer *coldsc, doublere
 /*:ref: zzekixlk_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern int zzekllti_(integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *prvloc, integer *prvptr);
+extern int zzekllti_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *ikey, integer *prvloc, integer *prvptr);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12275,7 +12275,7 @@ extern int zzekllti_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekixlk_ 14 4 4 4 4 4 */
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern int zzekmloc_(integer *handle, integer *segno, integer *page, integer *base);
+extern int zzekmloc_(void *cspice_state, integer *handle, integer *segno, integer *page, integer *base);
 /*:ref: eknseg_ 4 1 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12286,7 +12286,7 @@ extern int zzekmloc_(integer *handle, integer *segno, integer *page, integer *ba
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: zzektrdp_ 14 4 4 4 4 4 */
  
-extern int zzeknres_(char *query, integer *eqryi, char *eqryc, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len);
+extern int zzeknres_(void *cspice_state, char *query, integer *eqryi, char *eqryc, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12302,7 +12302,7 @@ extern int zzeknres_(char *query, integer *eqryi, char *eqryc, logical *error, c
 /*:ref: zzekcchk_ 14 15 13 4 13 4 13 13 4 12 13 4 124 124 124 124 124 */
 /*:ref: zzekweqi_ 14 4 13 4 4 124 */
  
-extern int zzeknrml_(char *query, integer *ntoken, integer *lxbegs, integer *lxends, integer *tokens, integer *values, doublereal *numvls, char *chrbuf, integer *chbegs, integer *chends, integer *eqryi, char *eqryc, doublereal *eqryd, logical *error, char *prserr, ftnlen query_len, ftnlen chrbuf_len, ftnlen eqryc_len, ftnlen prserr_len);
+extern int zzeknrml_(void *cspice_state, char *query, integer *ntoken, integer *lxbegs, integer *lxends, integer *tokens, integer *values, doublereal *numvls, char *chrbuf, integer *chbegs, integer *chends, integer *eqryi, char *eqryc, doublereal *eqryd, logical *error, char *prserr, ftnlen query_len, ftnlen chrbuf_len, ftnlen eqryc_len, ftnlen prserr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
@@ -12329,29 +12329,29 @@ extern int zzeknrml_(char *query, integer *ntoken, integer *lxbegs, integer *lxe
 /*:ref: appndi_ 14 2 4 4 */
 /*:ref: zzekweqi_ 14 4 13 4 4 124 */
  
-extern int zzekordc_(char *cvals, logical *nullok, logical *nlflgs, integer *nvals, integer *iorder, ftnlen cvals_len);
+extern int zzekordc_(void *cspice_state, char *cvals, logical *nullok, logical *nlflgs, integer *nvals, integer *iorder, ftnlen cvals_len);
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int zzekordd_(doublereal *dvals, logical *nullok, logical *nlflgs, integer *nvals, integer *iorder);
+extern int zzekordd_(void *cspice_state, doublereal *dvals, logical *nullok, logical *nlflgs, integer *nvals, integer *iorder);
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int zzekordi_(integer *ivals, logical *nullok, logical *nlflgs, integer *nvals, integer *iorder);
+extern int zzekordi_(void *cspice_state, integer *ivals, logical *nullok, logical *nlflgs, integer *nvals, integer *iorder);
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int zzekpage_(integer *handle, integer *type__, integer *addrss, char *stat, integer *p, char *pagec, doublereal *paged, integer *pagei, integer *base, integer *value, ftnlen stat_len, ftnlen pagec_len);
-extern int zzekpgin_(integer *handle);
-extern int zzekpgan_(integer *handle, integer *type__, integer *p, integer *base);
-extern int zzekpgal_(integer *handle, integer *type__, integer *p, integer *base);
-extern int zzekpgfr_(integer *handle, integer *type__, integer *p);
-extern int zzekpgrc_(integer *handle, integer *p, char *pagec, ftnlen pagec_len);
-extern int zzekpgrd_(integer *handle, integer *p, doublereal *paged);
-extern int zzekpgri_(integer *handle, integer *p, integer *pagei);
-extern int zzekpgwc_(integer *handle, integer *p, char *pagec, ftnlen pagec_len);
-extern int zzekpgwd_(integer *handle, integer *p, doublereal *paged);
-extern int zzekpgwi_(integer *handle, integer *p, integer *pagei);
-extern int zzekpgbs_(integer *type__, integer *p, integer *base);
-extern int zzekpgpg_(integer *type__, integer *addrss, integer *p, integer *base);
-extern int zzekpgst_(integer *handle, char *stat, integer *value, ftnlen stat_len);
+extern int zzekpage_(void *cspice_state, integer *handle, integer *type__, integer *addrss, char *stat, integer *p, char *pagec, doublereal *paged, integer *pagei, integer *base, integer *value, ftnlen stat_len, ftnlen pagec_len);
+extern int zzekpgin_(void *cspice_state, integer *handle);
+extern int zzekpgan_(void *cspice_state, integer *handle, integer *type__, integer *p, integer *base);
+extern int zzekpgal_(void *cspice_state, integer *handle, integer *type__, integer *p, integer *base);
+extern int zzekpgfr_(void *cspice_state, integer *handle, integer *type__, integer *p);
+extern int zzekpgrc_(void *cspice_state, integer *handle, integer *p, char *pagec, ftnlen pagec_len);
+extern int zzekpgrd_(void *cspice_state, integer *handle, integer *p, doublereal *paged);
+extern int zzekpgri_(void *cspice_state, integer *handle, integer *p, integer *pagei);
+extern int zzekpgwc_(void *cspice_state, integer *handle, integer *p, char *pagec, ftnlen pagec_len);
+extern int zzekpgwd_(void *cspice_state, integer *handle, integer *p, doublereal *paged);
+extern int zzekpgwi_(void *cspice_state, integer *handle, integer *p, integer *pagei);
+extern int zzekpgbs_(void *cspice_state, integer *type__, integer *p, integer *base);
+extern int zzekpgpg_(void *cspice_state, integer *type__, integer *addrss, integer *p, integer *base);
+extern int zzekpgst_(void *cspice_state, integer *handle, char *stat, integer *value, ftnlen stat_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
@@ -12379,7 +12379,7 @@ extern int zzekpgst_(integer *handle, char *stat, integer *value, ftnlen stat_le
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int zzekpars_(char *query, integer *ntoken, integer *lxbegs, integer *lxends, integer *tokens, integer *values, doublereal *numvls, char *chrbuf, integer *chbegs, integer *chends, integer *eqryi, char *eqryc, doublereal *eqryd, logical *error, char *prserr, ftnlen query_len, ftnlen chrbuf_len, ftnlen eqryc_len, ftnlen prserr_len);
+extern int zzekpars_(void *cspice_state, char *query, integer *ntoken, integer *lxbegs, integer *lxends, integer *tokens, integer *values, doublereal *numvls, char *chrbuf, integer *chbegs, integer *chends, integer *eqryi, char *eqryc, doublereal *eqryd, logical *error, char *prserr, ftnlen query_len, ftnlen chrbuf_len, ftnlen eqryc_len, ftnlen prserr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekqini_ 14 6 4 4 4 13 7 124 */
@@ -12396,7 +12396,7 @@ extern int zzekpars_(char *query, integer *ntoken, integer *lxbegs, integer *lxe
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
  
-extern int zzekpcol_(char *qcol, integer *eqryi, char *eqryc, char *table, char *alias, integer *tabidx, char *column, integer *colidx, logical *error, char *errmsg, ftnlen qcol_len, ftnlen eqryc_len, ftnlen table_len, ftnlen alias_len, ftnlen column_len, ftnlen errmsg_len);
+extern int zzekpcol_(void *cspice_state, char *qcol, integer *eqryi, char *eqryc, char *table, char *alias, integer *tabidx, char *column, integer *colidx, logical *error, char *errmsg, ftnlen qcol_len, ftnlen eqryc_len, ftnlen table_len, ftnlen alias_len, ftnlen column_len, ftnlen errmsg_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12411,7 +12411,7 @@ extern int zzekpcol_(char *qcol, integer *eqryi, char *eqryc, char *table, char 
 /*:ref: ekccnt_ 14 3 13 4 124 */
 /*:ref: ekcii_ 14 6 13 4 13 4 124 124 */
  
-extern int zzekpdec_(char *decl, integer *pardsc, ftnlen decl_len);
+extern int zzekpdec_(void *cspice_state, char *decl, integer *pardsc, ftnlen decl_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cleari_ 14 2 4 4 */
@@ -12425,7 +12425,7 @@ extern int zzekpdec_(char *decl, integer *pardsc, ftnlen decl_len);
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
  
-extern int zzekpgch_(integer *handle, char *access, ftnlen access_len);
+extern int zzekpgch_(void *cspice_state, integer *handle, char *access, ftnlen access_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dassih_ 14 3 4 13 124 */
 /*:ref: failed_ 12 0 */
@@ -12437,7 +12437,7 @@ extern int zzekpgch_(integer *handle, char *access, ftnlen access_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: daslla_ 14 4 4 4 4 4 */
  
-extern int zzekqcnj_(integer *eqryi, integer *n, integer *size);
+extern int zzekqcnj_(void *cspice_state, integer *eqryi, integer *n, integer *size);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12446,7 +12446,7 @@ extern int zzekqcnj_(integer *eqryi, integer *n, integer *size);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzekqcon_(integer *eqryi, char *eqryc, doublereal *eqryd, integer *n, integer *cnstyp, char *ltname, integer *ltidx, char *lcname, integer *lcidx, integer *opcode, char *rtname, integer *rtidx, char *rcname, integer *rcidx, integer *dtype, integer *cbeg, integer *cend, doublereal *dval, integer *ival, ftnlen eqryc_len, ftnlen ltname_len, ftnlen lcname_len, ftnlen rtname_len, ftnlen rcname_len);
+extern int zzekqcon_(void *cspice_state, integer *eqryi, char *eqryc, doublereal *eqryd, integer *n, integer *cnstyp, char *ltname, integer *ltidx, char *lcname, integer *lcidx, integer *opcode, char *rtname, integer *rtidx, char *rcname, integer *rcidx, integer *dtype, integer *cbeg, integer *cend, doublereal *dval, integer *ival, ftnlen eqryc_len, ftnlen ltname_len, ftnlen lcname_len, ftnlen rtname_len, ftnlen rcname_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12455,7 +12455,7 @@ extern int zzekqcon_(integer *eqryi, char *eqryc, doublereal *eqryd, integer *n,
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzekqini_(integer *isize, integer *dsize, integer *eqryi, char *eqryc, doublereal *eqryd, ftnlen eqryc_len);
+extern int zzekqini_(void *cspice_state, integer *isize, integer *dsize, integer *eqryi, char *eqryc, doublereal *eqryd, ftnlen eqryc_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12467,7 +12467,7 @@ extern int zzekqini_(integer *isize, integer *dsize, integer *eqryi, char *eqryc
 /*:ref: appndi_ 14 2 4 4 */
 /*:ref: cleari_ 14 2 4 4 */
  
-extern int zzekqord_(integer *eqryi, char *eqryc, integer *n, char *table, integer *tabidx, char *column, integer *colidx, integer *sense, ftnlen eqryc_len, ftnlen table_len, ftnlen column_len);
+extern int zzekqord_(void *cspice_state, integer *eqryi, char *eqryc, integer *n, char *table, integer *tabidx, char *column, integer *colidx, integer *sense, ftnlen eqryc_len, ftnlen table_len, ftnlen column_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12476,7 +12476,7 @@ extern int zzekqord_(integer *eqryi, char *eqryc, integer *n, char *table, integ
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzekqsel_(integer *eqryi, char *eqryc, integer *n, integer *lxbeg, integer *lxend, char *table, integer *tabidx, char *column, integer *colidx, ftnlen eqryc_len, ftnlen table_len, ftnlen column_len);
+extern int zzekqsel_(void *cspice_state, integer *eqryi, char *eqryc, integer *n, integer *lxbeg, integer *lxend, char *table, integer *tabidx, char *column, integer *colidx, ftnlen eqryc_len, ftnlen table_len, ftnlen column_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12485,7 +12485,7 @@ extern int zzekqsel_(integer *eqryi, char *eqryc, integer *n, integer *lxbeg, in
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzekqtab_(integer *eqryi, char *eqryc, integer *n, char *table, char *alias, ftnlen eqryc_len, ftnlen table_len, ftnlen alias_len);
+extern int zzekqtab_(void *cspice_state, integer *eqryi, char *eqryc, integer *n, char *table, char *alias, ftnlen eqryc_len, ftnlen table_len, ftnlen alias_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12494,9 +12494,9 @@ extern int zzekqtab_(integer *eqryi, char *eqryc, integer *n, char *table, char 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzekrbck_(char *action, integer *handle, integer *segdsc, integer *coldsc, integer *recno, ftnlen action_len);
+extern int zzekrbck_(void *cspice_state, char *action, integer *handle, integer *segdsc, integer *coldsc, integer *recno, ftnlen action_len);
  
-extern logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1, integer *cdlst1, integer *row1, integer *elts1, integer *han2, integer *sgdsc2, integer *cdlst2, integer *row2, integer *elts2);
+extern logical zzekrcmp_(void *cspice_state, integer *op, integer *ncols, integer *han1, integer *sgdsc1, integer *cdlst1, integer *row1, integer *elts1, integer *han2, integer *sgdsc2, integer *cdlst2, integer *row2, integer *elts2);
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: zzekecmp_ 4 5 4 4 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12505,7 +12505,7 @@ extern logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sg
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekrd01_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *ival, logical *isnull);
+extern int zzekrd01_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *ival, logical *isnull);
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12515,7 +12515,7 @@ extern int zzekrd01_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzekrd02_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, logical *isnull);
+extern int zzekrd02_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, logical *isnull);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12526,7 +12526,7 @@ extern int zzekrd02_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: errhan_ 14 3 13 4 124 */
  
-extern int zzekrd03_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *cvlen, char *cval, logical *isnull, ftnlen cval_len);
+extern int zzekrd03_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *cvlen, char *cval, logical *isnull, ftnlen cval_len);
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12542,7 +12542,7 @@ extern int zzekrd03_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int zzekrd04_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *beg, integer *end, integer *ivals, logical *isnull, logical *found);
+extern int zzekrd04_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *beg, integer *end, integer *ivals, logical *isnull, logical *found);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12556,7 +12556,7 @@ extern int zzekrd04_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: errhan_ 14 3 13 4 124 */
  
-extern int zzekrd05_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *beg, integer *end, doublereal *dvals, logical *isnull, logical *found);
+extern int zzekrd05_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *beg, integer *end, doublereal *dvals, logical *isnull, logical *found);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12571,7 +12571,7 @@ extern int zzekrd05_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: errhan_ 14 3 13 4 124 */
  
-extern int zzekrd06_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *beg, integer *end, char *cvals, logical *isnull, logical *found, ftnlen cvals_len);
+extern int zzekrd06_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *beg, integer *end, char *cvals, logical *isnull, logical *found, ftnlen cvals_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12588,7 +12588,7 @@ extern int zzekrd06_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: failed_ 12 0 */
 /*:ref: dasrdc_ 14 7 4 4 4 4 4 13 124 */
  
-extern int zzekrd07_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *ival, logical *isnull);
+extern int zzekrd07_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *ival, logical *isnull);
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12599,7 +12599,7 @@ extern int zzekrd07_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: dasrdc_ 14 7 4 4 4 4 4 13 124 */
  
-extern int zzekrd08_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, logical *isnull);
+extern int zzekrd08_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, logical *isnull);
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12611,7 +12611,7 @@ extern int zzekrd08_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: dasrdc_ 14 7 4 4 4 4 4 13 124 */
 /*:ref: dasrdd_ 14 4 4 4 4 7 */
  
-extern int zzekrd09_(integer *handle, integer *segdsc, integer *coldsc, integer *recno, integer *cvlen, char *cval, logical *isnull, ftnlen cval_len);
+extern int zzekrd09_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recno, integer *cvlen, char *cval, logical *isnull, ftnlen cval_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12623,7 +12623,7 @@ extern int zzekrd09_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: dasrdc_ 14 7 4 4 4 4 4 13 124 */
  
-extern int zzekreqi_(integer *eqryi, char *name__, integer *value, ftnlen name_len);
+extern int zzekreqi_(void *cspice_state, integer *eqryi, char *name__, integer *value, ftnlen name_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
@@ -12633,10 +12633,10 @@ extern int zzekreqi_(integer *eqryi, char *name__, integer *value, ftnlen name_l
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical zzekrmch_(integer *ncnstr, logical *active, integer *handle, integer *segdsc, integer *cdscrs, integer *row, integer *elts, integer *ops, integer *vtypes, char *chrbuf, integer *cbegs, integer *cends, doublereal *dvals, integer *ivals, ftnlen chrbuf_len);
+extern logical zzekrmch_(void *cspice_state, integer *ncnstr, logical *active, integer *handle, integer *segdsc, integer *cdscrs, integer *row, integer *elts, integer *ops, integer *vtypes, char *chrbuf, integer *cbegs, integer *cends, doublereal *dvals, integer *ivals, ftnlen chrbuf_len);
 /*:ref: zzekscmp_ 12 12 4 4 4 4 4 4 4 13 7 4 12 124 */
  
-extern integer zzekrp2n_(integer *handle, integer *segno, integer *recptr);
+extern integer zzekrp2n_(void *cspice_state, integer *handle, integer *segno, integer *recptr);
 /*:ref: zzeksdsc_ 14 3 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzektrls_ 4 3 4 4 4 */
@@ -12647,7 +12647,7 @@ extern integer zzekrp2n_(integer *handle, integer *segno, integer *recptr);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekrplk_(integer *handle, integer *segdsc, integer *n, integer *recptr);
+extern int zzekrplk_(void *cspice_state, integer *handle, integer *segdsc, integer *n, integer *recptr);
 /*:ref: zzektrdp_ 14 4 4 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12655,7 +12655,7 @@ extern int zzekrplk_(integer *handle, integer *segdsc, integer *n, integer *recp
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekrsc_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *eltidx, integer *cvlen, char *cval, logical *isnull, logical *found, ftnlen cval_len);
+extern int zzekrsc_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *eltidx, integer *cvlen, char *cval, logical *isnull, logical *found, ftnlen cval_len);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12669,7 +12669,7 @@ extern int zzekrsc_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*:ref: zzekrd06_ 14 10 4 4 4 4 4 4 13 12 12 124 */
 /*:ref: zzekrd09_ 14 8 4 4 4 4 4 13 12 124 */
  
-extern int zzekrsd_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *eltidx, doublereal *dval, logical *isnull, logical *found);
+extern int zzekrsd_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *eltidx, doublereal *dval, logical *isnull, logical *found);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12683,7 +12683,7 @@ extern int zzekrsd_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*:ref: zzekrd05_ 14 9 4 4 4 4 4 4 7 12 12 */
 /*:ref: zzekrd08_ 14 6 4 4 4 4 7 12 */
  
-extern int zzekrsi_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *eltidx, integer *ival, logical *isnull, logical *found);
+extern int zzekrsi_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *eltidx, integer *ival, logical *isnull, logical *found);
 /*:ref: zzekcnam_ 14 4 4 4 13 124 */
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12697,14 +12697,14 @@ extern int zzekrsi_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*:ref: zzekrd04_ 14 9 4 4 4 4 4 4 4 12 12 */
 /*:ref: zzekrd07_ 14 6 4 4 4 4 4 12 */
  
-extern int zzeksca_(integer *n, integer *beg, integer *end, integer *idata, integer *top);
-extern int zzekstop_(integer *top);
-extern int zzekspsh_(integer *n, integer *idata);
-extern int zzekspop_(integer *n, integer *idata);
-extern int zzeksdec_(integer *n);
-extern int zzeksupd_(integer *beg, integer *end, integer *idata);
-extern int zzeksrd_(integer *beg, integer *end, integer *idata);
-extern int zzekscln_(void);
+extern int zzeksca_(void *cspice_state, integer *n, integer *beg, integer *end, integer *idata, integer *top);
+extern int zzekstop_(void *cspice_state, integer *top);
+extern int zzekspsh_(void *cspice_state, integer *n, integer *idata);
+extern int zzekspop_(void *cspice_state, integer *n, integer *idata);
+extern int zzeksdec_(void *cspice_state, integer *n);
+extern int zzeksupd_(void *cspice_state, integer *beg, integer *end, integer *idata);
+extern int zzeksrd_(void *cspice_state, integer *beg, integer *end, integer *idata);
+extern int zzekscln_(void *cspice_state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -12721,7 +12721,7 @@ extern int zzekscln_(void);
 /*:ref: daswbr_ 14 1 4 */
 /*:ref: dasllc_ 14 1 4 */
  
-extern int zzekscan_(char *query, integer *maxntk, integer *maxnum, integer *ntoken, integer *tokens, integer *lxbegs, integer *lxends, integer *values, doublereal *numvls, char *chrbuf, integer *chbegs, integer *chends, logical *scnerr, char *errmsg, ftnlen query_len, ftnlen chrbuf_len, ftnlen errmsg_len);
+extern int zzekscan_(void *cspice_state, char *query, integer *maxntk, integer *maxnum, integer *ntoken, integer *tokens, integer *lxbegs, integer *lxends, integer *values, doublereal *numvls, char *chrbuf, integer *chbegs, integer *chends, logical *scnerr, char *errmsg, ftnlen query_len, ftnlen chrbuf_len, ftnlen errmsg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ssizei_ 14 2 4 4 */
@@ -12743,7 +12743,7 @@ extern int zzekscan_(char *query, integer *maxntk, integer *maxnum, integer *nto
 /*:ref: frstpc_ 4 2 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int zzekscdp_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *datptr);
+extern int zzekscdp_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *datptr);
 /*:ref: zzekpgch_ 14 3 4 13 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
@@ -12755,7 +12755,7 @@ extern int zzekscdp_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *coldsc, integer *row, integer *eltidx, integer *dtype, char *cval, doublereal *dval, integer *ival, logical *null, ftnlen cval_len);
+extern logical zzekscmp_(void *cspice_state, integer *op, integer *handle, integer *segdsc, integer *coldsc, integer *row, integer *eltidx, integer *dtype, char *cval, doublereal *dval, integer *ival, logical *null, ftnlen cval_len);
 /*:ref: zzekrsc_ 14 10 4 4 4 4 4 4 13 12 12 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzekrsd_ 14 8 4 4 4 4 4 7 12 12 */
@@ -12768,15 +12768,15 @@ extern logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer 
 /*:ref: errhan_ 14 3 13 4 124 */
 /*:ref: matchi_ 12 8 13 13 13 13 124 124 124 124 */
  
-extern int zzeksdsc_(integer *handle, integer *segno, integer *segdsc);
+extern int zzeksdsc_(void *cspice_state, integer *handle, integer *segno, integer *segdsc);
 /*:ref: zzekmloc_ 14 4 4 4 4 4 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzeksei_(integer *handle, integer *addrss, integer *ival);
+extern int zzeksei_(void *cspice_state, integer *handle, integer *addrss, integer *ival);
 /*:ref: prtenc_ 14 3 4 13 124 */
 /*:ref: dasudc_ 14 7 4 4 4 4 4 13 124 */
  
-extern int zzeksemc_(char *query, integer *eqryi, char *eqryc, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len);
+extern int zzeksemc_(void *cspice_state, char *query, integer *eqryi, char *eqryc, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12789,14 +12789,14 @@ extern int zzeksemc_(char *query, integer *eqryi, char *eqryc, logical *error, c
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: zzekweqi_ 14 4 13 4 4 124 */
  
-extern int zzeksfwd_(integer *handle, integer *type__, integer *p, integer *fward);
+extern int zzeksfwd_(void *cspice_state, integer *handle, integer *type__, integer *p, integer *fward);
 /*:ref: zzekpgbs_ 14 3 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzeksei_ 14 3 4 4 4 */
 /*:ref: dasudd_ 14 4 4 4 4 7 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int zzeksinf_(integer *handle, integer *segno, char *tabnam, integer *segdsc, char *cnames, integer *cdscrs, ftnlen tabnam_len, ftnlen cnames_len);
+extern int zzeksinf_(void *cspice_state, integer *handle, integer *segno, char *tabnam, integer *segdsc, char *cnames, integer *cdscrs, ftnlen tabnam_len, ftnlen cnames_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -12810,31 +12810,31 @@ extern int zzeksinf_(integer *handle, integer *segno, char *tabnam, integer *seg
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: dasrdc_ 14 7 4 4 4 4 4 13 124 */
  
-extern int zzekslnk_(integer *handle, integer *type__, integer *p, integer *nlinks);
+extern int zzekslnk_(void *cspice_state, integer *handle, integer *type__, integer *p, integer *nlinks);
 /*:ref: zzekpgbs_ 14 3 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzeksei_ 14 3 4 4 4 */
 /*:ref: dasudd_ 14 4 4 4 4 7 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int zzeksrcp_(integer *handle, integer *recptr, integer *recno);
+extern int zzeksrcp_(void *cspice_state, integer *handle, integer *recptr, integer *recno);
 /*:ref: zzekpgch_ 14 3 4 13 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int zzeksrs_(integer *handle, integer *recptr, integer *status);
+extern int zzeksrs_(void *cspice_state, integer *handle, integer *recptr, integer *status);
 /*:ref: zzekpgch_ 14 3 4 13 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern integer zzekstyp_(integer *ncols, integer *cdscrs);
+extern integer zzekstyp_(void *cspice_state, integer *ncols, integer *cdscrs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer zzeksz04_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern integer zzeksz04_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12842,7 +12842,7 @@ extern integer zzeksz04_(integer *handle, integer *segdsc, integer *coldsc, inte
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern integer zzeksz05_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern integer zzeksz05_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12851,7 +12851,7 @@ extern integer zzeksz05_(integer *handle, integer *segdsc, integer *coldsc, inte
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: dasrdd_ 14 4 4 4 4 7 */
  
-extern integer zzeksz06_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
+extern integer zzeksz06_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -12860,7 +12860,7 @@ extern integer zzeksz06_(integer *handle, integer *segdsc, integer *coldsc, inte
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: zzekgei_ 14 3 4 4 4 */
  
-extern int zzektcnv_(char *timstr, doublereal *et, logical *error, char *errmsg, ftnlen timstr_len, ftnlen errmsg_len);
+extern int zzektcnv_(void *cspice_state, char *timstr, doublereal *et, logical *error, char *errmsg, ftnlen timstr_len, ftnlen errmsg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
@@ -12878,9 +12878,9 @@ extern int zzektcnv_(char *timstr, doublereal *et, logical *error, char *errmsg,
 /*:ref: tpartv_ 14 15 13 7 4 13 13 12 12 12 13 13 124 124 124 124 124 */
 /*:ref: str2et_ 14 3 13 7 124 */
  
-extern int zzektloc_(integer *tokid, integer *kwcode, integer *ntoken, integer *tokens, integer *values, integer *loc, logical *found);
+extern int zzektloc_(void *cspice_state, integer *tokid, integer *kwcode, integer *ntoken, integer *tokens, integer *values, integer *loc, logical *found);
  
-extern int zzektr13_(integer *handle, integer *tree);
+extern int zzektr13_(void *cspice_state, integer *handle, integer *tree);
 /*:ref: zzekpgri_ 14 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12892,7 +12892,7 @@ extern int zzektr13_(integer *handle, integer *tree);
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
  
-extern int zzektr1s_(integer *handle, integer *tree, integer *size, integer *values);
+extern int zzektr1s_(void *cspice_state, integer *handle, integer *tree, integer *size, integer *values);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzektrsz_ 4 2 4 4 */
@@ -12908,7 +12908,7 @@ extern int zzektr1s_(integer *handle, integer *tree, integer *size, integer *val
 /*:ref: zzektrbs_ 4 1 4 */
 /*:ref: dasudi_ 14 4 4 4 4 4 */
  
-extern int zzektr23_(integer *handle, integer *tree, integer *left, integer *right, integer *parent, integer *pkidx, logical *overfl);
+extern int zzektr23_(void *cspice_state, integer *handle, integer *tree, integer *left, integer *right, integer *parent, integer *pkidx, logical *overfl);
 /*:ref: zzekpgri_ 14 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12923,7 +12923,7 @@ extern int zzektr23_(integer *handle, integer *tree, integer *left, integer *rig
 /*:ref: dasudi_ 14 4 4 4 4 4 */
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
  
-extern int zzektr31_(integer *handle, integer *tree);
+extern int zzektr31_(void *cspice_state, integer *handle, integer *tree);
 /*:ref: zzekpgri_ 14 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12934,7 +12934,7 @@ extern int zzektr31_(integer *handle, integer *tree);
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
 /*:ref: zzekpgfr_ 14 3 4 4 4 */
  
-extern int zzektr32_(integer *handle, integer *tree, integer *left, integer *middle, integer *right, integer *parent, integer *lpkidx, logical *undrfl);
+extern int zzektr32_(void *cspice_state, integer *handle, integer *tree, integer *left, integer *middle, integer *right, integer *parent, integer *lpkidx, logical *undrfl);
 /*:ref: zzekpgri_ 14 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -12948,11 +12948,11 @@ extern int zzektr32_(integer *handle, integer *tree, integer *left, integer *mid
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
 /*:ref: zzekpgfr_ 14 3 4 4 4 */
  
-extern int zzektrap_(integer *handle, integer *tree, integer *value, integer *key);
+extern int zzektrap_(void *cspice_state, integer *handle, integer *tree, integer *value, integer *key);
 /*:ref: zzektrsz_ 4 2 4 4 */
 /*:ref: zzektrin_ 14 4 4 4 4 4 */
  
-extern int zzektrbn_(integer *handle, integer *tree, integer *left, integer *right, integer *parent, integer *pkidx);
+extern int zzektrbn_(void *cspice_state, integer *handle, integer *tree, integer *left, integer *right, integer *parent, integer *pkidx);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -12961,10 +12961,10 @@ extern int zzektrbn_(integer *handle, integer *tree, integer *left, integer *rig
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: zzektrrk_ 14 7 4 4 4 4 4 4 4 */
  
-extern integer zzektrbs_(integer *node);
+extern integer zzektrbs_(void *cspice_state, integer *node);
 /*:ref: zzekpgbs_ 14 3 4 4 4 */
  
-extern int zzektrdl_(integer *handle, integer *tree, integer *key);
+extern int zzektrdl_(void *cspice_state, integer *handle, integer *tree, integer *key);
 /*:ref: zzektrud_ 14 5 4 4 4 4 12 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzektrlk_ 14 8 4 4 4 4 4 4 4 4 */
@@ -12977,10 +12977,10 @@ extern int zzektrdl_(integer *handle, integer *tree, integer *key);
 /*:ref: zzektr32_ 14 8 4 4 4 4 4 4 4 12 */
 /*:ref: zzektr31_ 14 2 4 4 */
  
-extern int zzektrdp_(integer *handle, integer *tree, integer *key, integer *ptr);
+extern int zzektrdp_(void *cspice_state, integer *handle, integer *tree, integer *key, integer *ptr);
 /*:ref: zzektrlk_ 14 8 4 4 4 4 4 4 4 4 */
  
-extern int zzektres_(char *query, integer *eqryi, char *eqryc, doublereal *eqryd, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len);
+extern int zzektres_(void *cspice_state, char *query, integer *eqryi, char *eqryc, doublereal *eqryd, logical *error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len);
 /*:ref: zzekreqi_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -12994,7 +12994,7 @@ extern int zzektres_(char *query, integer *eqryi, char *eqryc, doublereal *eqryd
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: zzekweqi_ 14 4 13 4 4 124 */
  
-extern int zzektrfr_(integer *handle, integer *tree);
+extern int zzektrfr_(void *cspice_state, integer *handle, integer *tree);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgri_ 14 3 4 4 4 */
@@ -13005,7 +13005,7 @@ extern int zzektrfr_(integer *handle, integer *tree);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzekpgfr_ 14 3 4 4 4 */
  
-extern int zzektrin_(integer *handle, integer *tree, integer *key, integer *value);
+extern int zzektrin_(void *cspice_state, integer *handle, integer *tree, integer *key, integer *value);
 /*:ref: zzektrui_ 14 5 4 4 4 4 12 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzektrlk_ 14 8 4 4 4 4 4 4 4 4 */
@@ -13016,7 +13016,7 @@ extern int zzektrin_(integer *handle, integer *tree, integer *key, integer *valu
 /*:ref: zzektr23_ 14 7 4 4 4 4 4 4 12 */
 /*:ref: zzektr13_ 14 2 4 4 */
  
-extern int zzektrit_(integer *handle, integer *tree);
+extern int zzektrit_(void *cspice_state, integer *handle, integer *tree);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgal_ 14 4 4 4 4 4 */
@@ -13024,7 +13024,7 @@ extern int zzektrit_(integer *handle, integer *tree);
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzektrki_(integer *handle, integer *tree, integer *nodkey, integer *n, integer *key);
+extern int zzektrki_(void *cspice_state, integer *handle, integer *tree, integer *nodkey, integer *n, integer *key);
 /*:ref: zzektrlk_ 14 8 4 4 4 4 4 4 4 4 */
 /*:ref: zzektrnk_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -13035,7 +13035,7 @@ extern int zzektrki_(integer *handle, integer *tree, integer *nodkey, integer *n
 /*:ref: zzektrbs_ 4 1 4 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzektrlk_(integer *handle, integer *tree, integer *key, integer *idx, integer *node, integer *noffst, integer *level, integer *value);
+extern int zzektrlk_(void *cspice_state, integer *handle, integer *tree, integer *key, integer *idx, integer *node, integer *noffst, integer *level, integer *value);
 /*:ref: dasham_ 14 3 4 13 124 */
 /*:ref: zzekpgri_ 14 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -13046,15 +13046,15 @@ extern int zzektrlk_(integer *handle, integer *tree, integer *key, integer *idx,
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: lstlei_ 4 3 4 4 4 */
  
-extern integer zzektrls_(integer *handle, integer *tree, integer *ival);
+extern integer zzektrls_(void *cspice_state, integer *handle, integer *tree, integer *ival);
 /*:ref: zzektrsz_ 4 2 4 4 */
 /*:ref: zzektrdp_ 14 4 4 4 4 4 */
  
-extern integer zzektrnk_(integer *handle, integer *tree, integer *node);
+extern integer zzektrnk_(void *cspice_state, integer *handle, integer *tree, integer *node);
 /*:ref: zzektrbs_ 4 1 4 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzektrpi_(integer *handle, integer *tree, integer *key, integer *parent, integer *pkey, integer *poffst, integer *lpidx, integer *lpkey, integer *lsib, integer *rpidx, integer *rpkey, integer *rsib);
+extern int zzektrpi_(void *cspice_state, integer *handle, integer *tree, integer *key, integer *parent, integer *pkey, integer *poffst, integer *lpidx, integer *lpkey, integer *lsib, integer *rpidx, integer *rpkey, integer *rsib);
 /*:ref: zzekpgri_ 14 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13064,7 +13064,7 @@ extern int zzektrpi_(integer *handle, integer *tree, integer *key, integer *pare
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: lstlei_ 4 3 4 4 4 */
  
-extern int zzektrrk_(integer *handle, integer *tree, integer *left, integer *right, integer *parent, integer *pkidx, integer *nrot);
+extern int zzektrrk_(void *cspice_state, integer *handle, integer *tree, integer *left, integer *right, integer *parent, integer *pkidx, integer *nrot);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -13075,17 +13075,17 @@ extern int zzektrrk_(integer *handle, integer *tree, integer *left, integer *rig
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
  
-extern int zzektrsb_(integer *handle, integer *tree, integer *key, integer *lsib, integer *lkey, integer *rsib, integer *rkey);
+extern int zzektrsb_(void *cspice_state, integer *handle, integer *tree, integer *key, integer *lsib, integer *lkey, integer *rsib, integer *rkey);
 /*:ref: zzektrpi_ 14 12 4 4 4 4 4 4 4 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: zzektrbs_ 4 1 4 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern integer zzektrsz_(integer *handle, integer *tree);
+extern integer zzektrsz_(void *cspice_state, integer *handle, integer *tree);
 /*:ref: zzektrbs_ 4 1 4 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int zzektrud_(integer *handle, integer *tree, integer *key, integer *trgkey, logical *undrfl);
+extern int zzektrud_(void *cspice_state, integer *handle, integer *tree, integer *key, integer *trgkey, logical *undrfl);
 /*:ref: zzekpgri_ 14 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13098,7 +13098,7 @@ extern int zzektrud_(integer *handle, integer *tree, integer *key, integer *trgk
 /*:ref: zzektrpi_ 14 12 4 4 4 4 4 4 4 4 4 4 4 4 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzektrui_(integer *handle, integer *tree, integer *key, integer *value, logical *overfl);
+extern int zzektrui_(void *cspice_state, integer *handle, integer *tree, integer *key, integer *value, logical *overfl);
 /*:ref: zzekpgri_ 14 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13111,7 +13111,7 @@ extern int zzektrui_(integer *handle, integer *tree, integer *key, integer *valu
 /*:ref: failed_ 12 0 */
 /*:ref: zzektrpi_ 14 12 4 4 4 4 4 4 4 4 4 4 4 4 */
  
-extern int zzekue01_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *ival, logical *isnull);
+extern int zzekue01_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *ival, logical *isnull);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -13131,7 +13131,7 @@ extern int zzekue01_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: errhan_ 14 3 13 4 124 */
  
-extern int zzekue02_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, logical *isnull);
+extern int zzekue02_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, logical *isnull);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekpgch_ 14 3 4 13 124 */
@@ -13152,7 +13152,7 @@ extern int zzekue02_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: zzekrp2n_ 4 3 4 4 4 */
 /*:ref: errhan_ 14 3 13 4 124 */
  
-extern int zzekue03_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, char *cval, logical *isnull, ftnlen cval_len);
+extern int zzekue03_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, char *cval, logical *isnull, ftnlen cval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekde03_ 14 4 4 4 4 4 */
@@ -13160,7 +13160,7 @@ extern int zzekue03_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzekad03_ 14 7 4 4 4 4 13 12 124 */
  
-extern int zzekue04_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, integer *ivals, logical *isnull);
+extern int zzekue04_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, integer *ivals, logical *isnull);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekde04_ 14 4 4 4 4 4 */
@@ -13168,7 +13168,7 @@ extern int zzekue04_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzekad04_ 14 7 4 4 4 4 4 4 12 */
  
-extern int zzekue05_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, doublereal *dvals, logical *isnull);
+extern int zzekue05_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, doublereal *dvals, logical *isnull);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekde05_ 14 4 4 4 4 4 */
@@ -13176,7 +13176,7 @@ extern int zzekue05_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzekad05_ 14 7 4 4 4 4 4 7 12 */
  
-extern int zzekue06_(integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, char *cvals, logical *isnull, ftnlen cvals_len);
+extern int zzekue06_(void *cspice_state, integer *handle, integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, char *cvals, logical *isnull, ftnlen cvals_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekde06_ 14 4 4 4 4 4 */
@@ -13184,9 +13184,9 @@ extern int zzekue06_(integer *handle, integer *segdsc, integer *coldsc, integer 
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: zzekad06_ 14 8 4 4 4 4 4 13 12 124 */
  
-extern int zzekvadr_(integer *njrs, integer *bases, integer *rwvidx, integer *rwvbas, integer *sgvbas);
-extern int zzekvset_(integer *njrs, integer *bases);
-extern int zzekvcal_(integer *rwvidx, integer *rwvbas, integer *sgvbas);
+extern int zzekvadr_(void *cspice_state, integer *njrs, integer *bases, integer *rwvidx, integer *rwvbas, integer *sgvbas);
+extern int zzekvset_(void *cspice_state, integer *njrs, integer *bases);
+extern int zzekvcal_(void *cspice_state, integer *rwvidx, integer *rwvbas, integer *sgvbas);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -13198,7 +13198,7 @@ extern int zzekvcal_(integer *rwvidx, integer *rwvbas, integer *sgvbas);
 /*:ref: cleari_ 14 2 4 4 */
 /*:ref: lstlei_ 4 3 4 4 4 */
  
-extern logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols, integer *elts, integer *senses, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, integer *sgvec1, integer *rwvec1, integer *sgvec2, integer *rwvec2);
+extern logical zzekvcmp_(void *cspice_state, integer *op, integer *ncols, integer *tabs, integer *cols, integer *elts, integer *senses, integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, integer *sgvec1, integer *rwvec1, integer *sgvec2, integer *rwvec2);
 /*:ref: lnknxt_ 4 2 4 4 */
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: zzekecmp_ 4 5 4 4 4 4 4 */
@@ -13208,7 +13208,7 @@ extern logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *co
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *lsdscs, integer *lcdscs, integer *lrows, integer *lelts, integer *ops, integer *rhans, integer *rsdscs, integer *rcdscs, integer *rrows, integer *relts);
+extern logical zzekvmch_(void *cspice_state, integer *ncnstr, logical *active, integer *lhans, integer *lsdscs, integer *lcdscs, integer *lrows, integer *lelts, integer *ops, integer *rhans, integer *rsdscs, integer *rcdscs, integer *rrows, integer *relts);
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: zzekecmp_ 4 5 4 4 4 4 4 */
 /*:ref: zzekrsc_ 14 10 4 4 4 4 4 4 13 12 12 124 */
@@ -13220,7 +13220,7 @@ extern logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integ
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: matchi_ 12 8 13 13 13 13 124 124 124 124 */
  
-extern int zzekweed_(integer *njrs, integer *bases, integer *nrows);
+extern int zzekweed_(void *cspice_state, integer *njrs, integer *bases, integer *nrows);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -13232,7 +13232,7 @@ extern int zzekweed_(integer *njrs, integer *bases, integer *nrows);
 /*:ref: zzeksupd_ 14 3 4 4 4 */
 /*:ref: zzekjsqz_ 14 1 4 */
  
-extern int zzekweqi_(char *name__, integer *value, integer *eqryi, ftnlen name_len);
+extern int zzekweqi_(void *cspice_state, char *name__, integer *value, integer *eqryi, ftnlen name_len);
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
@@ -13242,7 +13242,7 @@ extern int zzekweqi_(char *name__, integer *value, integer *eqryi, ftnlen name_l
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekwpac_(integer *handle, integer *segdsc, integer *nvals, integer *l, char *cvals, integer *p, integer *base, ftnlen cvals_len);
+extern int zzekwpac_(void *cspice_state, integer *handle, integer *segdsc, integer *nvals, integer *l, char *cvals, integer *p, integer *base, ftnlen cvals_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13253,7 +13253,7 @@ extern int zzekwpac_(integer *handle, integer *segdsc, integer *nvals, integer *
 /*:ref: zzekpgwc_ 14 4 4 4 13 124 */
 /*:ref: zzekslnk_ 14 4 4 4 4 4 */
  
-extern int zzekwpai_(integer *handle, integer *segdsc, integer *nvals, integer *ivals, integer *p, integer *base);
+extern int zzekwpai_(void *cspice_state, integer *handle, integer *segdsc, integer *nvals, integer *ivals, integer *p, integer *base);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekacps_ 14 6 4 4 4 4 4 4 */
@@ -13261,7 +13261,7 @@ extern int zzekwpai_(integer *handle, integer *segdsc, integer *nvals, integer *
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzekwpal_(integer *handle, integer *segdsc, integer *nvals, logical *lvals, integer *p, integer *base);
+extern int zzekwpal_(void *cspice_state, integer *handle, integer *segdsc, integer *nvals, logical *lvals, integer *p, integer *base);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzekacps_ 14 6 4 4 4 4 4 4 */
@@ -13269,14 +13269,14 @@ extern int zzekwpal_(integer *handle, integer *segdsc, integer *nvals, logical *
 /*:ref: zzekslnk_ 14 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzellbds_(doublereal *a, doublereal *b, doublereal *hmax, doublereal *hmin, doublereal *amax, doublereal *bmax, doublereal *amin, doublereal *bmin);
+extern int zzellbds_(void *cspice_state, doublereal *a, doublereal *b, doublereal *hmax, doublereal *hmin, doublereal *amax, doublereal *bmax, doublereal *amin, doublereal *bmin);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzelnaxx_(doublereal *a, doublereal *b, doublereal *lat, doublereal *xxpt, doublereal *yxpt);
+extern int zzelnaxx_(void *cspice_state, doublereal *a, doublereal *b, doublereal *lat, doublereal *xxpt, doublereal *yxpt);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13285,7 +13285,7 @@ extern int zzelnaxx_(doublereal *a, doublereal *b, doublereal *lat, doublereal *
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: ednmpt_ 14 5 7 7 7 7 7 */
  
-extern int zzelvupy_(doublereal *ellips, doublereal *vertex, doublereal *axis, integer *n, doublereal *bounds, logical *found);
+extern int zzelvupy_(void *cspice_state, doublereal *ellips, doublereal *vertex, doublereal *axis, integer *n, doublereal *bounds, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: el2cgv_ 14 4 7 7 7 7 */
@@ -13313,7 +13313,7 @@ extern int zzelvupy_(doublereal *ellips, doublereal *vertex, doublereal *axis, i
 /*:ref: vhat_ 14 2 7 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int zzenut80_(doublereal *et, doublereal *nutxf);
+extern int zzenut80_(void *cspice_state, doublereal *et, doublereal *nutxf);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzwahr_ 14 2 7 7 */
@@ -13321,17 +13321,17 @@ extern int zzenut80_(doublereal *et, doublereal *nutxf);
 /*:ref: eul2xf_ 14 5 7 4 4 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzeprc76_(doublereal *et, doublereal *precxf);
+extern int zzeprc76_(void *cspice_state, doublereal *et, doublereal *precxf);
 /*:ref: jyear_ 7 0 */
 /*:ref: rpd_ 7 0 */
 /*:ref: eul2xf_ 14 5 7 4 4 4 7 */
  
-extern int zzeprcss_(doublereal *et, doublereal *precm);
+extern int zzeprcss_(void *cspice_state, doublereal *et, doublereal *precm);
 /*:ref: jyear_ 7 0 */
 /*:ref: rpd_ 7 0 */
 /*:ref: eul2m_ 14 7 7 7 7 4 4 4 7 */
  
-extern int zzfdat_(integer *ncount, integer *maxbfr, char *name__, integer *idcode, integer *center, integer *type__, integer *typid, integer *centrd, integer *bnmlst, integer *bnmpol, char *bnmnms, integer *bnmidx, integer *bidlst, integer *bidpol, integer *bidids, integer *bididx, ftnlen name_len, ftnlen bnmnms_len);
+extern int zzfdat_(void *cspice_state, integer *ncount, integer *maxbfr, char *name__, integer *idcode, integer *center, integer *type__, integer *typid, integer *centrd, integer *bnmlst, integer *bnmpol, char *bnmnms, integer *bnmidx, integer *bidlst, integer *bidpol, integer *bidids, integer *bididx, ftnlen name_len, ftnlen bnmnms_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -13343,7 +13343,7 @@ extern int zzfdat_(integer *ncount, integer *maxbfr, char *name__, integer *idco
 /*:ref: zzhscadd_ 14 8 4 4 13 13 4 12 124 124 */
 /*:ref: zzhsiadd_ 14 6 4 4 4 4 4 12 */
  
-extern int zzfovaxi_(char *inst, integer *n, doublereal *bounds, doublereal *axis, ftnlen inst_len);
+extern int zzfovaxi_(void *cspice_state, char *inst, integer *n, doublereal *bounds, doublereal *axis, ftnlen inst_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13364,7 +13364,7 @@ extern int zzfovaxi_(char *inst, integer *n, doublereal *bounds, doublereal *axi
 /*:ref: failed_ 12 0 */
 /*:ref: vhatip_ 14 1 7 */
  
-extern int zzfrmch0_(integer *frame1, integer *frame2, doublereal *et, doublereal *xform);
+extern int zzfrmch0_(void *cspice_state, integer *frame1, integer *frame2, doublereal *et, doublereal *xform);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13379,7 +13379,7 @@ extern int zzfrmch0_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: failed_ 12 0 */
 /*:ref: invstm_ 14 2 7 7 */
  
-extern int zzfrmch1_(integer *frame1, integer *frame2, doublereal *et, doublereal *xform);
+extern int zzfrmch1_(void *cspice_state, integer *frame1, integer *frame2, doublereal *et, doublereal *xform);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13394,7 +13394,7 @@ extern int zzfrmch1_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: failed_ 12 0 */
 /*:ref: invstm_ 14 2 7 7 */
  
-extern int zzfrmgt0_(integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
+extern int zzfrmgt0_(void *cspice_state, integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
@@ -13412,7 +13412,7 @@ extern int zzfrmgt0_(integer *infrm, doublereal *et, doublereal *xform, integer 
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: failed_ 12 0 */
  
-extern int zzfrmgt1_(integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
+extern int zzfrmgt1_(void *cspice_state, integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
@@ -13429,16 +13429,16 @@ extern int zzfrmgt1_(integer *infrm, doublereal *et, doublereal *xform, integer 
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: failed_ 12 0 */
  
-extern int zzftpchk_(char *string, logical *ftperr, ftnlen string_len);
+extern int zzftpchk_(void *cspice_state, char *string, logical *ftperr, ftnlen string_len);
 /*:ref: zzftpstr_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: zzrbrkst_ 14 10 13 13 13 13 4 12 124 124 124 124 */
 /*:ref: rtrim_ 4 2 13 124 */
 /*:ref: pos_ 4 5 13 13 4 124 124 */
  
-extern int zzftpstr_(char *tstcom, char *lend, char *rend, char *delim, ftnlen tstcom_len, ftnlen lend_len, ftnlen rend_len, ftnlen delim_len);
+extern int zzftpstr_(void *cspice_state, char *tstcom, char *lend, char *rend, char *delim, ftnlen tstcom_len, ftnlen lend_len, ftnlen rend_len, ftnlen delim_len);
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int zzgapool_(char *varnam, char *wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agtset, ftnlen varnam_len, ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen agtset_len);
+extern int zzgapool_(void *cspice_state, char *varnam, char *wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agtset, ftnlen varnam_len, ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen agtset_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: scardc_ 14 3 4 13 124 */
@@ -13449,9 +13449,9 @@ extern int zzgapool_(char *varnam, char *wtvars, integer *wtptrs, integer *wtpoo
 /*:ref: validc_ 14 4 4 4 13 124 */
 /*:ref: sizec_ 4 2 13 124 */
  
-extern int zzgetbff_(integer *bffid);
+extern int zzgetbff_(void *cspice_state, integer *bffid);
  
-extern int zzgetelm_(integer *frstyr, char *lines, doublereal *epoch, doublereal *elems, logical *ok, char *error, ftnlen lines_len, ftnlen error_len);
+extern int zzgetelm_(void *cspice_state, integer *frstyr, char *lines, doublereal *epoch, doublereal *elems, logical *ok, char *error, ftnlen lines_len, ftnlen error_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: rpd_ 7 0 */
@@ -13465,7 +13465,7 @@ extern int zzgetelm_(integer *frstyr, char *lines, doublereal *epoch, doublereal
 /*:ref: repmd_ 14 8 13 13 7 4 13 124 124 124 */
 /*:ref: ttrans_ 14 5 13 13 7 124 124 */
  
-extern int zzgetvox_(doublereal *voxsiz, doublereal *voxori, integer *nvox, doublereal *xyz, logical *inbox, integer *voxcor);
+extern int zzgetvox_(void *cspice_state, doublereal *voxsiz, doublereal *voxori, integer *nvox, doublereal *xyz, logical *inbox, integer *voxcor);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13473,7 +13473,7 @@ extern int zzgetvox_(doublereal *voxsiz, doublereal *voxori, integer *nvox, doub
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzgfcoq_(char *vecdef, char *method, integer *trgid, doublereal *et, char *ref, char *abcorr, integer *obsid, char *dref, doublereal *dvec, char *crdsys, integer *ctrid, doublereal *re, doublereal *f, char *crdnam, doublereal *value, logical *found, ftnlen vecdef_len, ftnlen method_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len);
+extern int zzgfcoq_(void *cspice_state, char *vecdef, char *method, integer *trgid, doublereal *et, char *ref, char *abcorr, integer *obsid, char *dref, doublereal *dvec, char *crdsys, integer *ctrid, doublereal *re, doublereal *f, char *crdnam, doublereal *value, logical *found, ftnlen vecdef_len, ftnlen method_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
@@ -13494,7 +13494,7 @@ extern int zzgfcoq_(char *vecdef, char *method, integer *trgid, doublereal *et, 
 /*:ref: recgeo_ 14 6 7 7 7 7 7 7 */
 /*:ref: recpgr_ 14 8 13 7 7 7 7 7 7 124 */
  
-extern int zzgfcost_(char *vecdef, char *method, integer *trgid, doublereal *et, char *ref, char *abcorr, integer *obsid, char *dref, integer *dctr, doublereal *dvec, doublereal *radii, doublereal *state, logical *found, ftnlen vecdef_len, ftnlen method_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen dref_len);
+extern int zzgfcost_(void *cspice_state, char *vecdef, char *method, integer *trgid, doublereal *et, char *ref, char *abcorr, integer *obsid, char *dref, integer *dctr, doublereal *dvec, doublereal *radii, doublereal *state, logical *found, ftnlen vecdef_len, ftnlen method_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen dref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spkez_ 14 9 4 7 13 13 4 7 7 124 124 */
@@ -13505,15 +13505,15 @@ extern int zzgfcost_(char *vecdef, char *method, integer *trgid, doublereal *et,
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzgfcou_(char *vecdef, char *method, char *target, doublereal *et, char *ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *crdnam, logical *decres, doublereal *crdval, logical *crdfnd, U_fp udfunc, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len);
-extern int zzgfcoin_(char *vecdef, char *method, char *target, char *ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *crdnam, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len);
-extern int zzgfcog_(doublereal *et, doublereal *crdval);
-extern int zzgfcodc_(U_fp udfunc, doublereal *et, logical *decres);
-extern int zzgfcoex_(U_fp udfunc, doublereal *et, logical *crdfnd);
-extern int zzgfcocg_(doublereal *et, doublereal *crdval);
-extern int zzgfcosg_(doublereal *et, doublereal *crdval);
-extern int zzgfcocd_(U_fp udfunc, doublereal *et, logical *decres);
-extern int zzgfcosd_(U_fp udfunc, doublereal *et, logical *decres);
+extern int zzgfcou_(void *cspice_state, char *vecdef, char *method, char *target, doublereal *et, char *ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *crdnam, logical *decres, doublereal *crdval, logical *crdfnd, U_fp udfunc, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len);
+extern int zzgfcoin_(void *cspice_state, char *vecdef, char *method, char *target, char *ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *crdnam, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len);
+extern int zzgfcog_(void *cspice_state, doublereal *et, doublereal *crdval);
+extern int zzgfcodc_(void *cspice_state, U_fp udfunc, doublereal *et, logical *decres);
+extern int zzgfcoex_(void *cspice_state, U_fp udfunc, doublereal *et, logical *crdfnd);
+extern int zzgfcocg_(void *cspice_state, doublereal *et, doublereal *crdval);
+extern int zzgfcosg_(void *cspice_state, doublereal *et, doublereal *crdval);
+extern int zzgfcocd_(void *cspice_state, U_fp udfunc, doublereal *et, logical *decres);
+extern int zzgfcosd_(void *cspice_state, U_fp udfunc, doublereal *et, logical *decres);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -13549,7 +13549,7 @@ extern int zzgfcosd_(U_fp udfunc, doublereal *et, logical *decres);
 /*:ref: reccyl_ 14 4 7 7 7 7 */
 /*:ref: recgeo_ 14 6 7 7 7 7 7 7 */
  
-extern int zzgfcprx_(doublereal *state, char *corsys, doublereal *re, doublereal *f, integer *sense, integer *cdsign, ftnlen corsys_len);
+extern int zzgfcprx_(void *cspice_state, doublereal *state, char *corsys, doublereal *re, doublereal *f, integer *sense, integer *cdsign, ftnlen corsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13569,7 +13569,7 @@ extern int zzgfcprx_(doublereal *state, char *corsys, doublereal *re, doublereal
 /*:ref: zzrtnmat_ 14 2 7 7 */
 /*:ref: mxv_ 14 3 7 7 7 */
  
-extern int zzgfcslv_(char *vecdef, char *method, char *target, char *ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *crdnam, char *relate, doublereal *refval, doublereal *tol, doublereal *adjust, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, integer *mw, integer *nw, doublereal *work, doublereal *cnfine, doublereal *result, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len, ftnlen relate_len);
+extern int zzgfcslv_(void *cspice_state, char *vecdef, char *method, char *target, char *ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *crdnam, char *relate, doublereal *refval, doublereal *tol, doublereal *adjust, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, integer *mw, integer *nw, doublereal *work, doublereal *cnfine, doublereal *result, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13595,7 +13595,7 @@ extern int zzgfcslv_(char *vecdef, char *method, char *target, char *ref, char *
 /*:ref: zzgflong_ 14 37 13 13 13 13 13 13 13 7 13 13 13 7 7 7 200 200 12 214 200 214 12 212 4 4 7 7 7 124 124 124 124 124 124 124 124 124 124 */
 /*:ref: zzgfrelx_ 14 25 200 200 200 200 200 13 7 7 7 7 4 4 7 12 214 200 214 13 13 12 212 7 124 124 124 */
  
-extern int zzgfdiq_(integer *targid, doublereal *et, char *abcorr, integer *obsid, doublereal *dist, ftnlen abcorr_len);
+extern int zzgfdiq_(void *cspice_state, integer *targid, doublereal *et, char *abcorr, integer *obsid, doublereal *dist, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
@@ -13603,10 +13603,10 @@ extern int zzgfdiq_(integer *targid, doublereal *et, char *abcorr, integer *obsi
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: vnorm_ 7 1 7 */
  
-extern int zzgfdiu_(char *target, char *abcorr, char *obsrvr, U_fp udfunc, doublereal *et, logical *decres, doublereal *dist, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
-extern int zzgfdiin_(char *target, char *abcorr, char *obsrvr, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
-extern int zzgfdidc_(U_fp udfunc, doublereal *et, logical *decres);
-extern int zzgfdigq_(doublereal *et, doublereal *dist);
+extern int zzgfdiu_(void *cspice_state, char *target, char *abcorr, char *obsrvr, U_fp udfunc, doublereal *et, logical *decres, doublereal *dist, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzgfdiin_(void *cspice_state, char *target, char *abcorr, char *obsrvr, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzgfdidc_(void *cspice_state, U_fp udfunc, doublereal *et, logical *decres);
+extern int zzgfdigq_(void *cspice_state, doublereal *et, doublereal *dist);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13622,7 +13622,7 @@ extern int zzgfdigq_(doublereal *et, doublereal *dist);
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: zzgfdiq_ 14 6 4 7 13 4 7 124 */
  
-extern int zzgfdsps_(integer *nlead, char *string, char *fmt, integer *ntrail, ftnlen string_len, ftnlen fmt_len);
+extern int zzgfdsps_(void *cspice_state, integer *nlead, char *string, char *fmt, integer *ntrail, ftnlen string_len, ftnlen fmt_len);
 /*:ref: rtrim_ 4 2 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -13631,9 +13631,9 @@ extern int zzgfdsps_(integer *nlead, char *string, char *fmt, integer *ntrail, f
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzgffvu_(char *inst, char *tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, char *obsrvr, doublereal *time, logical *vistat, ftnlen inst_len, ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
-extern int zzgffvin_(char *inst, char *tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, char *obsrvr, ftnlen inst_len, ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
-extern int zzgffvst_(doublereal *time, logical *vistat);
+extern int zzgffvu_(void *cspice_state, char *inst, char *tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, char *obsrvr, doublereal *time, logical *vistat, ftnlen inst_len, ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzgffvin_(void *cspice_state, char *inst, char *tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, char *obsrvr, ftnlen inst_len, ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzgffvst_(void *cspice_state, doublereal *time, logical *vistat);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13688,10 +13688,10 @@ extern int zzgffvst_(doublereal *time, logical *vistat);
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: zzwind2d_ 4 3 4 7 7 */
  
-extern int zzgfilu_(char *method, char *angtyp, char *target, char *illum, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *et, U_fp udfunc, logical *decres, doublereal *angle, ftnlen method_len, ftnlen angtyp_len, ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
-extern int zzgfilin_(char *method, char *angtyp, char *target, char *illum, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, ftnlen method_len, ftnlen angtyp_len, ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
-extern int zzgfildc_(U_fp udfunc, doublereal *et, logical *decres);
-extern int zzgfilgq_(doublereal *et, doublereal *angle);
+extern int zzgfilu_(void *cspice_state, char *method, char *angtyp, char *target, char *illum, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *et, U_fp udfunc, logical *decres, doublereal *angle, ftnlen method_len, ftnlen angtyp_len, ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzgfilin_(void *cspice_state, char *method, char *angtyp, char *target, char *illum, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, ftnlen method_len, ftnlen angtyp_len, ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzgfildc_(void *cspice_state, U_fp udfunc, doublereal *et, logical *decres);
+extern int zzgfilgq_(void *cspice_state, doublereal *et, doublereal *angle);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13714,7 +13714,7 @@ extern int zzgfilgq_(doublereal *et, doublereal *angle);
 /*:ref: zzilusta_ 14 18 13 13 13 7 13 13 13 7 7 7 7 7 124 124 124 124 124 124 */
 /*:ref: illumg_ 14 19 13 13 13 7 13 13 13 7 7 7 7 7 7 124 124 124 124 124 124 */
  
-extern int zzgflong_(char *vecdef, char *method, char *target, char *ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *crdnam, char *relate, doublereal *refval, doublereal *tol, doublereal *adjust, U_fp udstep, U_fp udrefn, logical *rpt, U_fp udrepi, U_fp udrepu, U_fp udrepf, logical *bail, L_fp udbail, integer *mw, integer *nw, doublereal *work, doublereal *cnfine, doublereal *result, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len, ftnlen relate_len);
+extern int zzgflong_(void *cspice_state, char *vecdef, char *method, char *target, char *ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *crdsys, char *crdnam, char *relate, doublereal *refval, doublereal *tol, doublereal *adjust, U_fp udstep, U_fp udrefn, logical *rpt, U_fp udrepi, U_fp udrepu, U_fp udrepf, logical *bail, L_fp udbail, integer *mw, integer *nw, doublereal *work, doublereal *cnfine, doublereal *result, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len, ftnlen relate_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13759,9 +13759,9 @@ extern int zzgflong_(char *vecdef, char *method, char *target, char *ref, char *
 /*:ref: elemi_ 12 2 4 4 */
 /*:ref: lnkfsl_ 14 3 4 4 4 */
  
-extern int zzgfocu_(char *occtyp, char *front, char *fshape, char *fframe, char *back, char *bshape, char *bframe, char *obsrvr, char *abcorr, doublereal *time, logical *ocstat, ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, ftnlen obsrvr_len, ftnlen abcorr_len);
-extern int zzgfocin_(char *occtyp, char *front, char *fshape, char *fframe, char *back, char *bshape, char *bframe, char *obsrvr, char *abcorr, ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, ftnlen obsrvr_len, ftnlen abcorr_len);
-extern int zzgfocst_(doublereal *time, logical *ocstat);
+extern int zzgfocu_(void *cspice_state, char *occtyp, char *front, char *fshape, char *fframe, char *back, char *bshape, char *bframe, char *obsrvr, char *abcorr, doublereal *time, logical *ocstat, ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, ftnlen obsrvr_len, ftnlen abcorr_len);
+extern int zzgfocin_(void *cspice_state, char *occtyp, char *front, char *fshape, char *fframe, char *back, char *bshape, char *bframe, char *obsrvr, char *abcorr, ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, ftnlen obsrvr_len, ftnlen abcorr_len);
+extern int zzgfocst_(void *cspice_state, doublereal *time, logical *ocstat);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13802,7 +13802,7 @@ extern int zzgfocst_(doublereal *time, logical *ocstat);
 /*:ref: halfpi_ 7 0 */
 /*:ref: sincpt_ 14 18 13 13 7 13 13 13 13 7 7 7 7 12 124 124 124 124 124 124 */
  
-extern int zzgfpaq_(doublereal *et, integer *targ, integer *illmn, integer *obs, char *abcorr, doublereal *value, ftnlen abcorr_len);
+extern int zzgfpaq_(void *cspice_state, doublereal *et, integer *targ, integer *illmn, integer *obs, char *abcorr, doublereal *value, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
@@ -13812,11 +13812,11 @@ extern int zzgfpaq_(doublereal *et, integer *targ, integer *illmn, integer *obs,
 /*:ref: vsep_ 7 2 7 7 */
 /*:ref: pi_ 7 0 */
  
-extern int zzgfpau_(char *target, char *illmn, char *abcorr, char *obsrvr, U_fp udfunc, doublereal *et, logical *decres, doublereal *rvl, integer *xtarg, integer *xillmn, char *xabcor, integer *xobs, logical *xablk, ftnlen target_len, ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen xabcor_len);
-extern int zzgfpain_(char *target, char *illmn, char *abcorr, char *obsrvr, ftnlen target_len, ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len);
-extern int zzgfpadc_(U_fp udfunc, doublereal *et, logical *decres);
-extern int zzgfpagq_(doublereal *et, doublereal *rvl);
-extern int zzgfpax_(integer *xtarg, integer *xillmn, char *xabcor, integer *xobs, logical *xablk, ftnlen xabcor_len);
+extern int zzgfpau_(void *cspice_state, char *target, char *illmn, char *abcorr, char *obsrvr, U_fp udfunc, doublereal *et, logical *decres, doublereal *rvl, integer *xtarg, integer *xillmn, char *xabcor, integer *xobs, logical *xablk, ftnlen target_len, ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen xabcor_len);
+extern int zzgfpain_(void *cspice_state, char *target, char *illmn, char *abcorr, char *obsrvr, ftnlen target_len, ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzgfpadc_(void *cspice_state, U_fp udfunc, doublereal *et, logical *decres);
+extern int zzgfpagq_(void *cspice_state, doublereal *et, doublereal *rvl);
+extern int zzgfpax_(void *cspice_state, integer *xtarg, integer *xillmn, char *xabcor, integer *xobs, logical *xablk, ftnlen xabcor_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13836,10 +13836,10 @@ extern int zzgfpax_(integer *xtarg, integer *xillmn, char *xabcor, integer *xobs
 /*:ref: dvsep_ 7 2 7 7 */
 /*:ref: zzgfpaq_ 14 7 7 4 4 4 13 7 124 */
  
-extern int zzgfref_(doublereal *refval);
+extern int zzgfref_(void *cspice_state, doublereal *refval);
 /*:ref: zzholdd_ 14 4 4 4 12 7 */
  
-extern int zzgfrel_(U_fp udstep, U_fp udrefn, U_fp udqdec, U_fp udcond, S_fp udfunc, S_fp udqref, char *relate, doublereal *refval, doublereal *tol, doublereal *adjust, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, char *rptpre, char *rptsuf, logical *bail, L_fp udbail, doublereal *result, ftnlen relate_len, ftnlen rptpre_len, ftnlen rptsuf_len);
+extern int zzgfrel_(void *cspice_state, U_fp udstep, U_fp udrefn, U_fp udqdec, U_fp udcond, S_fp udfunc, S_fp udqref, char *relate, doublereal *refval, doublereal *tol, doublereal *adjust, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, char *rptpre, char *rptsuf, logical *bail, L_fp udbail, doublereal *result, ftnlen relate_len, ftnlen rptpre_len, ftnlen rptsuf_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13868,7 +13868,7 @@ extern int zzgfrel_(U_fp udstep, U_fp udrefn, U_fp udqdec, U_fp udcond, S_fp udf
 /*:ref: zzwninsd_ 14 5 7 7 13 7 124 */
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int zzgfrelx_(U_fp udstep, U_fp udrefn, U_fp udqdec, U_fp udcond, S_fp udfunc, char *relate, doublereal *refval, doublereal *tol, doublereal *adjust, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, char *rptpre, char *rptsuf, logical *bail, L_fp udbail, doublereal *result, ftnlen relate_len, ftnlen rptpre_len, ftnlen rptsuf_len);
+extern int zzgfrelx_(void *cspice_state, U_fp udstep, U_fp udrefn, U_fp udqdec, U_fp udcond, S_fp udfunc, char *relate, doublereal *refval, doublereal *tol, doublereal *adjust, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, char *rptpre, char *rptsuf, logical *bail, L_fp udbail, doublereal *result, ftnlen relate_len, ftnlen rptpre_len, ftnlen rptsuf_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13898,12 +13898,12 @@ extern int zzgfrelx_(U_fp udstep, U_fp udrefn, U_fp udqdec, U_fp udcond, S_fp ud
 /*:ref: zzwninsd_ 14 5 7 7 13 7 124 */
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int zzgfrpwk_(integer *unit, doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len);
-extern int zzgftswk_(doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len);
-extern int zzgfwkin_(doublereal *incr);
-extern int zzgfwkad_(doublereal *freq, integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len);
-extern int zzgfwkun_(integer *unit);
-extern int zzgfwkmo_(integer *unit, doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len);
+extern int zzgfrpwk_(void *cspice_state, integer *unit, doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len);
+extern int zzgftswk_(void *cspice_state, doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len);
+extern int zzgfwkin_(void *cspice_state, doublereal *incr);
+extern int zzgfwkad_(void *cspice_state, doublereal *freq, integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len);
+extern int zzgfwkun_(void *cspice_state, integer *unit);
+extern int zzgfwkmo_(void *cspice_state, integer *unit, doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13916,7 +13916,7 @@ extern int zzgfwkmo_(integer *unit, doublereal *total, doublereal *freq, integer
 /*:ref: brcktd_ 7 3 7 7 7 */
 /*:ref: dpfmt_ 14 5 7 13 13 124 124 */
  
-extern int zzgfrrq_(doublereal *et, integer *targ, integer *obs, char *abcorr, doublereal *value, ftnlen abcorr_len);
+extern int zzgfrrq_(void *cspice_state, doublereal *et, integer *targ, integer *obs, char *abcorr, doublereal *value, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: spkez_ 14 9 4 7 13 13 4 7 7 124 124 */
@@ -13924,11 +13924,11 @@ extern int zzgfrrq_(doublereal *et, integer *targ, integer *obs, char *abcorr, d
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dvnorm_ 7 1 7 */
  
-extern int zzgfrru_(char *target, char *abcorr, char *obsrvr, doublereal *dt, U_fp udfunc, doublereal *et, logical *decres, doublereal *rvl, integer *xtarg, char *xabcor, integer *xobs, doublereal *xdt, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen xabcor_len);
-extern int zzgfrrin_(char *target, char *abcorr, char *obsrvr, doublereal *dt, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
-extern int zzgfrrdc_(U_fp udfunc, doublereal *et, logical *decres);
-extern int zzgfrrgq_(doublereal *et, doublereal *rvl);
-extern int zzgfrrx_(integer *xtarg, char *xabcor, integer *xobs, doublereal *xdt, ftnlen xabcor_len);
+extern int zzgfrru_(void *cspice_state, char *target, char *abcorr, char *obsrvr, doublereal *dt, U_fp udfunc, doublereal *et, logical *decres, doublereal *rvl, integer *xtarg, char *xabcor, integer *xobs, doublereal *xdt, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen xabcor_len);
+extern int zzgfrrin_(void *cspice_state, char *target, char *abcorr, char *obsrvr, doublereal *dt, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzgfrrdc_(void *cspice_state, U_fp udfunc, doublereal *et, logical *decres);
+extern int zzgfrrgq_(void *cspice_state, doublereal *et, doublereal *rvl);
+extern int zzgfrrx_(void *cspice_state, integer *xtarg, char *xabcor, integer *xobs, doublereal *xdt, ftnlen xabcor_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -13946,7 +13946,7 @@ extern int zzgfrrx_(integer *xtarg, char *xabcor, integer *xobs, doublereal *xdt
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: zzgfrrq_ 14 6 7 4 4 13 7 124 */
  
-extern int zzgfsolv_(S_fp udcond, S_fp udstep, S_fp udrefn, logical *bail, L_fp udbail, logical *cstep, doublereal *step, doublereal *start, doublereal *finish, doublereal *tol, logical *rpt, S_fp udrepu, doublereal *result);
+extern int zzgfsolv_(void *cspice_state, S_fp udcond, S_fp udstep, S_fp udrefn, logical *bail, L_fp udbail, logical *cstep, doublereal *step, doublereal *start, doublereal *finish, doublereal *tol, logical *rpt, S_fp udrepu, doublereal *result);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13960,7 +13960,7 @@ extern int zzgfsolv_(S_fp udcond, S_fp udstep, S_fp udrefn, logical *bail, L_fp 
 /*:ref: brcktd_ 7 3 7 7 7 */
 /*:ref: zzwninsd_ 14 5 7 7 13 7 124 */
  
-extern int zzgfsolvx_(U_fp udfuns, S_fp udfunb, S_fp udstep, S_fp udrefn, logical *bail, L_fp udbail, logical *cstep, doublereal *step, doublereal *start, doublereal *finish, doublereal *tol, logical *rpt, S_fp udrepu, doublereal *result);
+extern int zzgfsolvx_(void *cspice_state, U_fp udfuns, S_fp udfunb, S_fp udstep, S_fp udrefn, logical *bail, L_fp udbail, logical *cstep, doublereal *step, doublereal *start, doublereal *finish, doublereal *tol, logical *rpt, S_fp udrepu, doublereal *result);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13974,7 +13974,7 @@ extern int zzgfsolvx_(U_fp udfuns, S_fp udfunb, S_fp udstep, S_fp udrefn, logica
 /*:ref: brcktd_ 7 3 7 7 7 */
 /*:ref: zzwninsd_ 14 5 7 7 13 7 124 */
  
-extern int zzgfspq_(doublereal *et, integer *targ1, integer *targ2, doublereal *r1, doublereal *r2, integer *obs, char *abcorr, char *ref, doublereal *value, ftnlen abcorr_len, ftnlen ref_len);
+extern int zzgfspq_(void *cspice_state, doublereal *et, integer *targ1, integer *targ2, doublereal *r1, doublereal *r2, integer *obs, char *abcorr, char *ref, doublereal *value, ftnlen abcorr_len, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -13989,11 +13989,11 @@ extern int zzgfspq_(doublereal *et, integer *targ1, integer *targ2, doublereal *
 /*:ref: halfpi_ 7 0 */
 /*:ref: vsep_ 7 2 7 7 */
  
-extern int zzgfspu_(char *of, char *from, char *shape, char *frame, doublereal *et, U_fp udfunc, char *abcorr, logical *decres, doublereal *sep, char *xabcr, integer *xbod, char *yref, char *xref, integer *xobs, doublereal *xrad, integer *xshp, ftnlen of_len, ftnlen from_len, ftnlen shape_len, ftnlen frame_len, ftnlen abcorr_len, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len);
-extern int zzgfspin_(char *of, char *from, char *shape, char *frame, char *abcorr, ftnlen of_len, ftnlen from_len, ftnlen shape_len, ftnlen frame_len, ftnlen abcorr_len);
-extern int zzgfspdc_(U_fp udfunc, doublereal *et, logical *decres);
-extern int zzgfspgq_(doublereal *et, doublereal *sep);
-extern int zzgfspx_(char *xabcr, integer *xbod, char *yref, char *xref, integer *xobs, doublereal *xrad, integer *xshp, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len);
+extern int zzgfspu_(void *cspice_state, char *of, char *from, char *shape, char *frame, doublereal *et, U_fp udfunc, char *abcorr, logical *decres, doublereal *sep, char *xabcr, integer *xbod, char *yref, char *xref, integer *xobs, doublereal *xrad, integer *xshp, ftnlen of_len, ftnlen from_len, ftnlen shape_len, ftnlen frame_len, ftnlen abcorr_len, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len);
+extern int zzgfspin_(void *cspice_state, char *of, char *from, char *shape, char *frame, char *abcorr, ftnlen of_len, ftnlen from_len, ftnlen shape_len, ftnlen frame_len, ftnlen abcorr_len);
+extern int zzgfspdc_(void *cspice_state, U_fp udfunc, doublereal *et, logical *decres);
+extern int zzgfspgq_(void *cspice_state, doublereal *et, doublereal *sep);
+extern int zzgfspx_(void *cspice_state, char *xabcr, integer *xbod, char *yref, char *xref, integer *xobs, doublereal *xrad, integer *xshp, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -14016,7 +14016,7 @@ extern int zzgfspx_(char *xabcr, integer *xbod, char *yref, char *xref, integer 
 /*:ref: dhfa_ 7 2 7 7 */
 /*:ref: zzgfspq_ 14 11 7 4 4 7 7 4 13 13 7 124 124 */
  
-extern int zzgfssin_(char *method, integer *trgid, doublereal *et, char *fixref, char *abcorr, integer *obsid, char *dref, integer *dctr, doublereal *dvec, doublereal *radii, doublereal *state, logical *found, ftnlen method_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen dref_len);
+extern int zzgfssin_(void *cspice_state, char *method, integer *trgid, doublereal *et, char *fixref, char *abcorr, integer *obsid, char *dref, integer *dctr, doublereal *dvec, doublereal *radii, doublereal *state, logical *found, ftnlen method_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen dref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bodc2s_ 14 3 4 13 124 */
@@ -14051,7 +14051,7 @@ extern int zzgfssin_(char *method, integer *trgid, doublereal *et, char *fixref,
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: clight_ 7 0 */
  
-extern int zzgfssob_(char *method, integer *trgid, doublereal *et, char *fixref, char *abcorr, integer *obsid, doublereal *radii, doublereal *state, ftnlen method_len, ftnlen fixref_len, ftnlen abcorr_len);
+extern int zzgfssob_(void *cspice_state, char *method, integer *trgid, doublereal *et, char *fixref, char *abcorr, integer *obsid, doublereal *radii, doublereal *state, ftnlen method_len, ftnlen fixref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bodc2s_ 14 3 4 13 124 */
@@ -14086,7 +14086,7 @@ extern int zzgfssob_(char *method, integer *trgid, doublereal *et, char *fixref,
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: clight_ 7 0 */
  
-extern int zzgftreb_(integer *body, doublereal *axes);
+extern int zzgftreb_(void *cspice_state, integer *body, doublereal *axes);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
@@ -14095,7 +14095,7 @@ extern int zzgftreb_(integer *body, doublereal *axes);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzgfudb_(U_fp udfuns, U_fp udfunb, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, doublereal *cnfine, doublereal *result);
+extern int zzgfudb_(void *cspice_state, U_fp udfuns, U_fp udfunb, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, doublereal *cnfine, doublereal *result);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14107,7 +14107,7 @@ extern int zzgfudb_(U_fp udfuns, U_fp udfunb, doublereal *tol, U_fp udstep, U_fp
 /*:ref: zzgfsolvx_ 14 14 200 200 200 200 12 212 12 7 7 7 7 12 200 7 */
 /*:ref: failed_ 12 0 */
  
-extern int zzgfudlt_(S_fp udfunc, doublereal *et, logical *isless);
+extern int zzgfudlt_(void *cspice_state, S_fp udfunc, doublereal *et, logical *isless);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: failed_ 12 0 */
@@ -14116,7 +14116,7 @@ extern int zzgfudlt_(S_fp udfunc, doublereal *et, logical *isless);
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzgfwsts_(doublereal *wndw1, doublereal *wndw2, char *inclsn, doublereal *wndw3, ftnlen inclsn_len);
+extern int zzgfwsts_(void *cspice_state, doublereal *wndw1, doublereal *wndw2, char *inclsn, doublereal *wndw3, ftnlen inclsn_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -14130,7 +14130,7 @@ extern int zzgfwsts_(doublereal *wndw1, doublereal *wndw2, char *inclsn, doubler
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: scardd_ 14 2 4 7 */
  
-extern int zzgpnm_(integer *namlst, integer *nmpool, char *names, integer *datlst, integer *dppool, doublereal *dpvals, integer *chpool, char *chvals, char *varnam, logical *found, integer *lookat, integer *nameat, ftnlen names_len, ftnlen chvals_len, ftnlen varnam_len);
+extern int zzgpnm_(void *cspice_state, integer *namlst, integer *nmpool, char *names, integer *datlst, integer *dppool, doublereal *dpvals, integer *chpool, char *chvals, char *varnam, logical *found, integer *lookat, integer *nameat, ftnlen names_len, ftnlen chvals_len, ftnlen varnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzhash_ 4 2 13 124 */
@@ -14141,16 +14141,16 @@ extern int zzgpnm_(integer *namlst, integer *nmpool, char *names, integer *datls
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzgrav_(doublereal *grav);
+extern int zzgrav_(void *cspice_state, doublereal *grav);
  
-extern integer zzhashi_(integer *n, integer *m);
+extern integer zzhashi_(void *cspice_state, integer *n, integer *m);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzholdd_(integer *op, integer *id, logical *ok, doublereal *value);
+extern int zzholdd_(void *cspice_state, integer *op, integer *id, logical *ok, doublereal *value);
 /*:ref: return_ 12 0 */
 /*:ref: brckti_ 4 3 4 4 4 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -14159,12 +14159,12 @@ extern int zzholdd_(integer *op, integer *id, logical *ok, doublereal *value);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzhsc_(integer *hashsz, integer *hedlst, integer *collst, char *items, char *item, integer *itemat, logical *new__, integer *avail, ftnlen items_len, ftnlen item_len);
-extern int zzhscini_(integer *hashsz, integer *hedlst, integer *collst);
-extern int zzhscadd_(integer *hedlst, integer *collst, char *items, char *item, integer *itemat, logical *new__, ftnlen items_len, ftnlen item_len);
-extern int zzhscchk_(integer *hedlst, integer *collst, char *items, char *item, integer *itemat, ftnlen items_len, ftnlen item_len);
-extern int zzhscavl_(integer *collst, integer *avail);
-extern int zzhscinf_(integer *hedlst, integer *collst, char *items, char *item, integer *avail, ftnlen items_len, ftnlen item_len);
+extern int zzhsc_(void *cspice_state, integer *hashsz, integer *hedlst, integer *collst, char *items, char *item, integer *itemat, logical *new__, integer *avail, ftnlen items_len, ftnlen item_len);
+extern int zzhscini_(void *cspice_state, integer *hashsz, integer *hedlst, integer *collst);
+extern int zzhscadd_(void *cspice_state, integer *hedlst, integer *collst, char *items, char *item, integer *itemat, logical *new__, ftnlen items_len, ftnlen item_len);
+extern int zzhscchk_(void *cspice_state, integer *hedlst, integer *collst, char *items, char *item, integer *itemat, ftnlen items_len, ftnlen item_len);
+extern int zzhscavl_(void *cspice_state, integer *collst, integer *avail);
+extern int zzhscinf_(void *cspice_state, integer *hedlst, integer *collst, char *items, char *item, integer *avail, ftnlen items_len, ftnlen item_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -14174,12 +14174,12 @@ extern int zzhscinf_(integer *hedlst, integer *collst, char *items, char *item, 
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int zzhsi_(integer *hashsz, integer *hedlst, integer *collst, integer *items, integer *item, char *param, integer *itemat, logical *new__, integer *avail, ftnlen param_len);
-extern int zzhsiini_(integer *hashsz, integer *hedlst, integer *collst);
-extern int zzhsiadd_(integer *hedlst, integer *collst, integer *items, integer *item, integer *itemat, logical *new__);
-extern int zzhsichk_(integer *hedlst, integer *collst, integer *items, integer *item, integer *itemat);
-extern int zzhsiavl_(integer *collst, integer *avail);
-extern int zzhsiinf_(integer *hedlst, integer *collst, integer *items, char *param, integer *avail, ftnlen param_len);
+extern int zzhsi_(void *cspice_state, integer *hashsz, integer *hedlst, integer *collst, integer *items, integer *item, char *param, integer *itemat, logical *new__, integer *avail, ftnlen param_len);
+extern int zzhsiini_(void *cspice_state, integer *hashsz, integer *hedlst, integer *collst);
+extern int zzhsiadd_(void *cspice_state, integer *hedlst, integer *collst, integer *items, integer *item, integer *itemat, logical *new__);
+extern int zzhsichk_(void *cspice_state, integer *hedlst, integer *collst, integer *items, integer *item, integer *itemat);
+extern int zzhsiavl_(void *cspice_state, integer *collst, integer *avail);
+extern int zzhsiinf_(void *cspice_state, integer *hedlst, integer *collst, integer *items, char *param, integer *avail, ftnlen param_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -14190,7 +14190,7 @@ extern int zzhsiinf_(integer *hedlst, integer *collst, integer *items, char *par
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int zzhullax_(char *inst, integer *n, doublereal *bounds, doublereal *axis, ftnlen inst_len);
+extern int zzhullax_(void *cspice_state, char *inst, integer *n, doublereal *bounds, doublereal *axis, ftnlen inst_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14213,9 +14213,9 @@ extern int zzhullax_(char *inst, integer *n, doublereal *bounds, doublereal *axi
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: vrotv_ 14 4 7 7 7 7 */
  
-extern int zzidmap_(integer *bltcod, char *bltnam, ftnlen bltnam_len);
+extern int zzidmap_(void *cspice_state, integer *bltcod, char *bltnam, ftnlen bltnam_len);
  
-extern int zzilusta_(char *method, char *target, char *illum, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *normal, doublereal *phssta, doublereal *incsta, doublereal *emista, ftnlen method_len, ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int zzilusta_(void *cspice_state, char *method, char *target, char *illum, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *normal, doublereal *phssta, doublereal *incsta, doublereal *emista, ftnlen method_len, ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
@@ -14242,9 +14242,9 @@ extern int zzilusta_(char *method, char *target, char *illum, doublereal *et, ch
 /*:ref: vsep_ 7 2 7 7 */
 /*:ref: dvsep_ 7 2 7 7 */
  
-extern logical zzingrd_(integer *nvox, integer *voxel);
+extern logical zzingrd_(void *cspice_state, integer *nvox, integer *voxel);
  
-extern int zzinil_(doublereal *geophs, integer *opmode, doublereal *ecco, doublereal *epoch, doublereal *inclo, doublereal *no, doublereal *ainv, doublereal *ao, doublereal *con41, doublereal *con42, doublereal *cosio, doublereal *cosio2, doublereal *eccsq, doublereal *omeosq, doublereal *posq, doublereal *rp, doublereal *rteosq, doublereal *sinio, doublereal *gsto);
+extern int zzinil_(void *cspice_state, doublereal *geophs, integer *opmode, doublereal *ecco, doublereal *epoch, doublereal *inclo, doublereal *no, doublereal *ainv, doublereal *ao, doublereal *con41, doublereal *con42, doublereal *cosio, doublereal *cosio2, doublereal *eccsq, doublereal *omeosq, doublereal *posq, doublereal *rp, doublereal *rteosq, doublereal *sinio, doublereal *gsto);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
@@ -14253,7 +14253,7 @@ extern int zzinil_(doublereal *geophs, integer *opmode, doublereal *ecco, double
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzinilnk_(integer *maxp, integer *maxc, integer *ncell, integer *pntrs, integer *cells);
+extern int zzinilnk_(void *cspice_state, integer *maxp, integer *maxc, integer *ncell, integer *pntrs, integer *cells);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14261,7 +14261,7 @@ extern int zzinilnk_(integer *maxp, integer *maxc, integer *ncell, integer *pntr
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzinlat_(doublereal *p, doublereal *bounds, doublereal *margin, integer *exclud, logical *inside);
+extern int zzinlat_(void *cspice_state, doublereal *p, doublereal *bounds, doublereal *margin, integer *exclud, logical *inside);
 /*:ref: return_ 12 0 */
 /*:ref: twopi_ 7 0 */
 /*:ref: halfpi_ 7 0 */
@@ -14275,11 +14275,11 @@ extern int zzinlat_(doublereal *p, doublereal *bounds, doublereal *margin, integ
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: zznrmlon_ 14 5 7 7 7 7 7 */
  
-extern int zzinlat0_(doublereal *r__, doublereal *lon, doublereal *lat, doublereal *bounds, integer *exclud, logical *inside);
+extern int zzinlat0_(void *cspice_state, doublereal *r__, doublereal *lon, doublereal *lat, doublereal *bounds, integer *exclud, logical *inside);
 /*:ref: twopi_ 7 0 */
 /*:ref: zznrmlon_ 14 5 7 7 7 7 7 */
  
-extern int zzinpdt_(doublereal *p, doublereal *bounds, doublereal *corpar, doublereal *margin, integer *exclud, logical *inside);
+extern int zzinpdt_(void *cspice_state, doublereal *p, doublereal *bounds, doublereal *corpar, doublereal *margin, integer *exclud, logical *inside);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: halfpi_ 7 0 */
@@ -14296,7 +14296,7 @@ extern int zzinpdt_(doublereal *p, doublereal *bounds, doublereal *corpar, doubl
 /*:ref: failed_ 12 0 */
 /*:ref: zznrmlon_ 14 5 7 7 7 7 7 */
  
-extern int zzinpdt0_(doublereal *p, doublereal *lon, doublereal *bounds, doublereal *corpar, integer *exclud, logical *inside);
+extern int zzinpdt0_(void *cspice_state, doublereal *p, doublereal *lon, doublereal *bounds, doublereal *corpar, integer *exclud, logical *inside);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
@@ -14307,7 +14307,7 @@ extern int zzinpdt0_(doublereal *p, doublereal *lon, doublereal *bounds, doubler
 /*:ref: zznrmlon_ 14 5 7 7 7 7 7 */
 /*:ref: zzellbds_ 14 8 7 7 7 7 7 7 7 7 */
  
-extern int zzinrec_(doublereal *p, doublereal *bounds, doublereal *margin, integer *exclud, logical *inside);
+extern int zzinrec_(void *cspice_state, doublereal *p, doublereal *bounds, doublereal *margin, integer *exclud, logical *inside);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14316,13 +14316,13 @@ extern int zzinrec_(doublereal *p, doublereal *bounds, doublereal *margin, integ
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzinrypl_(doublereal *vertex, doublereal *udir, doublereal *uplnml, doublereal *const__, doublereal *maxd, integer *nxpts, doublereal *xpt);
+extern int zzinrypl_(void *cspice_state, doublereal *vertex, doublereal *udir, doublereal *uplnml, doublereal *const__, doublereal *maxd, integer *nxpts, doublereal *xpt);
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int zzinssub_(char *in, char *sub, integer *loc, char *out, ftnlen in_len, ftnlen sub_len, ftnlen out_len);
+extern int zzinssub_(void *cspice_state, char *in, char *sub, integer *loc, char *out, ftnlen in_len, ftnlen sub_len, ftnlen out_len);
  
-extern int zzinvelt_(doublereal *p, integer *corsys, doublereal *corpar, doublereal *bounds, doublereal *margin, integer *exclud, logical *inside);
+extern int zzinvelt_(void *cspice_state, doublereal *p, integer *corsys, doublereal *corpar, doublereal *bounds, doublereal *margin, integer *exclud, logical *inside);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14334,7 +14334,7 @@ extern int zzinvelt_(doublereal *p, integer *corsys, doublereal *corpar, doubler
 /*:ref: zzinrec_ 14 5 7 7 7 4 12 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzlatbox_(doublereal *bounds, doublereal *center, doublereal *lr, doublereal *lt, doublereal *lz, doublereal *radius);
+extern int zzlatbox_(void *cspice_state, doublereal *bounds, doublereal *center, doublereal *lr, doublereal *lt, doublereal *lz, doublereal *radius);
 /*:ref: return_ 12 0 */
 /*:ref: twopi_ 7 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -14347,7 +14347,7 @@ extern int zzlatbox_(doublereal *bounds, doublereal *center, doublereal *lr, dou
 /*:ref: vpack_ 14 4 7 7 7 7 */
 /*:ref: vnorm_ 7 1 7 */
  
-extern int zzldker_(char *file, char *nofile, char *filtyp, integer *handle, ftnlen file_len, ftnlen nofile_len, ftnlen filtyp_len);
+extern int zzldker_(void *cspice_state, char *file, char *nofile, char *filtyp, integer *handle, ftnlen file_len, ftnlen nofile_len, ftnlen filtyp_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: exists_ 12 2 13 124 */
@@ -14366,7 +14366,7 @@ extern int zzldker_(char *file, char *nofile, char *filtyp, integer *handle, ftn
 /*:ref: failed_ 12 0 */
 /*:ref: zzbodkik_ 14 0 */
  
-extern int zzlexmet_(char *method, integer *maxn, integer *n, integer *begs, integer *ends, ftnlen method_len);
+extern int zzlexmet_(void *cspice_state, char *method, integer *maxn, integer *n, integer *begs, integer *ends, ftnlen method_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -14379,11 +14379,11 @@ extern int zzlexmet_(char *method, integer *maxn, integer *n, integer *begs, int
 /*:ref: lxqstr_ 14 7 13 13 4 4 4 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int zzmkpc_(char *pictur, integer *b, integer *e, char *mark, char *pattrn, ftnlen pictur_len, ftnlen mark_len, ftnlen pattrn_len);
+extern int zzmkpc_(void *cspice_state, char *pictur, integer *b, integer *e, char *mark, char *pattrn, ftnlen pictur_len, ftnlen mark_len, ftnlen pattrn_len);
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: zzrepsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int zzmkspin_(integer *np, integer *plates, doublereal *vrtces, doublereal *voxscl, integer *cgscal, integer *maxptr, integer *mxcell, integer *maxvxl, integer *cells, integer *nvox, doublereal *voxsiz, doublereal *voxori, integer *nvxtot, integer *nvxptr, integer *vxptr, integer *nvxlst, integer *vxlist, doublereal *extent, integer *cgrptr);
+extern int zzmkspin_(void *cspice_state, integer *np, integer *plates, doublereal *vrtces, doublereal *voxscl, integer *cgscal, integer *maxptr, integer *mxcell, integer *maxvxl, integer *cells, integer *nvox, doublereal *voxsiz, doublereal *voxori, integer *nvxtot, integer *nvxptr, integer *vxptr, integer *nvxlst, integer *vxlist, doublereal *extent, integer *cgrptr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14404,13 +14404,13 @@ extern int zzmkspin_(integer *np, integer *plates, doublereal *vrtces, doublerea
 /*:ref: zzaddlnk_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: zzuntngl_ 14 7 4 4 4 4 4 4 4 */
  
-extern int zzmobliq_(doublereal *et, doublereal *mob, doublereal *dmob);
+extern int zzmobliq_(void *cspice_state, doublereal *et, doublereal *mob, doublereal *dmob);
 /*:ref: jyear_ 7 0 */
 /*:ref: rpd_ 7 0 */
  
-extern int zzmsxf_(doublereal *matrix, integer *n, doublereal *output);
+extern int zzmsxf_(void *cspice_state, doublereal *matrix, integer *n, doublereal *output);
  
-extern doublereal zzmult_(doublereal *a, doublereal *b);
+extern doublereal zzmult_(void *cspice_state, doublereal *a, doublereal *b);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dpmax_ 7 0 */
@@ -14419,14 +14419,14 @@ extern doublereal zzmult_(doublereal *a, doublereal *b);
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zznamfrm_(integer *usrctr, char *savnam, integer *savcde, char *frname, integer *frcode, ftnlen savnam_len, ftnlen frname_len);
+extern int zznamfrm_(void *cspice_state, integer *usrctr, char *savnam, integer *savcde, char *frname, integer *frcode, ftnlen savnam_len, ftnlen frname_len);
 /*:ref: return_ 12 0 */
 /*:ref: zzpctrck_ 14 2 4 12 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zznofcon_(doublereal *et, integer *frame1, integer *endp1, integer *frame2, integer *endp2, char *errmsg, ftnlen errmsg_len);
+extern int zznofcon_(void *cspice_state, doublereal *et, integer *frame1, integer *endp1, integer *frame2, integer *endp2, char *errmsg, ftnlen errmsg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: etcal_ 14 3 7 13 124 */
@@ -14441,10 +14441,10 @@ extern int zznofcon_(doublereal *et, integer *frame1, integer *endp1, integer *f
 /*:ref: ckmeta_ 14 4 4 13 4 124 */
 /*:ref: zzsclk_ 12 2 4 4 */
  
-extern int zznrddp_(doublereal *ao, doublereal *elems, doublereal *em, doublereal *omgasm, doublereal *omgdot, doublereal *t, doublereal *xinc, doublereal *xll, doublereal *xlldot, doublereal *xn, doublereal *xnodes, doublereal *xnodot, doublereal *xnodp);
-extern int zzdpinit_(doublereal *ao, doublereal *xlldot, doublereal *omgdot, doublereal *xnodot, doublereal *xnodp, doublereal *elems);
-extern int zzdpsec_(doublereal *xll, doublereal *omgasm, doublereal *xnodes, doublereal *em, doublereal *xinc, doublereal *xn, doublereal *t, doublereal *elems, doublereal *omgdot);
-extern int zzdpper_(doublereal *t, doublereal *em, doublereal *xinc, doublereal *omgasm, doublereal *xnodes, doublereal *xll);
+extern int zznrddp_(void *cspice_state, doublereal *ao, doublereal *elems, doublereal *em, doublereal *omgasm, doublereal *omgdot, doublereal *t, doublereal *xinc, doublereal *xll, doublereal *xlldot, doublereal *xn, doublereal *xnodes, doublereal *xnodot, doublereal *xnodp);
+extern int zzdpinit_(void *cspice_state, doublereal *ao, doublereal *xlldot, doublereal *omgdot, doublereal *xnodot, doublereal *xnodp, doublereal *elems);
+extern int zzdpsec_(void *cspice_state, doublereal *xll, doublereal *omgasm, doublereal *xnodes, doublereal *em, doublereal *xinc, doublereal *xn, doublereal *t, doublereal *elems, doublereal *omgdot);
+extern int zzdpper_(void *cspice_state, doublereal *t, doublereal *em, doublereal *xinc, doublereal *omgasm, doublereal *xnodes, doublereal *xll);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14457,7 +14457,7 @@ extern int zzdpper_(doublereal *t, doublereal *em, doublereal *xinc, doublereal 
 /*:ref: j1950_ 7 0 */
 /*:ref: zzsecprt_ 14 12 4 7 7 7 7 7 7 7 7 7 7 7 */
  
-extern int zznrmlon_(doublereal *inmin, doublereal *inmax, doublereal *tol, doublereal *outmin, doublereal *outmax);
+extern int zznrmlon_(void *cspice_state, doublereal *inmin, doublereal *inmax, doublereal *tol, doublereal *outmin, doublereal *outmax);
 /*:ref: twopi_ 7 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14467,7 +14467,7 @@ extern int zznrmlon_(doublereal *inmin, doublereal *inmax, doublereal *tol, doub
 /*:ref: dpr_ 7 0 */
 /*:ref: touchd_ 7 1 7 */
  
-extern int zznwpool_(char *varnam, char *wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agtwrk, char *notify, char *agents, ftnlen varnam_len, ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen agtwrk_len, ftnlen notify_len, ftnlen agents_len);
+extern int zznwpool_(void *cspice_state, char *varnam, char *wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agtwrk, char *notify, char *agents, ftnlen varnam_len, ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen agtwrk_len, ftnlen notify_len, ftnlen agents_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzgapool_ 14 10 13 13 4 4 13 13 124 124 124 124 */
@@ -14475,7 +14475,7 @@ extern int zznwpool_(char *varnam, char *wtvars, integer *wtptrs, integer *wtpoo
 /*:ref: copyc_ 14 4 13 13 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1, doublereal *centr2, doublereal *semax2);
+extern integer zzocced_(void *cspice_state, doublereal *viewpt, doublereal *centr1, doublereal *semax1, doublereal *centr2, doublereal *semax2);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: unorm_ 14 3 7 7 7 */
@@ -14511,7 +14511,7 @@ extern integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *sema
 /*:ref: ucrss_ 14 3 7 7 7 */
 /*:ref: pi_ 7 0 */
  
-extern int zzpdcmpl_(doublereal *re, doublereal *f, doublereal *p, doublereal *lat, integer *rel);
+extern int zzpdcmpl_(void *cspice_state, doublereal *re, doublereal *f, doublereal *p, doublereal *lat, integer *rel);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: halfpi_ 7 0 */
@@ -14521,7 +14521,7 @@ extern int zzpdcmpl_(doublereal *re, doublereal *f, doublereal *p, doublereal *l
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: reclat_ 14 4 7 7 7 7 */
  
-extern logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublereal *lat);
+extern logical zzpdpltc_(void *cspice_state, doublereal *re, doublereal *f, doublereal *p, doublereal *lat);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14531,7 +14531,7 @@ extern logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublerea
 /*:ref: zzelnaxx_ 14 5 7 7 7 7 7 */
 /*:ref: failed_ 12 0 */
  
-extern int zzpdtbox_(doublereal *bounds, doublereal *corpar, doublereal *center, doublereal *lr, doublereal *lt, doublereal *lz, doublereal *radius);
+extern int zzpdtbox_(void *cspice_state, doublereal *bounds, doublereal *corpar, doublereal *center, doublereal *lr, doublereal *lt, doublereal *lz, doublereal *radius);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14545,10 +14545,10 @@ extern int zzpdtbox_(doublereal *bounds, doublereal *corpar, doublereal *center,
 /*:ref: cylrec_ 14 4 7 7 7 7 */
 /*:ref: vpack_ 14 4 7 7 7 7 */
  
-extern integer zzphsh_(char *word, integer *m, integer *m2, ftnlen word_len);
-extern integer zzshsh_(integer *m);
-extern integer zzhash_(char *word, ftnlen word_len);
-extern integer zzhash2_(char *word, integer *m2, ftnlen word_len);
+extern integer zzphsh_(void *cspice_state, char *word, integer *m, integer *m2, ftnlen word_len);
+extern integer zzshsh_(void *cspice_state, integer *m);
+extern integer zzhash_(void *cspice_state, char *word, ftnlen word_len);
+extern integer zzhash2_(void *cspice_state, char *word, integer *m2, ftnlen word_len);
 /*:ref: intmax_ 4 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14557,7 +14557,7 @@ extern integer zzhash2_(char *word, integer *m2, ftnlen word_len);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int zzpini_(logical *first, integer *maxvar, integer *maxval, integer *maxlin, char *begdat, char *begtxt, integer *nmpool, integer *dppool, integer *chpool, integer *namlst, integer *datlst, integer *maxagt, integer *mxnote, char *wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agents, char *active, char *notify, integer *subctr, ftnlen begdat_len, ftnlen begtxt_len, ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen agents_len, ftnlen active_len, ftnlen notify_len);
+extern int zzpini_(void *cspice_state, logical *first, integer *maxvar, integer *maxval, integer *maxlin, char *begdat, char *begtxt, integer *nmpool, integer *dppool, integer *chpool, integer *namlst, integer *datlst, integer *maxagt, integer *mxnote, char *wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agents, char *active, char *notify, integer *subctr, ftnlen begdat_len, ftnlen begtxt_len, ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen agents_len, ftnlen active_len, ftnlen notify_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzshsh_ 4 1 4 */
 /*:ref: touchi_ 4 1 4 */
@@ -14569,12 +14569,12 @@ extern int zzpini_(logical *first, integer *maxvar, integer *maxval, integer *ma
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzplatfm_(char *key, char *value, ftnlen key_len, ftnlen value_len);
+extern int zzplatfm_(void *cspice_state, char *key, char *value, ftnlen key_len, ftnlen value_len);
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
  
-extern int zzpltchk_(logical *ok);
+extern int zzpltchk_(void *cspice_state, logical *ok);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzplatfm_ 14 4 13 13 124 124 */
@@ -14585,7 +14585,7 @@ extern int zzpltchk_(logical *ok);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzprscor_(char *abcorr, logical *attblk, ftnlen abcorr_len);
+extern int zzprscor_(void *cspice_state, char *abcorr, logical *attblk, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: orderc_ 14 4 13 4 4 124 */
 /*:ref: reordc_ 14 4 4 4 13 124 */
@@ -14598,7 +14598,7 @@ extern int zzprscor_(char *abcorr, logical *attblk, ftnlen abcorr_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzprsmet_(integer *bodyid, char *method, integer *mxnsrf, char *shape, char *subtyp, logical *pri, integer *nsurf, integer *srflst, char *pntdef, char *trmtyp, ftnlen method_len, ftnlen shape_len, ftnlen subtyp_len, ftnlen pntdef_len, ftnlen trmtyp_len);
+extern int zzprsmet_(void *cspice_state, integer *bodyid, char *method, integer *mxnsrf, char *shape, char *subtyp, logical *pri, integer *nsurf, integer *srflst, char *pntdef, char *trmtyp, ftnlen method_len, ftnlen shape_len, ftnlen subtyp_len, ftnlen pntdef_len, ftnlen trmtyp_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
@@ -14612,7 +14612,7 @@ extern int zzprsmet_(integer *bodyid, char *method, integer *mxnsrf, char *shape
 /*:ref: srfscc_ 14 5 13 4 4 12 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
  
-extern int zzptpl02_(integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *point, integer *plid, integer *plate, doublereal *verts, logical *found);
+extern int zzptpl02_(void *cspice_state, integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *point, integer *plid, integer *plate, doublereal *verts, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dlassg_ 12 4 4 4 4 4 */
@@ -14638,7 +14638,7 @@ extern int zzptpl02_(integer *handle, integer *dladsc, doublereal *dskdsc, doubl
 /*:ref: pltnp_ 14 6 7 7 7 7 7 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int zzraybox_(doublereal *vertex, doublereal *raydir, doublereal *boxori, doublereal *extent, doublereal *xpt, logical *found);
+extern int zzraybox_(void *cspice_state, doublereal *vertex, doublereal *raydir, doublereal *boxori, doublereal *extent, doublereal *xpt, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: vzero_ 12 1 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -14654,10 +14654,10 @@ extern int zzraybox_(doublereal *vertex, doublereal *raydir, doublereal *boxori,
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int zzrbrkst_(char *string, char *lftend, char *rgtend, char *substr, integer *length, logical *bkpres, ftnlen string_len, ftnlen lftend_len, ftnlen rgtend_len, ftnlen substr_len);
+extern int zzrbrkst_(void *cspice_state, char *string, char *lftend, char *rgtend, char *substr, integer *length, logical *bkpres, ftnlen string_len, ftnlen lftend_len, ftnlen rgtend_len, ftnlen substr_len);
 /*:ref: posr_ 4 5 13 13 4 124 124 */
  
-extern int zzrecbox_(doublereal *bounds, doublereal *center, doublereal *lx, doublereal *ly, doublereal *lz, doublereal *radius);
+extern int zzrecbox_(void *cspice_state, doublereal *bounds, doublereal *center, doublereal *lx, doublereal *ly, doublereal *lz, doublereal *radius);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14668,7 +14668,7 @@ extern int zzrecbox_(doublereal *bounds, doublereal *center, doublereal *lx, dou
 /*:ref: vpack_ 14 4 7 7 7 7 */
 /*:ref: vnorm_ 7 1 7 */
  
-extern int zzrefch0_(integer *frame1, integer *frame2, doublereal *et, doublereal *rotate);
+extern int zzrefch0_(void *cspice_state, integer *frame1, integer *frame2, doublereal *et, doublereal *rotate);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ident_ 14 1 7 */
@@ -14684,7 +14684,7 @@ extern int zzrefch0_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: failed_ 12 0 */
 /*:ref: xpose_ 14 2 7 7 */
  
-extern int zzrefch1_(integer *frame1, integer *frame2, doublereal *et, doublereal *rotate);
+extern int zzrefch1_(void *cspice_state, integer *frame1, integer *frame2, doublereal *et, doublereal *rotate);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ident_ 14 1 7 */
@@ -14700,14 +14700,14 @@ extern int zzrefch1_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: failed_ 12 0 */
 /*:ref: xpose_ 14 2 7 7 */
  
-extern int zzrepsub_(char *in, integer *left, integer *right, char *string, char *out, ftnlen in_len, ftnlen string_len, ftnlen out_len);
+extern int zzrepsub_(void *cspice_state, char *in, integer *left, integer *right, char *string, char *out, ftnlen in_len, ftnlen string_len, ftnlen out_len);
 /*:ref: sumai_ 4 2 4 4 */
  
-extern logical zzrept_(char *sub, char *replac, logical *l2r, ftnlen sub_len, ftnlen replac_len);
+extern logical zzrept_(void *cspice_state, char *sub, char *replac, logical *l2r, ftnlen sub_len, ftnlen replac_len);
 /*:ref: zzsubt_ 12 5 13 13 12 124 124 */
 /*:ref: zzremt_ 12 2 13 124 */
  
-extern int zzrotgt0_(integer *infrm, doublereal *et, doublereal *rotate, integer *outfrm, logical *found);
+extern int zzrotgt0_(void *cspice_state, integer *infrm, doublereal *et, doublereal *rotate, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
@@ -14725,7 +14725,7 @@ extern int zzrotgt0_(integer *infrm, doublereal *et, doublereal *rotate, integer
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int zzrotgt1_(integer *infrm, doublereal *et, doublereal *rotate, integer *outfrm, logical *found);
+extern int zzrotgt1_(void *cspice_state, integer *infrm, doublereal *et, doublereal *rotate, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
@@ -14742,7 +14742,7 @@ extern int zzrotgt1_(integer *infrm, doublereal *et, doublereal *rotate, integer
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int zzrtnmat_(doublereal *v, doublereal *m);
+extern int zzrtnmat_(void *cspice_state, doublereal *v, doublereal *m);
 /*:ref: return_ 12 0 */
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -14753,7 +14753,7 @@ extern int zzrtnmat_(doublereal *v, doublereal *m);
 /*:ref: ucrss_ 14 3 7 7 7 */
 /*:ref: vhat_ 14 2 7 7 */
  
-extern int zzrvar_(integer *namlst, integer *nmpool, char *names, integer *datlst, integer *dppool, doublereal *dpvals, integer *chpool, char *chvals, char *varnam, logical *eof, ftnlen names_len, ftnlen chvals_len, ftnlen varnam_len);
+extern int zzrvar_(void *cspice_state, integer *namlst, integer *nmpool, char *names, integer *datlst, integer *dppool, doublereal *dpvals, integer *chpool, char *chvals, char *varnam, logical *eof, ftnlen names_len, ftnlen chvals_len, ftnlen varnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: failed_ 12 0 */
@@ -14776,7 +14776,7 @@ extern int zzrvar_(integer *namlst, integer *nmpool, char *names, integer *datls
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
  
-extern int zzrvbf_(char *buffer, integer *bsize, integer *linnum, integer *namlst, integer *nmpool, char *names, integer *datlst, integer *dppool, doublereal *dpvals, integer *chpool, char *chvals, char *varnam, logical *eof, ftnlen buffer_len, ftnlen names_len, ftnlen chvals_len, ftnlen varnam_len);
+extern int zzrvbf_(void *cspice_state, char *buffer, integer *bsize, integer *linnum, integer *namlst, integer *nmpool, char *names, integer *datlst, integer *dppool, doublereal *dpvals, integer *chpool, char *chvals, char *varnam, logical *eof, ftnlen buffer_len, ftnlen names_len, ftnlen chvals_len, ftnlen varnam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: failed_ 12 0 */
@@ -14796,10 +14796,10 @@ extern int zzrvbf_(char *buffer, integer *bsize, integer *linnum, integer *namls
 /*:ref: tparse_ 14 5 13 7 13 124 124 */
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
  
-extern int zzrxr_(doublereal *matrix, integer *n, doublereal *output);
+extern int zzrxr_(void *cspice_state, doublereal *matrix, integer *n, doublereal *output);
 /*:ref: ident_ 14 1 7 */
  
-extern int zzrytelt_(doublereal *vertex, doublereal *raydir, doublereal *dskdsc, doublereal *margin, integer *nxpts, doublereal *xpt);
+extern int zzrytelt_(void *cspice_state, doublereal *vertex, doublereal *raydir, doublereal *dskdsc, doublereal *margin, integer *nxpts, doublereal *xpt);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzrytlat_ 14 6 7 7 7 7 4 7 */
@@ -14810,7 +14810,7 @@ extern int zzrytelt_(doublereal *vertex, doublereal *raydir, doublereal *dskdsc,
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzrytlat_(doublereal *vertex, doublereal *raydir, doublereal *bounds, doublereal *margin, integer *nxpts, doublereal *xpt);
+extern int zzrytlat_(void *cspice_state, doublereal *vertex, doublereal *raydir, doublereal *bounds, doublereal *margin, integer *nxpts, doublereal *xpt);
 /*:ref: zzinlat_ 14 5 7 7 7 4 12 */
 /*:ref: failed_ 12 0 */
 /*:ref: vequ_ 14 2 7 7 */
@@ -14830,7 +14830,7 @@ extern int zzrytlat_(doublereal *vertex, doublereal *raydir, doublereal *bounds,
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vminus_ 14 2 7 7 */
  
-extern int zzrytpdt_(doublereal *vertex, doublereal *raydir, doublereal *bounds, doublereal *corpar, doublereal *margin, integer *nxpts, doublereal *xpt);
+extern int zzrytpdt_(void *cspice_state, doublereal *vertex, doublereal *raydir, doublereal *bounds, doublereal *corpar, doublereal *margin, integer *nxpts, doublereal *xpt);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14861,7 +14861,7 @@ extern int zzrytpdt_(doublereal *vertex, doublereal *raydir, doublereal *bounds,
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vminus_ 14 2 7 7 */
  
-extern int zzrytrec_(doublereal *vertex, doublereal *raydir, doublereal *bounds, doublereal *margin, integer *nxpts, doublereal *xpt);
+extern int zzrytrec_(void *cspice_state, doublereal *vertex, doublereal *raydir, doublereal *bounds, doublereal *margin, integer *nxpts, doublereal *xpt);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -14873,11 +14873,11 @@ extern int zzrytrec_(doublereal *vertex, doublereal *raydir, doublereal *bounds,
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: zzraybox_ 14 6 7 7 7 7 7 12 */
  
-extern int zzryxsph_(doublereal *vertex, doublereal *udir, doublereal *r__, doublereal *xpt, logical *found);
+extern int zzryxsph_(void *cspice_state, doublereal *vertex, doublereal *udir, doublereal *r__, doublereal *xpt, logical *found);
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern logical zzsclk_(integer *ckid, integer *sclkid);
+extern logical zzsclk_(void *cspice_state, integer *ckid, integer *sclkid);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ssizei_ 14 2 4 4 */
@@ -14892,9 +14892,9 @@ extern logical zzsclk_(integer *ckid, integer *sclkid);
 /*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
 /*:ref: removi_ 14 2 4 4 */
  
-extern int zzsecprt_(integer *isynfl, doublereal *dg, doublereal *del, doublereal *xni, doublereal *omegao, doublereal *atime, doublereal *omgdot, doublereal *xli, doublereal *xfact, doublereal *xldot, doublereal *xndot, doublereal *xnddt);
+extern int zzsecprt_(void *cspice_state, integer *isynfl, doublereal *dg, doublereal *del, doublereal *xni, doublereal *omegao, doublereal *atime, doublereal *omgdot, doublereal *xli, doublereal *xfact, doublereal *xldot, doublereal *xndot, doublereal *xnddt);
  
-extern int zzsegbox_(doublereal *dskdsc, doublereal *boxctr, doublereal *maxr);
+extern int zzsegbox_(void *cspice_state, doublereal *dskdsc, doublereal *boxctr, doublereal *maxr);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzlatbox_ 14 6 7 7 7 7 7 7 */
@@ -14905,7 +14905,7 @@ extern int zzsegbox_(doublereal *dskdsc, doublereal *boxctr, doublereal *maxr);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzsfxcor_(S_fp udnear, S_fp udmaxr, S_fp udrayx, integer *trgcde, doublereal *et, char *abcorr, logical *uselt, logical *usecn, logical *usestl, logical *xmit, char *fixref, integer *obscde, integer *dfrcde, integer *dclass, integer *dcentr, doublereal *dvec, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, logical *found, ftnlen abcorr_len, ftnlen fixref_len);
+extern int zzsfxcor_(void *cspice_state, S_fp udnear, S_fp udmaxr, S_fp udrayx, integer *trgcde, doublereal *et, char *abcorr, logical *uselt, logical *usecn, logical *usestl, logical *xmit, char *fixref, integer *obscde, integer *dfrcde, integer *dclass, integer *dcentr, doublereal *dvec, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, logical *found, ftnlen abcorr_len, ftnlen fixref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: vzero_ 12 1 7 */
@@ -14935,7 +14935,7 @@ extern int zzsfxcor_(S_fp udnear, S_fp udmaxr, S_fp udrayx, integer *trgcde, dou
 /*:ref: vhatip_ 14 1 7 */
 /*:ref: vscl_ 14 3 7 7 7 */
  
-extern int zzsglatx_(doublereal *p1, doublereal *p2, doublereal *minlat, doublereal *minp, doublereal *maxlat, doublereal *maxp);
+extern int zzsglatx_(void *cspice_state, doublereal *p1, doublereal *p2, doublereal *minlat, doublereal *minp, doublereal *maxlat, doublereal *maxp);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: reclat_ 14 4 7 7 7 7 */
@@ -14951,9 +14951,9 @@ extern int zzsglatx_(doublereal *p1, doublereal *p2, doublereal *minlat, doubler
 /*:ref: inrypl_ 14 5 7 7 7 4 7 */
 /*:ref: failed_ 12 0 */
  
-extern int zzsgp4_(doublereal *geophs, doublereal *elems, integer *opmode, doublereal *t, doublereal *state);
-extern int xxsgp4i_(doublereal *geophs, doublereal *elems, integer *opmode);
-extern int xxsgp4e_(doublereal *t, doublereal *state);
+extern int zzsgp4_(void *cspice_state, doublereal *geophs, doublereal *elems, integer *opmode, doublereal *t, doublereal *state);
+extern int xxsgp4i_(void *cspice_state, doublereal *geophs, doublereal *elems, integer *opmode);
+extern int xxsgp4e_(void *cspice_state, doublereal *t, doublereal *state);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -14970,13 +14970,13 @@ extern int xxsgp4e_(doublereal *t, doublereal *state);
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: pi_ 7 0 */
  
-extern int zzsinutl_(integer *trgcde, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, doublereal *raydir, doublereal *spoint, logical *found, doublereal *minrad, doublereal *maxrad, doublereal *pnear, doublereal *dist);
-extern int zzsuelin_(integer *trgcde);
-extern int zzsudski_(integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid);
-extern int zzraysfx_(doublereal *vertex, doublereal *raydir, doublereal *et, doublereal *spoint, logical *found);
-extern int zzmaxrad_(doublereal *maxrad);
-extern int zzminrad_(doublereal *minrad);
-extern int zzraynp_(doublereal *vertex, doublereal *raydir, doublereal *et, doublereal *pnear, doublereal *dist);
+extern int zzsinutl_(void *cspice_state, integer *trgcde, integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, doublereal *raydir, doublereal *spoint, logical *found, doublereal *minrad, doublereal *maxrad, doublereal *pnear, doublereal *dist);
+extern int zzsuelin_(void *cspice_state, integer *trgcde);
+extern int zzsudski_(void *cspice_state, integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid);
+extern int zzraysfx_(void *cspice_state, doublereal *vertex, doublereal *raydir, doublereal *et, doublereal *spoint, logical *found);
+extern int zzmaxrad_(void *cspice_state, doublereal *maxrad);
+extern int zzminrad_(void *cspice_state, doublereal *minrad);
+extern int zzraynp_(void *cspice_state, doublereal *vertex, doublereal *raydir, doublereal *et, doublereal *pnear, doublereal *dist);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -14992,10 +14992,10 @@ extern int zzraynp_(doublereal *vertex, doublereal *raydir, doublereal *et, doub
 /*:ref: zzsbfxr_ 14 9 4 4 4 7 4 7 7 7 12 */
 /*:ref: npedln_ 14 7 7 7 7 7 7 7 7 */
  
-extern int zzsizeok_(integer *size, integer *psize, integer *dsize, integer *offset, logical *ok, integer *n);
+extern int zzsizeok_(void *cspice_state, integer *size, integer *psize, integer *dsize, integer *offset, logical *ok, integer *n);
 /*:ref: rmaini_ 14 4 4 4 4 4 */
  
-extern int zzspkac0_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkac0_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzprscor_ 14 3 13 12 124 */
@@ -15010,7 +15010,7 @@ extern int zzspkac0_(integer *targ, doublereal *et, char *ref, char *abcorr, int
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: zzspkas0_ 14 11 4 7 13 13 7 7 7 7 7 124 124 */
  
-extern int zzspkac1_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkac1_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzprscor_ 14 3 13 12 124 */
@@ -15025,7 +15025,7 @@ extern int zzspkac1_(integer *targ, doublereal *et, char *ref, char *abcorr, int
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: zzspkas1_ 14 11 4 7 13 13 7 7 7 7 7 124 124 */
  
-extern int zzspkap0_(integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkap0_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
@@ -15045,7 +15045,7 @@ extern int zzspkap0_(integer *targ, doublereal *et, char *ref, doublereal *sobs,
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
  
-extern int zzspkap1_(integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkap1_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
@@ -15065,7 +15065,7 @@ extern int zzspkap1_(integer *targ, doublereal *et, char *ref, doublereal *sobs,
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
  
-extern int zzspkas0_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkas0_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzprscor_ 14 3 13 12 124 */
@@ -15080,7 +15080,7 @@ extern int zzspkas0_(integer *targ, doublereal *et, char *ref, char *abcorr, dou
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int zzspkas1_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkas1_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzprscor_ 14 3 13 12 124 */
@@ -15095,7 +15095,7 @@ extern int zzspkas1_(integer *targ, doublereal *et, char *ref, char *abcorr, dou
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int zzspkez0_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkez0_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -15116,7 +15116,7 @@ extern int zzspkez0_(integer *targ, doublereal *et, char *ref, char *abcorr, int
 /*:ref: vsclip_ 14 2 7 7 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
  
-extern int zzspkez1_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkez1_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -15137,7 +15137,7 @@ extern int zzspkez1_(integer *targ, doublereal *et, char *ref, char *abcorr, int
 /*:ref: vsclip_ 14 2 7 7 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
  
-extern int zzspkfao_(integer *targ, doublereal *et, char *ref, char *abcorr, S_fp obssub, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkfao_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, S_fp obssub, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -15153,7 +15153,7 @@ extern int zzspkfao_(integer *targ, doublereal *et, char *ref, char *abcorr, S_f
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: spkaps_ 14 11 4 7 13 13 7 7 7 7 7 124 124 */
  
-extern int zzspkfap_(U_fp trgsub, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkfap_(void *cspice_state, U_fp trgsub, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -15168,7 +15168,7 @@ extern int zzspkfap_(U_fp trgsub, doublereal *et, char *ref, char *abcorr, doubl
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
-extern int zzspkfat_(U_fp trgsub, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkfat_(void *cspice_state, U_fp trgsub, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -15183,7 +15183,7 @@ extern int zzspkfat_(U_fp trgsub, doublereal *et, char *ref, char *abcorr, integ
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: zzspkfap_ 14 11 200 7 13 13 7 7 7 7 7 124 124 */
  
-extern int zzspkflt_(S_fp trgsub, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkflt_(void *cspice_state, S_fp trgsub, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -15202,7 +15202,7 @@ extern int zzspkflt_(S_fp trgsub, doublereal *et, char *ref, char *abcorr, doubl
 /*:ref: touchd_ 7 1 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int zzspkfzo_(integer *targ, doublereal *et, char *ref, char *abcorr, S_fp obssub, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkfzo_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, S_fp obssub, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -15225,7 +15225,7 @@ extern int zzspkfzo_(integer *targ, doublereal *et, char *ref, char *abcorr, S_f
 /*:ref: zzcorsxf_ 14 4 12 7 7 7 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
  
-extern int zzspkfzt_(S_fp trgsub, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkfzt_(void *cspice_state, S_fp trgsub, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -15247,7 +15247,7 @@ extern int zzspkfzt_(S_fp trgsub, doublereal *et, char *ref, char *abcorr, integ
 /*:ref: zzcorsxf_ 14 4 12 7 7 7 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
  
-extern int zzspkgo0_(integer *targ, doublereal *et, char *ref, integer *obs, doublereal *state, doublereal *lt, ftnlen ref_len);
+extern int zzspkgo0_(void *cspice_state, integer *targ, doublereal *et, char *ref, integer *obs, doublereal *state, doublereal *lt, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -15279,7 +15279,7 @@ extern int zzspkgo0_(integer *targ, doublereal *et, char *ref, integer *obs, dou
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: clight_ 7 0 */
  
-extern int zzspkgo1_(integer *targ, doublereal *et, char *ref, integer *obs, doublereal *state, doublereal *lt, ftnlen ref_len);
+extern int zzspkgo1_(void *cspice_state, integer *targ, doublereal *et, char *ref, integer *obs, doublereal *state, doublereal *lt, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -15311,7 +15311,7 @@ extern int zzspkgo1_(integer *targ, doublereal *et, char *ref, integer *obs, dou
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: clight_ 7 0 */
  
-extern int zzspkgp0_(integer *targ, doublereal *et, char *ref, integer *obs, doublereal *pos, doublereal *lt, ftnlen ref_len);
+extern int zzspkgp0_(void *cspice_state, integer *targ, doublereal *et, char *ref, integer *obs, doublereal *pos, doublereal *lt, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -15343,7 +15343,7 @@ extern int zzspkgp0_(integer *targ, doublereal *et, char *ref, integer *obs, dou
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: clight_ 7 0 */
  
-extern int zzspkgp1_(integer *targ, doublereal *et, char *ref, integer *obs, doublereal *pos, doublereal *lt, ftnlen ref_len);
+extern int zzspkgp1_(void *cspice_state, integer *targ, doublereal *et, char *ref, integer *obs, doublereal *pos, doublereal *lt, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzctruin_ 14 1 4 */
@@ -15375,7 +15375,7 @@ extern int zzspkgp1_(integer *targ, doublereal *et, char *ref, integer *obs, dou
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: clight_ 7 0 */
  
-extern int zzspklt0_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspklt0_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -15393,7 +15393,7 @@ extern int zzspklt0_(integer *targ, doublereal *et, char *ref, char *abcorr, dou
 /*:ref: touchd_ 7 1 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int zzspklt1_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspklt1_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
@@ -15411,7 +15411,7 @@ extern int zzspklt1_(integer *targ, doublereal *et, char *ref, char *abcorr, dou
 /*:ref: touchd_ 7 1 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int zzspkpa0_(integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkpa0_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
@@ -15431,7 +15431,7 @@ extern int zzspkpa0_(integer *targ, doublereal *et, char *ref, doublereal *sobs,
 /*:ref: stlabx_ 14 3 7 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
  
-extern int zzspkpa1_(integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkpa1_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
@@ -15451,19 +15451,19 @@ extern int zzspkpa1_(integer *targ, doublereal *et, char *ref, doublereal *sobs,
 /*:ref: stlabx_ 14 3 7 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
  
-extern int zzspksb0_(integer *targ, doublereal *et, char *ref, doublereal *starg, ftnlen ref_len);
+extern int zzspksb0_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *starg, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzspkgo0_ 14 7 4 7 13 4 7 7 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzspksb1_(integer *targ, doublereal *et, char *ref, doublereal *starg, ftnlen ref_len);
+extern int zzspksb1_(void *cspice_state, integer *targ, doublereal *et, char *ref, doublereal *starg, ftnlen ref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzspkgo1_ 14 7 4 7 13 4 7 7 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzspkzp0_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkzp0_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -15484,7 +15484,7 @@ extern int zzspkzp0_(integer *targ, doublereal *et, char *ref, char *abcorr, int
 /*:ref: zzrefch0_ 14 4 4 4 7 7 */
 /*:ref: mxv_ 14 3 7 7 7 */
  
-extern int zzspkzp1_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
+extern int zzspkzp1_(void *cspice_state, integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -15505,7 +15505,7 @@ extern int zzspkzp1_(integer *targ, doublereal *et, char *ref, char *abcorr, int
 /*:ref: zzrefch1_ 14 4 4 4 7 7 */
 /*:ref: mxv_ 14 3 7 7 7 */
  
-extern int zzsrfini_(char *nornam, integer *codes, integer *bodies, integer *nvals, integer *maxval, integer *snmhls, integer *snmpol, integer *snmidx, integer *sidhls, integer *sidpol, integer *sididx, ftnlen nornam_len);
+extern int zzsrfini_(void *cspice_state, char *nornam, integer *codes, integer *bodies, integer *nvals, integer *maxval, integer *snmhls, integer *snmpol, integer *snmidx, integer *sidhls, integer *sidpol, integer *sididx, ftnlen nornam_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -15519,7 +15519,7 @@ extern int zzsrfini_(char *nornam, integer *codes, integer *bodies, integer *nva
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: zzhashi_ 4 2 4 4 */
  
-extern int zzsrfker_(char *kernam, char *nornam, integer *kersid, integer *kerbid, logical *extker, integer *nkvar, integer *snmhls, integer *snmpol, integer *snmidx, integer *sidhls, integer *sidpol, integer *sididx, ftnlen kernam_len, ftnlen nornam_len);
+extern int zzsrfker_(void *cspice_state, char *kernam, char *nornam, integer *kersid, integer *kerbid, logical *extker, integer *nkvar, integer *snmhls, integer *snmpol, integer *snmidx, integer *sidhls, integer *sidpol, integer *sididx, ftnlen kernam_len, ftnlen nornam_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: swpool_ 14 5 13 4 13 124 124 */
@@ -15535,10 +15535,10 @@ extern int zzsrfker_(char *kernam, char *nornam, integer *kersid, integer *kerbi
 /*:ref: ljucrs_ 14 5 4 13 13 124 124 */
 /*:ref: zzsrfini_ 14 12 13 4 4 4 4 4 4 4 4 4 4 124 */
  
-extern int zzsrftrn_(integer *bodyid, char *srfnam, integer *surfid, integer *usrctr, logical *found, logical *update, ftnlen srfnam_len);
-extern int zzsrfn2c_(char *srfnam, integer *bodyid, integer *surfid, logical *found, ftnlen srfnam_len);
-extern int zzsrfc2n_(integer *surfid, integer *bodyid, char *srfnam, logical *found, ftnlen srfnam_len);
-extern int zzsrftrk_(integer *usrctr, logical *update);
+extern int zzsrftrn_(void *cspice_state, integer *bodyid, char *srfnam, integer *surfid, integer *usrctr, logical *found, logical *update, ftnlen srfnam_len);
+extern int zzsrfn2c_(void *cspice_state, char *srfnam, integer *bodyid, integer *surfid, logical *found, ftnlen srfnam_len);
+extern int zzsrfc2n_(void *cspice_state, integer *surfid, integer *bodyid, char *srfnam, logical *found, ftnlen srfnam_len);
+extern int zzsrftrk_(void *cspice_state, integer *usrctr, logical *update);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15556,7 +15556,7 @@ extern int zzsrftrk_(integer *usrctr, logical *update);
 /*:ref: zzhashi_ 4 2 4 4 */
 /*:ref: zzctrchk_ 14 3 4 4 12 */
  
-extern int zzstelab_(logical *xmit, doublereal *accobs, doublereal *vobs, doublereal *starg, doublereal *scorr, doublereal *dscorr);
+extern int zzstelab_(void *cspice_state, logical *xmit, doublereal *accobs, doublereal *vobs, doublereal *starg, doublereal *scorr, doublereal *dscorr);
 /*:ref: return_ 12 0 */
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
@@ -15577,7 +15577,7 @@ extern int zzstelab_(logical *xmit, doublereal *accobs, doublereal *vobs, double
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: qderiv_ 14 5 4 7 7 7 7 */
  
-extern int zztangnt_(integer *curve, doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, doublereal *axis, doublereal *schstp, doublereal *soltol, doublereal *result, doublereal *points);
+extern int zztangnt_(void *cspice_state, integer *curve, doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, doublereal *axis, doublereal *schstp, doublereal *soltol, doublereal *result, doublereal *points);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: scardd_ 14 2 4 7 */
@@ -15597,7 +15597,7 @@ extern int zztangnt_(integer *curve, doublereal *srcrad, integer *shape, integer
 /*:ref: zztanslv_ 14 11 200 200 200 12 7 7 7 7 7 7 12 */
 /*:ref: cardd_ 4 1 7 */
  
-extern int zztanslv_(S_fp udcond, S_fp udstep, S_fp udrefn, logical *cstep, doublereal *step, doublereal *start, doublereal *finish, doublereal *tol, doublereal *result, doublereal *points, logical *endflg);
+extern int zztanslv_(void *cspice_state, S_fp udcond, S_fp udstep, S_fp udrefn, logical *cstep, doublereal *step, doublereal *start, doublereal *finish, doublereal *tol, doublereal *result, doublereal *points, logical *endflg);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15612,9 +15612,9 @@ extern int zztanslv_(S_fp udcond, S_fp udstep, S_fp udrefn, logical *cstep, doub
 /*:ref: brcktd_ 7 3 7 7 7 */
 /*:ref: zzwninsd_ 14 5 7 7 13 7 124 */
  
-extern int zztanutl_(integer *curve, doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, doublereal *axis, doublereal *angle, logical *ocultd, doublereal *point);
-extern int zztanini_(integer *curve, doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, doublereal *axis);
-extern int zztansta_(doublereal *angle, logical *ocultd, doublereal *point);
+extern int zztanutl_(void *cspice_state, integer *curve, doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, doublereal *axis, doublereal *angle, logical *ocultd, doublereal *point);
+extern int zztanini_(void *cspice_state, integer *curve, doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, doublereal *axis);
+extern int zztansta_(void *cspice_state, doublereal *angle, logical *ocultd, doublereal *point);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -15635,7 +15635,7 @@ extern int zztansta_(doublereal *angle, logical *ocultd, doublereal *point);
 /*:ref: vsclip_ 14 2 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int zzteme_(doublereal *et, doublereal *mt);
+extern int zzteme_(void *cspice_state, doublereal *et, doublereal *mt);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeprc76_ 14 2 7 7 */
@@ -15646,17 +15646,17 @@ extern int zzteme_(doublereal *et, doublereal *mt);
 /*:ref: zztwovxf_ 14 5 7 4 7 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical zztime_(char *string, char *transl, char *letter, char *error, char *pic, doublereal *tvec, integer *b, integer *e, logical *l2r, logical *yabbrv, ftnlen string_len, ftnlen transl_len, ftnlen letter_len, ftnlen error_len, ftnlen pic_len);
-extern logical zzcmbt_(char *string, char *letter, logical *l2r, ftnlen string_len, ftnlen letter_len);
-extern logical zzgrep_(char *string, ftnlen string_len);
-extern logical zzispt_(char *string, integer *b, integer *e, ftnlen string_len);
-extern logical zzist_(char *letter, ftnlen letter_len);
-extern logical zznote_(char *letter, integer *b, integer *e, ftnlen letter_len);
-extern logical zzremt_(char *letter, ftnlen letter_len);
-extern logical zzsubt_(char *string, char *transl, logical *l2r, ftnlen string_len, ftnlen transl_len);
-extern logical zztokns_(char *string, char *error, ftnlen string_len, ftnlen error_len);
-extern logical zzunpck_(char *string, logical *yabbrv, doublereal *tvec, integer *e, char *transl, char *pic, char *error, ftnlen string_len, ftnlen transl_len, ftnlen pic_len, ftnlen error_len);
-extern logical zzvalt_(char *string, integer *b, integer *e, char *letter, ftnlen string_len, ftnlen letter_len);
+extern logical zztime_(void *cspice_state, char *string, char *transl, char *letter, char *error, char *pic, doublereal *tvec, integer *b, integer *e, logical *l2r, logical *yabbrv, ftnlen string_len, ftnlen transl_len, ftnlen letter_len, ftnlen error_len, ftnlen pic_len);
+extern logical zzcmbt_(void *cspice_state, char *string, char *letter, logical *l2r, ftnlen string_len, ftnlen letter_len);
+extern logical zzgrep_(void *cspice_state, char *string, ftnlen string_len);
+extern logical zzispt_(void *cspice_state, char *string, integer *b, integer *e, ftnlen string_len);
+extern logical zzist_(void *cspice_state, char *letter, ftnlen letter_len);
+extern logical zznote_(void *cspice_state, char *letter, integer *b, integer *e, ftnlen letter_len);
+extern logical zzremt_(void *cspice_state, char *letter, ftnlen letter_len);
+extern logical zzsubt_(void *cspice_state, char *string, char *transl, logical *l2r, ftnlen string_len, ftnlen transl_len);
+extern logical zztokns_(void *cspice_state, char *string, char *error, ftnlen string_len, ftnlen error_len);
+extern logical zzunpck_(void *cspice_state, char *string, logical *yabbrv, doublereal *tvec, integer *e, char *transl, char *pic, char *error, ftnlen string_len, ftnlen transl_len, ftnlen pic_len, ftnlen error_len);
+extern logical zzvalt_(void *cspice_state, char *string, integer *b, integer *e, char *letter, ftnlen string_len, ftnlen letter_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -15680,10 +15680,10 @@ extern logical zzvalt_(char *string, integer *b, integer *e, char *letter, ftnle
 /*:ref: zzmkpc_ 14 8 13 4 4 13 13 124 124 124 */
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
  
-extern int zztknerr_(char *templt, char *string, char *token, char *error, logical *status, ftnlen templt_len, ftnlen string_len, ftnlen token_len, ftnlen error_len);
+extern int zztknerr_(void *cspice_state, char *templt, char *string, char *token, char *error, logical *status, ftnlen templt_len, ftnlen string_len, ftnlen token_len, ftnlen error_len);
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
  
-extern int zztogrid_(doublereal *modxyz, doublereal *voxori, doublereal *voxsiz, doublereal *grdxyz);
+extern int zztogrid_(void *cspice_state, doublereal *modxyz, doublereal *voxori, doublereal *voxsiz, doublereal *grdxyz);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15691,11 +15691,11 @@ extern int zztogrid_(doublereal *modxyz, doublereal *voxori, doublereal *voxsiz,
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical zztpats_(integer *room, integer *nknown, char *known, char *meanng, ftnlen known_len, ftnlen meanng_len);
+extern logical zztpats_(void *cspice_state, integer *room, integer *nknown, char *known, char *meanng, ftnlen known_len, ftnlen meanng_len);
 /*:ref: orderc_ 14 4 13 4 4 124 */
 /*:ref: reordc_ 14 4 4 4 13 124 */
  
-extern int zztrvlnk_(integer *aval, integer *maxa, integer *pntrs, integer *cellsz, integer *cells, integer *maxb, integer *nb, integer *blist);
+extern int zztrvlnk_(void *cspice_state, integer *aval, integer *maxa, integer *pntrs, integer *cellsz, integer *cells, integer *maxb, integer *nb, integer *blist);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15703,7 +15703,7 @@ extern int zztrvlnk_(integer *aval, integer *maxa, integer *pntrs, integer *cell
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zztwovxf_(doublereal *axdef, integer *indexa, doublereal *plndef, integer *indexp, doublereal *xform);
+extern int zztwovxf_(void *cspice_state, doublereal *axdef, integer *indexa, doublereal *plndef, integer *indexp, doublereal *xform);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15716,7 +15716,7 @@ extern int zztwovxf_(doublereal *axdef, integer *indexa, doublereal *plndef, int
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: vzero_ 12 1 7 */
  
-extern int zzuntngl_(integer *nptr, integer *maxcel, integer *cells, integer *maxb, integer *pntrs, integer *nout, integer *outlst);
+extern int zzuntngl_(void *cspice_state, integer *nptr, integer *maxcel, integer *cells, integer *maxb, integer *pntrs, integer *nout, integer *outlst);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15726,12 +15726,12 @@ extern int zzuntngl_(integer *nptr, integer *maxcel, integer *cells, integer *ma
 /*:ref: zztrvlnk_ 14 8 4 4 4 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
  
-extern int zzutcpm_(char *string, integer *start, doublereal *hoff, doublereal *moff, integer *last, logical *succes, ftnlen string_len);
+extern int zzutcpm_(void *cspice_state, char *string, integer *start, doublereal *hoff, doublereal *moff, integer *last, logical *succes, ftnlen string_len);
 /*:ref: lx4uns_ 14 5 13 4 4 4 124 */
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
 /*:ref: samch_ 12 6 13 4 13 4 124 124 */
  
-extern int zzvalcor_(char *abcorr, logical *attblk, ftnlen abcorr_len);
+extern int zzvalcor_(void *cspice_state, char *abcorr, logical *attblk, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzprscor_ 14 3 13 12 124 */
@@ -15741,9 +15741,9 @@ extern int zzvalcor_(char *abcorr, logical *attblk, ftnlen abcorr_len);
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern integer zzvox2id_(integer *vixyz, integer *nvox);
+extern integer zzvox2id_(void *cspice_state, integer *vixyz, integer *nvox);
  
-extern int zzvoxcvo_(integer *vixyz, integer *nvox, integer *cgrscl, integer *cgxyz, integer *cgoff, integer *cgof1d);
+extern int zzvoxcvo_(void *cspice_state, integer *vixyz, integer *nvox, integer *cgrscl, integer *cgxyz, integer *cgoff, integer *cgof1d);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15751,7 +15751,7 @@ extern int zzvoxcvo_(integer *vixyz, integer *nvox, integer *cgrscl, integer *cg
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int zzvrtplt_(integer *nv, integer *np, integer *plates, integer *cellsz, integer *maxlst, integer *cells, integer *vrtptr, integer *nlist, integer *pltlst);
+extern int zzvrtplt_(void *cspice_state, integer *nv, integer *np, integer *plates, integer *cellsz, integer *maxlst, integer *cells, integer *vrtptr, integer *nlist, integer *pltlst);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15763,17 +15763,17 @@ extern int zzvrtplt_(integer *nv, integer *np, integer *plates, integer *cellsz,
 /*:ref: zzaddlnk_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: zzuntngl_ 14 7 4 4 4 4 4 4 4 */
  
-extern int zzvstrng_(doublereal *x, char *fill, integer *from, integer *to, logical *rnd, integer *expont, char *substr, logical *did, ftnlen fill_len, ftnlen substr_len);
-extern int zzvststr_(doublereal *x, char *fill, integer *expont, ftnlen fill_len);
-extern int zzvsbstr_(integer *from, integer *to, logical *rnd, char *substr, logical *did, ftnlen substr_len);
+extern int zzvstrng_(void *cspice_state, doublereal *x, char *fill, integer *from, integer *to, logical *rnd, integer *expont, char *substr, logical *did, ftnlen fill_len, ftnlen substr_len);
+extern int zzvststr_(void *cspice_state, doublereal *x, char *fill, integer *expont, ftnlen fill_len);
+extern int zzvsbstr_(void *cspice_state, integer *from, integer *to, logical *rnd, char *substr, logical *did, ftnlen substr_len);
 /*:ref: dpstr_ 14 4 7 4 13 124 */
  
-extern int zzwahr_(doublereal *et, doublereal *dvnut);
+extern int zzwahr_(void *cspice_state, doublereal *et, doublereal *dvnut);
 /*:ref: pi_ 7 0 */
 /*:ref: twopi_ 7 0 */
 /*:ref: spd_ 7 0 */
  
-extern integer zzwind_(doublereal *plane, integer *n, doublereal *vertcs, doublereal *point);
+extern integer zzwind_(void *cspice_state, doublereal *plane, integer *n, doublereal *vertcs, doublereal *point);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15791,7 +15791,7 @@ extern integer zzwind_(doublereal *plane, integer *n, doublereal *vertcs, double
 /*:ref: ucrss_ 14 3 7 7 7 */
 /*:ref: twopi_ 7 0 */
  
-extern integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point);
+extern integer zzwind2d_(void *cspice_state, integer *n, doublereal *vertcs, doublereal *point);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15804,7 +15804,7 @@ extern integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point);
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: twopi_ 7 0 */
  
-extern int zzwninsd_(doublereal *left, doublereal *right, char *context, doublereal *window, ftnlen context_len);
+extern int zzwninsd_(void *cspice_state, doublereal *left, doublereal *right, char *context, doublereal *window, ftnlen context_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sized_ 4 1 7 */
@@ -15817,7 +15817,7 @@ extern int zzwninsd_(doublereal *left, doublereal *right, char *context, doubler
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int zzxlated_(integer *inbff, char *input, integer *space, doublereal *output, ftnlen input_len);
+extern int zzxlated_(void *cspice_state, integer *inbff, char *input, integer *space, doublereal *output, ftnlen input_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhgsd_ 14 5 13 4 13 124 124 */
@@ -15832,7 +15832,7 @@ extern int zzxlated_(integer *inbff, char *input, integer *space, doublereal *ou
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int zzxlatei_(integer *inbff, char *input, integer *space, integer *output, ftnlen input_len);
+extern int zzxlatei_(void *cspice_state, integer *inbff, char *input, integer *space, integer *output, ftnlen input_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzddhgsd_ 14 5 13 4 13 124 124 */

@@ -346,53 +346,53 @@ Macros used to abbreviate type casts:
 Macros that substitute for function calls:
 */
 
-   #define  axisar_c( axis, angle, r )                                 \
+   #define  axisar_c( naif_state, axis, angle, r )                                 \
                                                                        \
-        (   axisar_c( CONST_VEC(axis), (angle), (r) )   )
+        (   axisar_c( naif_state, CONST_VEC(axis), (angle), (r) )   )
 
 
-   #define  bschoc_c( value, ndim, lenvals, array, order )             \
+   #define  bschoc_c( naif_state, value, ndim, lenvals, array, order )             \
                                                                        \
-        (   bschoc_c ( CONST_STR(value),  (ndim),          (lenvals),  \
+        (   bschoc_c ( naif_state, CONST_STR(value),  (ndim),          (lenvals),  \
                        CONST_VOID(array), CONST_IVEC(order)          ) )
 
 
-   #define  bschoi_c( value, ndim, array, order )                      \
+   #define  bschoi_c( naif_state, value, ndim, array, order )                      \
                                                                        \
-        (   bschoi_c ( (value)         ,  (ndim),                      \
+        (   bschoi_c ( naif_state, (value)         ,  (ndim),                      \
                        CONST_IVEC(array), CONST_IVEC(order) )  )
 
 
-   #define  bsrchc_c( value, ndim, lenvals, array )                    \
+   #define  bsrchc_c( naif_state, value, ndim, lenvals, array )                    \
                                                                        \
-        (   bsrchc_c ( CONST_STR(value),  (ndim),  (lenvals),          \
+        (   bsrchc_c ( naif_state, CONST_STR(value),  (ndim),  (lenvals),          \
                        CONST_VOID(array)                      ) )
 
 
-   #define  bsrchd_c( value, ndim, array )                             \
+   #define  bsrchd_c( naif_state, value, ndim, array )                             \
                                                                        \
-        (   bsrchd_c( (value),  (ndim),  CONST_VEC(array) )  )
+        (   bsrchd_c( naif_state, (value),  (ndim),  CONST_VEC(array) )  )
 
 
-   #define  bsrchi_c( value, ndim, array )                             \
+   #define  bsrchi_c( naif_state, value, ndim, array )                             \
                                                                        \
-        (   bsrchi_c( (value),  (ndim),  CONST_IVEC(array) )  )
+        (   bsrchi_c( naif_state, (value),  (ndim),  CONST_IVEC(array) )  )
 
 
-   #define  ckw01_c( handle, begtim, endtim, inst,  ref, avflag,       \
+   #define  ckw01_c( naif_state, handle, begtim, endtim, inst,  ref, avflag,       \
                      segid,  nrec,   sclkdp, quats, avvs        )      \
                                                                        \
-        (   ckw01_c ( (handle),          (begtim),        (endtim),    \
+        (   ckw01_c ( naif_state, (handle),          (begtim),        (endtim),    \
                       (inst),            CONST_STR(ref),  (avflag),    \
                       CONST_STR(segid),  (nrec),                       \
                       CONST_VEC(sclkdp), CONST_VEC4(quats),            \
                       CONST_VEC3(avvs)                            )  )
 
 
-   #define  ckw02_c( handle, begtim, endtim, inst,  ref,   segid,      \
+   #define  ckw02_c( naif_state, handle, begtim, endtim, inst,  ref,   segid,      \
                      nrec,   start,  stop,  quats,  avvs,  rates )     \
                                                                        \
-        (   ckw02_c ( (handle),          (begtim),        (endtim),    \
+        (   ckw02_c ( naif_state, (handle),          (begtim),        (endtim),    \
                       (inst),            CONST_STR(ref),               \
                       CONST_STR(segid),  (nrec),                       \
                       CONST_VEC(start),  CONST_VEC(stop),              \
@@ -400,11 +400,11 @@ Macros that substitute for function calls:
                       CONST_VEC(rates)                             )  )
 
 
-   #define  ckw03_c( handle, begtim, endtim, inst,  ref,  avflag,      \
+   #define  ckw03_c( naif_state, handle, begtim, endtim, inst,  ref,  avflag,      \
                      segid,  nrec,   sclkdp, quats, avvs, nints,       \
                      starts                                       )    \
                                                                        \
-        (   ckw03_c ( (handle),          (begtim),        (endtim),    \
+        (   ckw03_c ( naif_state, (handle),          (begtim),        (endtim),    \
                       (inst),            CONST_STR(ref),  (avflag),    \
                       CONST_STR(segid),  (nrec),                       \
                       CONST_VEC(sclkdp), CONST_VEC4(quats),            \
@@ -412,11 +412,11 @@ Macros that substitute for function calls:
                       CONST_VEC(starts)                            )  )
 
 
-   #define  ckw05_c( handle, subtyp, degree, begtim, endtim, inst,     \
+   #define  ckw05_c( naif_state, handle, subtyp, degree, begtim, endtim, inst,     \
                      ref,    avflag, segid,  n,      sclkdp, packts,   \
                      rate,    nints, starts                          ) \
                                                                        \
-        (   ckw05_c ( (handle),          (subtyp),        (degree),    \
+        (   ckw05_c ( naif_state, (handle),          (subtyp),        (degree),    \
                       (begtim),          (endtim),                     \
                       (inst),            CONST_STR(ref),  (avflag),    \
                       CONST_STR(segid),  (n),                          \
@@ -425,129 +425,129 @@ Macros that substitute for function calls:
                       CONST_VEC(starts)                            )  )
 
 
-   #define  cgv2el_c( center, vec1, vec2, ellipse )                    \
+   #define  cgv2el_c( naif_state, center, vec1, vec2, ellipse )                    \
                                                                        \
-        (   cgv2el_c( CONST_VEC(center), CONST_VEC(vec1),              \
+        (   cgv2el_c( naif_state, CONST_VEC(center), CONST_VEC(vec1),              \
                       CONST_VEC(vec2),   (ellipse)        )   )
 
 
-   #define  conics_c( elts, et, state )                                \
+   #define  conics_c( naif_state, elts, et, state )                                \
                                                                        \
-        (   conics_c( CONST_VEC(elts), (et), (state) )  )
+        (   conics_c( naif_state, CONST_VEC(elts), (et), (state) )  )
 
 
-   #define  dafps_c( nd, ni, dc, ic, sum )                             \
+   #define  dafps_c( naif_state, nd, ni, dc, ic, sum )                             \
                                                                        \
-        (   dafps_c ( (nd), (ni), CONST_VEC(dc), CONST_IVEC(ic),       \
+        (   dafps_c ( naif_state, (nd), (ni), CONST_VEC(dc), CONST_IVEC(ic),       \
                       (sum)                                     )   )
 
 
-   #define  dafrs_c( sum )                                             \
+   #define  dafrs_c( naif_state, sum )                                             \
                                                                        \
-        (   dafrs_c ( CONST_VEC( sum )  )   )
+        (   dafrs_c ( naif_state, CONST_VEC( sum )  )   )
 
 
-   #define  dafus_c( sum, nd, ni, dc, ic )                             \
+   #define  dafus_c( naif_state, sum, nd, ni, dc, ic )                             \
                                                                        \
-        (   dafus_c ( CONST_VEC(sum), (nd), (ni), (dc), (ic) )   )
+        (   dafus_c ( naif_state, CONST_VEC(sum), (nd), (ni), (dc), (ic) )   )
 
 
-   #define  dasac_c( handle, n, buflen, buffer )                       \
+   #define  dasac_c( naif_state, handle, n, buflen, buffer )                       \
                                                                        \
-        (   dasac_c ( (handle), (n), (buflen), CONST_VOID(buffer) )   )
+        (   dasac_c ( naif_state, (handle), (n), (buflen), CONST_VOID(buffer) )   )
 
 
-   #define  det_c( m1 )                                                \
+   #define  det_c( naif_state, m1 )                                                \
                                                                        \
-        (   det_c ( CONST_MAT(m1) )   )
+        (   det_c ( naif_state, CONST_MAT(m1) )   )
 
 
-   #define  diags2_c( symmat, diag, rotate )                           \
+   #define  diags2_c( naif_state, symmat, diag, rotate )                           \
                                                                        \
-        (   diags2_c ( CONST_MAT2(symmat), (diag), (rotate) )   )
+        (   diags2_c ( naif_state, CONST_MAT2(symmat), (diag), (rotate) )   )
 
 
-   #define  dskb02_c( handle, dladsc, nv,     np,     nvxtot,         \
+   #define  dskb02_c( naif_state, handle, dladsc, nv,     np,     nvxtot,         \
                       vtxbds, voxsiz, voxori, vgrext, cgscal,         \
                       vtxnpl, voxnpt, voxnpl                  )       \
                                                                       \
-        (   dskb02_c( (handle), CONST_DLADSC(dladsc), (nv), (np),     \
+        (   dskb02_c( naif_state, (handle), CONST_DLADSC(dladsc), (nv), (np),     \
                       (nvxtot), (vtxbds), (voxsiz), (voxori),         \
                       (vgrext), (cgscal), (vtxnpl), (voxnpt),         \
                       (voxnpl)    )   )
 
 
-   #define  dskd02_c( handle, dladsc, item, start, room, n, values )  \
+   #define  dskd02_c( naif_state, handle, dladsc, item, start, room, n, values )  \
                                                                       \
-        (   dskd02_c ( (handle), CONST_DLADSC(dladsc), (item),        \
+        (   dskd02_c ( naif_state, (handle), CONST_DLADSC(dladsc), (item),        \
                        (start), (room), (n), (values)         )  )
 
 
-   #define  dski02_c( handle, dladsc, item, start, room, n, values )  \
+   #define  dski02_c( naif_state, handle, dladsc, item, start, room, n, values )  \
                                                                       \
-        (   dski02_c ( (handle), CONST_DLADSC(dladsc), (item),        \
+        (   dski02_c ( naif_state, (handle), CONST_DLADSC(dladsc), (item),        \
                        (start), (room), (n), (values)         )  )
 
 
-   #define  dskgd_c( handle, dladsc, dskdsc )                         \
+   #define  dskgd_c( naif_state, handle, dladsc, dskdsc )                         \
                                                                       \
-        (   dskgd_c ( (handle), CONST_DLADSC(dladsc), (dskdsc) )  )
+        (   dskgd_c ( naif_state, (handle), CONST_DLADSC(dladsc), (dskdsc) )  )
 
 
-   #define  dskmi2_c( nv,     vrtces, np,     plates,                 \
+   #define  dskmi2_c( naif_state, nv,     vrtces, np,     plates,                 \
                       finscl, corscl, worksz, voxpsz, voxlsz,         \
                       makvtl, spxisz, work,   spaixd, spaixi  )       \
                                                                       \
-        (   dskmi2_c ( (nv),                CONST_VEC3(vrtces), (np), \
+        (   dskmi2_c ( naif_state, (nv),                CONST_VEC3(vrtces), (np), \
                        CONST_IVEC3(plates), (finscl),                 \
                        (corscl),            (worksz),  (voxpsz),      \
                        (voxlsz),            (makvtl),  (spxisz),      \
                        (work),              (spaixd),  (spaixi)  )  )
 
 
-   #define  dskn02_c( handle, dladsc, plid, normal )                  \
+   #define  dskn02_c( naif_state, handle, dladsc, plid, normal )                  \
                                                                       \
-        (   dskn02_c ( (handle), CONST_DLADSC(dladsc), (plid),        \
+        (   dskn02_c ( naif_state, (handle), CONST_DLADSC(dladsc), (plid),        \
                        (normal)                                )  )
 
 
-   #define  dskobj_c( dsk, bodids )                                   \
+   #define  dskobj_c( naif_state, dsk, bodids )                                   \
                                                                       \
-        (   dskobj_c ( CONST_STR(dsk), (bodids) )   )
+        (   dskobj_c ( naif_state, CONST_STR(dsk), (bodids) )   )
 
 
-   #define  dskp02_c( handle, dladsc, start, room, n, plates )        \
+   #define  dskp02_c( naif_state, handle, dladsc, start, room, n, plates )        \
                                                                       \
-        (   dskp02_c ( (handle), CONST_DLADSC(dladsc), (start),       \
+        (   dskp02_c ( naif_state, (handle), CONST_DLADSC(dladsc), (start),       \
                        (room), (n),  (plates)                   )  )
 
 
-   #define  dskrb2_c( nv,     vrtces, np,     plates,                 \
+   #define  dskrb2_c( naif_state, nv,     vrtces, np,     plates,                 \
                       corsys, corpar, mncor3, mxcor3   )              \
                                                                       \
-        (   dskrb2_c ( (nv),                CONST_VEC3(vrtces), (np), \
+        (   dskrb2_c ( naif_state, (nv),                CONST_VEC3(vrtces), (np), \
                        CONST_IVEC3(plates), (corsys),                 \
                        (corpar),            (mncor3),  (mxcor3) )  )
 
 
-   #define  dsksrf_c( dsk,    bodyid, srfids )                        \
+   #define  dsksrf_c( naif_state, dsk,    bodyid, srfids )                        \
                                                                       \
-        (   dsksrf_c ( CONST_STR(dsk), (bodyid), (srfids) )   )
+        (   dsksrf_c ( naif_state, CONST_STR(dsk), (bodyid), (srfids) )   )
 
 
-   #define  dskv02_c( handle, dladsc, start, room, n, vrtces )        \
+   #define  dskv02_c( naif_state, handle, dladsc, start, room, n, vrtces )        \
                                                                       \
-        (   dskv02_c ( (handle), CONST_DLADSC(dladsc), (start),       \
+        (   dskv02_c ( naif_state, (handle), CONST_DLADSC(dladsc), (start),       \
                        (room), (n),  (vrtces)                   )  )
 
 
-   #define  dskw02_c( handle, center, surfce, dclass,                 \
+   #define  dskw02_c( naif_state, handle, center, surfce, dclass,                 \
                       frame,  corsys, corpar, mncor1,                 \
                       mxcor1, mncor2, mxcor2, mncor3,                 \
                       mxcor3, first,  last,   nv,                     \
                       vrtces, np,     plates, spaixd, spaixi )        \
                                                                       \
-        (   dskw02_c ( (handle), (center), (surfce), (dclass),        \
+        (   dskw02_c ( naif_state, (handle), (center), (surfce), (dclass),        \
                        CONST_STR(frame),   (corsys),                  \
                        CONST_VEC(corpar),  (mncor1), (mxcor1),        \
                        (mncor2),           (mxcor2), (mncor3),        \
@@ -557,12 +557,12 @@ Macros that substitute for function calls:
                        (spaixd),           (spaixi)             )   )
 
 
-   #define  dskxsi_c( pri,    target, nsurf,  srflst, et,             \
+   #define  dskxsi_c( naif_state, pri,    target, nsurf,  srflst, et,             \
                       fixref, vertex, raydir, maxd,   maxi,           \
                       xpt,    handle, dladsc, dskdsc, dc,             \
                       ic,     found                         )         \
                                                                       \
-        (   dskxsi_c( (pri),              CONST_STR(target), (nsurf), \
+        (   dskxsi_c( naif_state, (pri),              CONST_STR(target), (nsurf), \
                       CONST_IVEC(srflst), (et),                       \
                       CONST_STR(fixref),  CONST_VEC(vertex),          \
                       CONST_VEC(raydir),  (maxd),            (maxi),  \
@@ -571,164 +571,164 @@ Macros that substitute for function calls:
                       (found)                                     )   )
 
 
-   #define   dskxv_c( pri,   target, nsurf,  srflst, et,    fixref,   \
+   #define   dskxv_c( naif_state, pri,   target, nsurf,  srflst, et,    fixref,   \
                       nrays, vtxarr, dirarr, xptarr, fndarr        )  \
                                                                       \
-           ( dskxv_c( (pri),              CONST_STR(target), (nsurf), \
+           ( dskxv_c( naif_state, (pri),              CONST_STR(target), (nsurf), \
                       CONST_IVEC(srflst), (et),                       \
                       CONST_STR(fixref),  (nrays),                    \
                       CONST_VEC3(vtxarr), CONST_VEC3(dirarr),         \
                       (xptarr),           (fndarr)            )   )
 
 
-   #define  dvdot_c( s1, s2 )                                         \
+   #define  dvdot_c( naif_state, s1, s2 )                                         \
                                                                       \
-           ( dvdot_c ( CONST_VEC(s1), CONST_VEC(s2) )   )
+           ( dvdot_c ( naif_state, CONST_VEC(s1), CONST_VEC(s2) )   )
 
 
-   #define  dvhat_c( v1, v2 )                                         \
+   #define  dvhat_c( naif_state, v1, v2 )                                         \
                                                                       \
-           ( dvhat_c ( CONST_VEC(v1), (v2) )   )
+           ( dvhat_c ( naif_state, CONST_VEC(v1), (v2) )   )
 
 
-   #define  dvsep_c( s1, s2 )                                         \
+   #define  dvsep_c( naif_state, s1, s2 )                                         \
                                                                       \
-           ( dvsep_c ( CONST_VEC(s1), CONST_VEC(s2) )   )
+           ( dvsep_c ( naif_state, CONST_VEC(s1), CONST_VEC(s2) )   )
 
 
-   #define  edlimb_c( a, b, c, viewpt, limb )                          \
+   #define  edlimb_c( naif_state, a, b, c, viewpt, limb )                          \
                                                                        \
-        (   edlimb_c( (a), (b), (c), CONST_VEC(viewpt), (limb) )   )
+        (   edlimb_c( naif_state, (a), (b), (c), CONST_VEC(viewpt), (limb) )   )
 
 
-   #define  ekacec_c( handle, segno,  recno, column, nvals, vallen,    \
+   #define  ekacec_c( naif_state, handle, segno,  recno, column, nvals, vallen,    \
                       cvals,  isnull                               )   \
                                                                        \
-        (   ekacec_c( (handle), (segno), (recno), CONST_STR(column),   \
+        (   ekacec_c( naif_state, (handle), (segno), (recno), CONST_STR(column),   \
                       (nvals),  (vallen), CONST_VOID(cvals),           \
                       (isnull)                                      )  )
 
 
-   #define  ekaced_c( handle, segno,  recno, column, nvals,            \
+   #define  ekaced_c( naif_state, handle, segno,  recno, column, nvals,            \
                       dvals,  isnull                               )   \
                                                                        \
-        (   ekaced_c( (handle), (segno), (recno), CONST_STR(column),   \
+        (   ekaced_c( naif_state, (handle), (segno), (recno), CONST_STR(column),   \
                       (nvals),  CONST_VEC(dvals), (isnull)          )  )
 
 
-   #define  ekacei_c( handle, segno,  recno, column, nvals,            \
+   #define  ekacei_c( naif_state, handle, segno,  recno, column, nvals,            \
                       ivals,  isnull                               )   \
                                                                        \
-        (   ekacei_c( (handle), (segno), (recno), CONST_STR(column),   \
+        (   ekacei_c( naif_state, (handle), (segno), (recno), CONST_STR(column),   \
                       (nvals),  CONST_IVEC(ivals), (isnull)         )  )
 
 
-   #define  ekaclc_c( handle, segno,  column, vallen, cvals, entszs,   \
+   #define  ekaclc_c( naif_state, handle, segno,  column, vallen, cvals, entszs,   \
                       nlflgs, rcptrs, wkindx                         ) \
                                                                        \
-        (   ekaclc_c( (handle), (segno),  (column),  (vallen),         \
+        (   ekaclc_c( naif_state, (handle), (segno),  (column),  (vallen),         \
                       CONST_VOID(cvals),  CONST_IVEC(entszs),          \
                       CONST_BOOL(nlflgs), CONST_IVEC(rcptrs),          \
                       (wkindx)                                      )  )
 
 
-   #define  ekacld_c( handle, segno,  column, dvals, entszs, nlflgs,   \
+   #define  ekacld_c( naif_state, handle, segno,  column, dvals, entszs, nlflgs,   \
                       rcptrs, wkindx                                 ) \
                                                                        \
-        (   ekacld_c( (handle),           (segno),           (column), \
+        (   ekacld_c( naif_state, (handle),           (segno),           (column), \
                       CONST_VEC(dvals),   CONST_IVEC(entszs),          \
                       CONST_BOOL(nlflgs), CONST_IVEC(rcptrs),          \
                       (wkindx)                                      )  )
 
 
-   #define  ekacli_c( handle, segno,  column, ivals, entszs, nlflgs,   \
+   #define  ekacli_c( naif_state, handle, segno,  column, ivals, entszs, nlflgs,   \
                       rcptrs, wkindx                                 ) \
                                                                        \
-        (   ekacli_c( (handle),           (segno),           (column), \
+        (   ekacli_c( naif_state, (handle),           (segno),           (column), \
                       CONST_IVEC(ivals),  CONST_IVEC(entszs),          \
                       CONST_BOOL(nlflgs), CONST_IVEC(rcptrs),          \
                       (wkindx)                                      )  )
 
 
-   #define  ekbseg_c( handle, tabnam, ncols, cnmlen, cnames, declen,   \
+   #define  ekbseg_c( naif_state, handle, tabnam, ncols, cnmlen, cnames, declen,   \
                       decls,  segno                                 )  \
                                                                        \
-        (   ekbseg_c( (handle), (tabnam), (ncols), (cnmlen),           \
+        (   ekbseg_c( naif_state, (handle), (tabnam), (ncols), (cnmlen),           \
                       CONST_VOID(cnames), (declen),                    \
                       CONST_VOID(decls),  (segno)             )  )
 
 
-   #define  ekifld_c( handle, tabnam, ncols, nrows, cnmlen, cnames,    \
+   #define  ekifld_c( naif_state, handle, tabnam, ncols, nrows, cnmlen, cnames,    \
                       declen, decls,  segno, rcptrs                 )  \
                                                                        \
-        (   ekifld_c( (handle), (tabnam), (ncols), (nrows), (cnmlen),  \
+        (   ekifld_c( naif_state, (handle), (tabnam), (ncols), (nrows), (cnmlen),  \
                       CONST_VOID(cnames), (declen),                    \
                       CONST_VOID(decls),  (segno), (rcptrs)         )  )
 
 
-   #define  ekucec_c( handle, segno,  recno, column, nvals, vallen,    \
+   #define  ekucec_c( naif_state, handle, segno,  recno, column, nvals, vallen,    \
                       cvals,  isnull                               )   \
                                                                        \
-        (   ekucec_c( (handle), (segno), (recno), CONST_STR(column),   \
+        (   ekucec_c( naif_state, (handle), (segno), (recno), CONST_STR(column),   \
                       (nvals),  (vallen), CONST_VOID(cvals),           \
                       (isnull)                                      )  )
 
-   #define  ekuced_c( handle, segno,  recno, column, nvals,            \
+   #define  ekuced_c( naif_state, handle, segno,  recno, column, nvals,            \
                       dvals,  isnull                               )   \
                                                                        \
-        (   ekuced_c( (handle), (segno), (recno),   CONST_STR(column), \
+        (   ekuced_c( naif_state, (handle), (segno), (recno),   CONST_STR(column), \
                       (nvals),  CONST_VOID(dvals), (isnull)         )  )
 
 
-   #define  ekucei_c( handle, segno,  recno, column, nvals,            \
+   #define  ekucei_c( naif_state, handle, segno,  recno, column, nvals,            \
                       ivals,  isnull                               )   \
                                                                        \
-        (   ekucei_c( (handle), (segno), (recno),   CONST_STR(column), \
+        (   ekucei_c( naif_state, (handle), (segno), (recno),   CONST_STR(column), \
                       (nvals),  CONST_VOID(ivals), (isnull)         )  )
 
 
-   #define  el2cgv_c( ellipse, center, smajor, sminor )                \
+   #define  el2cgv_c( naif_state, ellipse, center, smajor, sminor )                \
                                                                        \
-        (   el2cgv_c( CONST_ELLIPSE(ellipse), (center),                \
+        (   el2cgv_c( naif_state, CONST_ELLIPSE(ellipse), (center),                \
                       (smajor),               (sminor)  )   )
 
 
-   #define  eqncpv_c( et, epoch, eqel, rapol, decpol, state )          \
+   #define  eqncpv_c( naif_state, et, epoch, eqel, rapol, decpol, state )          \
                                                                        \
-        (   eqncpv_c ( (et), (epoch), CONST_VEC(eqel), (rapol),        \
+        (   eqncpv_c ( naif_state, (et), (epoch), CONST_VEC(eqel), (rapol),        \
                       (decpol), (state) )  )
 
 
-   #define  esrchc_c( value, ndim, lenvals, array )                    \
+   #define  esrchc_c( naif_state, value, ndim, lenvals, array )                    \
                                                                        \
-        (   esrchc_c ( CONST_STR(value),  (ndim),  (lenvals),          \
+        (   esrchc_c ( naif_state, CONST_STR(value),  (ndim),  (lenvals),          \
                        CONST_VOID(array)                      ) )
 
 
-   #define  eul2xf_c( eulang, axisa, axisb, axisc, xform )             \
+   #define  eul2xf_c( naif_state, eulang, axisa, axisb, axisc, xform )             \
                                                                        \
-        (   eul2xf_c ( CONST_VEC(eulang), (axisa), (axisb), (axisc),   \
+        (   eul2xf_c ( naif_state, CONST_VEC(eulang), (axisa), (axisb), (axisc),   \
                        (xform)                                     )  )
 
-   #define  fovray_c( inst,   raydir, rframe, abcorr, observer,        \
+   #define  fovray_c( naif_state, inst,   raydir, rframe, abcorr, observer,        \
                       et,     visible       )                          \
                                                                        \
-        (   fovray_c( (inst),    CONST_VEC(raydir), (rframe),          \
+        (   fovray_c( naif_state, (inst),    CONST_VEC(raydir), (rframe),          \
                       (abcorr), (observer), (et), (visible)   )   )
 
-   #define  getelm_c( frstyr, lineln, lines, epoch, elems )            \
+   #define  getelm_c( naif_state, frstyr, lineln, lines, epoch, elems )            \
                                                                        \
-        (   getelm_c ( (frstyr), (lineln), CONST_VOID(lines),          \
+        (   getelm_c ( naif_state, (frstyr), (lineln), CONST_VOID(lines),          \
                        (epoch),  (elems)                      )   )
 
 
-   #define  gfevnt_c( udstep, udrefn, gquant, qnpars, lenvals,         \
+   #define  gfevnt_c( naif_state, udstep, udrefn, gquant, qnpars, lenvals,         \
                       qpnams, qcpars, qdpars, qipars, qlpars,          \
                       op,     refval, tol,    adjust, rpt,             \
                       udrepi, udrepu, udrepf, nintvls,                 \
                       bail,   udbail, cnfine, result         )         \
                                                                        \
-         ( gfevnt_c( (udstep),           (udrefn),  (gquant),          \
+         ( gfevnt_c( naif_state, (udstep),           (udrefn),  (gquant),          \
                      (qnpars),           (lenvals), CONST_VOID(qpnams),\
                      CONST_VOID(qcpars), (qdpars),  (qipars),          \
                      (qlpars),           (op),      (refval),          \
@@ -738,12 +738,12 @@ Macros that substitute for function calls:
                      (udbail),           (cnfine),  (result)     )   )
 
 
-   #define  gffove_c( inst,   tshape, raydir, target, tframe,          \
+   #define  gffove_c( naif_state, inst,   tshape, raydir, target, tframe,          \
                       abcorr, obsrvr, tol,    udstep, udrefn,          \
                       rpt,    udrepi, udrepu, udrepf, bail,            \
                       udbail, cnfine, result                 )         \
                                                                        \
-        (   gffove_c( (inst),   (tshape), CONST_VEC(raydir),           \
+        (   gffove_c( naif_state, (inst),   (tshape), CONST_VEC(raydir),           \
                       (target), (tframe), (abcorr),                    \
                       (obsrvr), (tol),    (udstep),                    \
                       (udrefn), (rpt),    (udrepi),                    \
@@ -751,104 +751,104 @@ Macros that substitute for function calls:
                       (udbail), (cnfine), (result) )   )
 
 
-   #define  gfrfov_c( inst,   raydir, rframe, abcorr, obsrvr,          \
+   #define  gfrfov_c( naif_state, inst,   raydir, rframe, abcorr, obsrvr,          \
                       step,   cnfine, result                 )         \
                                                                        \
-        (   gfrfov_c( (inst),    CONST_VEC(raydir), (rframe),          \
+        (   gfrfov_c( naif_state, (inst),    CONST_VEC(raydir), (rframe),          \
                       (abcorr), (obsrvr),           (step),            \
                       (cnfine), (result)                      )   )
 
 
-   #define  gfsntc_c( target, fixref, method, abcorr,  obsrvr,         \
+   #define  gfsntc_c( naif_state, target, fixref, method, abcorr,  obsrvr,         \
                       dref,   dvec,   crdsys, coord,   relate,         \
                       refval, adjust, step,   nintvls, cnfine,         \
                       result                                    )      \
                                                                        \
-        (   gfsntc_c( (target),        (fixref),  (method),            \
+        (   gfsntc_c( naif_state, (target),        (fixref),  (method),            \
                       (abcorr),        (obsrvr),  (dref),              \
                       CONST_VEC(dvec), (crdsys),  (coord),             \
                       (relate),        (refval),  (adjust),            \
                       (step),          (nintvls), (cnfine), (result) )  )
 
 
-   #define  illum_c( target, et,    abcorr, obsrvr,                    \
+   #define  illum_c( naif_state, target, et,    abcorr, obsrvr,                    \
                      spoint, phase, solar,  emissn )                   \
                                                                        \
-        (   illum_c ( (target),          (et),    (abcorr), (obsrvr),  \
+        (   illum_c ( naif_state, (target),          (et),    (abcorr), (obsrvr),  \
                       CONST_VEC(spoint), (phase), (solar),  (emissn) )  )
 
 
-   #define  ilumin_c( method, target, et,     fixref,                  \
+   #define  ilumin_c( naif_state, method, target, et,     fixref,                  \
                       abcorr, obsrvr, spoint, trgepc,                  \
                       srfvec, phase, solar,   emissn   )               \
                                                                        \
-       (   ilumin_c ( (method), (target), (et),    (fixref),           \
+       (   ilumin_c ( naif_state, (method), (target), (et),    (fixref),           \
                       (abcorr), (obsrvr), CONST_VEC(spoint), (trgepc), \
                       (srfvec), (phase),  (solar), (emissn)          )  )
 
 
-   #define  inedpl_c( a, b, c, plane, ellipse, found )                 \
+   #define  inedpl_c( naif_state, a, b, c, plane, ellipse, found )                 \
                                                                        \
-        (   inedpl_c ( (a),                (b),         (c),           \
+        (   inedpl_c ( naif_state, (a),                (b),         (c),           \
                        CONST_PLANE(plane), (ellipse),   (found) )   )
 
 
-   #define  inrypl_c( vertex, dir, plane, nxpts, xpt )                 \
+   #define  inrypl_c( naif_state, vertex, dir, plane, nxpts, xpt )                 \
                                                                        \
-        (   inrypl_c ( CONST_VEC(vertex),   CONST_VEC(dir),            \
+        (   inrypl_c ( naif_state, CONST_VEC(vertex),   CONST_VEC(dir),            \
                        CONST_PLANE(plane),  (nxpts),        (xpt) )   )
 
 
-   #define  invert_c( m1, m2 )                                         \
+   #define  invert_c( naif_state, m1, m2 )                                         \
                                                                        \
-        (   invert_c ( CONST_MAT(m1), (m2) )   )
+        (   invert_c ( naif_state, CONST_MAT(m1), (m2) )   )
 
 
-   #define  invort_c( m, mit )                                         \
+   #define  invort_c( naif_state, m, mit )                                         \
                                                                        \
-        (   invort_c ( CONST_MAT(m), (mit) )   )
+        (   invort_c ( naif_state, CONST_MAT(m), (mit) )   )
 
 
-   #define  isordv_c( array, n )                                       \
+   #define  isordv_c( naif_state, array, n )                                       \
                                                                        \
-        (   isordv_c ( CONST_IVEC(array), (n) )  )
+        (   isordv_c ( naif_state, CONST_IVEC(array), (n) )  )
 
 
-   #define  isrchc_c( value, ndim, lenvals, array )                    \
+   #define  isrchc_c( naif_state, value, ndim, lenvals, array )                    \
                                                                        \
-        (   isrchc_c ( CONST_STR(value),  (ndim),  (lenvals),          \
+        (   isrchc_c ( naif_state, CONST_STR(value),  (ndim),  (lenvals),          \
                        CONST_VOID(array)                      ) )
 
-   #define  isrchd_c( value, ndim, array )                             \
+   #define  isrchd_c( naif_state, value, ndim, array )                             \
                                                                        \
-        (   isrchd_c( (value),  (ndim),  CONST_VEC(array) )  )
+        (   isrchd_c( naif_state, (value),  (ndim),  CONST_VEC(array) )  )
 
 
-   #define  isrchi_c( value, ndim, array )                             \
+   #define  isrchi_c( naif_state, value, ndim, array )                             \
                                                                        \
-        (   isrchi_c( (value),  (ndim),  CONST_IVEC(array) )  )
+        (   isrchi_c( naif_state, (value),  (ndim),  CONST_IVEC(array) )  )
 
 
-   #define  isrot_c( m, ntol, dtol )                                   \
+   #define  isrot_c( naif_state, m, ntol, dtol )                                   \
                                                                        \
-        (   isrot_c ( CONST_MAT(m), (ntol), (dtol) )   )
+        (   isrot_c ( naif_state, CONST_MAT(m), (ntol), (dtol) )   )
 
 
-   #define  latsrf_c( method, target, et,    fixref,                   \
+   #define  latsrf_c( naif_state, method, target, et,    fixref,                   \
                       npts,   lonlat, srfpts         )                 \
                                                                        \
-        (   latsrf_c( CONST_STR(method), CONST_STR(target), (et),      \
+        (   latsrf_c( naif_state, CONST_STR(method), CONST_STR(target), (et),      \
                       CONST_STR(fixref), (npts), CONST_MAT2(lonlat),   \
                       (srfpts)                                     )  )
 
 
-   #define  limbpt_c( method, target, et,     fixref,                  \
+   #define  limbpt_c( naif_state, method, target, et,     fixref,                  \
                       abcorr, corloc, obsrvr, refvec,                  \
                       rolstp, ncuts,  schstp, soltol,                  \
                       maxn,   npts,   points, epochs,                  \
                       tangts                          )                \
                                                                        \
-       (   limbpt_c( CONST_STR(method), CONST_STR(target),  (et),      \
+       (   limbpt_c( naif_state, CONST_STR(method), CONST_STR(target),  (et),      \
                      CONST_STR(fixref), CONST_STR(abcorr),             \
                      CONST_STR(corloc), CONST_STR(obsrvr),             \
                      CONST_VEC(refvec), (rolstp),           (ncuts),   \
@@ -857,467 +857,467 @@ Macros that substitute for function calls:
                      (tangts)                                      )  )
 
 
-   #define  lmpool_c( cvals, lenvals, n )                              \
+   #define  lmpool_c( naif_state, cvals, lenvals, n )                              \
                                                                        \
-        (   lmpool_c( CONST_VOID(cvals), (lenvals), (n) )  )
+        (   lmpool_c( naif_state, CONST_VOID(cvals), (lenvals), (n) )  )
 
 
-   #define  lstltc_c( value, ndim, lenvals, array )                    \
+   #define  lstltc_c( naif_state, value, ndim, lenvals, array )                    \
                                                                        \
-        (   lstltc_c ( CONST_STR(value),  (ndim),  (lenvals),          \
+        (   lstltc_c ( naif_state, CONST_STR(value),  (ndim),  (lenvals),          \
                        CONST_VOID(array)                      ) )
 
 
-   #define  lstled_c( value, ndim, array )                             \
+   #define  lstled_c( naif_state, value, ndim, array )                             \
                                                                        \
-        (   lstled_c( (value),  (ndim),  CONST_VEC(array) )  )
+        (   lstled_c( naif_state, (value),  (ndim),  CONST_VEC(array) )  )
 
 
-   #define  lstlei_c( value, ndim, array )                             \
+   #define  lstlei_c( naif_state, value, ndim, array )                             \
                                                                        \
-        (   lstlei_c( (value),  (ndim),  CONST_IVEC(array) )  )
+        (   lstlei_c( naif_state, (value),  (ndim),  CONST_IVEC(array) )  )
 
 
-   #define  lstlec_c( value, ndim, lenvals, array )                    \
+   #define  lstlec_c( naif_state, value, ndim, lenvals, array )                    \
                                                                        \
-        (   lstlec_c ( CONST_STR(value),  (ndim),  (lenvals),          \
+        (   lstlec_c ( naif_state, CONST_STR(value),  (ndim),  (lenvals),          \
                        CONST_VOID(array)                      ) )
 
 
-   #define  lstltd_c( value, ndim, array )                             \
+   #define  lstltd_c( naif_state, value, ndim, array )                             \
                                                                        \
-        (   lstltd_c( (value),  (ndim),  CONST_VEC(array) )  )
+        (   lstltd_c( naif_state, (value),  (ndim),  CONST_VEC(array) )  )
 
 
-   #define  lstlti_c( value, ndim, array )                             \
+   #define  lstlti_c( naif_state, value, ndim, array )                             \
                                                                        \
-        (   lstlti_c( (value),  (ndim),  CONST_IVEC(array) )  )
+        (   lstlti_c( naif_state, (value),  (ndim),  CONST_IVEC(array) )  )
 
 
-   #define  m2eul_c( r, axis3,  axis2,  axis1,                         \
+   #define  m2eul_c( naif_state, r, axis3,  axis2,  axis1,                         \
                         angle3, angle2, angle1 )                       \
                                                                        \
-        (   m2eul_c ( CONST_MAT(r), (axis3),  (axis2),  (axis1),       \
+        (   m2eul_c ( naif_state, CONST_MAT(r), (axis3),  (axis2),  (axis1),       \
                                     (angle3), (angle2), (angle1) )   )
 
-   #define  m2q_c( r, q )                                              \
+   #define  m2q_c( naif_state, r, q )                                              \
                                                                        \
-        (   m2q_c ( CONST_MAT(r), (q) )   )
+        (   m2q_c ( naif_state, CONST_MAT(r), (q) )   )
 
 
-   #define  mequ_c( m1, m2 )                                           \
+   #define  mequ_c( naif_state, m1, m2 )                                           \
                                                                        \
            ( mequ_c  ( CONST_MAT(m1), m2 ) )
 
 
-   #define  mequg_c( m1, nr, nc, mout )                                \
+   #define  mequg_c( naif_state, m1, nr, nc, mout )                                \
                                                                        \
         (   mequg_c  ( CONST_MAT(m1), (nr), (nc), mout )   )
 
 
-   #define  mtxm_c( m1, m2, mout )                                     \
+   #define  mtxm_c( naif_state, m1, m2, mout )                                     \
                                                                        \
-        (   mtxm_c ( CONST_MAT(m1), CONST_MAT(m2), (mout) )   )
+        (   mtxm_c ( naif_state, CONST_MAT(m1), CONST_MAT(m2), (mout) )   )
 
 
-   #define  mtxmg_c( m1, m2, ncol1, nr1r2, ncol2, mout )               \
+   #define  mtxmg_c( naif_state, m1, m2, ncol1, nr1r2, ncol2, mout )               \
                                                                        \
-        (   mtxmg_c ( CONST_MAT(m1), CONST_MAT(m2),                    \
+        (   mtxmg_c ( naif_state, CONST_MAT(m1), CONST_MAT(m2),                    \
                       (ncol1),       (nr1r2),       (ncol2), (mout) )  )
 
 
-   #define  mtxv_c( m1, vin, vout )                                    \
+   #define  mtxv_c( naif_state, m1, vin, vout )                                    \
                                                                        \
-        (   mtxv_c ( CONST_MAT(m1), CONST_VEC(vin), (vout) )   )
+        (   mtxv_c ( naif_state, CONST_MAT(m1), CONST_VEC(vin), (vout) )   )
 
 
-   #define  mtxvg_c( m1, v2, nrow1, nc1r2, vout )                      \
+   #define  mtxvg_c( naif_state, m1, v2, nrow1, nc1r2, vout )                      \
                                                                        \
-        (   mtxvg_c( CONST_VOID(m1), CONST_VOID(v2),                   \
+        (   mtxvg_c( naif_state, CONST_VOID(m1), CONST_VOID(v2),                   \
                     (nrow1),        (nc1r2),       (vout) )   )
 
-   #define  mxm_c( m1, m2, mout )                                      \
+   #define  mxm_c( naif_state, m1, m2, mout )                                      \
                                                                        \
-        (   mxm_c ( CONST_MAT(m1), CONST_MAT(m2), (mout) )   )
+        (   mxm_c ( naif_state, CONST_MAT(m1), CONST_MAT(m2), (mout) )   )
 
 
-   #define  mxmg_c( m1, m2, row1, col1, col2, mout )                   \
+   #define  mxmg_c( naif_state, m1, m2, row1, col1, col2, mout )                   \
                                                                        \
-        (   mxmg_c ( CONST_VOID(m1), CONST_VOID(m2),                   \
+        (   mxmg_c ( naif_state, CONST_VOID(m1), CONST_VOID(m2),                   \
                      (row1), (col1), (col2), (mout) )   )
 
 
-   #define  mxmt_c( m1, m2, mout )                                     \
+   #define  mxmt_c( naif_state, m1, m2, mout )                                     \
                                                                        \
-        (   mxmt_c ( CONST_MAT(m1), CONST_MAT(m2), (mout) )   )
+        (   mxmt_c ( naif_state, CONST_MAT(m1), CONST_MAT(m2), (mout) )   )
 
 
-   #define  mxmtg_c( m1, m2, nrow1, nc1c2, nrow2, mout )               \
+   #define  mxmtg_c( naif_state, m1, m2, nrow1, nc1c2, nrow2, mout )               \
                                                                        \
-        (   mxmtg_c ( CONST_VOID(m1), CONST_VOID(m2),                  \
+        (   mxmtg_c ( naif_state, CONST_VOID(m1), CONST_VOID(m2),                  \
                       (nrow1),        (nc1c2),                         \
                       (nrow2),        (mout)             )   )
 
 
-   #define  mxv_c( m1, vin, vout )                                     \
+   #define  mxv_c( naif_state, m1, vin, vout )                                     \
                                                                        \
-        (   mxv_c ( CONST_MAT(m1), CONST_VEC(vin), (vout) )   )
+        (   mxv_c ( naif_state, CONST_MAT(m1), CONST_VEC(vin), (vout) )   )
 
 
-   #define  mxvg_c( m1, v2, nrow1, nc1r2, vout )                       \
+   #define  mxvg_c( naif_state, m1, v2, nrow1, nc1r2, vout )                       \
                                                                        \
-        (   mxvg_c( CONST_VOID(m1), CONST_VOID(v2),                    \
+        (   mxvg_c( naif_state, CONST_VOID(m1), CONST_VOID(v2),                    \
                     (nrow1),        (nc1r2),       (vout) )   )
 
-   #define  nearpt_c( positn, a, b, c, npoint, alt )                   \
+   #define  nearpt_c( naif_state, positn, a, b, c, npoint, alt )                   \
                                                                        \
-        (   nearpt_c ( CONST_VEC(positn), (a),  (b),  (c),             \
+        (   nearpt_c ( naif_state, CONST_VEC(positn), (a),  (b),  (c),             \
                        (npoint),          (alt)            )   )
 
 
-   #define  npedln_c( a, b, c, linept, linedr, pnear, dist )           \
+   #define  npedln_c( naif_state, a, b, c, linept, linedr, pnear, dist )           \
                                                                        \
-        (   npedln_c ( (a),               (b),               (c),      \
+        (   npedln_c ( naif_state, (a),               (b),               (c),      \
                        CONST_VEC(linept), CONST_VEC(linedr),           \
                        (pnear),           (dist)                 )   )
 
 
-   #define  nplnpt_c( linpt, lindir, point, pnear, dist )              \
+   #define  nplnpt_c( naif_state, linpt, lindir, point, pnear, dist )              \
                                                                        \
-        (   nplnpt_c ( CONST_VEC(linpt), CONST_VEC(lindir),            \
+        (   nplnpt_c ( naif_state, CONST_VEC(linpt), CONST_VEC(lindir),            \
                        CONST_VEC(point), (pnear), (dist )   )   )
 
 
-   #define  nvc2pl_c( normal, constant, plane )                        \
+   #define  nvc2pl_c( naif_state, normal, constant, plane )                        \
                                                                        \
-        (   nvc2pl_c ( CONST_VEC(normal), (constant), (plane) )  )
+        (   nvc2pl_c ( naif_state, CONST_VEC(normal), (constant), (plane) )  )
 
 
-   #define  nvp2pl_c( normal, point, plane )                           \
+   #define  nvp2pl_c( naif_state, normal, point, plane )                           \
                                                                        \
-        (   nvp2pl_c( CONST_VEC(normal), CONST_VEC(point), (plane) )  )
+        (   nvp2pl_c( naif_state, CONST_VEC(normal), CONST_VEC(point), (plane) )  )
 
 
-   #define  orderc_c( lenvals, array, ndim, iorder )                   \
+   #define  orderc_c( naif_state, lenvals, array, ndim, iorder )                   \
                                                                        \
-        (   orderc_c ( (lenvals), CONST_VOID(array), (ndim), (iorder)) )
+        (   orderc_c ( naif_state, (lenvals), CONST_VOID(array), (ndim), (iorder)) )
 
 
-   #define  orderd_c( array, ndim, iorder )                            \
+   #define  orderd_c( naif_state, array, ndim, iorder )                            \
                                                                        \
-        (   orderd_c ( CONST_VEC(array), (ndim), (iorder) )  )
+        (   orderd_c ( naif_state, CONST_VEC(array), (ndim), (iorder) )  )
 
 
-   #define  orderi_c( array, ndim, iorder )                            \
+   #define  orderi_c( naif_state, array, ndim, iorder )                            \
                                                                        \
-        (   orderi_c ( CONST_IVEC(array), (ndim), (iorder) )  )
+        (   orderi_c ( naif_state, CONST_IVEC(array), (ndim), (iorder) )  )
 
 
-   #define  oscelt_c( state, et, mu, elts )                            \
+   #define  oscelt_c( naif_state, state, et, mu, elts )                            \
                                                                        \
-        (   oscelt_c ( CONST_VEC(state), (et), (mu), (elts)  )   )
+        (   oscelt_c ( naif_state, CONST_VEC(state), (et), (mu), (elts)  )   )
 
 
-   #define  oscltx_c( state, et, mu, elts )                            \
+   #define  oscltx_c( naif_state, state, et, mu, elts )                            \
                                                                        \
-        (   oscltx_c ( CONST_VEC(state), (et), (mu), (elts)  )   )
+        (   oscltx_c ( naif_state, CONST_VEC(state), (et), (mu), (elts)  )   )
 
 
-   #define  pcpool_c( name, n, lenvals, cvals )                        \
+   #define  pcpool_c( naif_state, name, n, lenvals, cvals )                        \
                                                                        \
-        (   pcpool_c ( (name), (n), (lenvals), CONST_VOID(cvals) )  )
+        (   pcpool_c ( naif_state, (name), (n), (lenvals), CONST_VOID(cvals) )  )
 
 
-   #define  pdpool_c( name, n, dvals )                                 \
+   #define  pdpool_c( naif_state, name, n, dvals )                                 \
                                                                        \
-        (   pdpool_c ( (name), (n), CONST_VEC(dvals) )  )
+        (   pdpool_c ( naif_state, (name), (n), CONST_VEC(dvals) )  )
 
 
-   #define  pipool_c( name, n, ivals )                                 \
+   #define  pipool_c( naif_state, name, n, ivals )                                 \
                                                                        \
-        (   pipool_c ( (name), (n), CONST_IVEC(ivals) )  )
+        (   pipool_c ( naif_state, (name), (n), CONST_IVEC(ivals) )  )
 
 
-   #define  pl2nvc_c( plane, normal, constant )                        \
+   #define  pl2nvc_c( naif_state, plane, normal, constant )                        \
                                                                        \
-        (   pl2nvc_c ( CONST_PLANE(plane),  (normal), (constant) )  )
+        (   pl2nvc_c ( naif_state, CONST_PLANE(plane),  (normal), (constant) )  )
 
 
-   #define  pl2nvp_c( plane, normal, point )                           \
+   #define  pl2nvp_c( naif_state, plane, normal, point )                           \
                                                                        \
-        (   pl2nvp_c ( CONST_PLANE(plane),  (normal), (point) )  )
+        (   pl2nvp_c ( naif_state, CONST_PLANE(plane),  (normal), (point) )  )
 
 
-   #define  pl2psv_c( plane, point, span1, span2 )                     \
+   #define  pl2psv_c( naif_state, plane, point, span1, span2 )                     \
                                                                        \
-        (   pl2psv_c( CONST_PLANE(plane), (point), (span1), (span2) )  )
+        (   pl2psv_c( naif_state, CONST_PLANE(plane), (point), (span1), (span2) )  )
 
 
-   #define  pltar_c( nv, vrtces, np, plates )                          \
+   #define  pltar_c( naif_state, nv, vrtces, np, plates )                          \
                                                                        \
-        (   pltar_c( (nv), CONST_VEC3(vrtces),                         \
+        (   pltar_c( naif_state, (nv), CONST_VEC3(vrtces),                         \
                      (np), CONST_IVEC3(plates) )   )
 
 
-   #define  pltexp_c( iverts, delta, overts )                          \
+   #define  pltexp_c( naif_state, iverts, delta, overts )                          \
                                                                        \
-        (   pltexp_c( CONST_VEC3(iverts), (delta), (overts) )  )
+        (   pltexp_c( naif_state, CONST_VEC3(iverts), (delta), (overts) )  )
 
 
-   #define  pltnp_c( point, v1, v2, v3, pnear, dist )                  \
+   #define  pltnp_c( naif_state, point, v1, v2, v3, pnear, dist )                  \
                                                                        \
-        (   pltnp_c( CONST_VEC(point), CONST_VEC(v1), CONST_VEC(v2),   \
+        (   pltnp_c( naif_state, CONST_VEC(point), CONST_VEC(v1), CONST_VEC(v2),   \
                      CONST_VEC(v3),    (pnear),       (dist)       )  )
 
 
-   #define  pltnrm_c( v1, v2, v3, normal )                             \
+   #define  pltnrm_c( naif_state, v1, v2, v3, normal )                             \
                                                                        \
-        (   pltnrm_c( CONST_VEC(v1), CONST_VEC(v2), CONST_VEC(v3),     \
+        (   pltnrm_c( naif_state, CONST_VEC(v1), CONST_VEC(v2), CONST_VEC(v3),     \
                      (normal)  )   )
 
 
-   #define  pltvol_c( nv, vrtces, np, plates )                         \
+   #define  pltvol_c( naif_state, nv, vrtces, np, plates )                         \
                                                                        \
-        (   pltvol_c( (nv), CONST_VEC3(vrtces),                        \
+        (   pltvol_c( naif_state, (nv), CONST_VEC3(vrtces),                        \
                       (np), CONST_IVEC3(plates) )   )
 
 
-   #define  prop2b_c( gm, pvinit, dt, pvprop )                         \
+   #define  prop2b_c( naif_state, gm, pvinit, dt, pvprop )                         \
                                                                        \
-        (   prop2b_c ( (gm),  CONST_VEC(pvinit), (dt), (pvprop)  )   )
+        (   prop2b_c ( naif_state, (gm),  CONST_VEC(pvinit), (dt), (pvprop)  )   )
 
 
-   #define  psv2pl_c( point, span1, span2, plane )                     \
+   #define  psv2pl_c( naif_state, point, span1, span2, plane )                     \
                                                                        \
-        (   psv2pl_c ( CONST_VEC(point),  CONST_VEC(span1),            \
+        (   psv2pl_c ( naif_state, CONST_VEC(point),  CONST_VEC(span1),            \
                        CONST_VEC(span2),  (plane)           )   )
 
 
-   #define  qdq2av_c( q, dq, av )                                      \
+   #define  qdq2av_c( naif_state, q, dq, av )                                      \
                                                                        \
-        (   qdq2av_c ( CONST_VEC(q), CONST_VEC(dq),  (av) )    )
+        (   qdq2av_c ( naif_state, CONST_VEC(q), CONST_VEC(dq),  (av) )    )
 
 
-   #define  q2m_c( q, r )                                              \
+   #define  q2m_c( naif_state, q, r )                                              \
                                                                        \
-        (   q2m_c ( CONST_VEC(q), (r) )    )
+        (   q2m_c ( naif_state, CONST_VEC(q), (r) )    )
 
 
-   #define  qxq_c( q1, q2, qout )                                      \
+   #define  qxq_c( naif_state, q1, q2, qout )                                      \
                                                                        \
-        (   qxq_c ( CONST_VEC(q1), CONST_VEC(q2),  (qout) )    )
+        (   qxq_c ( naif_state, CONST_VEC(q1), CONST_VEC(q2),  (qout) )    )
 
 
-   #define  rav2xf_c( rot, av, xform )                                 \
+   #define  rav2xf_c( naif_state, rot, av, xform )                                 \
                                                                        \
-        (   rav2xf_c ( CONST_MAT(rot), CONST_VEC(av), (xform) )   )
+        (   rav2xf_c ( naif_state, CONST_MAT(rot), CONST_VEC(av), (xform) )   )
 
 
-   #define  raxisa_c( matrix, axis, angle )                            \
+   #define  raxisa_c( naif_state, matrix, axis, angle )                            \
                                                                        \
-        (   raxisa_c ( CONST_MAT(matrix), (axis), (angle) )   );
+        (   raxisa_c ( naif_state, CONST_MAT(matrix), (axis), (angle) )   );
 
 
-   #define  reccyl_c( rectan, r, lon, z )                              \
+   #define  reccyl_c( naif_state, rectan, r, lon, z )                              \
                                                                        \
-        (   reccyl_c ( CONST_VEC(rectan), (r), (lon), (z)  )   )
+        (   reccyl_c ( naif_state, CONST_VEC(rectan), (r), (lon), (z)  )   )
 
 
-   #define  recgeo_c( rectan, re, f, lon, lat, alt )                   \
+   #define  recgeo_c( naif_state, rectan, re, f, lon, lat, alt )                   \
                                                                        \
-        (   recgeo_c ( CONST_VEC(rectan), (re),   (f),                 \
+        (   recgeo_c ( naif_state, CONST_VEC(rectan), (re),   (f),                 \
                        (lon),             (lat),  (alt) )   )
 
-   #define  reclat_c( rectan, r, lon, lat )                            \
+   #define  reclat_c( naif_state, rectan, r, lon, lat )                            \
                                                                        \
-        (   reclat_c ( CONST_VEC(rectan), (r), (lon), (lat)  )   )
+        (   reclat_c ( naif_state, CONST_VEC(rectan), (r), (lon), (lat)  )   )
 
 
-   #define  recrad_c( rectan, radius, ra, dec )                        \
+   #define  recrad_c( naif_state, rectan, radius, ra, dec )                        \
                                                                        \
-        (   recrad_c ( CONST_VEC(rectan), (radius), (ra), (dec)  )   )
+        (   recrad_c ( naif_state, CONST_VEC(rectan), (radius), (ra), (dec)  )   )
 
 
-   #define  recsph_c( rectan, r, colat, lon )                          \
+   #define  recsph_c( naif_state, rectan, r, colat, lon )                          \
                                                                        \
-        (   recsph_c ( CONST_VEC(rectan), (r), (colat), (lon)  )   )
+        (   recsph_c ( naif_state, CONST_VEC(rectan), (r), (colat), (lon)  )   )
 
 
-   #define  reordd_c( iorder, ndim, array )                            \
+   #define  reordd_c( naif_state, iorder, ndim, array )                            \
                                                                        \
-        (   reordd_c ( CONST_IVEC(iorder), (ndim), (array) )  )
+        (   reordd_c ( naif_state, CONST_IVEC(iorder), (ndim), (array) )  )
 
 
-   #define  reordi_c( iorder, ndim, array )                            \
+   #define  reordi_c( naif_state, iorder, ndim, array )                            \
                                                                        \
-        (   reordi_c ( CONST_IVEC(iorder), (ndim), (array) )  )
+        (   reordi_c ( naif_state, CONST_IVEC(iorder), (ndim), (array) )  )
 
 
-   #define  reordl_c( iorder, ndim, array )                            \
+   #define  reordl_c( naif_state, iorder, ndim, array )                            \
                                                                        \
-        (   reordl_c ( CONST_IVEC(iorder), (ndim), (array) )  )
+        (   reordl_c ( naif_state, CONST_IVEC(iorder), (ndim), (array) )  )
 
 
-   #define  rotmat_c( m1, angle, iaxis, mout  )                        \
+   #define  rotmat_c( naif_state, m1, angle, iaxis, mout  )                        \
                                                                        \
-        (   rotmat_c ( CONST_MAT(m1), (angle), (iaxis), (mout)  )   )
+        (   rotmat_c ( naif_state, CONST_MAT(m1), (angle), (iaxis), (mout)  )   )
 
 
-   #define  rotvec_c( v1, angle, iaxis, vout )                         \
+   #define  rotvec_c( naif_state, v1, angle, iaxis, vout )                         \
                                                                        \
-        (   rotvec_c ( CONST_VEC(v1), (angle), (iaxis), (vout)  )   )
+        (   rotvec_c ( naif_state, CONST_VEC(v1), (angle), (iaxis), (vout)  )   )
 
 
-   #define  saelgv_c( vec1, vec2, smajor, sminor )                     \
+   #define  saelgv_c( naif_state, vec1, vec2, smajor, sminor )                     \
                                                                        \
-        (   saelgv_c ( CONST_VEC(vec1),  CONST_VEC(vec2),              \
+        (   saelgv_c ( naif_state, CONST_VEC(vec1),  CONST_VEC(vec2),              \
                        (smajor),         (sminor)         )   )
 
 
-   #define  spk14a_c( handle, ncsets, coeffs, epochs )                 \
+   #define  spk14a_c( naif_state, handle, ncsets, coeffs, epochs )                 \
                                                                        \
-        (   spk14a_c ( (handle),           (ncsets),                   \
+        (   spk14a_c ( naif_state, (handle),           (ncsets),                   \
                        CONST_VEC(coeffs),  CONST_VEC(epochs) )  )
 
 
-   #define  spkapo_c( targ, et, ref, sobs, abcorr, ptarg, lt )         \
+   #define  spkapo_c( naif_state, targ, et, ref, sobs, abcorr, ptarg, lt )         \
                                                                        \
-        (   spkapo_c ( (targ),   (et),    (ref), CONST_VEC(sobs),      \
+        (   spkapo_c ( naif_state, (targ),   (et),    (ref), CONST_VEC(sobs),      \
                        (abcorr), (ptarg), (lt)                   )  )
 
 
-   #define  spkapp_c( targ, et, ref, sobs, abcorr, starg, lt )         \
+   #define  spkapp_c( naif_state, targ, et, ref, sobs, abcorr, starg, lt )         \
                                                                        \
-        (   spkapp_c ( (targ),   (et),    (ref), CONST_VEC(sobs),      \
+        (   spkapp_c ( naif_state, (targ),   (et),    (ref), CONST_VEC(sobs),      \
                        (abcorr), (starg), (lt)                   )  )
 
 
-   #define  spkaps_c( targ,   et,    ref, abcorr, sobs,                \
+   #define  spkaps_c( naif_state, targ,   et,    ref, abcorr, sobs,                \
                       accobs, starg, lt,  dlt           )              \
                                                                        \
-        (   spkaps_c ( (targ),   (et),  (ref),  (abcorr),              \
+        (   spkaps_c ( naif_state, (targ),   (et),  (ref),  (abcorr),              \
                        CONST_VEC(sobs), CONST_VEC(accobs),             \
                        (starg),  (lt),  (dlt)              )   )
 
 
-   #define  spkcpo_c( target,   et,       outref,   refloc,            \
+   #define  spkcpo_c( naif_state, target,   et,       outref,   refloc,            \
                       abcorr,   obspos,   obsctr,                      \
                       obsref,   state,    lt               )           \
                                                                        \
-        (   spkcpo_c( (target), (et),    (outref), (refloc),           \
+        (   spkcpo_c( naif_state, (target), (et),    (outref), (refloc),           \
                       (abcorr), CONST_VEC(obspos), (obsctr),           \
                       (obsref), (state),  (lt)              )  )
 
 
-   #define  spkcpt_c( trgpos,   trgctr,   trgref,                      \
+   #define  spkcpt_c( naif_state, trgpos,   trgctr,   trgref,                      \
                       et,       outref,   refloc,   abcorr,            \
                       obsrvr,   state,    lt               )           \
                                                                        \
-        (   spkcpt_c( CONST_VEC(trgpos), (trgctr), (trgref),           \
+        (   spkcpt_c( naif_state, CONST_VEC(trgpos), (trgctr), (trgref),           \
                       (et),    (outref), (refloc), (abcorr),           \
                       (obsrvr),          (state),  (lt)      )  )
 
 
-   #define  spkcvo_c( target,   et,       outref,   refloc,            \
+   #define  spkcvo_c( naif_state, target,   et,       outref,   refloc,            \
                       abcorr,   obssta,   obsepc,   obsctr,            \
                       obsref,   state,    lt               )           \
                                                                        \
-        (   spkcvo_c( (target),  (et),    (outref), (refloc),          \
+        (   spkcvo_c( naif_state, (target),  (et),    (outref), (refloc),          \
                       (abcorr),  CONST_VEC(obssta), (obsepc),          \
                       (obsctr),  (obsref), (state), (lt)     )  )
 
 
-   #define  spkcvt_c( trgsta,   trgepc,   trgctr,   trgref,            \
+   #define  spkcvt_c( naif_state, trgsta,   trgepc,   trgctr,   trgref,            \
                       et,       outref,   refloc,   abcorr,            \
                       obsrvr,   state,    lt               )           \
                                                                        \
-        (   spkcvt_c( CONST_VEC(trgsta),  (trgepc), (trgctr),          \
+        (   spkcvt_c( naif_state, CONST_VEC(trgsta),  (trgepc), (trgctr),          \
                       (trgref), (et),     (outref), (refloc),          \
                       (abcorr), (obsrvr), (state),  (lt)     )  )
 
 
-   #define  spkltc_c( targ, et, ref, abcorr, sobs, starg, lt, dlt )    \
+   #define  spkltc_c( naif_state, targ, et, ref, abcorr, sobs, starg, lt, dlt )    \
                                                                        \
-        (   spkltc_c ( (targ),   (et),  (ref),    (abcorr),            \
+        (   spkltc_c ( naif_state, (targ),   (et),  (ref),    (abcorr),            \
                        CONST_VEC(sobs), (starg),  (lt),     (dlt) )  )
 
 
-   #define  spkpvn_c( handle, descr, et, ref, state, center )          \
+   #define  spkpvn_c( naif_state, handle, descr, et, ref, state, center )          \
                                                                        \
-        (   spkpvn_c ( (handle), CONST_VEC(descr), (et),               \
+        (   spkpvn_c ( naif_state, (handle), CONST_VEC(descr), (et),               \
                        (ref),    (state),          (center) )  )
 
-   #define  spkuds_c( descr, body, center, frame, type,                \
+   #define  spkuds_c( naif_state, descr, body, center, frame, type,                \
                       first, last, begin,  end         )               \
                                                                        \
-        (   spkuds_c ( CONST_VEC(descr), (body), (center), (frame),    \
+        (   spkuds_c ( naif_state, CONST_VEC(descr), (body), (center), (frame),    \
                        (type),  (first), (last), (begin),  (end)    )  )
 
 
-   #define  spkw02_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw02_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  intlen, n,      polydg, cdata,  btime )  \
                                                                        \
-        (   spkw02_c ( (handle), (body),   (center),         (frame),  \
+        (   spkw02_c ( naif_state, (handle), (body),   (center),         (frame),  \
                        (first),  (last),   (segid),          (intlen), \
                        (n),      (polydg), CONST_VEC(cdata), (btime) ) )
 
 
-   #define  spkw03_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw03_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  intlen, n,      polydg, cdata,  btime )  \
                                                                        \
-        (   spkw03_c ( (handle), (body),   (center),         (frame),  \
+        (   spkw03_c ( naif_state, (handle), (body),   (center),         (frame),  \
                        (first),  (last),   (segid),          (intlen), \
                        (n),      (polydg), CONST_VEC(cdata), (btime) ) )
 
 
 
-   #define  spkw05_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw05_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  gm,     n,      states, epochs        )  \
                                                                        \
-        (   spkw05_c ( (handle),  (body),   (center),   (frame),       \
+        (   spkw05_c ( naif_state, (handle),  (body),   (center),   (frame),       \
                        (first),   (last),   (segid),    (gm),          \
                        (n),                                            \
                        CONST_MAT6(states),  CONST_VEC(epochs)    )   )
 
 
-   #define  spkw08_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw08_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  degree, n,      states, epoch1, step )   \
                                                                        \
-        (   spkw08_c ( (handle),  (body),   (center),   (frame),       \
+        (   spkw08_c ( naif_state, (handle),  (body),   (center),   (frame),       \
                        (first),   (last),   (segid),    (degree),      \
                        (n),       CONST_MAT6(states),   (epoch1),      \
                        (step)                                     )   )
 
 
-   #define  spkw09_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw09_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  degree, n,      states, epochs       )   \
                                                                        \
-        (   spkw09_c ( (handle), (body),   (center), (frame),          \
+        (   spkw09_c ( naif_state, (handle), (body),   (center), (frame),          \
                        (first),  (last),   (segid),  (degree),  (n),   \
                        CONST_MAT6(states), CONST_VEC(epochs)        )  )
 
 
-   #define  spkw10_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw10_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  consts, n,      elems,  epochs       )   \
                                                                        \
-        (   spkw10_c ( (handle), (body),  (center), (frame),           \
+        (   spkw10_c ( naif_state, (handle), (body),  (center), (frame),           \
                        (first),  (last),  (segid),  CONST_VEC(consts), \
                        (n),      CONST_VEC(elems),  CONST_VEC(epochs)) )
 
 
-   #define  spkw12_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw12_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  degree, n,      states, epoch0, step )   \
                                                                        \
-        (   spkw12_c ( (handle),  (body),   (center),   (frame),       \
+        (   spkw12_c ( naif_state, (handle),  (body),   (center),   (frame),       \
                        (first),   (last),   (segid),    (degree),      \
                        (n),       CONST_MAT6(states),   (epoch0),      \
                        (step)                                     )   )
 
 
-   #define  spkw13_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw13_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  degree, n,      states, epochs       )   \
                                                                        \
-        (   spkw13_c ( (handle), (body),   (center), (frame),          \
+        (   spkw13_c ( naif_state, (handle), (body),   (center), (frame),          \
                        (first),  (last),   (segid),  (degree),  (n),   \
                        CONST_MAT6(states), CONST_VEC(epochs)        )  )
 
@@ -1325,108 +1325,108 @@ Macros that substitute for function calls:
 
 
 
-   #define  spkw15_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw15_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  epoch,  tp,     pa,     p,      ecc,     \
                       j2flg,  pv,     gm,     j2,     radius         ) \
                                                                        \
-        (   spkw15_c ( (handle), (body),  (center), (frame),           \
+        (   spkw15_c ( naif_state, (handle), (body),  (center), (frame),           \
                        (first),  (last),  (segid),  (epoch),           \
                        CONST_VEC(tp),     CONST_VEC(pa),               \
                        (p),      (ecc),   (j2flg),  CONST_VEC(pv),     \
                        (gm),     (j2),    (radius)                )   )
 
 
-   #define  spkw17_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw17_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  epoch,  eqel,   rapol,  decpol       )   \
                                                                        \
-        (   spkw17_c ( (handle), (body),  (center), (frame),           \
+        (   spkw17_c ( naif_state, (handle), (body),  (center), (frame),           \
                        (first),  (last),  (segid),  (epoch),           \
                        CONST_VEC(eqel),   (rapol),  (decpol)  )   )
 
 
 
-   #define  spkw18_c( handle, subtyp, body,   center, frame,  first,   \
+   #define  spkw18_c( naif_state, handle, subtyp, body,   center, frame,  first,   \
                       last,   segid,  degree, n,      packts, epochs ) \
                                                                        \
-        (   spkw18_c ( (handle), (subtyp), (body),  (center), (frame), \
+        (   spkw18_c ( naif_state, (handle), (subtyp), (body),  (center), (frame), \
                        (first),  (last),   (segid), (degree), (n),     \
                        CONST_VOID(packts), CONST_VEC(epochs)        )  )
 
 
-   #define  spkw20_c( handle, body,   center, frame,  first,  last,    \
+   #define  spkw20_c( naif_state, handle, body,   center, frame,  first,  last,    \
                       segid,  intlen, n,      polydg, cdata,  dscale,  \
                       tscale, initjd, initfr                         ) \
                                                                        \
-        (   spkw20_c ( (handle), (body),   (center),         (frame),  \
+        (   spkw20_c ( naif_state, (handle), (body),   (center),         (frame),  \
                        (first),  (last),   (segid),          (intlen), \
                        (n),      (polydg), CONST_VEC(cdata), (dscale), \
                        (tscale), (initjd), (initfr)                  ) )
 
 
 
-   #define  srfxpt_c( method, target, et,    abcorr, obsrvr, dref,     \
+   #define  srfxpt_c( naif_state, method, target, et,    abcorr, obsrvr, dref,     \
                       dvec,   spoint, dist,  trgepc, obspos, found )   \
                                                                        \
-        (   srfxpt_c ( (method), (target),  (et), (abcorr), (obsrvr),  \
+        (   srfxpt_c ( naif_state, (method), (target),  (et), (abcorr), (obsrvr),  \
                        (dref),   CONST_VEC(dvec), (spoint), (dist),    \
                        (trgepc), (obspos),        (found)          )   )
 
 
-   #define  srfnrm_c( method, target, et,    fixref,                   \
+   #define  srfnrm_c( naif_state, method, target, et,    fixref,                   \
                       npts,   srfpts, normls         )                 \
                                                                        \
-        (   srfnrm_c ( CONST_STR(method),  CONST_STR(target), (et),    \
+        (   srfnrm_c ( naif_state, CONST_STR(method),  CONST_STR(target), (et),    \
                        CONST_STR(fixref),  (npts),                     \
                        CONST_VEC3(srfpts), (normls)               )   )
 
 
-   #define  stelab_c( pobj, vobj, appobj )                             \
+   #define  stelab_c( naif_state, pobj, vobj, appobj )                             \
                                                                        \
-        (   stelab_c ( CONST_VEC(pobj), CONST_VEC(vobj), (appobj)  )   )
+        (   stelab_c ( naif_state, CONST_VEC(pobj), CONST_VEC(vobj), (appobj)  )   )
 
 
-   #define  sumad_c( array, n )                                        \
+   #define  sumad_c( naif_state, array, n )                                        \
                                                                        \
-        (   sumad_c ( CONST_VEC(array), (n)  )   )
+        (   sumad_c ( naif_state, CONST_VEC(array), (n)  )   )
 
 
-   #define  sumai_c( array, n )                                        \
+   #define  sumai_c( naif_state, array, n )                                        \
                                                                        \
-        (   sumai_c ( CONST_IVEC(array), (n)  )   )
+        (   sumai_c ( naif_state, CONST_IVEC(array), (n)  )   )
 
 
-   #define  surfnm_c( a, b, c, point, normal )                         \
+   #define  surfnm_c( naif_state, a, b, c, point, normal )                         \
                                                                        \
-        (   surfnm_c ( (a), (b), (c), CONST_VEC(point), (normal) )   )
+        (   surfnm_c ( naif_state, (a), (b), (c), CONST_VEC(point), (normal) )   )
 
 
-   #define  surfpt_c( positn, u, a, b, c, point, found )               \
+   #define  surfpt_c( naif_state, positn, u, a, b, c, point, found )               \
                                                                        \
-        (   surfpt_c ( CONST_VEC(positn), CONST_VEC(u),                \
+        (   surfpt_c ( naif_state, CONST_VEC(positn), CONST_VEC(u),                \
                        (a),               (b),               (c),      \
                        (point),           (found)                 )   )
 
 
-   #define  surfpv_c( stvrtx, stdir, a, b, c, stx, found )             \
+   #define  surfpv_c( naif_state, stvrtx, stdir, a, b, c, stx, found )             \
                                                                        \
-        (   surfpv_c ( CONST_VEC(stvrtx), CONST_VEC(stdir),            \
+        (   surfpv_c ( naif_state, CONST_VEC(stvrtx), CONST_VEC(stdir),            \
                        (a),               (b),               (c),      \
                        (stx),             (found)                 )   )
 
 
-   #define  swpool_c( agent, nnames, lenvals, names )                  \
+   #define  swpool_c( naif_state, agent, nnames, lenvals, names )                  \
                                                                        \
-        (   swpool_c( CONST_STR(agent), (nnames),                      \
+        (   swpool_c( naif_state, CONST_STR(agent), (nnames),                      \
                       (lenvals),        CONST_VOID(names)         )    )
 
 
-   #define  termpt_c( method, ilusrc, target, et,     fixref,          \
+   #define  termpt_c( naif_state, method, ilusrc, target, et,     fixref,          \
                       abcorr, corloc, obsrvr, refvec,                  \
                       rolstp, ncuts,  schstp, soltol,                  \
                       maxn,   npts,   points, epochs,                  \
                       tangts                          )                \
                                                                        \
-       (   termpt_c( CONST_STR(method), CONST_STR(ilusrc),             \
+       (   termpt_c( naif_state, CONST_STR(method), CONST_STR(ilusrc),             \
                      CONST_STR(target), (et),                          \
                      CONST_STR(fixref), CONST_STR(abcorr),             \
                      CONST_STR(corloc), CONST_STR(obsrvr),             \
@@ -1436,242 +1436,242 @@ Macros that substitute for function calls:
                      (tangts)                                      )  )
 
 
-   #define  trace_c( m1 )                                              \
+   #define  trace_c( naif_state, m1 )                                              \
                                                                        \
-           ( trace_c ( CONST_MAT(m1) ) )
+           ( trace_c ( naif_state, CONST_MAT(m1) ) )
 
 
-   #define  twovec_c( axdef, indexa, plndef, indexp, mout )            \
+   #define  twovec_c( naif_state, axdef, indexa, plndef, indexp, mout )            \
                                                                        \
-        (   twovec_c ( CONST_VEC(axdef),  (indexa),                    \
+        (   twovec_c ( naif_state, CONST_VEC(axdef),  (indexa),                    \
                        CONST_VEC(plndef), (indexp), (mout) )   )
 
 
-   #define  ucrss_c( v1, v2, vout )                                    \
+   #define  ucrss_c( naif_state, v1, v2, vout )                                    \
                                                                        \
-        (   ucrss_c ( CONST_VEC(v1), CONST_VEC(v2), (vout) )   )
+        (   ucrss_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), (vout) )   )
 
 
-   #define  unorm_c( v1, vout, vmag )                                  \
+   #define  unorm_c( naif_state, v1, vout, vmag )                                  \
                                                                        \
-        (   unorm_c ( CONST_VEC(v1), (vout), (vmag) )   )
+        (   unorm_c ( naif_state, CONST_VEC(v1), (vout), (vmag) )   )
 
 
-   #define  unormg_c( v1, ndim, vout, vmag )                           \
+   #define  unormg_c( naif_state, v1, ndim, vout, vmag )                           \
                                                                        \
-        (   unormg_c ( CONST_VEC(v1), (ndim), (vout), (vmag) )   )
+        (   unormg_c ( naif_state, CONST_VEC(v1), (ndim), (vout), (vmag) )   )
 
 
-   #define  vadd_c( v1, v2, vout )                                     \
+   #define  vadd_c( naif_state, v1, v2, vout )                                     \
                                                                        \
-        (   vadd_c ( CONST_VEC(v1), CONST_VEC(v2), (vout) )   )
+        (   vadd_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), (vout) )   )
 
 
-   #define  vaddg_c( v1, v2, ndim,vout )                               \
+   #define  vaddg_c( naif_state, v1, v2, ndim,vout )                               \
                                                                        \
-        (  vaddg_c ( CONST_VEC(v1), CONST_VEC(v2), (ndim), (vout) ) )
+        (  vaddg_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), (ndim), (vout) ) )
 
 
-   #define  vcrss_c( v1, v2, vout )                                    \
+   #define  vcrss_c( naif_state, v1, v2, vout )                                    \
                                                                        \
-        (   vcrss_c ( CONST_VEC(v1), CONST_VEC(v2), (vout) )   )
+        (   vcrss_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), (vout) )   )
 
 
-   #define  vdist_c( v1, v2 )                                          \
+   #define  vdist_c( naif_state, v1, v2 )                                          \
                                                                        \
-        (   vdist_c ( CONST_VEC(v1), CONST_VEC(v2) )   )
+        (   vdist_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2) )   )
 
 
-   #define  vdistg_c( v1, v2, ndim )                                   \
+   #define  vdistg_c( naif_state, v1, v2, ndim )                                   \
                                                                        \
-        (   vdistg_c ( CONST_VEC(v1), CONST_VEC(v2), (ndim) )   )
+        (   vdistg_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), (ndim) )   )
 
 
-   #define  vdot_c( v1, v2 )                                           \
+   #define  vdot_c( naif_state, v1, v2 )                                           \
                                                                        \
-        (   vdot_c ( CONST_VEC(v1), CONST_VEC(v2) )   )
+        (   vdot_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2) )   )
 
 
-   #define  vdotg_c( v1, v2, ndim )                                    \
+   #define  vdotg_c( naif_state, v1, v2, ndim )                                    \
                                                                        \
-        (   vdotg_c ( CONST_VEC(v1), CONST_VEC(v2), (ndim) )   )
+        (   vdotg_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), (ndim) )   )
 
 
-   #define  vequ_c( vin, vout )                                        \
+   #define  vequ_c( naif_state, vin, vout )                                        \
                                                                        \
-        (   vequ_c ( CONST_VEC(vin), (vout) )   )
+        (   vequ_c ( naif_state, CONST_VEC(vin), (vout) )   )
 
 
-   #define  vequg_c( vin, ndim, vout )                                 \
+   #define  vequg_c( naif_state, vin, ndim, vout )                                 \
                                                                        \
-        (   vequg_c ( CONST_VEC(vin), (ndim), (vout) )   )
+        (   vequg_c ( naif_state, CONST_VEC(vin), (ndim), (vout) )   )
 
 
-   #define  vhat_c( v1, vout )                                         \
+   #define  vhat_c( naif_state, v1, vout )                                         \
                                                                        \
-        (   vhat_c ( CONST_VEC(v1), (vout) )   )
+        (   vhat_c ( naif_state, CONST_VEC(v1), (vout) )   )
 
 
-   #define  vhatg_c( v1, ndim, vout )                                  \
+   #define  vhatg_c( naif_state, v1, ndim, vout )                                  \
                                                                        \
-        (   vhatg_c ( CONST_VEC(v1), (ndim), (vout) )   )
+        (   vhatg_c ( naif_state, CONST_VEC(v1), (ndim), (vout) )   )
 
 
-   #define  vlcom3_c( a, v1, b, v2, c, v3, sum )                       \
+   #define  vlcom3_c( naif_state, a, v1, b, v2, c, v3, sum )                       \
                                                                        \
-        (   vlcom3_c ( (a), CONST_VEC(v1),                             \
+        (   vlcom3_c ( naif_state, (a), CONST_VEC(v1),                             \
                        (b), CONST_VEC(v2),                             \
                        (c), CONST_VEC(v3), (sum) )   )
 
 
-   #define  vlcom_c( a, v1, b, v2, sum )                               \
+   #define  vlcom_c( naif_state, a, v1, b, v2, sum )                               \
                                                                        \
-        (   vlcom_c ( (a), CONST_VEC(v1),                              \
+        (   vlcom_c ( naif_state, (a), CONST_VEC(v1),                              \
                       (b), CONST_VEC(v2), (sum) )   )
 
 
-   #define  vlcomg_c( n, a, v1, b, v2, sum )                           \
+   #define  vlcomg_c( naif_state, n, a, v1, b, v2, sum )                           \
                                                                        \
-           ( vlcomg_c ( (n), (a), CONST_VEC(v1),                       \
+           ( vlcomg_c ( naif_state, (n), (a), CONST_VEC(v1),                       \
                              (b), CONST_VEC(v2),  (sum) )   )
 
 
-   #define  vminug_c( v1, ndim, vout )                                 \
+   #define  vminug_c( naif_state, v1, ndim, vout )                                 \
                                                                        \
-       (   vminug_c ( CONST_VEC(v1), (ndim), (vout) )   )
+       (   vminug_c ( naif_state, CONST_VEC(v1), (ndim), (vout) )   )
 
 
-   #define  vminus_c( v1, vout )                                       \
+   #define  vminus_c( naif_state, v1, vout )                                       \
                                                                        \
-        (   vminus_c ( CONST_VEC(v1), (vout) )   )
+        (   vminus_c ( naif_state, CONST_VEC(v1), (vout) )   )
 
 
-   #define  vnorm_c( v1 )                                              \
+   #define  vnorm_c( naif_state, v1 )                                              \
                                                                        \
-        (   vnorm_c ( CONST_VEC(v1) )   )
+        (   vnorm_c ( naif_state, CONST_VEC(v1) )   )
 
 
-   #define  vnormg_c( v1, ndim )                                       \
+   #define  vnormg_c( naif_state, v1, ndim )                                       \
                                                                        \
-        (   vnormg_c ( CONST_VEC(v1), (ndim) )   )
+        (   vnormg_c ( naif_state, CONST_VEC(v1), (ndim) )   )
 
 
-   #define  vperp_c( a, b, p )                                         \
+   #define  vperp_c( naif_state, a, b, p )                                         \
                                                                        \
-        (   vperp_c ( CONST_VEC(a), CONST_VEC(b), (p) )   )
+        (   vperp_c ( naif_state, CONST_VEC(a), CONST_VEC(b), (p) )   )
 
 
-   #define  vprjp_c( vin, plane, vout )                                \
+   #define  vprjp_c( naif_state, vin, plane, vout )                                \
                                                                        \
-        (   vprjp_c ( CONST_VEC(vin), CONST_PLANE(plane), (vout) )   )
+        (   vprjp_c ( naif_state, CONST_VEC(vin), CONST_PLANE(plane), (vout) )   )
 
 
-   #define  vprjpi_c( vin, projpl, invpl, vout, found )                \
+   #define  vprjpi_c( naif_state, vin, projpl, invpl, vout, found )                \
                                                                        \
-        (   vprjpi_c( CONST_VEC(vin),     CONST_PLANE(projpl),         \
+        (   vprjpi_c( naif_state, CONST_VEC(vin),     CONST_PLANE(projpl),         \
                       CONST_PLANE(invpl), (vout),           (found) ) )
 
 
-   #define  vproj_c( a, b, p )                                         \
+   #define  vproj_c( naif_state, a, b, p )                                         \
                                                                        \
-        (   vproj_c ( CONST_VEC(a), CONST_VEC(b), (p) )   )
+        (   vproj_c ( naif_state, CONST_VEC(a), CONST_VEC(b), (p) )   )
 
 
-   #define  vrel_c( v1, v2 )                                           \
+   #define  vrel_c( naif_state, v1, v2 )                                           \
                                                                        \
-           ( vrel_c ( CONST_VEC(v1), CONST_VEC(v2) )   )
+           ( vrel_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2) )   )
 
 
-   #define  vrelg_c( v1, v2, ndim )                                    \
+   #define  vrelg_c( naif_state, v1, v2, ndim )                                    \
                                                                        \
-           ( vrelg_c ( CONST_VEC(v1), CONST_VEC(v2), (ndim) )   )
+           ( vrelg_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), (ndim) )   )
 
 
-   #define  vrotv_c( v, axis, theta, r )                               \
+   #define  vrotv_c( naif_state, v, axis, theta, r )                               \
                                                                        \
-        (   vrotv_c ( CONST_VEC(v), CONST_VEC(axis), (theta), (r) )   )
+        (   vrotv_c ( naif_state, CONST_VEC(v), CONST_VEC(axis), (theta), (r) )   )
 
 
-   #define  vscl_c( s, v1, vout )                                      \
+   #define  vscl_c( naif_state, s, v1, vout )                                      \
                                                                        \
-        (   vscl_c ( (s), CONST_VEC(v1), (vout) )   )
+        (   vscl_c ( naif_state, (s), CONST_VEC(v1), (vout) )   )
 
 
-   #define  vsclg_c( s, v1, ndim, vout )                               \
+   #define  vsclg_c( naif_state, s, v1, ndim, vout )                               \
                                                                        \
-        (   vsclg_c ( (s), CONST_VEC(v1), (ndim), (vout) )   )
+        (   vsclg_c ( naif_state, (s), CONST_VEC(v1), (ndim), (vout) )   )
 
 
-   #define  vsep_c( v1, v2 )                                           \
+   #define  vsep_c( naif_state, v1, v2 )                                           \
                                                                        \
-        (   vsep_c ( CONST_VEC(v1), CONST_VEC(v2) )   )
+        (   vsep_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2) )   )
 
 
-   #define  vsepg_c( v1, v2, ndim)                                     \
+   #define  vsepg_c( naif_state, v1, v2, ndim)                                     \
                                                                        \
-           ( vsepg_c ( CONST_VEC(v1), CONST_VEC(v2), ndim )  )
+           ( vsepg_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), ndim )  )
 
 
-   #define  vsub_c( v1, v2, vout )                                     \
+   #define  vsub_c( naif_state, v1, v2, vout )                                     \
                                                                        \
-        (   vsub_c ( CONST_VEC(v1), CONST_VEC(v2), (vout) )   )
+        (   vsub_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2), (vout) )   )
 
 
-   #define  vsubg_c( v1, v2, ndim, vout )                              \
+   #define  vsubg_c( naif_state, v1, v2, ndim, vout )                              \
                                                                        \
-        (   vsubg_c ( CONST_VEC(v1), CONST_VEC(v2),                    \
+        (   vsubg_c ( naif_state, CONST_VEC(v1), CONST_VEC(v2),                    \
                       (ndim),        (vout)            )   )
 
-   #define  vtmv_c( v1, mat, v2 )                                      \
+   #define  vtmv_c( naif_state, v1, mat, v2 )                                      \
                                                                        \
-        ( vtmv_c ( CONST_VEC(v1), CONST_MAT(mat), CONST_VEC(v2) ) )
+        ( vtmv_c ( naif_state, CONST_VEC(v1), CONST_MAT(mat), CONST_VEC(v2) ) )
 
 
-   #define  vtmvg_c( v1, mat, v2, nrow, ncol )                         \
+   #define  vtmvg_c( naif_state, v1, mat, v2, nrow, ncol )                         \
                                                                        \
-        ( vtmvg_c ( CONST_VOID(v1), CONST_VOID(mat), CONST_VOID(v2),   \
+        ( vtmvg_c ( naif_state, CONST_VOID(v1), CONST_VOID(mat), CONST_VOID(v2),   \
                    (nrow), (ncol)                                   )  )
 
 
-   #define  vupack_c( v, x, y, z )                                     \
+   #define  vupack_c( naif_state, v, x, y, z )                                     \
                                                                        \
-        (   vupack_c ( CONST_VEC(v), (x), (y), (z) )   )
+        (   vupack_c ( naif_state, CONST_VEC(v), (x), (y), (z) )   )
 
 
-   #define  vzero_c( v1 )                                              \
+   #define  vzero_c( naif_state, v1 )                                              \
                                                                        \
-        (   vzero_c ( CONST_VEC(v1) )   )
+        (   vzero_c ( naif_state, CONST_VEC(v1) )   )
 
 
-   #define  vzerog_c( v1, ndim )                                       \
+   #define  vzerog_c( naif_state, v1, ndim )                                       \
                                                                        \
-           (   vzerog_c ( CONST_VEC(v1), (ndim) )   )
+           (   vzerog_c ( naif_state, CONST_VEC(v1), (ndim) )   )
 
 
-   #define  xf2eul_c( xform, axisa, axisb, axisc, eulang, unique )     \
+   #define  xf2eul_c( naif_state, xform, axisa, axisb, axisc, eulang, unique )     \
                                                                        \
-        (   xf2eul_c( CONST_MAT6(xform), (axisa), (axisb), (axisc),    \
+        (   xf2eul_c( naif_state, CONST_MAT6(xform), (axisa), (axisb), (axisc),    \
                       (eulang),          (unique)                  )  )
 
 
-   #define  xf2rav_c( xform, rot, av )                                 \
+   #define  xf2rav_c( naif_state, xform, rot, av )                                 \
                                                                        \
-        (   xf2rav_c( CONST_MAT6(xform), (rot), (av) )   )
+        (   xf2rav_c( naif_state, CONST_MAT6(xform), (rot), (av) )   )
 
 
-   #define  xpose6_c( m1, mout )                                       \
+   #define  xpose6_c( naif_state, m1, mout )                                       \
                                                                        \
-        (   xpose6_c ( CONST_MAT6(m1), (mout) )   )
+        (   xpose6_c ( naif_state, CONST_MAT6(m1), (mout) )   )
 
 
-   #define  xpose_c( m1, mout )                                        \
+   #define  xpose_c( naif_state, m1, mout )                                        \
                                                                        \
-        (   xpose_c ( CONST_MAT(m1), (mout) )   )
+        (   xpose_c ( naif_state, CONST_MAT(m1), (mout) )   )
 
 
-   #define  xposeg_c( matrix, nrow, ncol, mout )                       \
+   #define  xposeg_c( naif_state, matrix, nrow, ncol, mout )                       \
                                                                        \
-        (   xposeg_c ( CONST_VOID(matrix), (nrow), (ncol), (mout) )   )
+        (   xposeg_c ( naif_state, CONST_VOID(matrix), (nrow), (ncol), (mout) )   )
 
 
 #endif
