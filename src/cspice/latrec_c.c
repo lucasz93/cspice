@@ -44,7 +44,8 @@
    #include <math.h>
    #include "SpiceUsr.h"
 
-   void latrec_c ( SpiceDouble    radius,
+   void latrec_c ( void         * naif_state,
+                   SpiceDouble    radius,
                    SpiceDouble    longitude,
                    SpiceDouble    latitude,
                    SpiceDouble    rectan[3] )
