@@ -19,7 +19,7 @@
 #include "string.h"
 #endif /* NO_OVERWRITE */
 
- VOID
+ int
 #ifdef KR_headers
 s_cat(f2c, lp, rpp, rnp, np, ll) f2c_state_t *f2c; char *lp, *rpp[]; ftnlen rnp[], *np, ll;
 #else

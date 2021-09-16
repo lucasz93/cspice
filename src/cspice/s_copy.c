@@ -10,9 +10,9 @@
 /* assign strings:  a = b */
 
 #ifdef KR_headers
-VOID s_copy(f2c, a, b, la, lb) f2c_state_t *f2c; register char *a, *b; ftnlen la, lb;
+int s_copy(f2c, a, b, la, lb) f2c_state_t *f2c; register char *a, *b; ftnlen la, lb;
 #else
-void s_copy(f2c_state_t *f2c, register char *a, register char *b, ftnlen la, ftnlen lb)
+int s_copy(f2c_state_t *f2c, register char *a, register char *b, ftnlen la, ftnlen lb)
 #endif
 {
 	register char *aend, *bend;
