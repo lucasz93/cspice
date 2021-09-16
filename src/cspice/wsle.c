@@ -4,6 +4,7 @@
 #include "lio.h"
 #include "string.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
 integer s_wsle(f2c,a) f2c_state_t *f2c; cilist *a;

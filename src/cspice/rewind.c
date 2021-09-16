@@ -1,6 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 #ifdef KR_headers
 integer f_rew(f2c,a) f2c_state_t *f2c; alist *a;
 #else

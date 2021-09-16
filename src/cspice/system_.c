@@ -60,10 +60,9 @@
 */
 
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-
-   extern char *F77_aloc();
 
    integer system_(s, n) register char *s; ftnlen n;
 
@@ -73,8 +72,6 @@
    #undef min
    #undef max
    #include "stdlib.h"
-
-   extern char *F77_aloc(ftnlen, char*);
 
    integer system_(register char *s, ftnlen n)
 

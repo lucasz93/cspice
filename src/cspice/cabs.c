@@ -70,6 +70,10 @@
    #ifdef MIX_C_AND_FORTRAN
       #include "f2cMang.h"
    #endif
+
+   #include "f2c.h"
+   #include "fprocs.h"
+
    /*
    End of modification.  
    */

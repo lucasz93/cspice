@@ -69,6 +69,9 @@
    #ifdef MIX_C_AND_FORTRAN
       #include "f2cMang.h"
    #endif
+
+   #include "f2c.h"
+   #include "fprocs.h"
    /*
    End of modification.  
    */
@@ -100,9 +103,9 @@
 
  double
 #ifdef KR_headers
-etime_(tarray) float *tarray;
+etime_(f2c, tarray) f2c_state_t *f2c; float *tarray;
 #else
-etime_(float *tarray)
+etime_(f2c_state_t *f2c, float *tarray)
 #endif
 {
 #ifdef USE_CLOCK

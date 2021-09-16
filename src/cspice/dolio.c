@@ -1,5 +1,6 @@
 #include "f2c.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 #ifdef __cplusplus
 extern "C" {

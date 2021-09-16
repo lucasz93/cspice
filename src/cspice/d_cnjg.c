@@ -1,10 +1,11 @@
 #include "f2c.h"
+#include "fprocs.h"
 
  VOID
 #ifdef KR_headers
-d_cnjg(r, z) doublecomplex *r, *z;
+d_cnjg(f2c, r, z) f2c_state_t *f2c; doublecomplex *r, *z;
 #else
-d_cnjg(doublecomplex *r, doublecomplex *z)
+d_cnjg(f2c_state_t *f2c, doublecomplex *r, doublecomplex *z)
 #endif
 {
 r->r = z->r;

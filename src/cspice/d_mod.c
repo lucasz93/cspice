@@ -1,4 +1,5 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
 #ifdef IEEE_drem
@@ -6,7 +7,7 @@ double drem();
 #else
 double floor();
 #endif
-double d_mod(x,y) doublereal *x, *y;
+double d_mod(f2c,x,y) f2c_state_t *f2c; doublereal *x, *y;
 #else
 #ifdef IEEE_drem
 double drem(double, double);
@@ -14,7 +15,7 @@ double drem(double, double);
 #undef abs
 #include "math.h"
 #endif
-double d_mod(doublereal *x, doublereal *y)
+double d_mod(f2c_state_t *f2c, doublereal *x, doublereal *y)
 #endif
 {
 #ifdef IEEE_drem

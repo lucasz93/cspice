@@ -1,12 +1,13 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
 double atan2();
-double d_atn2(x,y) doublereal *x, *y;
+double d_atn2(f2c,x,y) f2c_state_t *f2c; doublereal *x, *y;
 #else
 #undef abs
 #include "math.h"
-double d_atn2(doublereal *x, doublereal *y)
+double d_atn2(f2c_state_t *f2c, doublereal *x, doublereal *y)
 #endif
 {
 return( atan2(*x,*y) );

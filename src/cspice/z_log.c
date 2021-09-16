@@ -1,13 +1,13 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-double log(), f__cabs(), atan2();
-VOID z_log(r, z) doublecomplex *r, *z;
+double log(), atan2();
+VOID z_log(f2c, r, z) f2c_state_t *f2c; doublecomplex *r, *z;
 #else
 #undef abs
 #include "math.h"
-extern double f__cabs(double, double);
-void z_log(doublecomplex *r, doublecomplex *z)
+void z_log(f2c_state_t *f2c, doublecomplex *r, doublecomplex *z)
 #endif
 {
 	double zi = z->i;

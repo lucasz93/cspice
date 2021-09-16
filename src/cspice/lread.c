@@ -1,5 +1,6 @@
 #include "f2c.h"
 #include "fio.h"
+#include "fprocs.h"
 
 /* Compile with -DF8X_NML_ELIDE_QUOTES to permit eliding quotation */
 /* marks in namelist input a la the Fortran 8X Draft published in  */
@@ -54,7 +55,7 @@ un_getc(f2c_state_t *f2c, int x, FILE *f__cf)
 #endif
 { return ungetc(x,f__cf); }
 
-t_getc(f2c_state_t *f2c)
+int t_getc(f2c_state_t *f2c)
 {	int ch;
 	if(f2c->f__curunit->uend) return(EOF);
 	if((ch=getc(f2c->f__cf))!=EOF) return(ch);
@@ -500,9 +501,9 @@ l_CHAR(f2c_state_t *f2c)
 	}
 }
 #ifdef KR_headers
-c_le(f2c,a) f2c_state_t *f2c; cilist *a;
+int c_le(f2c,a) f2c_state_t *f2c; cilist *a;
 #else
-c_le(f2c_state_t *f2c, cilist *a)
+int c_le(f2c_state_t *f2c, cilist *a)
 #endif
 {
 	if(!f2c->f__init)
@@ -520,9 +521,9 @@ c_le(f2c_state_t *f2c, cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-l_read(f2c,number,ptr,len,type) f2c_state_t *f2c; ftnint *number,type; char *ptr; ftnlen len;
+int l_read(f2c,number,ptr,len,type) f2c_state_t *f2c; ftnint *number,type; char *ptr; ftnlen len;
 #else
-l_read(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len, ftnint type)
+int l_read(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 {
 #define Ptr ((flex *)ptr)

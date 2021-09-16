@@ -1,5 +1,6 @@
 #include "f2c.h"
 #include "fio.h"
+#include "fprocs.h"
 #include "__cspice_state.h"
 #ifdef KR_headers
 integer f_clos(f2c, a) f2c_state_t *f2c; cllist *a;

@@ -2,8 +2,9 @@
 #include "fio.h"
 #include "fmt.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
-z_getc(f2c_state_t *f2c)
+int z_getc(f2c_state_t *f2c)
 {
 	if(f2c->f__recpos++ < f2c->f__svic->icirlen) {
 		if(f2c->f__icptr >= f2c->f__icend) err(f2c, f2c->f__svic->iciend,(EOF),"endfile");
@@ -22,7 +23,7 @@ z_putc(f2c_state_t *f2c, int c)
 	if (f2c->f__icptr < f2c->f__icend && f2c->f__recpos++ < f2c->f__svic->icirlen)
 		*f2c->f__icptr++ = c;
 }
-z_rnew(f2c_state_t *f2c)
+int z_rnew(f2c_state_t *f2c)
 {
 	f2c->f__icptr = f2c->f__svic->iciunit + (++f2c->f__icnum)*f2c->f__svic->icirlen;
 	f2c->f__recpos = 0;
@@ -39,9 +40,9 @@ z_endp(f2c_state_t *f2c)
 	}
 
 #ifdef KR_headers
-c_si(f2c, a) f2c_state_t *f2c; icilist *a;
+int c_si(f2c, a) f2c_state_t *f2c; icilist *a;
 #else
-c_si(f2c_state_t *f2c, icilist *a)
+int c_si(f2c_state_t *f2c, icilist *a)
 #endif
 {
 	f2c->f__elist = (cilist *)a;
@@ -89,7 +90,7 @@ integer s_rsfi(f2c_state_t *f2c, icilist *a)
 	return(0);
 }
 
-z_wnew(f2c_state_t *f2c)
+int z_wnew(f2c_state_t *f2c)
 {
 	if (f2c->f__recpos < f2c->f__hiwater) {
 		f2c->f__icptr += f2c->f__hiwater - f2c->f__recpos;

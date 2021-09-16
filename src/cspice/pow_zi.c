@@ -1,11 +1,12 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-VOID pow_zi(p, a, b) 	/* p = a**b  */
+VOID pow_zi(f2c, p, a, b) 	/* p = a**b  */
+ f2c_state_t *f2c;
  doublecomplex *p, *a; integer *b;
 #else
-extern void z_div(doublecomplex*, doublecomplex*, doublecomplex*);
-void pow_zi(doublecomplex *p, doublecomplex *a, integer *b) 	/* p = a**b  */
+void pow_zi(f2c_state_t *f2c, doublecomplex *p, doublecomplex *a, integer *b) 	/* p = a**b  */
 #endif
 {
 	integer n;
@@ -24,7 +25,7 @@ void pow_zi(doublecomplex *p, doublecomplex *a, integer *b) 	/* p = a**b  */
 	if(n < 0)
 		{
 		n = -n;
-		z_div(&x, &one, a);
+		z_div(f2c, &x, &one, a);
 		}
 	else
 		{

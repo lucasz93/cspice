@@ -1,5 +1,6 @@
 #include "f2c.h"
 #include "fio.h"
+#include "fprocs.h"
 
 #ifndef KR_headers
 #undef abs

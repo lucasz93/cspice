@@ -6,12 +6,13 @@
 #endif
 #include "f2c.h"
 #include "fio.h"
+#include "fprocs.h"
 
  VOID
 #ifdef KR_headers
-g_char(a,alen,b) char *a,*b; ftnlen alen;
+g_char(f2c,a,alen,b) f2c_state_t *f2c; char *a,*b; ftnlen alen;
 #else
-g_char(char *a, ftnlen alen, char *b)
+g_char(f2c_state_t *f2c, char *a, ftnlen alen, char *b)
 #endif
 {
 	char *x = a + alen, *y = b + alen;
@@ -31,9 +32,9 @@ g_char(char *a, ftnlen alen, char *b)
 
  VOID
 #ifdef KR_headers
-b_char(a,b,blen) char *a,*b; ftnlen blen;
+b_char(f2c,a,b,blen) f2c_state_t *f2c; char *a,*b; ftnlen blen;
 #else
-b_char(char *a, char *b, ftnlen blen)
+b_char(f2c_state_t *f2c, char *a, char *b, ftnlen blen)
 #endif
 {	int i;
 	for(i=0;i<blen && *a!=0;i++) *b++= *a++;
@@ -41,9 +42,9 @@ b_char(char *a, char *b, ftnlen blen)
 }
 #ifndef NON_UNIX_STDIO
 #ifdef KR_headers
-long f__inode(a, dev) char *a; int *dev;
+long f__inode(f2c, a, dev) f2c_state_t *f2c; char *a; int *dev;
 #else
-long f__inode(char *a, int *dev)
+long f__inode(f2c_state_t *f2c, char *a, int *dev)
 #endif
 {	struct stat x;
 	if(stat(a,&x)<0) return(-1);

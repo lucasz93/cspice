@@ -1,15 +1,14 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-extern double sqrt(), f__cabs();
+extern double sqrt()
 
-VOID c_sqrt(r, z) complex *r, *z;
+VOID c_sqrt(f2c, r, z) f2c_state_t *f2c; complex *r, *z;
 #else
 #undef abs
 #include "math.h"
-extern double f__cabs(double, double);
-
-void c_sqrt(complex *r, complex *z)
+void c_sqrt(f2c_state_t *f2c, complex *r, complex *z)
 #endif
 {
 	double mag, t;

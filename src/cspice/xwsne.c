@@ -2,6 +2,7 @@
 #include "fio.h"
 #include "lio.h"
 #include "fmt.h"
+#include "fprocs.h"
 
  static VOID
 nl_donewrec(f2c_state_t *f2c)

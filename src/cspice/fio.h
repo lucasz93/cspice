@@ -61,7 +61,7 @@ extern "C" {
 #endif
 extern void x_putc(struct f2c_state_s *,int);
 extern long f__inode(char*,int*);
-extern void sig_die(char*,int);
+extern void sig_die(struct f2c_state_s*,char*,int);
 extern void f__fatal(struct f2c_state_s*,int,char*);
 extern int t_runc(struct f2c_state_s*,alist*);
 extern int f__nowreading(struct f2c_state_s*,unit*), f__nowwriting(struct f2c_state_s*,unit*);

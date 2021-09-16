@@ -2,6 +2,7 @@
 #include "fio.h"
 #include "fmt.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 #define skip(s) while(*s==' ') s++
 #ifdef interdata
 #define SYLMX 300

@@ -1,12 +1,13 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
 double tanh();
-double d_tanh(x) doublereal *x;
+double d_tanh(f2c,x) f2c_state_t *f2c; doublereal *x;
 #else
 #undef abs
 #include "math.h"
-double d_tanh(doublereal *x)
+double d_tanh(f2c_state_t *f2c, doublereal *x)
 #endif
 {
 return( tanh(*x) );

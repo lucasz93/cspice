@@ -1,6 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
  static FILE *
 #ifdef KR_headers

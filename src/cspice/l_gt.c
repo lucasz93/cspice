@@ -1,12 +1,11 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-extern integer s_cmp();
-logical l_gt(a,b,la,lb) char *a, *b; ftnlen la, lb;
+logical l_gt(f2c,a,b,la,lb) f2c_state_t *f2c; char *a, *b; ftnlen la, lb;
 #else
-extern integer s_cmp(char *, char *, ftnlen, ftnlen);
-logical l_gt(char *a, char *b, ftnlen la, ftnlen lb)
+logical l_gt(f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb)
 #endif
 {
-return(s_cmp(a,b,la,lb) > 0);
+return(s_cmp(f2c,a,b,la,lb) > 0);
 }

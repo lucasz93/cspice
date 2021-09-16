@@ -3,6 +3,7 @@
 #include "fmt.h"
 #include "lio.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
  static VOID
 donewrec(f2c_state_t *f2c)

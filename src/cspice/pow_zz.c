@@ -1,13 +1,13 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-double log(), exp(), cos(), sin(), atan2(), f__cabs();
-VOID pow_zz(r,a,b) doublecomplex *r, *a, *b;
+double log(), exp(), cos(), sin(), atan2();
+VOID pow_zz(f2c,r,a,b) f2c_state_t *f2c; doublecomplex *r, *a, *b;
 #else
 #undef abs
 #include "math.h"
-extern double f__cabs(double,double);
-void pow_zz(doublecomplex *r, doublecomplex *a, doublecomplex *b)
+void pow_zz(f2c_state_t *f2c, doublecomplex *r, doublecomplex *a, doublecomplex *b)
 #endif
 {
 double logr, logi, x, y;

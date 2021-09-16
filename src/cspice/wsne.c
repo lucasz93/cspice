@@ -1,6 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "lio.h"
+#include "fprocs.h"
 
  integer
 #ifdef KR_headers

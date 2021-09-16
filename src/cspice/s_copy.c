@@ -5,6 +5,7 @@
  */
 
 #include "f2c.h"
+#include "fprocs.h"
 
 /* assign strings:  a = b */
 

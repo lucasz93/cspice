@@ -60,6 +60,7 @@ extern char *malloc();
 #include "fio.h"
 #include "fmt.h"   /* for struct syl */
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 /*
 -Brief_I/O

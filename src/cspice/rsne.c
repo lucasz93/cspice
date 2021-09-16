@@ -2,6 +2,7 @@
 #include "fio.h"
 #include "lio.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 #define MAX_NL_CACHE 3	/* maximum number of namelist hash tables to cache */
 #define MAXDIM 20	/* maximum number of subscripts */
@@ -15,8 +16,6 @@
  typedef struct dimen dimen;
 
  extern ftnlen f__typesize[];
-
- extern t_getc(f2c_state_t *);
 
  static int
 #ifdef KR_headers

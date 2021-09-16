@@ -11,14 +11,11 @@
 
 #include "stdio.h"
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-extern VOID sig_die();
-
 int abort_()
 #else
-extern void sig_die(char*,int);
-
 int abort_(void)
 #endif
 {

@@ -1,12 +1,12 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-extern VOID sig_die();
-VOID c_div(c, a, b)
+VOID c_div(f2c, c, a, b)
+f2c_state_t *f2c;
 complex *a, *b, *c;
 #else
-extern void sig_die(char*,int);
-void c_div(complex *c, complex *a, complex *b)
+void c_div(f2c_state_t *f2c, complex *c, complex *a, complex *b)
 #endif
 {
 	double ratio, den;

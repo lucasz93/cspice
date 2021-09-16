@@ -65,6 +65,7 @@
 
 #include "f2c.h"
 #include "fio.h"
+#include "fprocs.h"
 #include "string.h"
 #ifndef NON_POSIX_STDIO
 #ifdef MSDOS
@@ -79,7 +80,6 @@ extern char *malloc();
 #ifdef NON_ANSI_STDIO
 extern char *mktemp();
 #endif
-extern integer f_clos();
 #else
 #undef abs
 #undef min
@@ -93,7 +93,6 @@ extern "C" {
 #endif
 
 extern int f__canseek(FILE*);
-extern integer f_clos(cllist*);
 #endif
 
 #ifdef NON_ANSI_RW_MODES
@@ -420,11 +419,11 @@ static void
 
 #ifdef KR_headers
 
-   fk_open(f2c, seq, fmt, n) f2c_state_t *f2c; ftnint n;
+   int fk_open(f2c, seq, fmt, n) f2c_state_t *f2c; ftnint n;
 
 #else
 
-   fk_open(f2c_state_t *f2c, int seq, int fmt, ftnint n)
+   int fk_open(f2c_state_t *f2c, int seq, int fmt, ftnint n)
 
 #endif
    {

@@ -2,6 +2,7 @@
 #include "fio.h"
 #include "fmt.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 int y_rsk(f2c_state_t *f2c)
 {

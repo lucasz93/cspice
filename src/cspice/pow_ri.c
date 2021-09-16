@@ -1,9 +1,10 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-double pow_ri(ap, bp) real *ap; integer *bp;
+double pow_ri(f2c, ap, bp) f2c_state_t *f2c; real *ap; integer *bp;
 #else
-double pow_ri(real *ap, integer *bp)
+double pow_ri(f2c_state_t *f2c, real *ap, integer *bp)
 #endif
 {
 double pow, x;

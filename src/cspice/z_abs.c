@@ -1,11 +1,10 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-double f__cabs();
-double z_abs(z) doublecomplex *z;
+double z_abs(f2c, z) f2c_state_t *f2c; doublecomplex *z;
 #else
-double f__cabs(double, double);
-double z_abs(doublecomplex *z)
+double z_abs(f2c_state_t *f2c, doublecomplex *z)
 #endif
 {
 return( f__cabs( z->r, z->i ) );

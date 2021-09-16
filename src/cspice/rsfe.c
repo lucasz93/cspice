@@ -46,6 +46,7 @@
 #include "fio.h"
 #include "fmt.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 logical zzcheckeol ( f2c_state_t *f2c, int ch );
 void    zzsetnnread_( f2c_state_t *f2c, logical * on );

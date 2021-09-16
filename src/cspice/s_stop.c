@@ -11,10 +11,10 @@
 
 #include "stdio.h"
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-extern void f_exit();
-VOID s_stop(s, n) char *s; ftnlen n;
+VOID s_stop(f2c, s, n) f2c_state_t *f2c; char *s; ftnlen n;
 #else
 #undef abs
 #undef min
@@ -23,9 +23,7 @@ VOID s_stop(s, n) char *s; ftnlen n;
 #ifdef __cplusplus
 extern "C" {
 #endif
-void f_exit(void);
-
-int s_stop(char *s, ftnlen n)
+int s_stop(f2c_state_t *f2c, char *s, ftnlen n)
 #endif
 {
 int i;
@@ -38,7 +36,7 @@ if(n > 0)
    fprintf(stderr, " statement executed\n");
    }
 #ifdef NO_ONEXIT
-f_exit();
+f_exit(f2c);
 #endif
 exit(0);
 

@@ -1,6 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
 extern double atof();

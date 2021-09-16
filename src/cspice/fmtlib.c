@@ -3,6 +3,7 @@
 
 #include "f2c.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 #ifndef Allow_TYQUAD
 #undef longint
 #define longint long

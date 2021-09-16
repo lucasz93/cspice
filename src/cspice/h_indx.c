@@ -1,9 +1,10 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-shortint h_indx(a, b, la, lb) char *a, *b; ftnlen la, lb;
+shortint h_indx(f2c, a, b, la, lb) f2c_state_t *f2c; char *a, *b; ftnlen la, lb;
 #else
-shortint h_indx(char *a, char *b, ftnlen la, ftnlen lb)
+shortint h_indx(f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb)
 #endif
 {
 ftnlen i, n;

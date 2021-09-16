@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "f2c.h"
+#include "fprocs.h"
 #define PAUSESIG 15
 
 #include "signal1.h"
@@ -18,8 +19,6 @@ extern "C" {
 #endif
 extern int getpid(void), isatty(int), pause(void);
 #endif
-
-extern VOID f_exit(Void);
 
  static VOID
 waitpause(Sigarg)
@@ -48,9 +47,9 @@ s_1paus(FILE *fin)
 
  int
 #ifdef KR_headers
-s_paus(s, n) char *s; ftnlen n;
+s_paus(f2c, s, n) f2c_state_t *f2c; char *s; ftnlen n;
 #else
-s_paus(char *s, ftnlen n)
+s_paus(f2c_state_t *f2c, char *s, ftnlen n)
 #endif
 {
 	fprintf(stderr, "PAUSE ");

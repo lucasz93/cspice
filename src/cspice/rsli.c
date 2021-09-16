@@ -3,6 +3,7 @@
 #include "lio.h"
 #include "fmt.h" /* for f__doend */
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 static int i_getc(f2c_state_t *f2c)
 {
@@ -78,8 +79,6 @@ integer e_rsli(Void)
 #ifdef KR_headers
 integer s_rsni(f2c,a) f2c_state_t *f2c; icilist *a;
 #else
-extern int x_rsne(f2c_state_t *f2c, cilist*);
-
 integer s_rsni(f2c_state_t *f2c, icilist *a)
 #endif
 {

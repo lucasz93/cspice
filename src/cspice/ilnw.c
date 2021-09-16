@@ -2,11 +2,7 @@
 #include "fio.h"
 #include "lio.h"
 #include "__cspice_state.h"
-#ifdef KR_headers
-extern void z_putc();
-#else
-extern void z_putc(f2c_state_t *,int);
-#endif
+#include "fprocs.h"
 
  static int
 z_wSL(f2c_state_t *f2c)

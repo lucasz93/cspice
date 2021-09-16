@@ -75,6 +75,8 @@
 
 #include "stdio.h"
 #include "signal.h"
+#include "f2c.h"
+#include "fprocs.h"
 
 #ifndef SIGIOT
 #ifdef SIGABRT
@@ -83,15 +85,13 @@
 #endif
 
 #ifdef KR_headers
-void sig_die(s, kill) register char *s; int kill;
+void sig_die(f2c, s, kill) f2c_state_t *f2c; register char *s; int kill;
 #else
 #include "stdlib.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
- extern void f_exit(void);
-
-void sig_die(register char *s, int kill)
+void sig_die(f2c_state_t *f2c, register char *s, int kill)
 #endif
 {
    /* print error message, then clear buffers */
@@ -100,7 +100,7 @@ void sig_die(register char *s, int kill)
    if(kill)
       {
       fflush(stderr);
-      f_exit();
+      f_exit(f2c);
       fflush(stderr);
       /* now get a core */
 #ifdef SIGIOT

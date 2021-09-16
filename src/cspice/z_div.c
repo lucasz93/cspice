@@ -1,11 +1,10 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
-extern VOID sig_die();
-VOID z_div(c, a, b) doublecomplex *a, *b, *c;
+VOID z_div(f2c, c, a, b) f2c_state_t *f2c; doublecomplex *a, *b, *c;
 #else
-extern void sig_die(char*, int);
-void z_div(doublecomplex *c, doublecomplex *a, doublecomplex *b)
+void z_div(f2c_state_t *f2c, doublecomplex *c, doublecomplex *a, doublecomplex *b)
 #endif
 {
 	double ratio, den;
@@ -18,7 +17,7 @@ void z_div(doublecomplex *c, doublecomplex *a, doublecomplex *b)
 	if( abr <= abi )
 		{
 		if(abi == 0)
-			sig_die("complex division by zero", 1);
+			sig_die(f2c, "complex division by zero", 1);
 		ratio = b->r / b->i ;
 		den = b->i * (1 + ratio*ratio);
 		cr = (a->r*ratio + a->i) / den;

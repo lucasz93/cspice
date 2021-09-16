@@ -1,4 +1,5 @@
 #include "f2c.h"
+#include "fprocs.h"
 #undef abs
 #undef min
 #undef max
@@ -9,16 +10,14 @@ static integer memfailure = 3;
 
 #ifdef KR_headers
 extern char *malloc();
-extern void exit_();
 
  char *
-F77_aloc(Len, whence) integer Len; char *whence;
+F77_aloc(f2c, Len, whence) f2c_state_t *f2c; integer Len; char *whence;
 #else
 #include "stdlib.h"
-extern void exit_(integer*);
 
  char *
-F77_aloc(integer Len, char *whence)
+F77_aloc(f2c_state_t *f2c, integer Len, char *whence)
 #endif
 {
 	char *rv;
@@ -27,7 +26,7 @@ F77_aloc(integer Len, char *whence)
 	if (!(rv = (char*)malloc(uLen))) {
 		fprintf(stderr, "malloc(%u) failure in %s\n",
 			uLen, whence);
-		exit_(&memfailure);
+		exit_(f2c, &memfailure);
 		}
 	return rv;
 	}

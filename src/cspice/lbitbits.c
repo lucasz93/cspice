@@ -1,4 +1,5 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifndef LONGBITS
 #define LONGBITS 32
@@ -6,9 +7,9 @@
 
  integer
 #ifdef KR_headers
-lbit_bits(a, b, len) integer a, b, len;
+lbit_bits(f2c, a, b, len) f2c_state_t *f2c; integer a, b, len;
 #else
-lbit_bits(integer a, integer b, integer len)
+lbit_bits(f2c_state_t *f2c, integer a, integer b, integer len)
 #endif
 {
 	/* Assume 2's complement arithmetic */
@@ -24,9 +25,9 @@ lbit_bits(integer a, integer b, integer len)
 
  integer
 #ifdef KR_headers
-lbit_cshift(a, b, len) integer a, b, len;
+lbit_cshift(f2c, a, b, len) f2c_state_t *f2c; integer a, b, len;
 #else
-lbit_cshift(integer a, integer b, integer len)
+lbit_cshift(f2c_state_t *f2c, integer a, integer b, integer len)
 #endif
 {
 	unsigned long x, y, z;

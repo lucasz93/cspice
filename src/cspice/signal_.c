@@ -1,5 +1,6 @@
 #include "f2c.h"
 #include "signal1.h"
+#include "fprocs.h"
 
  ftnint
 #ifdef KR_headers

@@ -1,6 +1,7 @@
 #include "f2c.h"
 #include "fio.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
 do_us(f2c,number,ptr,len) f2c_state_t *f2c; ftnint *number; char *ptr; ftnlen len;

@@ -9,6 +9,7 @@
  */
 
 #include "f2c.h"
+#include "fprocs.h"
 #undef abs
 #undef min
 #undef max
@@ -17,18 +18,17 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern void f_exit(void);
 #endif
 
  void
 #ifdef KR_headers
-exit_(rc) integer *rc;
+exit_(f2c,rc) f2c_state_t *f2c; integer *rc;
 #else
-exit_(integer *rc)
+exit_(f2c_state_t *f2c, integer *rc)
 #endif
 {
 #ifdef NO_ONEXIT
-	f_exit();
+	f_exit(f2c);
 #endif
 	exit(*rc);
 	}

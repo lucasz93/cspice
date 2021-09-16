@@ -1,4 +1,5 @@
 #include "f2c.h"
+#include "fprocs.h"
 
 /* compare two strings */
 

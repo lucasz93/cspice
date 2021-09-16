@@ -2,6 +2,7 @@
 #include "fio.h"
 #include "string.h"
 #include "__cspice_state.h"
+#include "fprocs.h"
 #ifdef KR_headers
 integer f_inqu(f2c, a) f2c_state_t *f2c; inlist *a;
 #else

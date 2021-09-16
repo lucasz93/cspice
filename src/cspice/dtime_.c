@@ -88,6 +88,7 @@
 #endif
 
 #include "__cspice_state.h"
+#include "fprocs.h"
 
 #undef Hz
 #ifdef CLK_TCK

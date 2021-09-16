@@ -4,19 +4,17 @@
  */
 
 #include "f2c.h"
+#include "fprocs.h"
 #undef L
 #ifndef NO_OVERWRITE
 #include "stdio.h"
 #undef abs
 #ifdef KR_headers
- extern char *F77_aloc();
  extern void free();
- extern void exit_();
 #else
 #undef min
 #undef max
 #include "stdlib.h"
- extern char *F77_aloc(ftnlen, char*);
 #endif
 #include "string.h"
 #endif /* NO_OVERWRITE */

@@ -126,15 +126,16 @@ from the min and max defintions in f2c.h.
 #undef max
 
 #include "f2c.h"
+#include "fprocs.h"
 
 #ifdef KR_headers
 
-void getenv_(fname, value, flen, vlen) char  *value, *fname;
+void getenv_(f2c, fname, value, flen, vlen) f2c_state_t *f2c; char  *value, *fname;
                                           ftnlen vlen , flen;
 
 #else
 
-void getenv_(char *fname, char *value, ftnlen flen, ftnlen vlen)
+void getenv_(f2c_state_t *f2c, char *fname, char *value, ftnlen flen, ftnlen vlen)
 
 #endif
    {

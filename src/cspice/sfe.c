@@ -1,6 +1,7 @@
 /* sequential formatted external common routines*/
 #include "f2c.h"
 #include "fio.h"
+#include "fprocs.h"
 
 integer e_rsfe(f2c_state_t *f2c)
 {	int n;
