@@ -19,7 +19,7 @@ void c_div(f2c_state_t *f2c, complex *c, complex *a, complex *b)
 	if( abr <= abi )
 		{
 		if(abi == 0)
-			sig_die("complex division by zero", 1);
+			sig_die(f2c, "complex division by zero", 1);
 		ratio = (double)b->r / b->i ;
 		den = b->i * (1 + ratio*ratio);
 		cr = (a->r*ratio + a->i) / den;

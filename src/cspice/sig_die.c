@@ -87,6 +87,7 @@
 #ifdef KR_headers
 void sig_die(f2c, s, kill) f2c_state_t *f2c; register char *s; int kill;
 #else
+#undef abs
 #include "stdlib.h"
 #ifdef __cplusplus
 extern "C" {

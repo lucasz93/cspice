@@ -46,7 +46,7 @@ op_gen(f2c_state_t *f2c, int a, int b, int c, int d)
 {	struct syl *p= &f2c->f__syl[f2c->f__pc];
 	if(f2c->f__pc>=SYLMX)
 	{	fprintf(stderr,"format too complicated:\n");
-		sig_die(f2c->f__fmtbuf, 1);
+		sig_die(f2c, f2c->f__fmtbuf, 1);
 	}
 	p->op=a;
 	p->p1=b;
@@ -104,7 +104,7 @@ char *f_s(f2c_state_t *f2c, char *s, int curloc)
 	return(s);
 }
 
- static
+ static int
 #ifdef KR_headers
 ne_d(f2c,s,p) f2c_state_t *f2c; char *s,**p;
 #else
@@ -196,7 +196,7 @@ ne_d(f2c_state_t *f2c, char *s, char **p)
 	return(1);
 }
 
- static
+ static int
 #ifdef KR_headers
 e_d(f2c,s,p) f2c_state_t *f2c; char *s,**p;
 #else
@@ -356,6 +356,7 @@ char *f_list(f2c_state_t *f2c, char *s)
 	return(NULL);
 }
 
+int
 #ifdef KR_headers
 pars_f(f2c,s) f2c_state_t *f2c; char *s;
 #else
@@ -370,7 +371,7 @@ pars_f(f2c_state_t *f2c, char *s)
 	return(0);
 }
 
- static
+ static int
 #ifdef KR_headers
 type_f(n)
 #else
@@ -498,7 +499,7 @@ loop:	switch(type_f((p= &f2c->f__syl[f2c->f__pc])->op))
 	}
 	return(0);
 }
-en_fio(f2c_state_t *f2c)
+int en_fio(f2c_state_t *f2c)
 {	ftnint one=1;
 	return(do_fio(f2c,&one,(char *)NULL,(ftnint)0));
 }

@@ -60,7 +60,7 @@ extern int c_sfe(), err__fl(), xrd_SL(), f__putbuf();
 extern "C" {
 #endif
 extern void x_putc(struct f2c_state_s *,int);
-extern long f__inode(char*,int*);
+extern long f__inode(struct f2c_state_s *,char*,int*);
 extern void sig_die(struct f2c_state_s*,char*,int);
 extern void f__fatal(struct f2c_state_s*,int,char*);
 extern int t_runc(struct f2c_state_s*,alist*);
@@ -69,7 +69,7 @@ extern int fk_open(struct f2c_state_s*, int,int,ftnint);
 extern int en_fio(struct f2c_state_s*);
 extern void f_init(struct f2c_state_s*);
 extern int t_putc(int), x_wSL(struct f2c_state_s *);
-extern void b_char(char*,char*,ftnlen), g_char(char*,ftnlen,char*);
+extern void b_char(struct f2c_state_s *,char*,char*,ftnlen), g_char(struct f2c_state_s *,char*,ftnlen,char*);
 extern int c_sfe(struct f2c_state_s *,cilist*), z_rnew(struct f2c_state_s *);
 extern int isatty(int);
 extern int err__fl(struct f2c_state_s*,int,int,char*);

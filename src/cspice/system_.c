@@ -64,7 +64,7 @@
 
 #ifdef KR_headers
 
-   integer system_(s, n) register char *s; ftnlen n;
+   integer system_(f2c, s, n) f2c_state_t *f2c; register char *s; ftnlen n;
 
 #else
 
@@ -73,7 +73,7 @@
    #undef max
    #include "stdlib.h"
 
-   integer system_(register char *s, ftnlen n)
+   integer system_(f2c_state_t *f2c, register char *s, ftnlen n)
 
 #endif
 
@@ -85,7 +85,7 @@
    register char *bp, *blast;
    integer rv;
 
-   buff = bp = n < sizeof(buff0) ? buff0 : F77_aloc(n+1, "system_");
+   buff = bp = n < sizeof(buff0) ? buff0 : F77_aloc(f2c, n+1, "system_");
    blast = bp + n;
 
    while(bp < blast && *s)

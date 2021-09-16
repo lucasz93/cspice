@@ -300,7 +300,7 @@ w_ed(f2c_state_t *f2c, struct syl *p, char *ptr, ftnlen len)
 	{
 	default:
 		fprintf(stderr,"w_ed, unexpected code: %d\n", p->op);
-		sig_die(f2c->f__fmtbuf, 1);
+		sig_die(f2c, f2c->f__fmtbuf, 1);
 	case I:	return(wrt_I(f2c,(Uint *)ptr,p->p1,len, 10));
 	case IM:
 		return(wrt_IM(f2c,(Uint *)ptr,p->p1,p->p2.i[0],len,10));
@@ -341,7 +341,7 @@ w_ned(f2c_state_t *f2c, struct syl *p)
 	switch(p->op)
 	{
 	default: fprintf(stderr,"w_ned, unexpected code: %d\n", p->op);
-		sig_die(f2c->f__fmtbuf, 1);
+		sig_die(f2c, f2c->f__fmtbuf, 1);
 	case SLASH:
 		return((*f2c->f__donewrec)(f2c));
 	case T: f2c->f__cursor = p->p1-f2c->f__recpos - 1;

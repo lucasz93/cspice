@@ -203,7 +203,7 @@ static void
      /* supply file name to error message */
       if (a->ofnmlen >= f2c->f__buflen)
          f__bufadj(f2c, (int)a->ofnmlen, 0);
-      g_char(a->ofnm, a->ofnmlen, f2c->f__curunit->ufnm = f2c->f__buf);
+      g_char(f2c, a->ofnm, a->ofnmlen, f2c->f__curunit->ufnm = f2c->f__buf);
       }
    f__fatal(f2c,m, s);
    }
@@ -249,14 +249,14 @@ static void
        && !strncmp(b->ufnm, a->ofnm, (unsigned)a->ofnmlen))
          goto same;
 #else
-      g_char(a->ofnm,a->ofnmlen,buf);
-      if (f__inode(buf,&n) == b->uinode && n == b->udev)
+      g_char(f2c,a->ofnm,a->ofnmlen,buf);
+      if (f__inode(f2c,buf,&n) == b->uinode && n == b->udev)
          goto same;
 #endif
       x.cunit=a->ounit;
       x.csta=0;
       x.cerr=a->oerr;
-      if ((rv = f_clos(&x)) != 0)
+      if ((rv = f_clos(f2c,&x)) != 0)
          return rv;
       }
    b->url = (int)a->orl;
@@ -275,12 +275,12 @@ static void
 #endif
    if (a->ofnm) 
        {
-      g_char(a->ofnm,a->ofnmlen,buf);
+      g_char(f2c,a->ofnm,a->ofnmlen,buf);
       if (!buf[0])
          opnerr(f2c,a->oerr,107,"open")
       }
    else
-      sprintf(buf, "fort.%ld", a->ounit);
+      sprintf(buf, "fort.%ld", (size_t)a->ounit);
    b->uscrtch = 0;
    b->uend=0;
    b->uwrt = 0;
@@ -400,7 +400,7 @@ static void
 
 #ifndef NON_UNIX_STDIO
 
-   if((b->uinode = f__inode(buf,&b->udev)) == -1)
+   if((b->uinode = f__inode(f2c,buf,&b->udev)) == -1)
       opnerr(f2c,a->oerr,108,"open")
 
 #endif
@@ -429,7 +429,7 @@ static void
    {
    char nbuf[10];
    olist a;
-   (void) sprintf(nbuf,"fort.%ld",n);
+   (void) sprintf(nbuf,"fort.%ld",(size_t)n);
    a.oerr=1;
    a.ounit=n;
    a.ofnm=nbuf;

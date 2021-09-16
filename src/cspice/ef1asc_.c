@@ -23,7 +23,7 @@ ef1asc_(f2c, a, la, b, lb) f2c_state_t *f2c; ftnint *a, *b; ftnlen *la, *lb;
 int ef1asc_(f2c_state_t *f2c, ftnint *a, ftnlen *la, ftnint *b, ftnlen *lb)
 #endif
 {
-s_copy( (char *)a, (char *)b, EVEN(*la), *lb );
+s_copy( f2c, (char *)a, (char *)b, EVEN(*la), *lb );
 
 return 0;
 

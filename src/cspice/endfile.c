@@ -29,7 +29,7 @@ integer f_end(f2c_state_t *f2c, alist *a)
 	b = &f2c->f__units[a->aunit];
 	if(b->ufd==NULL) {
 		char nbuf[10];
-		sprintf(nbuf,"fort.%ld",a->aunit);
+		sprintf(nbuf,"fort.%ld",(size_t)a->aunit);
 		if (tf = fopen(nbuf, f__w_mode[0]))
 			fclose(tf);
 		return(0);

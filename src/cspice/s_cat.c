@@ -49,7 +49,7 @@ s_cat(f2c_state_t *f2c, char *lp, char *rpp[], ftnlen rnp[], ftnlen *np, ftnlen 
 			continue;
 			}
 		lp0 = lp;
-		lp = lp1 = F77_aloc(L = ll, "s_cat");
+		lp = lp1 = F77_aloc(f2c, L = ll, "s_cat");
 		break;
 		}
 	lp1 = lp;

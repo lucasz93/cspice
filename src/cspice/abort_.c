@@ -14,12 +14,12 @@
 #include "fprocs.h"
 
 #ifdef KR_headers
-int abort_()
+int abort_(f2c) f2c_state_t *f2c;
 #else
-int abort_(void)
+int abort_(f2c_state_t *f2c)
 #endif
 {
-sig_die("Fortran abort routine called", 1);
+sig_die(f2c, "Fortran abort routine called", 1);
 
 return 0;
 

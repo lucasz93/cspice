@@ -125,6 +125,7 @@ from the min and max defintions in f2c.h.
 #undef max
 
 #include "f2c.h"
+#include "fprocs.h"
 
 #define     ERRLEN              32
 #define     TRC_LEN             32
@@ -136,9 +137,8 @@ CSPICE routines cannot include both SpiceZfc.h and f2c.h.
 Explicitly provide prototypes for the f2c library and 
 CSPICE routines.
 */
-VOID  sig_die(char*,int);
-int   trcdep_(integer *depth);
-int   trcnam_(integer *index, char *name__, ftnlen name_len);
+int   trcdep_(void *naif_context, integer *depth);
+int   trcnam_(void *naif_context, integer *index, char *name__, ftnlen name_len);
 
 
 integer s_rnge(f2c_state_t *f2c, char *varn, ftnint offset, char *procn, ftnint line)
@@ -228,7 +228,7 @@ integer s_rnge(f2c_state_t *f2c, char *varn, ftnint offset, char *procn, ftnint 
    /*
    Retrieve the depth of the call traceback stack.
    */
-   (void) trcdep_( &depth );
+   (void) trcdep_( f2c->parent, &depth );
 
    /*
    Check 'depth' as less-than or equal-to MAXMOD. Output an error
@@ -253,7 +253,7 @@ integer s_rnge(f2c_state_t *f2c, char *varn, ftnint offset, char *procn, ftnint 
          from the trace stack. No SPICE call name has a string length longer
          than TRC_LEN characters.
          */
-         (void) trcnam_( (integer *) &i, trname, (ftnlen) TRC_LEN );
+         (void) trcnam_( f2c->parent, (integer *) &i, trname, (ftnlen) TRC_LEN );
    
          /*
          The f2c code returns a FORTRAN type string, so null terminate
@@ -279,7 +279,7 @@ integer s_rnge(f2c_state_t *f2c, char *varn, ftnint offset, char *procn, ftnint 
 
       }
 
-   sig_die("", 1);
+   sig_die(f2c, "", 1);
  
    return 0;
 

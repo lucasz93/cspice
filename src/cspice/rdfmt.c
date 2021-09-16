@@ -401,7 +401,7 @@ rd_ed(f2c_state_t *f2c, struct syl *p, char *ptr, ftnlen len)
 	switch(p->op)
 	{
 	default: fprintf(stderr,"rd_ed, unexpected code: %d\n", p->op);
-		sig_die(f2c->f__fmtbuf, 1);
+		sig_die(f2c, f2c->f__fmtbuf, 1);
 	case IM:
 	case I: ch = rd_I(f2c,(Uint *)ptr,p->p1,len, 10);
 		break;
@@ -449,7 +449,7 @@ rd_ned(f2c_state_t *f2c, struct syl *p)
 	switch(p->op)
 	{
 	default: fprintf(stderr,"rd_ned, unexpected code: %d\n", p->op);
-		sig_die(f2c->f__fmtbuf, 1);
+		sig_die(f2c, f2c->f__fmtbuf, 1);
 	case APOS:
 		return(rd_POS(f2c,p->p2.s));
 	case H:	return(rd_H(f2c,p->p1,p->p2.s));

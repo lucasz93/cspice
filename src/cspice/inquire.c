@@ -21,7 +21,7 @@ integer f_inqu(f2c_state_t *f2c, inlist *a)
 	long x;
 	if(a->infile!=NULL)
 	{	byfile=1;
-		g_char(a->infile,a->infilen,buf);
+		g_char(f2c,a->infile,a->infilen,buf);
 #ifdef NON_UNIX_STDIO
 		x = access(buf,0) ? -1 : 0;
 		for(i=0,p=NULL;i<MXUNIT;i++)
@@ -32,7 +32,7 @@ integer f_inqu(f2c_state_t *f2c, inlist *a)
 				break;
 				}
 #else
-		x=f__inode(buf, &n);
+		x=f__inode(f2c, buf, &n);
 		for(i=0,p=NULL;i<MXUNIT;i++)
 			if(f2c->f__units[i].uinode==x
 			&& f2c->f__units[i].ufd!=NULL
@@ -68,41 +68,41 @@ integer f_inqu(f2c_state_t *f2c, inlist *a)
 		else	*a->innamed=0;
 	if(a->inname!=NULL)
 		if(byfile)
-			b_char(buf,a->inname,a->innamlen);
+			b_char(f2c,buf,a->inname,a->innamlen);
 		else if(p!=NULL && p->ufnm!=NULL)
-			b_char(p->ufnm,a->inname,a->innamlen);
+			b_char(f2c,p->ufnm,a->inname,a->innamlen);
 	if(a->inacc!=NULL && p!=NULL && p->ufd!=NULL)
 		if(p->url)
-			b_char("DIRECT",a->inacc,a->inacclen);
-		else	b_char("SEQUENTIAL",a->inacc,a->inacclen);
+			b_char(f2c,"DIRECT",a->inacc,a->inacclen);
+		else	b_char(f2c,"SEQUENTIAL",a->inacc,a->inacclen);
 	if(a->inseq!=NULL)
 		if(p!=NULL && p->url)
-			b_char("NO",a->inseq,a->inseqlen);
-		else	b_char("YES",a->inseq,a->inseqlen);
+			b_char(f2c,"NO",a->inseq,a->inseqlen);
+		else	b_char(f2c,"YES",a->inseq,a->inseqlen);
 	if(a->indir!=NULL)
 		if(p==NULL || p->url)
-			b_char("YES",a->indir,a->indirlen);
-		else	b_char("NO",a->indir,a->indirlen);
+			b_char(f2c,"YES",a->indir,a->indirlen);
+		else	b_char(f2c,"NO",a->indir,a->indirlen);
 	if(a->infmt!=NULL)
 		if(p!=NULL && p->ufmt==0)
-			b_char("UNFORMATTED",a->infmt,a->infmtlen);
-		else	b_char("FORMATTED",a->infmt,a->infmtlen);
+			b_char(f2c,"UNFORMATTED",a->infmt,a->infmtlen);
+		else	b_char(f2c,"FORMATTED",a->infmt,a->infmtlen);
 	if(a->inform!=NULL)
 		if(p!=NULL && p->ufmt==0)
-		b_char("NO",a->inform,a->informlen);
-		else b_char("YES",a->inform,a->informlen);
+		b_char(f2c,"NO",a->inform,a->informlen);
+		else b_char(f2c,"YES",a->inform,a->informlen);
 	if(a->inunf)
 		if(p!=NULL && p->ufmt==0)
-			b_char("YES",a->inunf,a->inunflen);
-		else if (p!=NULL) b_char("NO",a->inunf,a->inunflen);
-		else b_char("UNKNOWN",a->inunf,a->inunflen);
+			b_char(f2c,"YES",a->inunf,a->inunflen);
+		else if (p!=NULL) b_char(f2c,"NO",a->inunf,a->inunflen);
+		else b_char(f2c,"UNKNOWN",a->inunf,a->inunflen);
 	if(a->inrecl!=NULL && p!=NULL)
 		*a->inrecl=p->url;
 	if(a->innrec!=NULL && p!=NULL && p->url>0)
 		*a->innrec=ftell(p->ufd)/p->url+1;
 	if(a->inblank && p!=NULL && p->ufmt)
 		if(p->ublnk)
-			b_char("ZERO",a->inblank,a->inblanklen);
-		else	b_char("NULL",a->inblank,a->inblanklen);
+			b_char(f2c,"ZERO",a->inblank,a->inblanklen);
+		else	b_char(f2c,"NULL",a->inblank,a->inblanklen);
 	return(0);
 }

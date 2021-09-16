@@ -55,6 +55,8 @@ extern char *malloc();
 #undef max
 #include "stdlib.h"
 #include "stdio.h"
+
+int fileno (FILE *);
 #endif
 
 #include "fio.h"
@@ -257,7 +259,7 @@ void f__fatal(f2c_state_t *f2c, int n, char *s)
       f2c->f__sequential?"sequential":"direct",
       f2c->f__formatted?"formatted":"unformatted",
       f2c->f__external?"external":"internal");
-   sig_die(" IO", 1);
+   sig_die(f2c, " IO", 1);
 }
 
 

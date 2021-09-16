@@ -639,7 +639,7 @@ int l_read(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len, ftnint type)
 			*yy = f2c->f__ly;
 			break;
 		case TYCHAR:
-			b_char(f2c->f__lchar,ptr,len);
+			b_char(f2c,f2c->f__lchar,ptr,len);
 			break;
 		}
 	bump:
