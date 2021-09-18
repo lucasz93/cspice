@@ -66,10 +66,8 @@ extern integer pow_ii();
 
 extern int     rd_ed(), rd_ned();
 
-extern void    s_cat();
 extern integer s_cmp();
-extern void    s_copy();
-extern int     s_paus(), s_stop();
+extern int     s_cat(), s_copy(), s_paus(), s_stop();
 
 extern integer s_rsfe(), s_rsfi(), s_wsfi(), s_rdfe(), s_wdfe(), s_rdue(), s_wdue(), s_wsni(), s_wsli(), s_rsle(), s_rsli(), s_rsni(), s_rsne(), s_rsue(), s_wsue(), s_wsle(), s_wsne(), s_wsfe();
 
@@ -267,9 +265,9 @@ extern int     rd_ned(struct f2c_state_s *f2c, struct syl *p);
 
 extern void    sig_die(struct f2c_state_s *f2c, register char *s, int kill);
 
-extern void    s_cat(struct f2c_state_s *f2c, char *lp, char *rpp[], ftnlen rnp[], ftnlen *np, ftnlen ll);
+extern int     s_cat(struct f2c_state_s *f2c, char *lp, char *rpp[], ftnlen rnp[], ftnlen *np, ftnlen ll);
 extern integer s_cmp(struct f2c_state_s *,char*,char*,ftnlen,ftnlen);
-extern void    s_copy(struct f2c_state_s *,char*,char*,ftnlen,ftnlen);
+extern int     s_copy(struct f2c_state_s *,char*,char*,ftnlen,ftnlen);
 extern int     s_paus(struct f2c_state_s *f2c, char *s, ftnlen n);
 extern int     s_stop(struct f2c_state_s *f2c, char *s, ftnlen n);
 
