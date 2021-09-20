@@ -133,7 +133,7 @@ if ( $?TKCOMPILER ) then
 
 else
 
-   set TKCOMPILER  =  "gcc"
+   set TKCOMPILER  =  "$CC"
    echo " "
    echo "      Setting default compiler:"
    echo $TKCOMPILER

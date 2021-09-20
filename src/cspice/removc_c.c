@@ -41,6 +41,8 @@
  
 */
 
+   #include "__cspice_state.h"
+   #undef abs
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
@@ -169,10 +171,12 @@
 -&
 */
 {
+   cspice_t * state = (cspice_t *)naif_state;
+
    /*
    f2c library utility prototypes 
    */
-   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb ); 
+   extern integer   s_cmp  (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
 
    /*
    Local macros 
@@ -229,7 +233,8 @@
 
    inSet =       (  loc  >  -1  ) 
 
-              && (  s_cmp( (SpiceChar *)item,   
+              && (  s_cmp( &state->f2c,
+                           (SpiceChar *)item,   
                             ARRAY(loc), 
                             strlen(item),     
                             strlen(ARRAY(loc))  ) == 0  );

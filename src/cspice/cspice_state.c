@@ -1548,3 +1548,8 @@ void cspice_free(void* s) {
 	free(state);
 }
 
+void* cspice_get_f2c(void* s) {
+	cspice_t* state = s;
+	return &state->f2c;
+}
+
